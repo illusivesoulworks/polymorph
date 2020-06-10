@@ -42,4 +42,20 @@ public class ScreenEventHandler {
       }
     }
   }
+
+  @SubscribeEvent
+  public void guiMouseClick(GuiScreenEvent.MouseClickedEvent.Pre evt) {
+    Screen screen = evt.getGui();
+
+    if (screen instanceof CraftingScreen) {
+
+      if (recipeSelectionGui != null) {
+
+        if (recipeSelectionGui.mouseClicked(evt.getMouseX(), evt.getMouseY(), evt.getButton())) {
+          recipeSelectionGui.setVisible(false);
+          evt.setCanceled(true);
+        }
+      }
+    }
+  }
 }

@@ -12,7 +12,7 @@ public class RecipeSelectWidget extends Widget {
 
   private static final ResourceLocation SWITCH = new ResourceLocation(Polymorph.MODID,
       "textures/gui/switch.png");
-  private ItemStack output;
+  public ItemStack output;
   private float time;
   private float animationTime;
 
@@ -33,6 +33,13 @@ public class RecipeSelectWidget extends Widget {
     int i = 16;
     int j = 0;
     boolean flag = this.animationTime > 0.0F;
+
+    if (this.x + 25 >= p_renderButton_1_ && this.x <= p_renderButton_1_) {
+
+      if (this.y + 25 >= p_renderButton_2_ && this.y <= p_renderButton_2_) {
+        j += 25;
+      }
+    }
 
     if (flag) {
       float f = 1.0F + 0.1F * (float) Math.sin((this.animationTime / 15.0F * (float) Math.PI));

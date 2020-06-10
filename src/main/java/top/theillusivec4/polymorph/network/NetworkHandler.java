@@ -10,6 +10,7 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.network.client.CPacketFetchRecipeOutputs;
+import top.theillusivec4.polymorph.network.client.CPacketSetOutput;
 import top.theillusivec4.polymorph.network.server.SPacketSendRecipeOutputs;
 
 public class NetworkHandler {
@@ -27,6 +28,8 @@ public class NetworkHandler {
 
     register(CPacketFetchRecipeOutputs.class, CPacketFetchRecipeOutputs::encode,
         CPacketFetchRecipeOutputs::decode, CPacketFetchRecipeOutputs::handle);
+    register(CPacketSetOutput.class, CPacketSetOutput::encode, CPacketSetOutput::decode,
+        CPacketSetOutput::handle);
     register(SPacketSendRecipeOutputs.class, SPacketSendRecipeOutputs::encode,
         SPacketSendRecipeOutputs::decode, SPacketSendRecipeOutputs::handle);
   }

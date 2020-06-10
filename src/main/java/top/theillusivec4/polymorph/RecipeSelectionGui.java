@@ -3,10 +3,16 @@ package top.theillusivec4.polymorph;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.IRenderable;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.network.PacketDistributor;
+import top.theillusivec4.polymorph.network.NetworkHandler;
+import top.theillusivec4.polymorph.network.client.CPacketSetOutput;
 
 public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGuiEventListener {
 
@@ -17,6 +23,11 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
   public void setStacks(List<ItemStack> stacks) {
     buttons = new ArrayList<>();
     stacks.forEach(stack -> buttons.add(new RecipeSelectWidget(stack)));
+    int[] i = {0};
+    buttons.forEach(button -> {
+      button.setPosition(i[0], 0);
+      i[0] += 16;
+    });
   }
 
   public void setVisible(boolean visible) {
@@ -51,5 +62,34 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
       });
       this.renderTooltip(p_render_1_, p_render_2_);
     }
+  }
+
+  @Override
+  public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_,
+      int p_mouseClicked_5_) {
+
+    if (this.isVisible()) {
+
+      for (RecipeSelectWidget button : this.buttons) {
+
+        if (button.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_)) {
+          ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
+
+          if (playerEntity != null) {
+            Container container = playerEntity.openContainer;
+
+            if (container instanceof WorkbenchContainer) {
+              WorkbenchContainer workbenchContainer = (WorkbenchContainer) container;
+              workbenchContainer.getSlot(workbenchContainer.getOutputSlot())
+                  .putStack(button.output.copy());
+            }
+          }
+          NetworkHandler.INSTANCE
+              .send(PacketDistributor.SERVER.noArg(), new CPacketSetOutput(button.output));
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }
