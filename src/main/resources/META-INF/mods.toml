@@ -1,0 +1,25 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+issueTrackerURL="https://github.com/TheIllusiveC4/Polymorph/issues"
+logoFile="${mod_icon}"
+[[mods]]
+modId="${mod_id}"
+version="${version}"
+displayName="${mod_name}"
+displayURL="${mod_url}"
+authors="${mod_author}"
+description='''
+${mod_description}
+'''
+[[dependencies.polymorph]]
+    modId="forge"
+    mandatory=true
+    versionRange="[31.2.0,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.polymorph]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.15.2, 1.16)"
+    ordering="NONE"
+    side="BOTH"
