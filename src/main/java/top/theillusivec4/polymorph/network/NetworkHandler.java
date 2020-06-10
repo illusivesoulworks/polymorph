@@ -9,9 +9,8 @@ import net.minecraftforge.fml.network.NetworkEvent.Context;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import top.theillusivec4.polymorph.Polymorph;
-import top.theillusivec4.polymorph.network.client.CPacketFetchRecipeOutputs;
 import top.theillusivec4.polymorph.network.client.CPacketSetOutput;
-import top.theillusivec4.polymorph.network.server.SPacketSendRecipeOutputs;
+import top.theillusivec4.polymorph.network.client.CPacketTransferOutput;
 
 public class NetworkHandler {
 
@@ -26,12 +25,10 @@ public class NetworkHandler {
         .networkProtocolVersion(() -> PTC_VERSION).clientAcceptedVersions(PTC_VERSION::equals)
         .serverAcceptedVersions(PTC_VERSION::equals).simpleChannel();
 
-    register(CPacketFetchRecipeOutputs.class, CPacketFetchRecipeOutputs::encode,
-        CPacketFetchRecipeOutputs::decode, CPacketFetchRecipeOutputs::handle);
     register(CPacketSetOutput.class, CPacketSetOutput::encode, CPacketSetOutput::decode,
         CPacketSetOutput::handle);
-    register(SPacketSendRecipeOutputs.class, SPacketSendRecipeOutputs::encode,
-        SPacketSendRecipeOutputs::decode, SPacketSendRecipeOutputs::handle);
+    register(CPacketTransferOutput.class, CPacketTransferOutput::encode, CPacketTransferOutput::decode,
+        CPacketTransferOutput::handle);
   }
 
   private static <M> void register(Class<M> messageType, BiConsumer<M, PacketBuffer> encoder,

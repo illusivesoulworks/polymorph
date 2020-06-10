@@ -5,20 +5,24 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 
 public class RecipeSelectWidget extends Widget {
 
   private static final ResourceLocation SWITCH = new ResourceLocation(Polymorph.MODID,
       "textures/gui/switch.png");
-  public ItemStack output;
+  public IRecipe<CraftingInventory> recipe;
+  public CraftingInventory craftingMatrix;
   private float time;
   private float animationTime;
 
-  public RecipeSelectWidget(ItemStack output) {
+  public RecipeSelectWidget(CraftingInventory craftingMatrix, IRecipe<CraftingInventory> recipe) {
     super(0, 0, 25, 25, "");
-    this.output = output;
+    this.recipe = recipe;
+    this.craftingMatrix = craftingMatrix;
   }
 
   public void setPosition(int x, int y) {
@@ -51,7 +55,9 @@ public class RecipeSelectWidget extends Widget {
     }
     this.blit(this.x, this.y, i, j, this.width, this.height);
     int k = 4;
-    minecraft.getItemRenderer().renderItemAndEffectIntoGUI(output, this.x + k, this.y + k);
+    minecraft.getItemRenderer()
+        .renderItemAndEffectIntoGUI(this.recipe.getCraftingResult(this.craftingMatrix), this.x + k,
+            this.y + k);
 
     if (flag) {
       RenderSystem.popMatrix();
@@ -59,7 +65,7 @@ public class RecipeSelectWidget extends Widget {
   }
 
   public List<String> getTooltipText(Screen screen) {
-    return screen.getTooltipFromItem(output);
+    return screen.getTooltipFromItem(this.recipe.getCraftingResult(this.craftingMatrix));
   }
 
   @Override

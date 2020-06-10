@@ -3,16 +3,17 @@ package top.theillusivec4.polymorph;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.gui.widget.button.ImageButton;
-import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.crafting.ICraftingRecipe;
+import net.minecraft.item.crafting.IRecipe;
 
 public class ClientCraftingManager {
 
-  private static final List<ItemStack> resultsList = new ArrayList<>();
+  private static final List<IRecipe<CraftingInventory>> resultsList = new ArrayList<>();
 
-  public static void setResultsList(List<ItemStack> list) {
+  public static void setResultsList(List<ICraftingRecipe> list) {
     resultsList.clear();
     resultsList.addAll(list);
-    resultsList.forEach(stack -> Polymorph.LOGGER.info(stack.toString()));
     ImageButton button = ScreenEventHandler.switchButton;
 
     if (button != null) {
@@ -21,11 +22,11 @@ public class ClientCraftingManager {
     RecipeSelectionGui recipeSelectionGui = ScreenEventHandler.recipeSelectionGui;
 
     if (recipeSelectionGui != null) {
-      recipeSelectionGui.setStacks(resultsList);
+      recipeSelectionGui.setRecipes(resultsList);
     }
   }
 
-  public static List<ItemStack> getResultsList() {
+  public static List<IRecipe<CraftingInventory>> getResultsList() {
     return resultsList;
   }
 }

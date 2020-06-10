@@ -7,9 +7,12 @@ import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.IRenderable;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.network.NetworkHandler;
 import top.theillusivec4.polymorph.network.client.CPacketSetOutput;
@@ -19,10 +22,16 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
   private List<RecipeSelectWidget> buttons;
   private RecipeSelectWidget hoveredButton;
   private boolean visible = false;
+  private ContainerScreen<?> parent;
 
-  public void setStacks(List<ItemStack> stacks) {
+  public RecipeSelectionGui(ContainerScreen<?> parent) {
+    this.parent = parent;
+  }
+
+  public void setRecipes(List<IRecipe<CraftingInventory>> recipes) {
     buttons = new ArrayList<>();
-    stacks.forEach(stack -> buttons.add(new RecipeSelectWidget(stack)));
+    recipes.forEach(
+        recipe -> buttons.add(new RecipeSelectWidget(ClientEventHandler.craftingMatrix, recipe)));
     int[] i = {0};
     buttons.forEach(button -> {
       button.setPosition(i[0], 0);
@@ -73,6 +82,7 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
       for (RecipeSelectWidget button : this.buttons) {
 
         if (button.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_)) {
+          ClientEventHandler.lastSelectedRecipe = button.recipe;
           ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
 
           if (playerEntity != null) {
@@ -80,12 +90,12 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
 
             if (container instanceof WorkbenchContainer) {
               WorkbenchContainer workbenchContainer = (WorkbenchContainer) container;
-              workbenchContainer.getSlot(workbenchContainer.getOutputSlot())
-                  .putStack(button.output.copy());
+              ItemStack stack = button.recipe.getCraftingResult(ClientEventHandler.craftingMatrix);
+              workbenchContainer.getSlot(workbenchContainer.getOutputSlot()).putStack(stack.copy());
+              NetworkHandler.INSTANCE
+                  .send(PacketDistributor.SERVER.noArg(), new CPacketSetOutput(stack));
             }
           }
-          NetworkHandler.INSTANCE
-              .send(PacketDistributor.SERVER.noArg(), new CPacketSetOutput(button.output));
           return true;
         }
       }
