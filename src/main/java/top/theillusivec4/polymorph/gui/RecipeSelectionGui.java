@@ -7,31 +7,36 @@ import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.IRenderable;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraftforge.fml.network.PacketDistributor;
-import top.theillusivec4.polymorph.util.ClientCraftingManager;
-import top.theillusivec4.polymorph.event.ClientEventHandler;
 import top.theillusivec4.polymorph.network.NetworkHandler;
 import top.theillusivec4.polymorph.network.client.CPacketSetOutput;
+import top.theillusivec4.polymorph.util.ClientCraftingManager;
 
 public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGuiEventListener {
 
+  private final ClientCraftingManager craftingManager;
   private List<RecipeSelectWidget> buttons = new ArrayList<>();
   private RecipeSelectWidget hoveredButton;
   private boolean visible = false;
 
-  public void setRecipes(List<IRecipe<CraftingInventory>> recipes) {
-    ClientCraftingManager.getCurrentCraftingMatrix().ifPresent(craftingInventory -> recipes
-        .forEach(recipe -> buttons.add(new RecipeSelectWidget(craftingInventory, recipe))));
+  public RecipeSelectionGui(ClientCraftingManager craftingManager) {
+    this.craftingManager = craftingManager;
+  }
+
+  public void setRecipes(List<ICraftingRecipe> recipes) {
+    this.buttons.clear();
+    this.craftingManager.getCurrentCraftingMatrix().ifPresent(craftingInventory -> recipes
+        .forEach(recipe -> this.buttons.add(new RecipeSelectWidget(craftingInventory, recipe))));
     int[] pos = {0, 0};
-    buttons.forEach(button -> {
+    this.buttons.forEach(button -> {
       button.setPosition(pos[0], 0);
       pos[0] += 25;
     });
+    this.craftingManager.getSwitchButton().visible = recipes.size() > 1;
   }
 
   public void setVisible(boolean visible) {
@@ -77,7 +82,7 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
       for (RecipeSelectWidget button : this.buttons) {
 
         if (button.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_)) {
-          ClientCraftingManager.setLastSelectedRecipe(button.recipe);
+          craftingManager.setLastSelectedRecipe(button.recipe);
           ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
 
           if (playerEntity != null) {
@@ -86,7 +91,7 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
             if (container instanceof WorkbenchContainer) {
               WorkbenchContainer workbenchContainer = (WorkbenchContainer) container;
 
-              ClientCraftingManager.getCurrentCraftingMatrix().ifPresent(craftingInventory -> {
+              craftingManager.getCurrentCraftingMatrix().ifPresent(craftingInventory -> {
                 ItemStack stack = button.recipe.getCraftingResult(craftingInventory);
                 workbenchContainer.getSlot(workbenchContainer.getOutputSlot())
                     .putStack(stack.copy());

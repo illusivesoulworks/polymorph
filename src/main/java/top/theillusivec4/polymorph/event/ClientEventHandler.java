@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.inventory.container.Slot;
@@ -14,9 +15,9 @@ import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.util.ClientCraftingManager;
 import top.theillusivec4.polymorph.util.ClientHelper;
-import top.theillusivec4.polymorph.Polymorph;
 
 public class ClientEventHandler {
 
@@ -33,7 +34,7 @@ public class ClientEventHandler {
       if (containerScreen.getContainer() instanceof WorkbenchContainer) {
         Slot slot = containerScreen.getSlotUnderMouse();
 
-        if (slot != null && slot.inventory instanceof CraftingResultSlot) {
+        if (slot != null && slot.inventory instanceof CraftResultInventory) {
           updateCraftingMatrix((WorkbenchContainer) containerScreen.getContainer());
         }
       }
@@ -70,7 +71,9 @@ public class ClientEventHandler {
 
     if (world != null && craftingMatrix != null) {
       update = true;
-      ClientCraftingManager.setCurrentCraftingMatrix(craftingMatrix);
+      CraftingInventory finalCraftingMatrix = craftingMatrix;
+      ClientCraftingManager.getInstance().ifPresent(
+          craftingManager -> craftingManager.setCurrentCraftingMatrix(finalCraftingMatrix));
     }
   }
 
@@ -82,7 +85,7 @@ public class ClientEventHandler {
       ClientWorld world = Minecraft.getInstance().world;
 
       if (world != null) {
-        ClientCraftingManager.updateOutput();
+        ClientCraftingManager.getInstance().ifPresent(ClientCraftingManager::update);
       }
     }
   }
