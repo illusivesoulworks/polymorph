@@ -7,6 +7,7 @@ import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
+import top.theillusivec4.polymorph.Polymorph;
 
 public class CPacketSetOutput {
 
@@ -33,6 +34,7 @@ public class CPacketSetOutput {
 
         if (container instanceof WorkbenchContainer) {
           WorkbenchContainer workbenchContainer = (WorkbenchContainer) container;
+          Polymorph.LOGGER.info(msg.stack.toString());
           workbenchContainer.getSlot(workbenchContainer.getOutputSlot()).putStack(msg.stack);
         }
       }

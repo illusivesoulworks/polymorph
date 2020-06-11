@@ -51,6 +51,12 @@ public class ScreenEventHandler {
         if (recipeSelectionGui.mouseClicked(evt.getMouseX(), evt.getMouseY(), evt.getButton())) {
           recipeSelectionGui.setVisible(false);
           evt.setCanceled(true);
+        } else if (recipeSelectionGui.isVisible()) {
+
+          if (!craftingManager.getSwitchButton().mouseClicked(evt.getMouseX(), evt.getMouseY(), evt.getButton())) {
+            recipeSelectionGui.setVisible(false);
+          }
+          evt.setCanceled(true);
         }
         CraftingScreen craftingScreen = (CraftingScreen) screen;
         WorkbenchContainer workbenchContainer = craftingScreen.getContainer();

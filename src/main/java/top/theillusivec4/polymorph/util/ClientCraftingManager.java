@@ -38,11 +38,12 @@ public class ClientCraftingManager {
   private ImageButton switchButton;
 
   private ClientCraftingManager(ContainerScreen<?> screen) {
-    this.recipeSelectionGui = new RecipeSelectionGui(this);
     int x = screen.width / 2;
     int y = screen.height / 2;
+    this.recipeSelectionGui = new RecipeSelectionGui(this, x + 19, y - 100);
     this.switchButton = new ImageButton(x + 36, y - 72, 16, 16, 0, 0, 17, SWITCH,
         clickWidget -> recipeSelectionGui.setVisible(!recipeSelectionGui.isVisible()));
+    this.switchButton.visible = this.recipeSelectionGui.getButtons().size() > 1;
   }
 
   public static Optional<ClientCraftingManager> getInstance() {

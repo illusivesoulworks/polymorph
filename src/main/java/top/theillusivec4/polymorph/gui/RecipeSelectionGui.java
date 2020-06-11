@@ -19,21 +19,30 @@ import top.theillusivec4.polymorph.util.ClientCraftingManager;
 public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGuiEventListener {
 
   private final ClientCraftingManager craftingManager;
+
   private List<RecipeSelectWidget> buttons = new ArrayList<>();
   private RecipeSelectWidget hoveredButton;
   private boolean visible = false;
+  private int x;
+  private int y;
 
-  public RecipeSelectionGui(ClientCraftingManager craftingManager) {
+  public RecipeSelectionGui(ClientCraftingManager craftingManager, int x, int y) {
     this.craftingManager = craftingManager;
+    this.x = x;
+    this.y = y;
+  }
+
+  public List<RecipeSelectWidget> getButtons() {
+    return buttons;
   }
 
   public void setRecipes(List<ICraftingRecipe> recipes) {
     this.buttons.clear();
     this.craftingManager.getCurrentCraftingMatrix().ifPresent(craftingInventory -> recipes
         .forEach(recipe -> this.buttons.add(new RecipeSelectWidget(craftingInventory, recipe))));
-    int[] pos = {0, 0};
+    int[] pos = {x, y};
     this.buttons.forEach(button -> {
-      button.setPosition(pos[0], 0);
+      button.setPosition(pos[0], pos[1]);
       pos[0] += 25;
     });
     this.craftingManager.getSwitchButton().visible = recipes.size() > 1;
@@ -61,9 +70,9 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
   public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
 
     if (this.isVisible()) {
+      this.hoveredButton = null;
       buttons.forEach(button -> {
         button.render(p_render_1_, p_render_2_, p_render_3_);
-        this.hoveredButton = null;
 
         if (button.visible && button.isHovered()) {
           this.hoveredButton = button;
