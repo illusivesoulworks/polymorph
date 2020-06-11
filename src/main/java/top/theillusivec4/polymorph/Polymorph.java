@@ -8,6 +8,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import top.theillusivec4.polymorph.event.ClientEventHandler;
+import top.theillusivec4.polymorph.event.ScreenEventHandler;
 import top.theillusivec4.polymorph.network.NetworkHandler;
 
 @Mod(Polymorph.MODID)

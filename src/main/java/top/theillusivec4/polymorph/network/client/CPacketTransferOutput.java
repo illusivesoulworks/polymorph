@@ -9,12 +9,11 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
-import top.theillusivec4.polymorph.ClientEventHandler;
 import top.theillusivec4.polymorph.Polymorph;
 
 public class CPacketTransferOutput {
@@ -54,16 +53,18 @@ public class CPacketTransferOutput {
           } catch (IllegalAccessException e) {
             Polymorph.LOGGER.error("beep beep");
           }
-          Optional<IRecipe<CraftingInventory>> result = (Optional<IRecipe<CraftingInventory>>) sender
+
+          @SuppressWarnings("unchecked") Optional<ICraftingRecipe> result = (Optional<ICraftingRecipe>) sender
               .getServerWorld().getRecipeManager().getRecipe(new ResourceLocation(msg.recipe));
+
           CraftingInventory finalCraftingInventory = craftingInventory;
           result.ifPresent(res -> {
             if (finalCraftingInventory != null) {
-              ItemStack itemstack7 = workbenchContainer.transferStackInSlot(sender, outputSlot);
+              ItemStack itemstack = workbenchContainer.transferStackInSlot(sender, outputSlot);
               slot.putStack(res.getCraftingResult(finalCraftingInventory));
 
-              while (!itemstack7.isEmpty() && ItemStack.areItemsEqual(slot.getStack(), itemstack7)) {
-                itemstack7 = workbenchContainer.transferStackInSlot(sender, outputSlot);
+              while (!itemstack.isEmpty() && ItemStack.areItemsEqual(slot.getStack(), itemstack)) {
+                itemstack = workbenchContainer.transferStackInSlot(sender, outputSlot);
 
                 if (res.matches(finalCraftingInventory, sender.world)) {
                   slot.putStack(res.getCraftingResult(finalCraftingInventory));

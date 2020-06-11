@@ -1,14 +1,13 @@
-package top.theillusivec4.polymorph;
+package top.theillusivec4.polymorph.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
+import top.theillusivec4.polymorph.Polymorph;
 
 public class RecipeSelectWidget extends Widget {
 
@@ -16,8 +15,6 @@ public class RecipeSelectWidget extends Widget {
       "textures/gui/switch.png");
   public IRecipe<CraftingInventory> recipe;
   public CraftingInventory craftingMatrix;
-  private float time;
-  private float animationTime;
 
   public RecipeSelectWidget(CraftingInventory craftingMatrix, IRecipe<CraftingInventory> recipe) {
     super(0, 0, 25, 25, "");
@@ -36,7 +33,6 @@ public class RecipeSelectWidget extends Widget {
     minecraft.getTextureManager().bindTexture(SWITCH);
     int i = 16;
     int j = 0;
-    boolean flag = this.animationTime > 0.0F;
 
     if (this.x + 25 >= p_renderButton_1_ && this.x <= p_renderButton_1_) {
 
@@ -44,24 +40,11 @@ public class RecipeSelectWidget extends Widget {
         j += 25;
       }
     }
-
-    if (flag) {
-      float f = 1.0F + 0.1F * (float) Math.sin((this.animationTime / 15.0F * (float) Math.PI));
-      RenderSystem.pushMatrix();
-      RenderSystem.translatef((float) (this.x + 8), (float) (this.y + 12), 0.0F);
-      RenderSystem.scalef(f, f, 1.0F);
-      RenderSystem.translatef((float) (-(this.x + 8)), (float) (-(this.y + 12)), 0.0F);
-      this.animationTime -= p_renderButton_3_;
-    }
     this.blit(this.x, this.y, i, j, this.width, this.height);
     int k = 4;
     minecraft.getItemRenderer()
         .renderItemAndEffectIntoGUI(this.recipe.getCraftingResult(this.craftingMatrix), this.x + k,
             this.y + k);
-
-    if (flag) {
-      RenderSystem.popMatrix();
-    }
   }
 
   public List<String> getTooltipText(Screen screen) {
