@@ -1,0 +1,3 @@
+{
+  "commands.polymorph.conflicts.success": "Found %d conflicts. Check logs/conflicts.log for more details."
+}
