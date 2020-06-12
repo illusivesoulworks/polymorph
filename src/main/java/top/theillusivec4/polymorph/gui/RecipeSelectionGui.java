@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.network.NetworkHandler;
-import top.theillusivec4.polymorph.network.client.CPacketSetOutput;
+import top.theillusivec4.polymorph.network.client.CPacketSetRecipe;
 import top.theillusivec4.polymorph.util.ClientCraftingManager;
 
 public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGuiEventListener {
@@ -104,8 +104,8 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
                 ItemStack stack = button.recipe.getCraftingResult(craftingInventory);
                 workbenchContainer.getSlot(workbenchContainer.getOutputSlot())
                     .putStack(stack.copy());
-                NetworkHandler.INSTANCE
-                    .send(PacketDistributor.SERVER.noArg(), new CPacketSetOutput(stack));
+                NetworkHandler.INSTANCE.send(PacketDistributor.SERVER.noArg(),
+                    new CPacketSetRecipe(button.recipe.getId().toString()));
               });
             }
           }

@@ -1,18 +1,15 @@
 package top.theillusivec4.polymorph.event;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.CraftingScreen;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.inventory.container.WorkbenchContainer;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.gui.RecipeSelectionGui;
 import top.theillusivec4.polymorph.network.NetworkHandler;
-import top.theillusivec4.polymorph.network.client.CPacketTransferOutput;
+import top.theillusivec4.polymorph.network.client.CPacketTransferRecipe;
 import top.theillusivec4.polymorph.util.ClientCraftingManager;
 import top.theillusivec4.polymorph.util.ClientHelper;
 
@@ -70,18 +67,8 @@ public class ScreenEventHandler {
             craftingManager.getLastSelectedRecipe().ifPresent(
                 recipe -> craftingManager.getCurrentCraftingMatrix()
                     .ifPresent(craftingInventory -> {
-                      ClientPlayerEntity player = Minecraft.getInstance().player;
-
-                      for (ItemStack itemstack = workbenchContainer
-                          .transferStackInSlot(player, outputSlot);
-                          !itemstack.isEmpty() && ItemStack
-                              .areItemsEqual(slot.getStack(), itemstack);
-                          itemstack = workbenchContainer.transferStackInSlot(player, outputSlot)) {
-                        slot.putStack(recipe.getCraftingResult(craftingInventory));
-                      }
                       NetworkHandler.INSTANCE.send(PacketDistributor.SERVER.noArg(),
-                          new CPacketTransferOutput(recipe.getId().toString()));
-                      craftingManager.update();
+                          new CPacketTransferRecipe(recipe.getId().toString()));
                       evt.setCanceled(true);
                     }));
 

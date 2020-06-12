@@ -1,6 +1,6 @@
 package top.theillusivec4.polymorph.util;
 
-import java.util.ArrayList;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.client.Minecraft;
@@ -16,16 +16,19 @@ import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.gui.RecipeSelectionGui;
 import top.theillusivec4.polymorph.network.NetworkHandler;
-import top.theillusivec4.polymorph.network.client.CPacketSetOutput;
+import top.theillusivec4.polymorph.network.client.CPacketSetRecipe;
 
 public class ClientCraftingManager {
 
   private static final ResourceLocation SWITCH = new ResourceLocation(Polymorph.MODID,
       "textures/gui/switch.png");
+  private static final Field CRAFT_MATRIX = ObfuscationReflectionHelper
+      .findField(WorkbenchContainer.class, "field_75162_e");
 
   private static ClientCraftingManager instance;
 
@@ -36,6 +39,8 @@ public class ClientCraftingManager {
   private IRecipe<CraftingInventory> lastSelectedRecipe;
 
   private ImageButton switchButton;
+  private boolean needsUpdate;
+  private boolean paused;
 
   private ClientCraftingManager(ContainerScreen<?> screen) {
     int x = screen.width / 2;
@@ -44,6 +49,18 @@ public class ClientCraftingManager {
     this.switchButton = new ImageButton(x + 36, y - 72, 16, 16, 0, 0, 17, SWITCH,
         clickWidget -> recipeSelectionGui.setVisible(!recipeSelectionGui.isVisible()));
     this.switchButton.visible = this.recipeSelectionGui.getButtons().size() > 1;
+
+    if (screen.getContainer() instanceof WorkbenchContainer) {
+      WorkbenchContainer workbenchContainer = (WorkbenchContainer) screen.getContainer();
+      CraftingInventory craftingMatrix = null;
+
+      try {
+        craftingMatrix = (CraftingInventory) CRAFT_MATRIX.get(workbenchContainer);
+      } catch (IllegalAccessException e) {
+        Polymorph.LOGGER.error("beep beep");
+      }
+      this.currentCraftingMatrix = craftingMatrix;
+    }
   }
 
   public static Optional<ClientCraftingManager> getInstance() {
@@ -57,6 +74,7 @@ public class ClientCraftingManager {
 
   public void update() {
     ClientWorld world = Minecraft.getInstance().world;
+    this.needsUpdate = false;
 
     if (world != null) {
       this.getCurrentCraftingMatrix().ifPresent(craftingInventory -> {
@@ -77,12 +95,9 @@ public class ClientCraftingManager {
               Container container = playerEntity.openContainer;
 
               if (container instanceof WorkbenchContainer) {
-                WorkbenchContainer workbenchContainer = (WorkbenchContainer) container;
                 ItemStack stack = recipe.getCraftingResult(craftingInventory);
-                workbenchContainer.getSlot(workbenchContainer.getOutputSlot())
-                    .putStack(stack.copy());
-                NetworkHandler.INSTANCE
-                    .send(PacketDistributor.SERVER.noArg(), new CPacketSetOutput(stack));
+                NetworkHandler.INSTANCE.send(PacketDistributor.SERVER.noArg(),
+                    new CPacketSetRecipe(recipe.getId().toString()));
               }
             }
           } else {
@@ -127,5 +142,13 @@ public class ClientCraftingManager {
 
   public void setSwitchButton(ImageButton button) {
     this.switchButton = button;
+  }
+
+  public void flagUpdate() {
+    this.needsUpdate = true;
+  }
+
+  public boolean needsUpdate() {
+    return this.needsUpdate;
   }
 }
