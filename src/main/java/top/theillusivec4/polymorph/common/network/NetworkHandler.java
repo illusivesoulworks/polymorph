@@ -1,4 +1,4 @@
-package top.theillusivec4.polymorph.network;
+package top.theillusivec4.polymorph.common.network;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -9,9 +9,9 @@ import net.minecraftforge.fml.network.NetworkEvent.Context;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import top.theillusivec4.polymorph.Polymorph;
-import top.theillusivec4.polymorph.network.client.CPacketSetRecipe;
-import top.theillusivec4.polymorph.network.client.CPacketTransferRecipe;
-import top.theillusivec4.polymorph.network.server.SPacketSyncOutput;
+import top.theillusivec4.polymorph.common.network.client.CPacketSetRecipe;
+import top.theillusivec4.polymorph.common.network.client.CPacketTransferRecipe;
+import top.theillusivec4.polymorph.common.network.server.SPacketSyncOutput;
 
 public class NetworkHandler {
 

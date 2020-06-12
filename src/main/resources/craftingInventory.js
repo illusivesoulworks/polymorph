@@ -10,8 +10,8 @@ function initializeCoreMod() {
         var opcodes = Java.type('org.objectweb.asm.Opcodes');
         var MethodInsnNode = Java.type(
             'org.objectweb.asm.tree.MethodInsnNode');
-        var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
         var methods = classNode.methods;
+        var found = 0;
 
         for (m in methods) {
           var method = methods[m];
@@ -21,6 +21,7 @@ function initializeCoreMod() {
           if (method.name === "decrStackSize" || method.name
               === "func_70298_a") {
             print("Found method decrStackSize ", method.toString());
+            found++;
 
             for (var i = 0; i < instr.length; i++) {
               var instruction = instr[i];
@@ -29,28 +30,27 @@ function initializeCoreMod() {
                 var inst = instruction.getNext();
                 print("Found node ", inst.toString());
                 code.insert(inst, new MethodInsnNode(opcodes.INVOKESTATIC,
-                    "top/theillusivec4/polymorph/core/PolymorphHooks",
-                    "onCraftMatrixChanged",
-                    "(Lnet/minecraft/inventory/CraftingInventory;)V",
-                    false));
-                code.insert(instruction, new VarInsnNode(opcodes.ALOAD, 0));
+                    "top/theillusivec4/polymorph/common/PolymorphHooks",
+                    "onCraftMatrixChanged", "()V", false));
                 break;
               }
             }
           } else if (method.name === "setInventorySlotContents" || method.name
               === "func_70299_a") {
             print("Found method setInventorySlotContents ", method.toString());
+            found++;
 
             if (instr.length > 0) {
               var instruction1 = instr[0];
               print("Found node ", instruction1.toString());
               code.insert(instruction1, new MethodInsnNode(opcodes.INVOKESTATIC,
-                  "top/theillusivec4/polymorph/core/PolymorphHooks",
-                  "onCraftMatrixChanged",
-                  "(Lnet/minecraft/inventory/CraftingInventory;)V",
-                  false));
-              code.insert(instruction1, new VarInsnNode(opcodes.ALOAD, 0));
+                  "top/theillusivec4/polymorph/common/PolymorphHooks",
+                  "onCraftMatrixChanged", "()V", false));
             }
+          }
+
+          if (found >= 2) {
+            break;
           }
         }
         return classNode;

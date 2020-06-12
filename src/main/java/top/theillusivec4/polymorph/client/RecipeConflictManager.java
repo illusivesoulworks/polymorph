@@ -1,4 +1,4 @@
-package top.theillusivec4.polymorph.util;
+package top.theillusivec4.polymorph.client;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -11,7 +11,6 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.WorkbenchContainer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
@@ -19,18 +18,18 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.Polymorph;
-import top.theillusivec4.polymorph.gui.RecipeSelectionGui;
-import top.theillusivec4.polymorph.network.NetworkHandler;
-import top.theillusivec4.polymorph.network.client.CPacketSetRecipe;
+import top.theillusivec4.polymorph.client.gui.RecipeSelectionGui;
+import top.theillusivec4.polymorph.common.network.NetworkHandler;
+import top.theillusivec4.polymorph.common.network.client.CPacketSetRecipe;
 
-public class ClientCraftingManager {
+public class RecipeConflictManager {
 
   private static final ResourceLocation SWITCH = new ResourceLocation(Polymorph.MODID,
       "textures/gui/switch.png");
   private static final Field CRAFT_MATRIX = ObfuscationReflectionHelper
       .findField(WorkbenchContainer.class, "field_75162_e");
 
-  private static ClientCraftingManager instance;
+  private static RecipeConflictManager instance;
 
   private RecipeSelectionGui recipeSelectionGui;
 
@@ -40,9 +39,8 @@ public class ClientCraftingManager {
 
   private ImageButton switchButton;
   private boolean needsUpdate;
-  private boolean paused;
 
-  private ClientCraftingManager(ContainerScreen<?> screen) {
+  private RecipeConflictManager(ContainerScreen<?> screen) {
     int x = screen.width / 2;
     int y = screen.height / 2;
     this.recipeSelectionGui = new RecipeSelectionGui(this, x + 19, y - 100);
@@ -63,12 +61,12 @@ public class ClientCraftingManager {
     }
   }
 
-  public static Optional<ClientCraftingManager> getInstance() {
+  public static Optional<RecipeConflictManager> getInstance() {
     return Optional.ofNullable(instance);
   }
 
-  public static ClientCraftingManager refreshInstance(ContainerScreen<?> screen) {
-    instance = new ClientCraftingManager(screen);
+  public static RecipeConflictManager refreshInstance(ContainerScreen<?> screen) {
+    instance = new RecipeConflictManager(screen);
     return instance;
   }
 
@@ -95,7 +93,6 @@ public class ClientCraftingManager {
               Container container = playerEntity.openContainer;
 
               if (container instanceof WorkbenchContainer) {
-                ItemStack stack = recipe.getCraftingResult(craftingInventory);
                 NetworkHandler.INSTANCE.send(PacketDistributor.SERVER.noArg(),
                     new CPacketSetRecipe(recipe.getId().toString()));
               }

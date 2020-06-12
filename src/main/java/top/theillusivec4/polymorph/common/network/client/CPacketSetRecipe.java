@@ -1,4 +1,4 @@
-package top.theillusivec4.polymorph.network.client;
+package top.theillusivec4.polymorph.common.network.client;
 
 import java.lang.reflect.Field;
 import java.util.Optional;
@@ -17,8 +17,8 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.Polymorph;
-import top.theillusivec4.polymorph.network.NetworkHandler;
-import top.theillusivec4.polymorph.network.server.SPacketSyncOutput;
+import top.theillusivec4.polymorph.common.network.NetworkHandler;
+import top.theillusivec4.polymorph.common.network.server.SPacketSyncOutput;
 
 public class CPacketSetRecipe {
 

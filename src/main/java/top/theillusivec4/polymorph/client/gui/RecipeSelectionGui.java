@@ -1,4 +1,4 @@
-package top.theillusivec4.polymorph.gui;
+package top.theillusivec4.polymorph.client.gui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +12,13 @@ import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraftforge.fml.network.PacketDistributor;
-import top.theillusivec4.polymorph.network.NetworkHandler;
-import top.theillusivec4.polymorph.network.client.CPacketSetRecipe;
-import top.theillusivec4.polymorph.util.ClientCraftingManager;
+import top.theillusivec4.polymorph.client.RecipeConflictManager;
+import top.theillusivec4.polymorph.common.network.NetworkHandler;
+import top.theillusivec4.polymorph.common.network.client.CPacketSetRecipe;
 
 public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGuiEventListener {
 
-  private final ClientCraftingManager craftingManager;
+  private final RecipeConflictManager craftingManager;
 
   private List<RecipeSelectWidget> buttons = new ArrayList<>();
   private RecipeSelectWidget hoveredButton;
@@ -26,7 +26,7 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
   private int x;
   private int y;
 
-  public RecipeSelectionGui(ClientCraftingManager craftingManager, int x, int y) {
+  public RecipeSelectionGui(RecipeConflictManager craftingManager, int x, int y) {
     this.craftingManager = craftingManager;
     this.x = x;
     this.y = y;

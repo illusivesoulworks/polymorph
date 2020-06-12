@@ -1,4 +1,4 @@
-package top.theillusivec4.polymorph.gui;
+package top.theillusivec4.polymorph.client.gui;
 
 import java.util.List;
 import net.minecraft.client.Minecraft;

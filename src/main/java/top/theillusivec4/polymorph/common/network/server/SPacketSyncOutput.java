@@ -1,4 +1,4 @@
-package top.theillusivec4.polymorph.network.server;
+package top.theillusivec4.polymorph.common.network.server;
 
 import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
