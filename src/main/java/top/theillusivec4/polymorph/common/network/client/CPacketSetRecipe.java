@@ -31,7 +31,7 @@ public class CPacketSetRecipe {
   }
 
   public static CPacketSetRecipe decode(PacketBuffer buf) {
-    return new CPacketSetRecipe(buf.readString());
+    return new CPacketSetRecipe(buf.readString(32767));
   }
 
   public static void handle(CPacketSetRecipe msg, Supplier<Context> ctx) {
