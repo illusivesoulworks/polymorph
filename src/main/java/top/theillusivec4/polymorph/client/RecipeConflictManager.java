@@ -102,8 +102,6 @@ public class RecipeConflictManager<T extends Container> {
                 NetworkHandler.INSTANCE.send(PacketDistributor.SERVER.noArg(),
                     new CPacketSetRecipe(recipe.getId().toString()));
               }
-            } else {
-              this.setLastSelectedRecipe(null);
             }
           });
         });
@@ -130,8 +128,9 @@ public class RecipeConflictManager<T extends Container> {
       recipes.removeIf(rec -> !recipeOutputs.add(new RecipeOutputWrapper(rec.getCraftingResult(craftingInventory))));
 
       if (!recipes.isEmpty()) {
-        this.setLastSelectedRecipe(null);
-        this.setLastPlacedRecipe(recipes.get(0));
+        ICraftingRecipe defaultRecipe = recipes.get(0);
+        this.setLastSelectedRecipe(defaultRecipe);
+        this.setLastPlacedRecipe(defaultRecipe);
         this.setLastRecipesList(recipes);
       }
     }
