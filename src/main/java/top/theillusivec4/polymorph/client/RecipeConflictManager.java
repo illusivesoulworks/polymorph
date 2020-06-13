@@ -1,7 +1,9 @@
 package top.theillusivec4.polymorph.client;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -50,7 +52,7 @@ public class RecipeConflictManager<T extends Container> {
     int y = screen.height / 2;
     x += provider.getXOffset();
     y += provider.getYOffset();
-    this.recipeSelectionGui = new RecipeSelectionGui(this, x - 4, y - 28);
+    this.recipeSelectionGui = new RecipeSelectionGui(this, x - 4, y - 32);
     this.switchButton = new ImageButton(x, y, 16, 16, 0, 0, 17, SWITCH,
         clickWidget -> recipeSelectionGui.setVisible(!recipeSelectionGui.isVisible()));
     this.switchButton.visible = this.recipeSelectionGui.getButtons().size() > 1;
@@ -82,13 +84,17 @@ public class RecipeConflictManager<T extends Container> {
 
           if (this.getLastPlacedRecipe().map(recipe -> !recipe.matches(craftingInventory, world))
               .orElse(true)) {
+            Polymorph.LOGGER.info("fetching new recipes");
+            Set<RecipeOutputWrapper> recipeOutputs = new HashSet<>();
             List<ICraftingRecipe> recipes = world.getRecipeManager()
                 .getRecipes(IRecipeType.CRAFTING, craftingInventory, world);
-            Polymorph.LOGGER.info("setting recipes");
+            recipes.removeIf(recipe -> !recipeOutputs
+                .add(new RecipeOutputWrapper(recipe.getCraftingResult(craftingInventory))));
             recipeSelectionGui.setRecipes(recipes);
             this.setLastPlacedRecipe(recipes.isEmpty() ? null : recipes.get(0));
           }
           this.getLastSelectedRecipe().ifPresent(recipe -> {
+
             if (recipe.matches(craftingInventory, world)) {
               ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
 

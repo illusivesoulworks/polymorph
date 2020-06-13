@@ -73,6 +73,7 @@ public class ClientEventHandler {
   public void guiMouseClick(GuiScreenEvent.MouseClickedEvent.Pre evt) {
 
     if (evt.getGui() instanceof ContainerScreen) {
+
       if (RecipeConflictManager.getInstance().map(conflictManager -> conflictManager
           .mouseClicked(evt.getMouseX(), evt.getMouseY(), evt.getButton())).orElse(false)) {
         evt.setCanceled(true);

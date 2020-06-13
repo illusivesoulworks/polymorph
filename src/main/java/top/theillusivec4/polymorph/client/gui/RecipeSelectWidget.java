@@ -34,9 +34,9 @@ public class RecipeSelectWidget extends Widget {
     int i = 16;
     int j = 0;
 
-    if (this.x + 25 >= p_renderButton_1_ && this.x <= p_renderButton_1_) {
+    if (this.x + 25 > p_renderButton_1_ && this.x <= p_renderButton_1_) {
 
-      if (this.y + 25 >= p_renderButton_2_ && this.y <= p_renderButton_2_) {
+      if (this.y + 25 > p_renderButton_2_ && this.y <= p_renderButton_2_) {
         j += 25;
       }
     }

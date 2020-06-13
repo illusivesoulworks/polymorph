@@ -34,7 +34,11 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
     this.conflictManager.getCurrentCraftingMatrix().ifPresent(craftingInventory -> recipes
         .forEach(recipe -> this.buttons.add(new RecipeSelectWidget(craftingInventory, recipe))));
     int size = recipes.size();
-    int xOffset = (size % 2 == 0 ? -12 : -25) * (size - 1);
+    int xOffset = (int) (-25 * Math.floor((size / 2.0F)));
+
+    if (size % 2 == 0) {
+      xOffset += 13;
+    }
     int[] pos = {this.x + xOffset, this.y};
     this.buttons.forEach(button -> {
       button.setPosition(pos[0], pos[1]);
