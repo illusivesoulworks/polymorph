@@ -4,6 +4,7 @@ import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -13,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.client.ClientEventHandler;
+import top.theillusivec4.polymorph.common.integrations.FastWorkbenchModule;
 import top.theillusivec4.polymorph.common.network.NetworkHandler;
 import top.theillusivec4.polymorph.common.provider.InventoryProvider;
 import top.theillusivec4.polymorph.common.provider.WorkbenchProvider;
@@ -35,6 +37,10 @@ public class Polymorph {
     NetworkHandler.register();
     PolymorphApi.addProvider(WorkbenchContainer.class, new WorkbenchProvider());
     PolymorphApi.addProvider(PlayerContainer.class, new InventoryProvider());
+
+    if (ModList.get().isLoaded("fastbench")) {
+      FastWorkbenchModule.setup();
+    }
   }
 
   private void clientSetup(final FMLClientSetupEvent evt) {

@@ -8,10 +8,12 @@ buildscript {
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
         classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.4.0'
+        classpath 'com.wynprice.cursemaven:CurseMaven:2.1.1'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'com.matthewprenger.cursegradle'
+apply plugin: 'com.wynprice.cursemaven'
 
 version = "${version_minecraft}-${mod_version}"
 group = "${mod_group}"
@@ -53,6 +55,9 @@ minecraft {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
+    compile fg.deobf("curse.maven:fastworkbench:2856527")
+
+    runtimeOnly fg.deobf("curse.maven:placebo:2870411")
 }
 
 sourceSets {
