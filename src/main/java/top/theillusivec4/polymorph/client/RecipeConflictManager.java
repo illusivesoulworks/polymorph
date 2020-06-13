@@ -1,5 +1,6 @@
 package top.theillusivec4.polymorph.client;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.api.PolymorphApi.IProvider;
@@ -37,6 +39,7 @@ public class RecipeConflictManager<T extends Container> {
 
   private CraftingInventory currentCraftingMatrix;
   private IRecipe<CraftingInventory> lastPlacedRecipe;
+  private List<ICraftingRecipe> lastRecipesList;
   private IRecipe<CraftingInventory> lastSelectedRecipe;
 
   private ImageButton switchButton;
@@ -81,18 +84,15 @@ public class RecipeConflictManager<T extends Container> {
 
       if (world != null) {
         this.getCurrentCraftingMatrix().ifPresent(craftingInventory -> {
+          List<ICraftingRecipe> recipesList = this.getLastPlacedRecipe().map(recipe -> {
+            if (recipe.matches(craftingInventory, world)) {
+              return this.getLastRecipesList().orElse(new ArrayList<>());
+            }
+            return null;
+          }).orElseGet(() -> this.fetchRecipes(craftingInventory, world));
 
-          if (this.getLastPlacedRecipe().map(recipe -> !recipe.matches(craftingInventory, world))
-              .orElse(true)) {
-            Polymorph.LOGGER.info("fetching new recipes");
-            Set<RecipeOutputWrapper> recipeOutputs = new HashSet<>();
-            List<ICraftingRecipe> recipes = world.getRecipeManager()
-                .getRecipes(IRecipeType.CRAFTING, craftingInventory, world);
-            recipes.removeIf(recipe -> !recipeOutputs
-                .add(new RecipeOutputWrapper(recipe.getCraftingResult(craftingInventory))));
-            recipeSelectionGui.setRecipes(recipes);
-            this.setLastPlacedRecipe(recipes.isEmpty() ? null : recipes.get(0));
-          }
+          recipeSelectionGui.setRecipes(recipesList);
+
           this.getLastSelectedRecipe().ifPresent(recipe -> {
 
             if (recipe.matches(craftingInventory, world)) {
@@ -109,6 +109,33 @@ public class RecipeConflictManager<T extends Container> {
         });
       }
     }
+  }
+
+  private List<ICraftingRecipe> fetchRecipes(CraftingInventory craftingInventory, World world) {
+    List<ICraftingRecipe> recipes = new ArrayList<>();
+    boolean isCraftingEmpty = true;
+
+    for (int i = 0; i < craftingInventory.getSizeInventory(); i++) {
+
+      if (!craftingInventory.getStackInSlot(i).isEmpty()) {
+        isCraftingEmpty = false;
+        break;
+      }
+    }
+
+    if (!isCraftingEmpty) {
+      Polymorph.LOGGER.info("fetching new recipes");
+      Set<RecipeOutputWrapper> recipeOutputs = new HashSet<>();
+      recipes = world.getRecipeManager().getRecipes(IRecipeType.CRAFTING, craftingInventory, world);
+      recipes.removeIf(rec -> !recipeOutputs.add(new RecipeOutputWrapper(rec.getCraftingResult(craftingInventory))));
+
+      if (!recipes.isEmpty()) {
+        this.setLastSelectedRecipe(null);
+        this.setLastPlacedRecipe(recipes.get(0));
+        this.setLastRecipesList(recipes);
+      }
+    }
+    return recipes;
   }
 
   public void renderRecipeSelectionGui(int mouseX, int mouseY, float partialTicks) {
@@ -152,6 +179,14 @@ public class RecipeConflictManager<T extends Container> {
             new CPacketSetRecipe(recipe.getId().toString()));
       });
     }
+  }
+
+  public Optional<List<ICraftingRecipe>> getLastRecipesList() {
+    return Optional.ofNullable(lastRecipesList);
+  }
+
+  public void setLastRecipesList(List<ICraftingRecipe> recipesList) {
+    lastRecipesList = recipesList;
   }
 
   public Optional<IRecipe<CraftingInventory>> getLastPlacedRecipe() {
