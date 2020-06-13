@@ -49,6 +49,8 @@ public class PolymorphCommand {
     IntArrayList first = new IntArrayList();
     IntArrayList second = new IntArrayList();
     AtomicInteger conflictCount = new AtomicInteger();
+    source
+        .sendFeedback(new TranslationTextComponent("commands.polymorph.conflicts.starting"), true);
 
     recipes.forEach(recipe -> {
       String id = recipe.getId().toString();
@@ -93,7 +95,7 @@ public class PolymorphCommand {
       }
 
       if (!conflicts.isEmpty()) {
-        conflictCount.addAndGet(1);
+        conflictCount.addAndGet(conflicts.size());
         lines.add("Conflicts with " + id + ":");
         lines.addAll(conflicts);
         lines.add("");
