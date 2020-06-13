@@ -1,5 +1,7 @@
 package top.theillusivec4.polymorph;
 
+import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -9,8 +11,11 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.client.ClientEventHandler;
 import top.theillusivec4.polymorph.common.network.NetworkHandler;
+import top.theillusivec4.polymorph.common.provider.InventoryProvider;
+import top.theillusivec4.polymorph.common.provider.WorkbenchProvider;
 import top.theillusivec4.polymorph.server.PolymorphCommand;
 
 @Mod(Polymorph.MODID)
@@ -28,6 +33,8 @@ public class Polymorph {
 
   private void setup(final FMLCommonSetupEvent evt) {
     NetworkHandler.register();
+    PolymorphApi.addProvider(WorkbenchContainer.class, new WorkbenchProvider());
+    PolymorphApi.addProvider(PlayerContainer.class, new InventoryProvider());
   }
 
   private void clientSetup(final FMLClientSetupEvent evt) {

@@ -4,11 +4,10 @@ import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
-import top.theillusivec4.polymorph.Polymorph;
+import top.theillusivec4.polymorph.api.PolymorphApi;
 
 public class SPacketSyncOutput {
 
@@ -27,20 +26,15 @@ public class SPacketSyncOutput {
   }
 
   public static void handle(SPacketSyncOutput msg, Supplier<Context> ctx) {
-    ctx.get().enqueueWork(
-        () -> {
-          ClientPlayerEntity clientPlayerEntity = Minecraft.getInstance().player;
+    ctx.get().enqueueWork(() -> {
+      ClientPlayerEntity clientPlayerEntity = Minecraft.getInstance().player;
 
-          if (clientPlayerEntity != null) {
-            Container container = clientPlayerEntity.openContainer;
-
-            if (container instanceof WorkbenchContainer) {
-              WorkbenchContainer workbenchContainer = (WorkbenchContainer) container;
-              Polymorph.LOGGER.info("Syncing output " + msg.stack.toString());
-              workbenchContainer.getSlot(workbenchContainer.getOutputSlot()).putStack(msg.stack);
-            }
-          }
-        });
+      if (clientPlayerEntity != null) {
+        Container container = clientPlayerEntity.openContainer;
+        PolymorphApi.getProvider(container)
+            .ifPresent(provider -> provider.getOutputSlot(container).putStack(msg.stack));
+      }
+    });
     ctx.get().setPacketHandled(true);
   }
 }

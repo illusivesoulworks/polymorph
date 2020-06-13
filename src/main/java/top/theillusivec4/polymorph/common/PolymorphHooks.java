@@ -8,6 +8,6 @@ public class PolymorphHooks {
 
   public static void onCraftMatrixChanged() {
     DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> RecipeConflictManager.getInstance()
-        .ifPresent(RecipeConflictManager::flagUpdate));
+        .ifPresent(RecipeConflictManager::onCraftMatrixChanged));
   }
 }
