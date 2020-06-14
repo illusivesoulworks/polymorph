@@ -161,7 +161,7 @@ public class RecipeConflictManager<T extends Container> {
     }
 
     if (!isCraftingEmpty) {
-      Polymorph.LOGGER.info("fetching new recipes");
+//      Polymorph.LOGGER.info("fetching new recipes");
       Set<RecipeOutputWrapper> recipeOutputs = new HashSet<>();
       recipes = world.getRecipeManager().getRecipes(IRecipeType.CRAFTING, craftingInventory, world);
       recipes.removeIf(rec -> !recipeOutputs
