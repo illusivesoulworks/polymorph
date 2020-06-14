@@ -59,6 +59,8 @@ dependencies {
     compile fg.deobf("curse.maven:crafting-station:2905656")
 
     runtimeOnly fg.deobf("curse.maven:placebo:2870411")
+    // Needs to be run with MixinBootstrap for server builds
+    // runtimeOnly fg.deobf("curse.maven:extra-tags:2941269")
 }
 
 sourceSets {

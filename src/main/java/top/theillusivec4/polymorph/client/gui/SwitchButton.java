@@ -15,9 +15,7 @@ public class SwitchButton extends ImageButton {
 
   @Override
   public void renderButton(int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
-    RenderSystem.pushMatrix();
     RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
     super.renderButton(p_renderButton_1_, p_renderButton_2_, p_renderButton_3_);
-    RenderSystem.popMatrix();
   }
 }
