@@ -111,5 +111,9 @@ curseforge {
         changelogType = 'markdown'
         changelog = file('docs/CHANGELOG.md')
         addArtifact(sourcesJar)
+        relations {
+            optionalDependency 'fastworkbench'
+            optionalDependency 'crafting-station'
+        }
     }
 }

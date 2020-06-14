@@ -12,8 +12,7 @@ assignees: TheIllusiveC4
 Please reproduce all issues without any other unnecessary mods before submitting.
 -->
 #### Versions (Be specific, do not write "latest"):
-* Curious Shulker Boxes:
-* Curios:
+* Polymorph:
 * Forge:
 #### Observed Behavior:
 #### Expected Behavior:
