@@ -18,6 +18,7 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
   private boolean visible = false;
   private int x;
   private int y;
+  private List<ICraftingRecipe> recipes = new ArrayList<>();
 
   public RecipeSelectionGui(RecipeConflictManager<?> conflictManager, int x, int y) {
     this.conflictManager = conflictManager;
@@ -25,14 +26,13 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
     this.y = y;
   }
 
-  public List<RecipeSelectWidget> getButtons() {
-    return buttons;
+  public void setPosition(int x, int y) {
+    this.x = x;
+    this.y = y;
+    this.updateButtonPositions();
   }
 
-  public void setRecipes(List<ICraftingRecipe> recipes) {
-    this.buttons.clear();
-    this.conflictManager.getCurrentCraftingMatrix().ifPresent(craftingInventory -> recipes
-        .forEach(recipe -> this.buttons.add(new RecipeSelectWidget(craftingInventory, recipe))));
+  private void updateButtonPositions() {
     int size = recipes.size();
     int xOffset = (int) (-25 * Math.floor((size / 2.0F)));
 
@@ -44,6 +44,18 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
       button.setPosition(pos[0], pos[1]);
       pos[0] += 25;
     });
+  }
+
+  public List<RecipeSelectWidget> getButtons() {
+    return buttons;
+  }
+
+  public void setRecipes(List<ICraftingRecipe> recipes) {
+    this.recipes = recipes;
+    this.buttons.clear();
+    this.conflictManager.getCurrentCraftingMatrix().ifPresent(craftingInventory -> recipes
+        .forEach(recipe -> this.buttons.add(new RecipeSelectWidget(craftingInventory, recipe))));
+    this.updateButtonPositions();
     this.conflictManager.getSwitchButton().visible = recipes.size() > 1;
   }
 

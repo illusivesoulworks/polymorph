@@ -1,6 +1,6 @@
 package top.theillusivec4.polymorph.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.gui.recipebook.IRecipeShownListener;
+import net.minecraft.client.gui.recipebook.RecipeBookGui;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.client.util.InputMappings;
@@ -19,8 +21,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.RecipeBook;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.api.PolymorphApi.IProvider;
@@ -34,6 +38,8 @@ public class RecipeConflictManager<T extends Container> {
 
   private static final ResourceLocation SWITCH = new ResourceLocation(Polymorph.MODID,
       "textures/gui/switch.png");
+  private static final Field RECIPE_BOOK = ObfuscationReflectionHelper
+      .findField(RecipeBookGui.class, "field_193964_s");
 
   private static RecipeConflictManager<?> instance;
 
@@ -46,6 +52,7 @@ public class RecipeConflictManager<T extends Container> {
 
   private ImageButton switchButton;
   private boolean craftMatrixChanged;
+  private boolean positionChanged;
 
   private ContainerScreen<T> parent;
   private IProvider<T> provider;
@@ -78,7 +85,37 @@ public class RecipeConflictManager<T extends Container> {
     instance = null;
   }
 
+  public void updatePosition() {
+    this.positionChanged = true;
+  }
+
   public void tick() {
+
+    if (this.positionChanged) {
+      this.positionChanged = false;
+      int x = this.parent.width / 2;
+      int y = this.parent.height / 2;
+      x += provider.getXOffset();
+      y += provider.getYOffset();
+
+      if (this.parent instanceof IRecipeShownListener) {
+        IRecipeShownListener recipeShownListener = (IRecipeShownListener) this.parent;
+        RecipeBookGui recipeBookGui = recipeShownListener.getRecipeGui();
+        RecipeBook recipeBook = null;
+
+        try {
+          recipeBook = (RecipeBook) RECIPE_BOOK.get(recipeBookGui);
+        } catch (IllegalAccessException e) {
+          Polymorph.LOGGER.error("Something went wrong while accessing recipe book!");
+        }
+
+        if (recipeBook != null && recipeBookGui.isVisible()) {
+          x += 77;
+        }
+      }
+      this.recipeSelectionGui.setPosition(x - 4, y - 32);
+      this.switchButton.setPosition(x, y);
+    }
 
     if (this.craftMatrixChanged) {
       ClientWorld world = Minecraft.getInstance().world;
@@ -127,7 +164,8 @@ public class RecipeConflictManager<T extends Container> {
       Polymorph.LOGGER.info("fetching new recipes");
       Set<RecipeOutputWrapper> recipeOutputs = new HashSet<>();
       recipes = world.getRecipeManager().getRecipes(IRecipeType.CRAFTING, craftingInventory, world);
-      recipes.removeIf(rec -> !recipeOutputs.add(new RecipeOutputWrapper(rec.getCraftingResult(craftingInventory))));
+      recipes.removeIf(rec -> !recipeOutputs
+          .add(new RecipeOutputWrapper(rec.getCraftingResult(craftingInventory))));
 
       if (!recipes.isEmpty()) {
         ICraftingRecipe defaultRecipe = recipes.get(0);

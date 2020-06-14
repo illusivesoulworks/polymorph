@@ -1,10 +1,12 @@
 package top.theillusivec4.polymorph.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.recipebook.IRecipeShownListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.CraftingScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.inventory.container.WorkbenchContainer;
@@ -77,6 +79,7 @@ public class ClientEventHandler {
   public void guiMouseClick(GuiScreenEvent.MouseClickedEvent.Pre evt) {
 
     if (evt.getGui() instanceof ContainerScreen) {
+      RecipeConflictManager.getInstance().ifPresent(RecipeConflictManager::updatePosition);
 
       if (RecipeConflictManager.getInstance().map(conflictManager -> conflictManager
           .mouseClicked(evt.getMouseX(), evt.getMouseY(), evt.getButton())).orElse(false)) {
