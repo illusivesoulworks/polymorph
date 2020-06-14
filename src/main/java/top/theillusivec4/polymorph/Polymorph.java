@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.client.ClientEventHandler;
+import top.theillusivec4.polymorph.common.integrations.CraftingStationModule;
 import top.theillusivec4.polymorph.common.integrations.FastWorkbenchModule;
 import top.theillusivec4.polymorph.common.network.NetworkHandler;
 import top.theillusivec4.polymorph.common.provider.InventoryProvider;
@@ -26,11 +27,17 @@ public class Polymorph {
   public static final String MODID = "polymorph";
   public static final Logger LOGGER = LogManager.getLogger();
 
+  public static boolean isFastBenchLoaded = false;
+  public static boolean isCraftingStationLoaded = false;
+
   public Polymorph() {
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
     eventBus.addListener(this::setup);
     eventBus.addListener(this::clientSetup);
     MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
+
+    isFastBenchLoaded = ModList.get().isLoaded("fastbench");
+    isCraftingStationLoaded = ModList.get().isLoaded("craftingstation");
   }
 
   private void setup(final FMLCommonSetupEvent evt) {
@@ -38,13 +45,21 @@ public class Polymorph {
     PolymorphApi.addProvider(WorkbenchContainer.class, new WorkbenchProvider());
     PolymorphApi.addProvider(PlayerContainer.class, new InventoryProvider());
 
-    if (ModList.get().isLoaded("fastbench")) {
+    if (isFastBenchLoaded) {
       FastWorkbenchModule.setup();
+    }
+
+    if (isCraftingStationLoaded) {
+      CraftingStationModule.setup();
     }
   }
 
   private void clientSetup(final FMLClientSetupEvent evt) {
     MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+
+    if (isCraftingStationLoaded) {
+      CraftingStationModule.Client.clientSetup();
+    }
   }
 
   private void serverStarting(final FMLServerStartingEvent evt) {

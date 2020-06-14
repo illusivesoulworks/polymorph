@@ -12,7 +12,9 @@ import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.common.integrations.CraftingStationModule;
 
 public class ClientEventHandler {
 
@@ -50,6 +52,8 @@ public class ClientEventHandler {
         conflictManager = PolymorphApi.getProvider(playerContainer)
             .map(provider -> RecipeConflictManager.refreshInstance(inventoryScreen, provider))
             .orElse(null);
+      } else if (Polymorph.isCraftingStationLoaded) {
+        conflictManager = CraftingStationModule.Client.getConflictManager(containerScreen);
       }
     }
 

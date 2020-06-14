@@ -56,6 +56,7 @@ minecraft {
 dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
     compile fg.deobf("curse.maven:fastworkbench:2856527")
+    compile fg.deobf("curse.maven:crafting-station:2905656")
 
     runtimeOnly fg.deobf("curse.maven:placebo:2870411")
 }

@@ -1,5 +1,6 @@
 package top.theillusivec4.polymorph.client;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +25,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.api.PolymorphApi.IProvider;
 import top.theillusivec4.polymorph.client.gui.RecipeSelectionGui;
+import top.theillusivec4.polymorph.client.gui.SwitchButton;
 import top.theillusivec4.polymorph.common.network.NetworkHandler;
 import top.theillusivec4.polymorph.common.network.client.CPacketSetRecipe;
 import top.theillusivec4.polymorph.common.network.client.CPacketTransferRecipe;
@@ -56,7 +58,7 @@ public class RecipeConflictManager<T extends Container> {
     x += provider.getXOffset();
     y += provider.getYOffset();
     this.recipeSelectionGui = new RecipeSelectionGui(this, x - 4, y - 32);
-    this.switchButton = new ImageButton(x, y, 16, 16, 0, 0, 17, SWITCH,
+    this.switchButton = new SwitchButton(x, y, 16, 16, 0, 0, 17, SWITCH,
         clickWidget -> recipeSelectionGui.setVisible(!recipeSelectionGui.isVisible()));
     this.switchButton.visible = this.recipeSelectionGui.getButtons().size() > 1;
     this.currentCraftingMatrix = provider.getCraftingMatrix(screen.getContainer());
