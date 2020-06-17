@@ -17,7 +17,7 @@
  * License along with Polymorph.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.common.integrations;
+package top.theillusivec4.polymorph.common.integrations.fastbench;
 
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;

@@ -15,7 +15,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'com.matthewprenger.cursegradle'
 apply plugin: 'com.wynprice.cursemaven'
 
-version = "${version_minecraft}-${mod_version}"
+version = "FORGE-${version_minecraft}-${mod_version}"
 group = "${mod_group}"
 archivesBaseName = "${mod_id}"
 
@@ -53,10 +53,25 @@ minecraft {
     }
 }
 
+repositories {
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
+    }
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
     compile fg.deobf("curse.maven:fastworkbench:2856527")
     compile fg.deobf("curse.maven:crafting-station:2905656")
+    compileOnly fg.deobf("mezz.jei:jei-${version_minecraft}:${version_jei}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${version_minecraft}:${version_jei}")
 
     runtimeOnly fg.deobf("curse.maven:placebo:2870411")
     // Needs to be run with MixinBootstrap for server builds

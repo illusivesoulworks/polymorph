@@ -20,12 +20,10 @@
 package top.theillusivec4.polymorph.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.recipebook.IRecipeShownListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.CraftingScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
-import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.inventory.container.WorkbenchContainer;
@@ -35,7 +33,7 @@ import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.common.integrations.CraftingStationModule;
+import top.theillusivec4.polymorph.common.integrations.craftingstation.CraftingStationModule;
 
 public class ClientEventHandler {
 

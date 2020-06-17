@@ -34,7 +34,7 @@ import net.minecraftforge.fml.network.NetworkEvent.Context;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.common.integrations.FastWorkbenchModule;
+import top.theillusivec4.polymorph.common.integrations.fastbench.FastWorkbenchModule;
 import top.theillusivec4.polymorph.common.network.NetworkHandler;
 import top.theillusivec4.polymorph.common.network.server.SPacketSyncOutput;
 

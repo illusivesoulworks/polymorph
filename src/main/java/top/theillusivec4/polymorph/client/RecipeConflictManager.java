@@ -49,6 +49,7 @@ import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.api.PolymorphApi.IProvider;
 import top.theillusivec4.polymorph.client.gui.RecipeSelectionGui;
 import top.theillusivec4.polymorph.client.gui.SwitchButton;
+import top.theillusivec4.polymorph.common.integrations.jei.PolymorphJeiPlugin;
 import top.theillusivec4.polymorph.common.network.NetworkHandler;
 import top.theillusivec4.polymorph.common.network.client.CPacketSetRecipe;
 import top.theillusivec4.polymorph.common.network.client.CPacketTransferRecipe;
@@ -150,6 +151,23 @@ public class RecipeConflictManager<T extends Container> {
           }).orElseGet(() -> this.fetchRecipes(craftingInventory, world));
 
           recipeSelectionGui.setRecipes(recipesList);
+
+          if (Polymorph.isJeiLoaded) {
+            ItemStack chosenStack = PolymorphJeiPlugin.getItemStack();
+
+            if (!chosenStack.isEmpty()) {
+
+              for (ICraftingRecipe craftingRecipe : recipesList) {
+
+                if (craftingRecipe.getCraftingResult(craftingInventory).getItem() == chosenStack
+                    .getItem()) {
+                  this.setLastSelectedRecipe(craftingRecipe);
+                  break;
+                }
+              }
+            }
+            PolymorphJeiPlugin.clearItemStack();
+          }
 
           this.getLastSelectedRecipe().ifPresent(recipe -> {
 

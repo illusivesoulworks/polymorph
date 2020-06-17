@@ -33,8 +33,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.client.ClientEventHandler;
-import top.theillusivec4.polymorph.common.integrations.CraftingStationModule;
-import top.theillusivec4.polymorph.common.integrations.FastWorkbenchModule;
+import top.theillusivec4.polymorph.common.integrations.craftingstation.CraftingStationModule;
+import top.theillusivec4.polymorph.common.integrations.fastbench.FastWorkbenchModule;
+import top.theillusivec4.polymorph.common.integrations.jei.PolymorphJeiPlugin;
 import top.theillusivec4.polymorph.common.network.NetworkHandler;
 import top.theillusivec4.polymorph.common.provider.InventoryProvider;
 import top.theillusivec4.polymorph.common.provider.WorkbenchProvider;
@@ -48,6 +49,7 @@ public class Polymorph {
 
   public static boolean isFastBenchLoaded = false;
   public static boolean isCraftingStationLoaded = false;
+  public static boolean isJeiLoaded = false;
 
   public Polymorph() {
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -57,6 +59,7 @@ public class Polymorph {
 
     isFastBenchLoaded = ModList.get().isLoaded("fastbench");
     isCraftingStationLoaded = ModList.get().isLoaded("craftingstation");
+    isJeiLoaded = ModList.get().isLoaded("jei");
   }
 
   private void setup(final FMLCommonSetupEvent evt) {
@@ -78,6 +81,10 @@ public class Polymorph {
 
     if (isCraftingStationLoaded) {
       CraftingStationModule.Client.clientSetup();
+    }
+
+    if (isJeiLoaded) {
+      PolymorphJeiPlugin.clientSetup();
     }
   }
 

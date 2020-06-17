@@ -17,7 +17,7 @@
  * License along with Polymorph.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.common.integrations;
+package top.theillusivec4.polymorph.common.integrations.craftingstation;
 
 import com.tfar.craftingstation.CraftingStationContainer;
 import com.tfar.craftingstation.client.CraftingStationScreen;
