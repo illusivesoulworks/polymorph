@@ -32,7 +32,6 @@ import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.api.PolymorphApi;
@@ -40,9 +39,6 @@ import top.theillusivec4.polymorph.common.network.NetworkHandler;
 import top.theillusivec4.polymorph.common.network.server.SPacketSyncOutput;
 
 public class CPacketTransferRecipe {
-
-  private static final Field CRAFT_MATRIX = ObfuscationReflectionHelper
-      .findField(WorkbenchContainer.class, "field_75162_e");
 
   private final String recipe;
 
@@ -74,13 +70,12 @@ public class CPacketTransferRecipe {
 
             if (res instanceof ICraftingRecipe && finalCraftingInventory != null) {
               ICraftingRecipe craftingRecipe = (ICraftingRecipe) res;
+              ItemStack itemstack = container.transferStackInSlot(sender, slot.getSlotIndex());
 
               if (craftingRecipe.matches(finalCraftingInventory, sender.world)) {
-                ItemStack itemstack = container.transferStackInSlot(sender, slot.getSlotIndex());
                 slot.putStack(craftingRecipe.getCraftingResult(finalCraftingInventory));
 
-                while (!itemstack.isEmpty() && ItemStack
-                    .areItemsEqual(slot.getStack(), itemstack)) {
+                while (!itemstack.isEmpty() && ItemStack.areItemsEqual(slot.getStack(), itemstack)) {
                   itemstack = container.transferStackInSlot(sender, slot.getSlotIndex());
 
                   if (craftingRecipe.matches(finalCraftingInventory, sender.world)) {

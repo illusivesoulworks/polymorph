@@ -180,7 +180,7 @@ public class RecipeConflictManager<T extends Container> {
     }
 
     if (!isCraftingEmpty) {
-//      Polymorph.LOGGER.info("fetching new recipes");
+      //      Polymorph.LOGGER.info("fetching new recipes");
       Set<RecipeOutputWrapper> recipeOutputs = new HashSet<>();
       recipes = world.getRecipeManager().getRecipes(IRecipeType.CRAFTING, craftingInventory, world);
       recipes.removeIf(rec -> !recipeOutputs
@@ -214,7 +214,8 @@ public class RecipeConflictManager<T extends Container> {
     }
     Slot slot = this.provider.getOutputSlot(this.parent.getContainer());
 
-    if (slot == this.parent.getSlotUnderMouse() && isShiftKeyDown()) {
+    if (this.getSwitchButton().visible && slot == this.parent.getSlotUnderMouse()
+        && isShiftKeyDown()) {
       return this.getLastSelectedRecipe()
           .map(recipe -> this.getCurrentCraftingMatrix().map(craftingInventory -> {
             NetworkHandler.INSTANCE.send(PacketDistributor.SERVER.noArg(),
