@@ -19,14 +19,12 @@
 
 package top.theillusivec4.polymorph.common.network.client;
 
-import java.lang.reflect.Field;
 import java.util.Optional;
 import java.util.function.Supplier;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
@@ -34,7 +32,9 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 import net.minecraftforge.fml.network.PacketDistributor;
+import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.common.integrations.FastWorkbenchModule;
 import top.theillusivec4.polymorph.common.network.NetworkHandler;
 import top.theillusivec4.polymorph.common.network.server.SPacketSyncOutput;
 
@@ -70,12 +70,17 @@ public class CPacketTransferRecipe {
 
             if (res instanceof ICraftingRecipe && finalCraftingInventory != null) {
               ICraftingRecipe craftingRecipe = (ICraftingRecipe) res;
+
+              if (Polymorph.isFastBenchLoaded) {
+                FastWorkbenchModule.setLastRecipe(container, craftingRecipe);
+              }
               ItemStack itemstack = container.transferStackInSlot(sender, slot.getSlotIndex());
 
               if (craftingRecipe.matches(finalCraftingInventory, sender.world)) {
                 slot.putStack(craftingRecipe.getCraftingResult(finalCraftingInventory));
 
-                while (!itemstack.isEmpty() && ItemStack.areItemsEqual(slot.getStack(), itemstack)) {
+                while (!itemstack.isEmpty() && ItemStack
+                    .areItemsEqual(slot.getStack(), itemstack)) {
                   itemstack = container.transferStackInSlot(sender, slot.getSlotIndex());
 
                   if (craftingRecipe.matches(finalCraftingInventory, sender.world)) {
