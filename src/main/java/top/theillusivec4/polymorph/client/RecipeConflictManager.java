@@ -54,14 +54,14 @@ import top.theillusivec4.polymorph.common.network.NetworkHandler;
 import top.theillusivec4.polymorph.common.network.client.CPacketSetRecipe;
 import top.theillusivec4.polymorph.common.network.client.CPacketTransferRecipe;
 
-public class RecipeConflictManager<T extends Container> {
+public class RecipeConflictManager {
 
   private static final ResourceLocation SWITCH = new ResourceLocation(Polymorph.MODID,
       "textures/gui/switch.png");
   private static final Field RECIPE_BOOK = ObfuscationReflectionHelper
       .findField(RecipeBookGui.class, "field_193964_s");
 
-  private static RecipeConflictManager<?> instance;
+  private static RecipeConflictManager instance;
 
   private RecipeSelectionGui recipeSelectionGui;
 
@@ -74,10 +74,10 @@ public class RecipeConflictManager<T extends Container> {
   private boolean craftMatrixChanged;
   private boolean positionChanged;
 
-  private ContainerScreen<T> parent;
-  private IProvider<T> provider;
+  private ContainerScreen<?> parent;
+  private IProvider provider;
 
-  public RecipeConflictManager(ContainerScreen<T> screen, IProvider<T> provider) {
+  public RecipeConflictManager(ContainerScreen<?> screen, IProvider provider) {
     this.parent = screen;
     this.provider = provider;
     int x = screen.width / 2;
@@ -88,16 +88,16 @@ public class RecipeConflictManager<T extends Container> {
     this.switchButton = new SwitchButton(x, y, 16, 16, 0, 0, 17, SWITCH,
         clickWidget -> recipeSelectionGui.setVisible(!recipeSelectionGui.isVisible()));
     this.switchButton.visible = this.recipeSelectionGui.getButtons().size() > 1;
-    this.currentCraftingMatrix = provider.getCraftingMatrix(screen.getContainer());
+    this.currentCraftingMatrix = provider.getCraftingMatrix();
   }
 
-  public static Optional<RecipeConflictManager<?>> getInstance() {
+  public static Optional<RecipeConflictManager> getInstance() {
     return Optional.ofNullable(instance);
   }
 
-  public static <T extends Container> RecipeConflictManager<?> refreshInstance(
-      ContainerScreen<T> screen, IProvider<T> provider) {
-    instance = new RecipeConflictManager<>(screen, provider);
+  public static RecipeConflictManager refreshInstance(
+      ContainerScreen<?> screen, IProvider provider) {
+    instance = new RecipeConflictManager(screen, provider);
     return instance;
   }
 
@@ -230,7 +230,7 @@ public class RecipeConflictManager<T extends Container> {
       }
       return true;
     }
-    Slot slot = this.provider.getOutputSlot(this.parent.getContainer());
+    Slot slot = this.provider.getOutputSlot();
 
     if (this.getSwitchButton().visible && slot == this.parent.getSlotUnderMouse()
         && isShiftKeyDown()) {
@@ -251,7 +251,7 @@ public class RecipeConflictManager<T extends Container> {
     if (playerEntity != null) {
       this.getCurrentCraftingMatrix().ifPresent(craftingInventory -> {
         ItemStack stack = recipe.getCraftingResult(craftingInventory);
-        this.provider.getOutputSlot(parent.getContainer()).putStack(stack.copy());
+        this.provider.getOutputSlot().putStack(stack.copy());
         NetworkHandler.INSTANCE.send(PacketDistributor.SERVER.noArg(),
             new CPacketSetRecipe(recipe.getId().toString()));
       });

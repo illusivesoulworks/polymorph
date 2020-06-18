@@ -20,10 +20,8 @@
 package top.theillusivec4.polymorph.common.integrations.craftingstation;
 
 import com.tfar.craftingstation.CraftingStationContainer;
-import com.tfar.craftingstation.client.CraftingStationScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Slot;
@@ -39,7 +37,7 @@ import top.theillusivec4.polymorph.client.RecipeConflictManager;
 public class CraftingStationModule {
 
   public static void setup() {
-    PolymorphApi.addProvider(CraftingStationContainer.class, new CraftingStationProvider());
+    PolymorphApi.addProvider(CraftingStationContainer.class, CraftingStationProvider::new);
   }
 
   public static class Client {
@@ -65,29 +63,20 @@ public class CraftingStationModule {
         }
       }
     }
-
-    public static RecipeConflictManager<?> getConflictManager(ContainerScreen<?> screen) {
-      RecipeConflictManager<?> conflictManager = null;
-
-      if (screen instanceof CraftingStationScreen && screen
-          .getContainer() instanceof CraftingStationContainer) {
-        CraftingStationScreen craftingStationScreen = (CraftingStationScreen) screen;
-        CraftingStationContainer craftingStationContainer = (CraftingStationContainer) screen
-            .getContainer();
-        conflictManager = PolymorphApi.getProvider(craftingStationContainer)
-            .map(provider -> RecipeConflictManager.refreshInstance(craftingStationScreen, provider))
-            .orElse(null);
-      }
-      return conflictManager;
-    }
   }
 
-  public static class CraftingStationProvider implements IProvider<CraftingStationContainer> {
+  public static class CraftingStationProvider implements IProvider {
+
+    private final CraftingStationContainer craftingStationContainer;
+
+    public CraftingStationProvider(CraftingStationContainer craftingStationContainer) {
+      this.craftingStationContainer = craftingStationContainer;
+    }
 
     @Override
-    public CraftingInventory getCraftingMatrix(CraftingStationContainer container) {
+    public CraftingInventory getCraftingMatrix() {
 
-      for (Slot slot : container.inventorySlots) {
+      for (Slot slot : this.craftingStationContainer.inventorySlots) {
 
         if (slot.inventory instanceof CraftingInventory) {
           return (CraftingInventory) slot.inventory;
@@ -97,15 +86,15 @@ public class CraftingStationModule {
     }
 
     @Override
-    public Slot getOutputSlot(CraftingStationContainer container) {
+    public Slot getOutputSlot() {
 
-      for (Slot slot : container.inventorySlots) {
+      for (Slot slot : this.craftingStationContainer.inventorySlots) {
 
         if (slot.inventory instanceof CraftResultInventory) {
           return slot;
         }
       }
-      return container.inventorySlots.get(0);
+      return this.craftingStationContainer.inventorySlots.get(0);
     }
 
     @Override

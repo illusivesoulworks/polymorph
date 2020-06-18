@@ -22,30 +22,33 @@ package top.theillusivec4.polymorph.api;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 
 public class PolymorphApi {
 
-  private static final Map<Class<? extends Container>, IProvider<? extends Container>> providers = new HashMap<>();
+  private static final Map<Class<? extends Container>, Function<? extends Container, IProvider>> providerFunctions = new HashMap<>();
 
-  public static void addProvider(Class<? extends Container> clazz,
-      IProvider<? extends Container> provider) {
-    providers.put(clazz, provider);
+  public static <T extends Container> void addProvider(Class<T> clazz,
+      Function<T, IProvider> providerFunction) {
+    providerFunctions.put(clazz, providerFunction);
   }
 
   @SuppressWarnings("unchecked")
-  public static <T extends Container> Optional<IProvider<T>> getProvider(T container) {
-    IProvider<?> provider = providers.get(container.getClass());
-    return provider != null ? Optional.of((IProvider<T>) provider) : Optional.empty();
+  public static <T extends Container> Optional<IProvider> getProvider(T container) {
+    Function<T, IProvider> providerFunction = (Function<T, IProvider>) providerFunctions
+        .get(container.getClass());
+    return providerFunction != null ? Optional.of(providerFunction.apply(container))
+        : Optional.empty();
   }
 
-  public interface IProvider<T extends Container> {
+  public interface IProvider {
 
-    CraftingInventory getCraftingMatrix(T container);
+    CraftingInventory getCraftingMatrix();
 
-    Slot getOutputSlot(T container);
+    Slot getOutputSlot();
 
     int getXOffset();
 

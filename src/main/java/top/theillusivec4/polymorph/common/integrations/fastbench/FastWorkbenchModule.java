@@ -29,7 +29,7 @@ import top.theillusivec4.polymorph.common.provider.WorkbenchProvider;
 public class FastWorkbenchModule {
 
   public static void setup() {
-    PolymorphApi.addProvider(ContainerFastBench.class, new WorkbenchProvider());
+    PolymorphApi.addProvider(ContainerFastBench.class, WorkbenchProvider::new);
   }
 
   public static void setLastRecipe(Container container, IRecipe<CraftingInventory> recipe) {

@@ -64,8 +64,8 @@ public class Polymorph {
 
   private void setup(final FMLCommonSetupEvent evt) {
     NetworkHandler.register();
-    PolymorphApi.addProvider(WorkbenchContainer.class, new WorkbenchProvider());
-    PolymorphApi.addProvider(PlayerContainer.class, new InventoryProvider());
+    PolymorphApi.addProvider(WorkbenchContainer.class, WorkbenchProvider::new);
+    PolymorphApi.addProvider(PlayerContainer.class, InventoryProvider::new);
 
     if (isFastBenchLoaded) {
       FastWorkbenchModule.setup();

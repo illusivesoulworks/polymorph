@@ -70,9 +70,11 @@ dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
     compile fg.deobf("curse.maven:fastworkbench:2856527")
     compile fg.deobf("curse.maven:crafting-station:2905656")
+    compile fg.deobf("curse.maven:silent-gear:2956396")
     compileOnly fg.deobf("mezz.jei:jei-${version_minecraft}:${version_jei}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${version_minecraft}:${version_jei}")
 
+    runtimeOnly fg.deobf("curse.maven:silent-lib:2979648")
     runtimeOnly fg.deobf("curse.maven:placebo:2870411")
     // Needs to be run with MixinBootstrap for server builds
     // runtimeOnly fg.deobf("curse.maven:extra-tags:2941269")

@@ -51,7 +51,7 @@ public class SPacketSyncOutput {
       if (clientPlayerEntity != null) {
         Container container = clientPlayerEntity.openContainer;
         PolymorphApi.getProvider(container)
-            .ifPresent(provider -> provider.getOutputSlot(container).putStack(msg.stack));
+            .ifPresent(provider -> provider.getOutputSlot().putStack(msg.stack));
       }
     });
     ctx.get().setPacketHandled(true);

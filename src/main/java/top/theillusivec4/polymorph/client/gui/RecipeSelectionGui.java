@@ -30,7 +30,7 @@ import top.theillusivec4.polymorph.client.RecipeConflictManager;
 
 public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGuiEventListener {
 
-  private final RecipeConflictManager<?> conflictManager;
+  private final RecipeConflictManager conflictManager;
 
   private List<RecipeSelectWidget> buttons = new ArrayList<>();
   private RecipeSelectWidget hoveredButton;
@@ -39,7 +39,7 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
   private int y;
   private List<ICraftingRecipe> recipes = new ArrayList<>();
 
-  public RecipeSelectionGui(RecipeConflictManager<?> conflictManager, int x, int y) {
+  public RecipeSelectionGui(RecipeConflictManager conflictManager, int x, int y) {
     this.conflictManager = conflictManager;
     this.x = x;
     this.y = y;

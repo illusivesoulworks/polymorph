@@ -61,10 +61,10 @@ public class CPacketSetRecipe {
         Container container = sender.openContainer;
         AtomicReference<ItemStack> output = new AtomicReference<>(ItemStack.EMPTY);
         PolymorphApi.getProvider(container).ifPresent(provider -> {
-          Slot slot = provider.getOutputSlot(container);
+          Slot slot = provider.getOutputSlot();
           Optional<? extends IRecipe<?>> result = sender.getServerWorld().getRecipeManager()
               .getRecipe(new ResourceLocation(msg.recipe));
-          CraftingInventory finalCraftingInventory = provider.getCraftingMatrix(container);
+          CraftingInventory finalCraftingInventory = provider.getCraftingMatrix();
           result.ifPresent(res -> {
 
             if (res instanceof ICraftingRecipe && finalCraftingInventory != null) {

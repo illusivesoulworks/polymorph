@@ -27,17 +27,23 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.api.PolymorphApi.IProvider;
 
-public class WorkbenchProvider implements IProvider<WorkbenchContainer> {
+public class WorkbenchProvider implements IProvider {
 
   private static final Field CRAFT_MATRIX = ObfuscationReflectionHelper
       .findField(WorkbenchContainer.class, "field_75162_e");
 
+  private final WorkbenchContainer workbenchContainer;
+
+  public WorkbenchProvider(WorkbenchContainer workbenchContainer) {
+    this.workbenchContainer = workbenchContainer;
+  }
+
   @Override
-  public CraftingInventory getCraftingMatrix(WorkbenchContainer container) {
+  public CraftingInventory getCraftingMatrix() {
     CraftingInventory craftingInventory = null;
 
     try {
-      craftingInventory = (CraftingInventory) CRAFT_MATRIX.get(container);
+      craftingInventory = (CraftingInventory) CRAFT_MATRIX.get(this.workbenchContainer);
     } catch (IllegalAccessException e) {
       Polymorph.LOGGER
           .error("Whoops, something went wrong while trying to retrieve the crafting matrix!");
@@ -46,8 +52,8 @@ public class WorkbenchProvider implements IProvider<WorkbenchContainer> {
   }
 
   @Override
-  public Slot getOutputSlot(WorkbenchContainer container) {
-    return container.getSlot(container.getOutputSlot());
+  public Slot getOutputSlot() {
+    return this.workbenchContainer.getSlot(this.workbenchContainer.getOutputSlot());
   }
 
   @Override
