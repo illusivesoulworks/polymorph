@@ -21,6 +21,7 @@ package top.theillusivec4.polymorph.common.provider;
 
 import java.lang.reflect.Field;
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.inventory.container.Slot;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -39,7 +40,12 @@ public class InventoryProvider implements IProvider {
   }
 
   @Override
-  public CraftingInventory getCraftingMatrix() {
+  public Container getContainer() {
+    return this.playerContainer;
+  }
+
+  @Override
+  public CraftingInventory getCraftingInventory() {
     CraftingInventory craftingInventory = null;
 
     try {

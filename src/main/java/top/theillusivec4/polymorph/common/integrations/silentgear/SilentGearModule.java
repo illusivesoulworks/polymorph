@@ -17,50 +17,17 @@
  * License along with Polymorph.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.common.integrations.craftingstation;
+package top.theillusivec4.polymorph.common.integrations.silentgear;
 
-import com.tfar.craftingstation.CraftingStationContainer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent.ClientTickEvent;
-import net.minecraftforge.event.TickEvent.Phase;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.silentchaos512.gear.block.craftingstation.CraftingStationContainer;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.PolymorphApi.IProvider;
-import top.theillusivec4.polymorph.client.RecipeConflictManager;
 
-public class CraftingStationModule {
+public class SilentGearModule {
 
   public static void setup() {
     PolymorphApi.addProvider(CraftingStationContainer.class, CraftingStationProvider::new);
-  }
-
-  public static class Client {
-
-    public static void clientSetup() {
-      MinecraftForge.EVENT_BUS.register(new Client());
-    }
-
-    @SubscribeEvent
-    public void tick(ClientTickEvent evt) {
-
-      if (evt.phase == Phase.END) {
-        ClientPlayerEntity clientPlayerEntity = Minecraft.getInstance().player;
-
-        if (clientPlayerEntity != null) {
-          World world = clientPlayerEntity.world;
-
-          if (world != null
-              && clientPlayerEntity.openContainer instanceof CraftingStationContainer) {
-            RecipeConflictManager.getInstance()
-                .ifPresent(RecipeConflictManager::onCraftMatrixChanged);
-          }
-        }
-      }
-    }
   }
 
   public static class CraftingStationProvider implements IProvider {
@@ -78,7 +45,7 @@ public class CraftingStationModule {
 
     @Override
     public int getXOffset() {
-      return 36;
+      return -4;
     }
 
     @Override

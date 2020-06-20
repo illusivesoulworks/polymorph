@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
@@ -46,9 +47,29 @@ public class PolymorphApi {
 
   public interface IProvider {
 
-    CraftingInventory getCraftingMatrix();
+    Container getContainer();
 
-    Slot getOutputSlot();
+    default CraftingInventory getCraftingInventory() {
+
+      for (Slot slot : this.getContainer().inventorySlots) {
+
+        if (slot.inventory instanceof CraftingInventory) {
+          return (CraftingInventory) slot.inventory;
+        }
+      }
+      return null;
+    }
+
+    default Slot getOutputSlot() {
+
+      for (Slot slot : this.getContainer().inventorySlots) {
+
+        if (slot.inventory instanceof CraftResultInventory) {
+          return slot;
+        }
+      }
+      return this.getContainer().inventorySlots.get(0);
+    }
 
     int getXOffset();
 

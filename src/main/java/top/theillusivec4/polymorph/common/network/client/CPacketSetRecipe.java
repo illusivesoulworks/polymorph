@@ -64,7 +64,7 @@ public class CPacketSetRecipe {
           Slot slot = provider.getOutputSlot();
           Optional<? extends IRecipe<?>> result = sender.getServerWorld().getRecipeManager()
               .getRecipe(new ResourceLocation(msg.recipe));
-          CraftingInventory finalCraftingInventory = provider.getCraftingMatrix();
+          CraftingInventory finalCraftingInventory = provider.getCraftingInventory();
           result.ifPresent(res -> {
 
             if (res instanceof ICraftingRecipe && finalCraftingInventory != null) {

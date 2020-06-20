@@ -25,7 +25,7 @@ import top.theillusivec4.polymorph.client.RecipeConflictManager;
 
 public class PolymorphHooks {
 
-  public static void onCraftMatrixChanged() {
+  public static void onSlotChanged() {
     DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> RecipeConflictManager.getInstance()
         .ifPresent(RecipeConflictManager::onCraftMatrixChanged));
   }

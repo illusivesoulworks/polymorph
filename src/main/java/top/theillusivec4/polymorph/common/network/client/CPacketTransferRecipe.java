@@ -65,7 +65,7 @@ public class CPacketTransferRecipe {
           Slot slot = provider.getOutputSlot();
           Optional<? extends IRecipe<?>> result = sender.getServerWorld().getRecipeManager()
               .getRecipe(new ResourceLocation(msg.recipe));
-          CraftingInventory finalCraftingInventory = provider.getCraftingMatrix();
+          CraftingInventory finalCraftingInventory = provider.getCraftingInventory();
           result.ifPresent(res -> {
 
             if (res instanceof ICraftingRecipe && finalCraftingInventory != null) {
@@ -74,14 +74,14 @@ public class CPacketTransferRecipe {
               if (Polymorph.isFastBenchLoaded) {
                 FastWorkbenchModule.setLastRecipe(container, craftingRecipe);
               }
-              ItemStack itemstack = container.transferStackInSlot(sender, slot.getSlotIndex());
+              ItemStack itemstack = container.transferStackInSlot(sender, slot.slotNumber);
 
               if (craftingRecipe.matches(finalCraftingInventory, sender.world)) {
                 slot.putStack(craftingRecipe.getCraftingResult(finalCraftingInventory));
 
                 while (!itemstack.isEmpty() && ItemStack
                     .areItemsEqual(slot.getStack(), itemstack)) {
-                  itemstack = container.transferStackInSlot(sender, slot.getSlotIndex());
+                  itemstack = container.transferStackInSlot(sender, slot.slotNumber);
 
                   if (craftingRecipe.matches(finalCraftingInventory, sender.world)) {
                     slot.putStack(craftingRecipe.getCraftingResult(finalCraftingInventory));

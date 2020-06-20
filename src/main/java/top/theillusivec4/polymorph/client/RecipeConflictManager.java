@@ -34,7 +34,6 @@ import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
@@ -88,7 +87,7 @@ public class RecipeConflictManager {
     this.switchButton = new SwitchButton(x, y, 16, 16, 0, 0, 17, SWITCH,
         clickWidget -> recipeSelectionGui.setVisible(!recipeSelectionGui.isVisible()));
     this.switchButton.visible = this.recipeSelectionGui.getButtons().size() > 1;
-    this.currentCraftingMatrix = provider.getCraftingMatrix();
+    this.currentCraftingMatrix = provider.getCraftingInventory();
   }
 
   public static Optional<RecipeConflictManager> getInstance() {
