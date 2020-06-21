@@ -21,6 +21,7 @@ package top.theillusivec4.polymorph.client;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -94,8 +95,8 @@ public class RecipeConflictManager {
     return Optional.ofNullable(instance);
   }
 
-  public static RecipeConflictManager refreshInstance(
-      ContainerScreen<?> screen, IProvider provider) {
+  public static RecipeConflictManager refreshInstance(ContainerScreen<?> screen,
+      IProvider provider) {
     instance = new RecipeConflictManager(screen, provider);
     return instance;
   }
@@ -199,7 +200,18 @@ public class RecipeConflictManager {
     if (!isCraftingEmpty) {
       //      Polymorph.LOGGER.info("fetching new recipes");
       Set<RecipeOutputWrapper> recipeOutputs = new HashSet<>();
-      recipes = world.getRecipeManager().getRecipes(IRecipeType.CRAFTING, craftingInventory, world);
+      try {
+        recipes = world.getRecipeManager()
+            .getRecipes(IRecipeType.CRAFTING, craftingInventory, world);
+      } catch (Exception e) {
+        List<String> stacks = new ArrayList<>();
+
+        for (int i = 0; i < craftingInventory.getSizeInventory(); i++) {
+          stacks.add(craftingInventory.getStackInSlot(i).toString());
+        }
+        Polymorph.LOGGER.error("Attempted to craft using " + Arrays.toString(stacks.toArray())
+            + " but an error occurred while fetching recipes!", e);
+      }
       recipes.removeIf(rec -> !recipeOutputs
           .add(new RecipeOutputWrapper(rec.getCraftingResult(craftingInventory))));
 
