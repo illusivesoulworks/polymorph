@@ -37,6 +37,7 @@ import top.theillusivec4.polymorph.common.integrations.craftingstation.CraftingS
 import top.theillusivec4.polymorph.common.integrations.fastbench.FastWorkbenchModule;
 import top.theillusivec4.polymorph.common.integrations.jei.PolymorphJeiPlugin;
 import top.theillusivec4.polymorph.common.integrations.silentgear.SilentGearModule;
+import top.theillusivec4.polymorph.common.integrations.storagenetwork.StorageNetworkModule;
 import top.theillusivec4.polymorph.common.network.NetworkHandler;
 import top.theillusivec4.polymorph.common.provider.InventoryProvider;
 import top.theillusivec4.polymorph.common.provider.WorkbenchProvider;
@@ -52,17 +53,19 @@ public class Polymorph {
   public static boolean isCraftingStationLoaded = false;
   public static boolean isJeiLoaded = false;
   public static boolean isSilentGearLoaded = false;
+  public static boolean isStorageNetworkLoaded = false;
 
   public Polymorph() {
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
     eventBus.addListener(this::setup);
     eventBus.addListener(this::clientSetup);
     MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
-
-    isFastBenchLoaded = ModList.get().isLoaded("fastbench");
-    isCraftingStationLoaded = ModList.get().isLoaded("craftingstation");
-    isJeiLoaded = ModList.get().isLoaded("jei");
-    isSilentGearLoaded = ModList.get().isLoaded("silentgear");
+    ModList modList = ModList.get();
+    isFastBenchLoaded = modList.isLoaded("fastbench");
+    isCraftingStationLoaded = modList.isLoaded("craftingstation");
+    isJeiLoaded = modList.isLoaded("jei");
+    isSilentGearLoaded = modList.isLoaded("silentgear");
+    isStorageNetworkLoaded = modList.isLoaded("storagenetwork");
   }
 
   private void setup(final FMLCommonSetupEvent evt) {
@@ -80,6 +83,10 @@ public class Polymorph {
 
     if (isSilentGearLoaded) {
       SilentGearModule.setup();
+    }
+
+    if (isStorageNetworkLoaded) {
+      StorageNetworkModule.setup();
     }
   }
 

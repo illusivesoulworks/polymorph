@@ -19,6 +19,7 @@
 
 package top.theillusivec4.polymorph.common.network.client;
 
+import com.lothrazar.storagenetwork.gui.ContainerNetwork;
 import java.util.Optional;
 import java.util.function.Supplier;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -35,6 +36,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.common.integrations.fastbench.FastWorkbenchModule;
+import top.theillusivec4.polymorph.common.integrations.storagenetwork.StorageNetworkModule;
 import top.theillusivec4.polymorph.common.network.NetworkHandler;
 import top.theillusivec4.polymorph.common.network.server.SPacketSyncOutput;
 
@@ -74,17 +76,25 @@ public class CPacketTransferRecipe {
               if (Polymorph.isFastBenchLoaded) {
                 FastWorkbenchModule.setLastRecipe(container, craftingRecipe);
               }
-              ItemStack itemstack = container.transferStackInSlot(sender, slot.slotNumber);
+              // Handler for special transfer logic
+              if (Polymorph.isStorageNetworkLoaded && StorageNetworkModule
+                  .isNetworkContainer(container)) {
+                StorageNetworkModule
+                    .transferStackInSlot((ContainerNetwork) container, sender, slot.slotNumber,
+                        craftingRecipe);
+              } else {
+                ItemStack itemstack = container.transferStackInSlot(sender, slot.slotNumber);
 
-              if (craftingRecipe.matches(finalCraftingInventory, sender.world)) {
-                slot.putStack(craftingRecipe.getCraftingResult(finalCraftingInventory));
+                if (craftingRecipe.matches(finalCraftingInventory, sender.world)) {
+                  slot.putStack(craftingRecipe.getCraftingResult(finalCraftingInventory));
 
-                while (!itemstack.isEmpty() && ItemStack
-                    .areItemsEqual(slot.getStack(), itemstack)) {
-                  itemstack = container.transferStackInSlot(sender, slot.slotNumber);
+                  while (!itemstack.isEmpty() && ItemStack
+                      .areItemsEqual(slot.getStack(), itemstack)) {
+                    itemstack = container.transferStackInSlot(sender, slot.slotNumber);
 
-                  if (craftingRecipe.matches(finalCraftingInventory, sender.world)) {
-                    slot.putStack(craftingRecipe.getCraftingResult(finalCraftingInventory));
+                    if (craftingRecipe.matches(finalCraftingInventory, sender.world)) {
+                      slot.putStack(craftingRecipe.getCraftingResult(finalCraftingInventory));
+                    }
                   }
                 }
               }
