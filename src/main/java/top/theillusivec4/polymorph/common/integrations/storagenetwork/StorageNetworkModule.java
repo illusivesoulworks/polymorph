@@ -19,11 +19,11 @@
 
 package top.theillusivec4.polymorph.common.integrations.storagenetwork;
 
-import com.lothrazar.storagenetwork.api.data.ItemStackMatcher;
-import com.lothrazar.storagenetwork.block.master.TileMaster;
+import com.lothrazar.storagenetwork.capability.handler.ItemStackMatcher;
+import com.lothrazar.storagenetwork.block.main.TileMain;
 import com.lothrazar.storagenetwork.block.request.ContainerNetworkCraftingTable;
 import com.lothrazar.storagenetwork.gui.ContainerNetwork;
-import com.lothrazar.storagenetwork.gui.inventory.InventoryCraftingNetwork;
+import com.lothrazar.storagenetwork.gui.NetworkCraftingInventory;
 import com.lothrazar.storagenetwork.item.remote.ContainerNetworkCraftingRemote;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -56,14 +56,14 @@ public class StorageNetworkModule {
     Slot slot = containerNetwork.inventorySlots.get(slotIndex);
 
     if (slot != null && slot.getHasStack()) {
-      TileMaster tileMaster = containerNetwork.getTileMaster();
-      craftShift(containerNetwork, playerIn, tileMaster, recipe);
+      TileMain tileMain = containerNetwork.getTileMain();
+      craftShift(containerNetwork, playerIn, tileMain, recipe);
     }
   }
 
   @SuppressWarnings("deprecation")
   public static void craftShift(ContainerNetwork containerNetwork, PlayerEntity player,
-      TileMaster tile, ICraftingRecipe recipe) {
+      TileMain tile, ICraftingRecipe recipe) {
 
     if (!containerNetwork.isCrafting() || containerNetwork.matrix == null) {
       return;
@@ -76,7 +76,7 @@ public class StorageNetworkModule {
     } catch (Exception e) {
       Polymorph.LOGGER.error("Reflection error!", e);
     }
-    InventoryCraftingNetwork matrix = containerNetwork.matrix;
+    NetworkCraftingInventory matrix = containerNetwork.matrix;
     ItemStack res = recipe.getCraftingResult(matrix);
     int crafted = 0;
     List<ItemStack> recipeCopy = new ArrayList<>();

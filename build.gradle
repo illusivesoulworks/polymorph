@@ -71,7 +71,7 @@ dependencies {
     compile fg.deobf("curse.maven:fastworkbench:2856527")
     compile fg.deobf("curse.maven:crafting-station:2905656")
     compile fg.deobf("curse.maven:silent-gear:2956396")
-    compile fg.deobf("curse.maven:simple-storage-network:2915071")
+    compile fg.deobf("curse.maven:simple-storage-network:2990699")
     compileOnly fg.deobf("mezz.jei:jei-${version_minecraft}:${version_jei}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${version_minecraft}:${version_jei}")
 
