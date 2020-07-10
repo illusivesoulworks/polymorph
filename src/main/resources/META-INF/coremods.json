@@ -1,3 +1,4 @@
 {
-  "Slot Transformer": "slot.js"
+  "Slot Transformer": "slot.js",
+  "Shapeless Recipe Transformer": "shapelessRecipe.js"
 }
