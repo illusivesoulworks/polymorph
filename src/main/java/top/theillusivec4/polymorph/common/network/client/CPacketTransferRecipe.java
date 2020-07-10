@@ -19,7 +19,6 @@
 
 package top.theillusivec4.polymorph.common.network.client;
 
-import com.lothrazar.storagenetwork.gui.ContainerNetwork;
 import java.util.Optional;
 import java.util.function.Supplier;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -80,8 +79,7 @@ public class CPacketTransferRecipe {
               if (Polymorph.isStorageNetworkLoaded && StorageNetworkModule
                   .isNetworkContainer(container)) {
                 StorageNetworkModule
-                    .transferStackInSlot((ContainerNetwork) container, sender, slot.slotNumber,
-                        craftingRecipe);
+                    .transferStackInSlot(container, sender, slot.slotNumber, craftingRecipe);
               } else {
                 ItemStack itemstack = container.transferStackInSlot(sender, slot.slotNumber);
 
