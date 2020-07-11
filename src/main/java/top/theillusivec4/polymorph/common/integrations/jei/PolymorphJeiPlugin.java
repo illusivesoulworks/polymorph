@@ -31,13 +31,13 @@ import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.polymorph.Polymorph;
+import top.theillusivec4.polymorph.client.RecipeConflictManager;
 
 @JeiPlugin
 public class PolymorphJeiPlugin implements IModPlugin {
 
   private static IIngredientListOverlay ingredientListOverlay;
   private static IBookmarkOverlay bookmarkOverlay;
-  private static ItemStack itemStack = ItemStack.EMPTY;
 
   public static void clientSetup() {
     MinecraftForge.EVENT_BUS.register(new PolymorphJeiPlugin());
@@ -53,14 +53,6 @@ public class PolymorphJeiPlugin implements IModPlugin {
   public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
     ingredientListOverlay = jeiRuntime.getIngredientListOverlay();
     bookmarkOverlay = jeiRuntime.getBookmarkOverlay();
-  }
-
-  public static ItemStack getItemStack() {
-    return itemStack;
-  }
-
-  public static void clearItemStack() {
-    itemStack = ItemStack.EMPTY;
   }
 
   @SubscribeEvent
@@ -84,7 +76,7 @@ public class PolymorphJeiPlugin implements IModPlugin {
     }
 
     if (!chosenStack.isEmpty()) {
-      itemStack = chosenStack;
+      RecipeConflictManager.setPreferredStack(chosenStack);
     }
   }
 }

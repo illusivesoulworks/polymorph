@@ -48,20 +48,20 @@ import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.api.PolymorphApi.IProvider;
 import top.theillusivec4.polymorph.client.gui.RecipeSelectionGui;
-import top.theillusivec4.polymorph.client.gui.SwitchButton;
-import top.theillusivec4.polymorph.common.integrations.jei.PolymorphJeiPlugin;
+import top.theillusivec4.polymorph.client.gui.ToggleOutputButton;
 import top.theillusivec4.polymorph.common.network.NetworkHandler;
 import top.theillusivec4.polymorph.common.network.client.CPacketSetRecipe;
 import top.theillusivec4.polymorph.common.network.client.CPacketTransferRecipe;
 
 public class RecipeConflictManager {
 
-  private static final ResourceLocation SWITCH = new ResourceLocation(Polymorph.MODID,
-      "textures/gui/switch.png");
+  private static final ResourceLocation TOGGLE = new ResourceLocation(Polymorph.MODID,
+      "textures/gui/toggle.png");
   private static final Field RECIPE_BOOK = ObfuscationReflectionHelper
       .findField(RecipeBookGui.class, "field_193964_s");
 
   private static RecipeConflictManager instance;
+  private static ItemStack preferredStack = ItemStack.EMPTY;
 
   private RecipeSelectionGui recipeSelectionGui;
 
@@ -71,8 +71,9 @@ public class RecipeConflictManager {
   private IRecipe<CraftingInventory> lastSelectedRecipe;
 
   private ImageButton switchButton;
-  private boolean craftMatrixChanged;
+  private boolean resultChanged;
   private boolean positionChanged;
+  private boolean lockUpdates;
 
   private ContainerScreen<?> parent;
   private IProvider provider;
@@ -85,7 +86,7 @@ public class RecipeConflictManager {
     x += provider.getXOffset();
     y += provider.getYOffset();
     this.recipeSelectionGui = new RecipeSelectionGui(this, x - 4, y - 32);
-    this.switchButton = new SwitchButton(x, y, 16, 16, 0, 0, 17, SWITCH,
+    this.switchButton = new ToggleOutputButton(x, y, 16, 16, 0, 0, 17, TOGGLE,
         clickWidget -> recipeSelectionGui.setVisible(!recipeSelectionGui.isVisible()));
     this.switchButton.visible = this.recipeSelectionGui.getButtons().size() > 1;
     this.currentCraftingMatrix = provider.getCraftingInventory();
@@ -105,7 +106,15 @@ public class RecipeConflictManager {
     instance = null;
   }
 
-  public void updatePosition() {
+  public static ItemStack getPreferredStack() {
+    return preferredStack;
+  }
+
+  public static void setPreferredStack(ItemStack stack) {
+    preferredStack = stack.copy();
+  }
+
+  public void markPositionChanged() {
     this.positionChanged = true;
   }
 
@@ -137,9 +146,9 @@ public class RecipeConflictManager {
       this.switchButton.setPosition(x, y);
     }
 
-    if (this.craftMatrixChanged) {
+    if (this.resultChanged) {
       ClientWorld world = Minecraft.getInstance().world;
-      this.craftMatrixChanged = false;
+      this.resultChanged = false;
 
       if (world != null) {
         this.getCurrentCraftingMatrix().ifPresent(craftingInventory -> {
@@ -152,27 +161,24 @@ public class RecipeConflictManager {
 
           recipeSelectionGui.setRecipes(recipesList);
 
-          if (Polymorph.isJeiLoaded) {
-            ItemStack chosenStack = PolymorphJeiPlugin.getItemStack();
+          if (!preferredStack.isEmpty()) {
 
-            if (!chosenStack.isEmpty()) {
+            for (ICraftingRecipe craftingRecipe : recipesList) {
 
-              for (ICraftingRecipe craftingRecipe : recipesList) {
-
-                if (craftingRecipe.getCraftingResult(craftingInventory).getItem() == chosenStack
-                    .getItem()) {
-                  this.setLastSelectedRecipe(craftingRecipe);
-                  break;
-                }
+              if (craftingRecipe.getCraftingResult(craftingInventory).getItem() == preferredStack
+                  .getItem()) {
+                this.setLastSelectedRecipe(craftingRecipe);
+                break;
               }
             }
-            PolymorphJeiPlugin.clearItemStack();
+            preferredStack = ItemStack.EMPTY;
           }
 
           this.getLastSelectedRecipe().ifPresent(recipe -> {
 
             if (recipe.matches(craftingInventory, world)) {
               ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
+              lockUpdates = true;
 
               if (playerEntity != null) {
                 NetworkHandler.INSTANCE.send(PacketDistributor.SERVER.noArg(),
@@ -185,8 +191,7 @@ public class RecipeConflictManager {
     }
   }
 
-  private synchronized List<ICraftingRecipe> fetchRecipes(CraftingInventory craftingInventory,
-      World world) {
+  private List<ICraftingRecipe> fetchRecipes(CraftingInventory craftingInventory, World world) {
     List<ICraftingRecipe> recipes = new ArrayList<>();
     boolean isCraftingEmpty = true;
 
@@ -199,13 +204,11 @@ public class RecipeConflictManager {
     }
 
     if (!isCraftingEmpty) {
-      //      Polymorph.LOGGER.info("fetching new recipes");
       Set<RecipeOutputWrapper> recipeOutputs = new HashSet<>();
+
       try {
-        synchronized (this) {
-          recipes = world.getRecipeManager()
-              .getRecipes(IRecipeType.CRAFTING, craftingInventory, world);
-        }
+        recipes = world.getRecipeManager()
+            .getRecipes(IRecipeType.CRAFTING, craftingInventory, world);
       } catch (Exception e) {
         List<String> stacks = new ArrayList<>();
 
@@ -272,6 +275,14 @@ public class RecipeConflictManager {
     }
   }
 
+  public boolean canUpdate() {
+    return !this.lockUpdates;
+  }
+
+  public void unlockUpdates() {
+    this.lockUpdates = false;
+  }
+
   public Optional<List<ICraftingRecipe>> getLastRecipesList() {
     return Optional.ofNullable(lastRecipesList);
   }
@@ -304,8 +315,8 @@ public class RecipeConflictManager {
     return this.switchButton;
   }
 
-  public void onCraftMatrixChanged() {
-    this.craftMatrixChanged = true;
+  public void markResultChanged() {
+    this.resultChanged = true;
   }
 
   private static final int GLFW_LEFT_SHIFT = 340;

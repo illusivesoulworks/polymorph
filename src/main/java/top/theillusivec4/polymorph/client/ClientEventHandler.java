@@ -75,7 +75,7 @@ public class ClientEventHandler {
   public void guiMouseClick(GuiScreenEvent.MouseClickedEvent.Pre evt) {
 
     if (evt.getGui() instanceof ContainerScreen) {
-      RecipeConflictManager.getInstance().ifPresent(RecipeConflictManager::updatePosition);
+      RecipeConflictManager.getInstance().ifPresent(RecipeConflictManager::markPositionChanged);
 
       if (RecipeConflictManager.getInstance().map(conflictManager -> conflictManager
           .mouseClicked(evt.getMouseX(), evt.getMouseY(), evt.getButton())).orElse(false)) {

@@ -31,7 +31,7 @@ import top.theillusivec4.polymorph.Polymorph;
 public class RecipeSelectWidget extends Widget {
 
   private static final ResourceLocation SWITCH = new ResourceLocation(Polymorph.MODID,
-      "textures/gui/switch.png");
+      "textures/gui/toggle.png");
   public IRecipe<CraftingInventory> recipe;
   public CraftingInventory craftingMatrix;
 

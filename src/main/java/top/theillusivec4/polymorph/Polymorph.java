@@ -19,10 +19,8 @@
 
 package top.theillusivec4.polymorph;
 
-import net.minecraft.command.impl.DataPackCommand;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.inventory.container.WorkbenchContainer;
-import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
@@ -94,10 +92,6 @@ public class Polymorph {
 
   private void clientSetup(final FMLClientSetupEvent evt) {
     MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
-
-    if (isCraftingStationLoaded) {
-      CraftingStationModule.Client.clientSetup();
-    }
 
     if (isJeiLoaded) {
       PolymorphJeiPlugin.clientSetup();

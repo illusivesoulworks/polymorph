@@ -38,31 +38,6 @@ public class CraftingStationModule {
     PolymorphApi.addProvider(CraftingStationContainer.class, CraftingStationProvider::new);
   }
 
-  public static class Client {
-
-    public static void clientSetup() {
-      MinecraftForge.EVENT_BUS.register(new Client());
-    }
-
-    @SubscribeEvent
-    public void tick(ClientTickEvent evt) {
-
-      if (evt.phase == Phase.END) {
-        ClientPlayerEntity clientPlayerEntity = Minecraft.getInstance().player;
-
-        if (clientPlayerEntity != null) {
-          World world = clientPlayerEntity.world;
-
-          if (world != null
-              && clientPlayerEntity.openContainer instanceof CraftingStationContainer) {
-            RecipeConflictManager.getInstance()
-                .ifPresent(RecipeConflictManager::onCraftMatrixChanged);
-          }
-        }
-      }
-    }
-  }
-
   public static class CraftingStationProvider implements IProvider {
 
     private final CraftingStationContainer craftingStationContainer;

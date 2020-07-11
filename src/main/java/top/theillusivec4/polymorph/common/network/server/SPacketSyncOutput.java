@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.client.RecipeConflictManager;
 
 public class SPacketSyncOutput {
 
@@ -52,6 +53,7 @@ public class SPacketSyncOutput {
         Container container = clientPlayerEntity.openContainer;
         PolymorphApi.getProvider(container)
             .ifPresent(provider -> provider.getOutputSlot().putStack(msg.stack));
+        RecipeConflictManager.getInstance().ifPresent(RecipeConflictManager::unlockUpdates);
       }
     });
     ctx.get().setPacketHandled(true);
