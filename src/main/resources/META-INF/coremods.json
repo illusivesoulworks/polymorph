@@ -1,4 +1,4 @@
 {
-  "Slot Transformer": "slot.js",
-  "Shapeless Recipe Transformer": "shapelessRecipe.js"
+  "CraftResultInventory Transformer": "craftResultInventory.js",
+  "ShapelessRecipe Transformer": "shapelessRecipe.js"
 }

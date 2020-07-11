@@ -20,29 +20,20 @@
 package top.theillusivec4.polymorph.common;
 
 import java.lang.reflect.Field;
-import net.minecraft.inventory.container.CraftingResultSlot;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapelessRecipe;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import top.theillusivec4.polymorph.Polymorph;
+import top.theillusivec4.polymorph.client.RecipeConflictManager;
 
 public class PolymorphHooks {
 
   private static final Field IS_SIMPLE = ObfuscationReflectionHelper
       .findField(ShapelessRecipe.class, "isSimple");
 
-  public static void onSlotChanged(Slot slot) {
-    //    DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> RecipeConflictManager.getInstance()
-    //        .ifPresent(RecipeConflictManager::onCraftMatrixChanged));
-    DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-
-      if (!(slot instanceof CraftingResultSlot) || slot.getHasStack()) {
-        Polymorph.LOGGER.info("onSlotChanged!" + slot);
-      }
-    });
+  public static void onInventoryChanged(CraftResultInventory inventory) {
+    RecipeConflictManager.getInstance().ifPresent(RecipeConflictManager::onCraftMatrixChanged);
   }
 
   public static void packIngredients(ShapelessRecipe shapelessRecipe) {

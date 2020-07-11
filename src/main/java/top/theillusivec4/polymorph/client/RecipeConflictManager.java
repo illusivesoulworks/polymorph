@@ -185,7 +185,8 @@ public class RecipeConflictManager {
     }
   }
 
-  private List<ICraftingRecipe> fetchRecipes(CraftingInventory craftingInventory, World world) {
+  private synchronized List<ICraftingRecipe> fetchRecipes(CraftingInventory craftingInventory,
+      World world) {
     List<ICraftingRecipe> recipes = new ArrayList<>();
     boolean isCraftingEmpty = true;
 
@@ -201,8 +202,10 @@ public class RecipeConflictManager {
       //      Polymorph.LOGGER.info("fetching new recipes");
       Set<RecipeOutputWrapper> recipeOutputs = new HashSet<>();
       try {
-        recipes = world.getRecipeManager()
-            .getRecipes(IRecipeType.CRAFTING, craftingInventory, world);
+        synchronized (this) {
+          recipes = world.getRecipeManager()
+              .getRecipes(IRecipeType.CRAFTING, craftingInventory, world);
+        }
       } catch (Exception e) {
         List<String> stacks = new ArrayList<>();
 
