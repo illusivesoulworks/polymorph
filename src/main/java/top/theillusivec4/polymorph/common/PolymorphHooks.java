@@ -33,7 +33,6 @@ public class PolymorphHooks {
       .findField(ShapelessRecipe.class, "isSimple");
 
   public static void onInventoryChanged(CraftResultInventory inventory) {
-    Polymorph.LOGGER.info("result changed!");
     RecipeConflictManager.getInstance().ifPresent(manager -> {
 
       if (manager.canUpdate()) {
