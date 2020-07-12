@@ -23,6 +23,8 @@ import java.lang.reflect.Field;
 import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapelessRecipe;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.client.RecipeConflictManager;
@@ -33,12 +35,13 @@ public class PolymorphHooks {
       .findField(ShapelessRecipe.class, "isSimple");
 
   public static void onInventoryChanged(CraftResultInventory inventory) {
-    RecipeConflictManager.getInstance().ifPresent(manager -> {
+    DistExecutor.runWhenOn(Dist.CLIENT,
+        () -> () -> RecipeConflictManager.getInstance().ifPresent(manager -> {
 
-      if (manager.canUpdate()) {
-        manager.markResultChanged();
-      }
-    });
+          if (manager.canUpdate()) {
+            manager.markResultChanged();
+          }
+        }));
   }
 
   public static void packIngredients(ShapelessRecipe shapelessRecipe) {
