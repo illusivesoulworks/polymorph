@@ -55,9 +55,7 @@ public class ClientEventHandler {
           .orElse(null);
     }
 
-    if (conflictManager != null) {
-      evt.addWidget(conflictManager.getSwitchButton());
-    } else {
+    if (conflictManager == null) {
       RecipeConflictManager.clearInstance();
     }
   }

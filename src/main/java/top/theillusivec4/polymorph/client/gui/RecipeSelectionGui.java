@@ -110,6 +110,7 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
       });
       this.renderTooltip(p_render_1_, p_render_2_);
     }
+    conflictManager.getSwitchButton().render(p_render_1_, p_render_2_, p_render_3_);
   }
 
   @Override

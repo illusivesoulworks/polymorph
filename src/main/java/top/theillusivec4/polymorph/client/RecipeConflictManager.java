@@ -237,7 +237,9 @@ public class RecipeConflictManager {
 
   public boolean mouseClicked(double mouseX, double mouseY, int button) {
 
-    if (this.recipeSelectionGui.mouseClicked(mouseX, mouseY, button)) {
+    if (this.switchButton.mouseClicked(mouseX, mouseY, button)) {
+      return true;
+    } else if (this.recipeSelectionGui.mouseClicked(mouseX, mouseY, button)) {
       this.recipeSelectionGui.setVisible(false);
       return true;
     } else if (this.recipeSelectionGui.isVisible()) {

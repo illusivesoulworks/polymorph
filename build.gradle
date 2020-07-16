@@ -72,6 +72,8 @@ dependencies {
     compile fg.deobf("curse.maven:crafting-station:2905656")
     compile fg.deobf("curse.maven:silent-gear:2956396")
     compile fg.deobf("curse.maven:simple-storage-network:2990699")
+    compile fg.deobf("curse.maven:refined-storage:3004050")
+    compile fg.deobf("curse.maven:refined-storage-addons:3005715")
     compileOnly fg.deobf("mezz.jei:jei-${version_minecraft}:${version_jei}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${version_minecraft}:${version_jei}")
 

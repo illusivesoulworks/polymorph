@@ -36,6 +36,7 @@ import top.theillusivec4.polymorph.client.ClientEventHandler;
 import top.theillusivec4.polymorph.common.integrations.craftingstation.CraftingStationModule;
 import top.theillusivec4.polymorph.common.integrations.fastbench.FastWorkbenchModule;
 import top.theillusivec4.polymorph.common.integrations.jei.PolymorphJeiPlugin;
+import top.theillusivec4.polymorph.common.integrations.refinedstorage.RefinedStorageModule;
 import top.theillusivec4.polymorph.common.integrations.silentgear.SilentGearModule;
 import top.theillusivec4.polymorph.common.integrations.storagenetwork.StorageNetworkModule;
 import top.theillusivec4.polymorph.common.network.NetworkHandler;
@@ -54,6 +55,7 @@ public class Polymorph {
   public static boolean isJeiLoaded = false;
   public static boolean isSilentGearLoaded = false;
   public static boolean isStorageNetworkLoaded = false;
+  public static boolean isRefinedStorageLoaded = false;
 
   public Polymorph() {
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -66,6 +68,7 @@ public class Polymorph {
     isJeiLoaded = modList.isLoaded("jei");
     isSilentGearLoaded = modList.isLoaded("silentgear");
     isStorageNetworkLoaded = modList.isLoaded("storagenetwork");
+    isRefinedStorageLoaded = modList.isLoaded("refinedstorage");
   }
 
   private void setup(final FMLCommonSetupEvent evt) {
@@ -87,6 +90,10 @@ public class Polymorph {
 
     if (isStorageNetworkLoaded) {
       StorageNetworkModule.setup();
+    }
+
+    if (isRefinedStorageLoaded) {
+      RefinedStorageModule.setup();
     }
   }
 
