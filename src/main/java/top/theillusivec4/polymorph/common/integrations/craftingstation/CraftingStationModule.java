@@ -20,25 +20,18 @@
 package top.theillusivec4.polymorph.common.integrations.craftingstation;
 
 import com.tfar.craftingstation.CraftingStationContainer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent.ClientTickEvent;
-import net.minecraftforge.event.TickEvent.Phase;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import top.theillusivec4.polymorph.api.PolyProvider;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.api.PolymorphApi.IProvider;
-import top.theillusivec4.polymorph.client.RecipeConflictManager;
+import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
 
-public class CraftingStationModule {
+public class CraftingStationModule extends CompatibilityModule {
 
-  public static void setup() {
+  public void setup() {
     PolymorphApi.addProvider(CraftingStationContainer.class, CraftingStationProvider::new);
   }
 
-  public static class CraftingStationProvider implements IProvider {
+  public static class CraftingStationProvider implements PolyProvider {
 
     private final CraftingStationContainer craftingStationContainer;
 

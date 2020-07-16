@@ -21,16 +21,17 @@ package top.theillusivec4.polymorph.common.integrations.silentgear;
 
 import net.minecraft.inventory.container.Container;
 import net.silentchaos512.gear.block.craftingstation.CraftingStationContainer;
+import top.theillusivec4.polymorph.api.PolyProvider;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.api.PolymorphApi.IProvider;
+import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
 
-public class SilentGearModule {
+public class SilentGearModule extends CompatibilityModule {
 
-  public static void setup() {
+  public void setup() {
     PolymorphApi.addProvider(CraftingStationContainer.class, CraftingStationProvider::new);
   }
 
-  public static class CraftingStationProvider implements IProvider {
+  public static class CraftingStationProvider implements PolyProvider {
 
     private final CraftingStationContainer craftingStationContainer;
 

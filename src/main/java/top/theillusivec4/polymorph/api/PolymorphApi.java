@@ -23,56 +23,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import net.minecraft.inventory.CraftResultInventory;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
 
 public class PolymorphApi {
 
-  private static final Map<Class<? extends Container>, Function<? extends Container, IProvider>> providerFunctions = new HashMap<>();
+  private static final Map<Class<? extends Container>, Function<? extends Container, PolyProvider>> providerFunctions = new HashMap<>();
 
   public static <T extends Container> void addProvider(Class<T> clazz,
-      Function<T, IProvider> providerFunction) {
+      Function<T, PolyProvider> providerFunction) {
     providerFunctions.put(clazz, providerFunction);
   }
 
   @SuppressWarnings("unchecked")
-  public static <T extends Container> Optional<IProvider> getProvider(T container) {
-    Function<T, IProvider> providerFunction = (Function<T, IProvider>) providerFunctions
+  public static <T extends Container> Optional<PolyProvider> getProvider(T container) {
+    Function<T, PolyProvider> providerFunction = (Function<T, PolyProvider>) providerFunctions
         .get(container.getClass());
     return providerFunction != null ? Optional.of(providerFunction.apply(container))
         : Optional.empty();
-  }
-
-  public interface IProvider {
-
-    Container getContainer();
-
-    default CraftingInventory getCraftingInventory() {
-
-      for (Slot slot : this.getContainer().inventorySlots) {
-
-        if (slot.inventory instanceof CraftingInventory) {
-          return (CraftingInventory) slot.inventory;
-        }
-      }
-      return null;
-    }
-
-    default Slot getOutputSlot() {
-
-      for (Slot slot : this.getContainer().inventorySlots) {
-
-        if (slot.inventory instanceof CraftResultInventory) {
-          return slot;
-        }
-      }
-      return this.getContainer().inventorySlots.get(0);
-    }
-
-    int getXOffset();
-
-    int getYOffset();
   }
 }

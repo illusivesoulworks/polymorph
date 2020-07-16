@@ -17,16 +17,15 @@
  * License along with Polymorph.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.common.integrations.fastbench;
+package top.theillusivec4.polymorph.common.integrations;
 
-import shadows.fastbench.gui.ContainerFastBench;
-import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
-import top.theillusivec4.polymorph.common.provider.WorkbenchProvider;
-
-public class FastWorkbenchModule extends CompatibilityModule {
+public abstract class CompatibilityModule {
 
   public void setup() {
-    PolymorphApi.addProvider(ContainerFastBench.class, WorkbenchProvider::new);
+
+  }
+
+  public void clientSetup() {
+
   }
 }

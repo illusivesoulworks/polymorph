@@ -19,6 +19,11 @@
 
 package top.theillusivec4.polymorph;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,9 +38,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.client.ClientEventHandler;
+import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
 import top.theillusivec4.polymorph.common.integrations.craftingstation.CraftingStationModule;
 import top.theillusivec4.polymorph.common.integrations.fastbench.FastWorkbenchModule;
-import top.theillusivec4.polymorph.common.integrations.jei.PolymorphJeiPlugin;
+import top.theillusivec4.polymorph.common.integrations.jei.JeiModule;
 import top.theillusivec4.polymorph.common.integrations.refinedstorage.RefinedStorageModule;
 import top.theillusivec4.polymorph.common.integrations.silentgear.SilentGearModule;
 import top.theillusivec4.polymorph.common.integrations.storagenetwork.StorageNetworkModule;
@@ -50,12 +56,17 @@ public class Polymorph {
   public static final String MODID = "polymorph";
   public static final Logger LOGGER = LogManager.getLogger();
 
-  public static boolean isFastBenchLoaded = false;
-  public static boolean isCraftingStationLoaded = false;
-  public static boolean isJeiLoaded = false;
-  public static boolean isSilentGearLoaded = false;
-  public static boolean isStorageNetworkLoaded = false;
-  public static boolean isRefinedStorageLoaded = false;
+  private static final Map<String, Supplier<CompatibilityModule>> INTEGRATIONS = new HashMap<>();
+  private static final List<CompatibilityModule> ACTIVE_INTEGRATIONS = new ArrayList<>();
+
+  static {
+    INTEGRATIONS.put("fastbench", FastWorkbenchModule::new);
+    INTEGRATIONS.put("jei", JeiModule::new);
+    INTEGRATIONS.put("silentgear", SilentGearModule::new);
+    INTEGRATIONS.put("craftingstation", CraftingStationModule::new);
+    INTEGRATIONS.put("storagenetwork", StorageNetworkModule::new);
+    INTEGRATIONS.put("refinedstorage", RefinedStorageModule::new);
+  }
 
   public Polymorph() {
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -63,46 +74,24 @@ public class Polymorph {
     eventBus.addListener(this::clientSetup);
     MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
     ModList modList = ModList.get();
-    isFastBenchLoaded = modList.isLoaded("fastbench");
-    isCraftingStationLoaded = modList.isLoaded("craftingstation");
-    isJeiLoaded = modList.isLoaded("jei");
-    isSilentGearLoaded = modList.isLoaded("silentgear");
-    isStorageNetworkLoaded = modList.isLoaded("storagenetwork");
-    isRefinedStorageLoaded = modList.isLoaded("refinedstorage");
+    INTEGRATIONS.forEach((modid, supplier) -> {
+
+      if (modList.isLoaded(modid)) {
+        ACTIVE_INTEGRATIONS.add(supplier.get());
+      }
+    });
   }
 
   private void setup(final FMLCommonSetupEvent evt) {
     NetworkHandler.register();
     PolymorphApi.addProvider(WorkbenchContainer.class, WorkbenchProvider::new);
     PolymorphApi.addProvider(PlayerContainer.class, InventoryProvider::new);
-
-    if (isFastBenchLoaded) {
-      FastWorkbenchModule.setup();
-    }
-
-    if (isCraftingStationLoaded) {
-      CraftingStationModule.setup();
-    }
-
-    if (isSilentGearLoaded) {
-      SilentGearModule.setup();
-    }
-
-    if (isStorageNetworkLoaded) {
-      StorageNetworkModule.setup();
-    }
-
-    if (isRefinedStorageLoaded) {
-      RefinedStorageModule.setup();
-    }
+    ACTIVE_INTEGRATIONS.forEach(CompatibilityModule::setup);
   }
 
   private void clientSetup(final FMLClientSetupEvent evt) {
     MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
-
-    if (isJeiLoaded) {
-      PolymorphJeiPlugin.clientSetup();
-    }
+    ACTIVE_INTEGRATIONS.forEach(CompatibilityModule::clientSetup);
   }
 
   private void serverStarting(final FMLServerStartingEvent evt) {

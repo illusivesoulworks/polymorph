@@ -26,9 +26,9 @@ import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.inventory.container.Slot;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import top.theillusivec4.polymorph.Polymorph;
-import top.theillusivec4.polymorph.api.PolymorphApi.IProvider;
+import top.theillusivec4.polymorph.api.PolyProvider;
 
-public class InventoryProvider implements IProvider {
+public class InventoryProvider implements PolyProvider {
 
   private static final Field CRAFT_MATRIX = ObfuscationReflectionHelper
       .findField(PlayerContainer.class, "field_75181_e");

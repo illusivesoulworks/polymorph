@@ -19,19 +19,19 @@
 
 package top.theillusivec4.polymorph.common.integrations.refinedstorage;
 
-import com.refinedmods.refinedstorage.container.CrafterContainer;
 import com.refinedmods.refinedstorage.container.GridContainer;
 import net.minecraft.inventory.container.Container;
+import top.theillusivec4.polymorph.api.PolyProvider;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.api.PolymorphApi.IProvider;
+import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
 
-public class RefinedStorageModule {
+public class RefinedStorageModule extends CompatibilityModule {
 
-  public static void setup() {
+  public void setup() {
     PolymorphApi.addProvider(GridContainer.class, GridProvider::new);
   }
 
-  public static class GridProvider implements IProvider {
+  public static class GridProvider implements PolyProvider {
 
     private final GridContainer gridContainer;
 

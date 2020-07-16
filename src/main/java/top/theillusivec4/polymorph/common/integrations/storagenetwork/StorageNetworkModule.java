@@ -36,137 +36,18 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
 import top.theillusivec4.polymorph.Polymorph;
+import top.theillusivec4.polymorph.api.PolyProvider;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.api.PolymorphApi.IProvider;
+import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
 
-public class StorageNetworkModule {
+public class StorageNetworkModule extends CompatibilityModule {
 
-  public static void setup() {
+  public void setup() {
     PolymorphApi.addProvider(ContainerNetworkCraftingTable.class, StorageNetworkProvider::new);
     PolymorphApi.addProvider(ContainerNetworkCraftingRemote.class, StorageNetworkProvider::new);
   }
 
-  public static boolean isNetworkContainer(Container container) {
-    return container instanceof ContainerNetwork;
-  }
-
-  public static void transferStackInSlot(Container container, PlayerEntity playerIn, int slotIndex,
-      ICraftingRecipe recipe) {
-    Slot slot = container.getSlot(slotIndex);
-
-    if (slot.getHasStack() && container instanceof ContainerNetwork) {
-      craftShift(container, playerIn, recipe);
-    }
-  }
-
-  @SuppressWarnings("deprecation")
-  public static void craftShift(Container container, PlayerEntity player, ICraftingRecipe recipe) {
-
-    if (container instanceof ContainerNetwork) {
-      ContainerNetwork containerNetwork = (ContainerNetwork) container;
-
-      if (!containerNetwork.isCrafting() || containerNetwork.matrix == null) {
-        return;
-      }
-      Field f = null;
-      try {
-        f = ContainerNetwork.class.getDeclaredField("recipeLocked");
-        f.setAccessible(true);
-        f.set(containerNetwork, true);
-      } catch (Exception e) {
-        Polymorph.LOGGER.error("Reflection error!", e);
-      }
-      NetworkCraftingInventory matrix = containerNetwork.matrix;
-      ItemStack res = recipe.getCraftingResult(matrix);
-      int crafted = 0;
-      List<ItemStack> recipeCopy = new ArrayList<>();
-
-      for (int i = 0; i < matrix.getSizeInventory(); i++) {
-        recipeCopy.add(matrix.getStackInSlot(i).copy());
-      }
-      int sizePerCraft = res.getCount();
-
-      while (crafted + sizePerCraft <= res.getMaxStackSize()) {
-        res = recipe.getCraftingResult(matrix);
-
-        if (!ItemHandlerHelper
-            .insertItemStacked(new PlayerMainInvWrapper(player.inventory), res, true).isEmpty()) {
-          break;
-        }
-        if (!recipe.matches(matrix, player.world)) {
-          break;
-        }
-
-        if (!player.inventory.addItemStackToInventory(res)) {
-          player.dropItem(res, false);
-        }
-        NonNullList<ItemStack> remainder = recipe.getRemainingItems(matrix);
-
-        for (int i = 0; i < remainder.size(); ++i) {
-          ItemStack remainderCurrent = remainder.get(i);
-          ItemStack slot = matrix.getStackInSlot(i);
-
-          if (remainderCurrent.isEmpty()) {
-            matrix.getStackInSlot(i).shrink(1);
-            continue;
-          }
-
-          if (slot.getItem().getContainerItem() != null) {
-            slot = new ItemStack(slot.getItem().getContainerItem());
-            matrix.setInventorySlotContents(i, slot);
-          } else if (!slot.getItem().getContainerItem(slot).isEmpty()) {
-            slot = slot.getItem().getContainerItem(slot);
-            matrix.setInventorySlotContents(i, slot);
-          } else if (!remainderCurrent.isEmpty()) {
-            if (slot.isEmpty()) {
-              matrix.setInventorySlotContents(i, remainderCurrent);
-            } else if (ItemStack.areItemsEqual(slot, remainderCurrent) && ItemStack
-                .areItemStackTagsEqual(slot, remainderCurrent)) {
-              remainderCurrent.grow(slot.getCount());
-              matrix.setInventorySlotContents(i, remainderCurrent);
-            } else if (ItemStack.areItemsEqualIgnoreDurability(slot, remainderCurrent)) {
-              matrix.setInventorySlotContents(i, remainderCurrent);
-            } else {
-              if (!player.inventory.addItemStackToInventory(remainderCurrent)) {
-                player.dropItem(remainderCurrent, false);
-              }
-            }
-          } else if (!slot.isEmpty()) {
-            matrix.decrStackSize(i, 1);
-          }
-        }
-        crafted += sizePerCraft;
-        ItemStack stackInSlot;
-        ItemStack recipeStack;
-        ItemStackMatcher itemStackMatcherCurrent;
-
-        for (int i = 0; i < matrix.getSizeInventory(); i++) {
-          stackInSlot = matrix.getStackInSlot(i);
-
-          if (stackInSlot.isEmpty()) {
-            recipeStack = recipeCopy.get(i);
-            itemStackMatcherCurrent =
-                !recipeStack.isEmpty() ? new ItemStackMatcher(recipeStack, false, false) : null;
-            ItemStack req = containerNetwork.getTileMain().request(itemStackMatcherCurrent, 1, false);
-            matrix.setInventorySlotContents(i, req);
-          }
-        }
-        container.onCraftMatrixChanged(matrix);
-      }
-      container.detectAndSendChanges();
-
-      if (f != null) {
-        try {
-          f.set(containerNetwork, false);
-        } catch (IllegalAccessException e) {
-          Polymorph.LOGGER.error("Reflection error!", e);
-        }
-      }
-      container.onCraftMatrixChanged(matrix);
-    }
-  }
-
-  public static class StorageNetworkProvider<T extends ContainerNetwork> implements IProvider {
+  public static class StorageNetworkProvider<T extends ContainerNetwork> implements PolyProvider {
 
     private final T containerNetwork;
 
@@ -187,6 +68,125 @@ public class StorageNetworkModule {
     @Override
     public int getYOffset() {
       return -22;
+    }
+
+    @Override
+    public void transfer(PlayerEntity playerIn, ICraftingRecipe recipe) {
+      Container container = getContainer();
+      Slot slot = getOutputSlot();
+
+      if (slot.getHasStack() && container instanceof ContainerNetwork) {
+        craftShift(container, playerIn, recipe);
+      }
+    }
+
+    @SuppressWarnings("deprecation")
+    public static void craftShift(Container container, PlayerEntity player,
+        ICraftingRecipe recipe) {
+
+      if (container instanceof ContainerNetwork) {
+        ContainerNetwork containerNetwork = (ContainerNetwork) container;
+
+        if (!containerNetwork.isCrafting() || containerNetwork.matrix == null) {
+          return;
+        }
+        Field f = null;
+        try {
+          f = ContainerNetwork.class.getDeclaredField("recipeLocked");
+          f.setAccessible(true);
+          f.set(containerNetwork, true);
+        } catch (Exception e) {
+          Polymorph.LOGGER.error("Reflection error!", e);
+        }
+        NetworkCraftingInventory matrix = containerNetwork.matrix;
+        ItemStack res = recipe.getCraftingResult(matrix);
+        int crafted = 0;
+        List<ItemStack> recipeCopy = new ArrayList<>();
+
+        for (int i = 0; i < matrix.getSizeInventory(); i++) {
+          recipeCopy.add(matrix.getStackInSlot(i).copy());
+        }
+        int sizePerCraft = res.getCount();
+
+        while (crafted + sizePerCraft <= res.getMaxStackSize()) {
+          res = recipe.getCraftingResult(matrix);
+
+          if (!ItemHandlerHelper
+              .insertItemStacked(new PlayerMainInvWrapper(player.inventory), res, true).isEmpty()) {
+            break;
+          }
+          if (!recipe.matches(matrix, player.world)) {
+            break;
+          }
+
+          if (!player.inventory.addItemStackToInventory(res)) {
+            player.dropItem(res, false);
+          }
+          NonNullList<ItemStack> remainder = recipe.getRemainingItems(matrix);
+
+          for (int i = 0; i < remainder.size(); ++i) {
+            ItemStack remainderCurrent = remainder.get(i);
+            ItemStack slot = matrix.getStackInSlot(i);
+
+            if (remainderCurrent.isEmpty()) {
+              matrix.getStackInSlot(i).shrink(1);
+              continue;
+            }
+
+            if (slot.getItem().getContainerItem() != null) {
+              slot = new ItemStack(slot.getItem().getContainerItem());
+              matrix.setInventorySlotContents(i, slot);
+            } else if (!slot.getItem().getContainerItem(slot).isEmpty()) {
+              slot = slot.getItem().getContainerItem(slot);
+              matrix.setInventorySlotContents(i, slot);
+            } else if (!remainderCurrent.isEmpty()) {
+              if (slot.isEmpty()) {
+                matrix.setInventorySlotContents(i, remainderCurrent);
+              } else if (ItemStack.areItemsEqual(slot, remainderCurrent) && ItemStack
+                  .areItemStackTagsEqual(slot, remainderCurrent)) {
+                remainderCurrent.grow(slot.getCount());
+                matrix.setInventorySlotContents(i, remainderCurrent);
+              } else if (ItemStack.areItemsEqualIgnoreDurability(slot, remainderCurrent)) {
+                matrix.setInventorySlotContents(i, remainderCurrent);
+              } else {
+                if (!player.inventory.addItemStackToInventory(remainderCurrent)) {
+                  player.dropItem(remainderCurrent, false);
+                }
+              }
+            } else if (!slot.isEmpty()) {
+              matrix.decrStackSize(i, 1);
+            }
+          }
+          crafted += sizePerCraft;
+          ItemStack stackInSlot;
+          ItemStack recipeStack;
+          ItemStackMatcher itemStackMatcherCurrent;
+
+          for (int i = 0; i < matrix.getSizeInventory(); i++) {
+            stackInSlot = matrix.getStackInSlot(i);
+
+            if (stackInSlot.isEmpty()) {
+              recipeStack = recipeCopy.get(i);
+              itemStackMatcherCurrent =
+                  !recipeStack.isEmpty() ? new ItemStackMatcher(recipeStack, false, false) : null;
+              ItemStack req = containerNetwork.getTileMain()
+                  .request(itemStackMatcherCurrent, 1, false);
+              matrix.setInventorySlotContents(i, req);
+            }
+          }
+          container.onCraftMatrixChanged(matrix);
+        }
+        container.detectAndSendChanges();
+
+        if (f != null) {
+          try {
+            f.set(containerNetwork, false);
+          } catch (IllegalAccessException e) {
+            Polymorph.LOGGER.error("Reflection error!", e);
+          }
+        }
+        container.onCraftMatrixChanged(matrix);
+      }
     }
   }
 }

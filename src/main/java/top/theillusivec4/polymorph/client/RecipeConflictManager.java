@@ -46,7 +46,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.Polymorph;
-import top.theillusivec4.polymorph.api.PolymorphApi.IProvider;
+import top.theillusivec4.polymorph.api.PolyProvider;
 import top.theillusivec4.polymorph.client.gui.RecipeSelectionGui;
 import top.theillusivec4.polymorph.client.gui.ToggleOutputButton;
 import top.theillusivec4.polymorph.common.network.NetworkHandler;
@@ -76,9 +76,9 @@ public class RecipeConflictManager {
   private boolean lockUpdates;
 
   private ContainerScreen<?> parent;
-  private IProvider provider;
+  private PolyProvider provider;
 
-  public RecipeConflictManager(ContainerScreen<?> screen, IProvider provider) {
+  public RecipeConflictManager(ContainerScreen<?> screen, PolyProvider provider) {
     this.parent = screen;
     this.provider = provider;
     int x = screen.width / 2;
@@ -97,7 +97,7 @@ public class RecipeConflictManager {
   }
 
   public static RecipeConflictManager refreshInstance(ContainerScreen<?> screen,
-      IProvider provider) {
+      PolyProvider provider) {
     instance = new RecipeConflictManager(screen, provider);
     return instance;
   }
