@@ -319,6 +319,15 @@ public class RecipeConflictManager {
     this.resultChanged = true;
   }
 
+  public static void updateManager() {
+    RecipeConflictManager.getInstance().ifPresent(manager -> {
+
+      if (manager.canUpdate()) {
+        manager.markResultChanged();
+      }
+    });
+  }
+
   private static final int GLFW_LEFT_SHIFT = 340;
   private static final int GLFW_RIGHT_SHIFT = 344;
 

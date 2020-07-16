@@ -72,7 +72,7 @@ public class CPacketSetRecipe {
 
               if (craftingRecipe.matches(finalCraftingInventory, sender.world)) {
                 output.set(craftingRecipe.getCraftingResult(finalCraftingInventory));
-                slot.putStack(output.get());
+                slot.inventory.setInventorySlotContents(slot.getSlotIndex(), output.get());
               }
             }
           });

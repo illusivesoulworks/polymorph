@@ -35,13 +35,7 @@ public class PolymorphHooks {
       .findField(ShapelessRecipe.class, "isSimple");
 
   public static void onInventoryChanged(CraftResultInventory inventory) {
-    DistExecutor.runWhenOn(Dist.CLIENT,
-        () -> () -> RecipeConflictManager.getInstance().ifPresent(manager -> {
-
-          if (manager.canUpdate()) {
-            manager.markResultChanged();
-          }
-        }));
+    DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> RecipeConflictManager::updateManager);
   }
 
   public static void packIngredients(ShapelessRecipe shapelessRecipe) {

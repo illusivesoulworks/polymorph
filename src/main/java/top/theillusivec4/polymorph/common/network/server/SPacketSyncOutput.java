@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
@@ -52,7 +53,10 @@ public class SPacketSyncOutput {
       if (clientPlayerEntity != null) {
         Container container = clientPlayerEntity.openContainer;
         PolymorphApi.getProvider(container)
-            .ifPresent(provider -> provider.getOutputSlot().putStack(msg.stack));
+            .ifPresent(provider -> {
+              Slot slot = provider.getOutputSlot();
+              slot.inventory.setInventorySlotContents(slot.getSlotIndex(), msg.stack);
+            });
         RecipeConflictManager.getInstance().ifPresent(RecipeConflictManager::unlockUpdates);
       }
     });

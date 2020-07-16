@@ -34,8 +34,8 @@ public class FastWorkbenchModule {
 
   public static void setLastRecipe(Container container, IRecipe<CraftingInventory> recipe) {
 
-    if (container instanceof ContainerFastBench) {
-      ((ContainerFastBench) container).lastRecipe = recipe;
-    }
+//    if (container instanceof ContainerFastBench) {
+//      ((ContainerFastBench) container).lastRecipe = recipe;
+//    }
   }
 }
