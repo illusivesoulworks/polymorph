@@ -27,7 +27,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import top.theillusivec4.polymorph.Polymorph;
-import top.theillusivec4.polymorph.client.RecipeConflictManager;
+import top.theillusivec4.polymorph.client.RecipeSelectionManager;
 
 public class PolymorphHooks {
 
@@ -35,7 +35,7 @@ public class PolymorphHooks {
       .findField(ShapelessRecipe.class, "isSimple");
 
   public static void onInventoryChanged(CraftResultInventory inventory) {
-    DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> RecipeConflictManager::updateManager);
+    DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> RecipeSelectionManager::updateManager);
   }
 
   public static void packIngredients(ShapelessRecipe shapelessRecipe) {

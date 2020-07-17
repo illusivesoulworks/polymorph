@@ -38,25 +38,25 @@ public class ClientEventHandler {
       ClientWorld world = Minecraft.getInstance().world;
 
       if (world != null) {
-        RecipeConflictManager.getInstance().ifPresent(RecipeConflictManager::tick);
+        RecipeSelectionManager.getInstance().ifPresent(RecipeSelectionManager::tick);
       }
     }
   }
 
   @SubscribeEvent
-  public void guiInit(GuiScreenEvent.InitGuiEvent.Post evt) {
+  public void initGui(GuiScreenEvent.InitGuiEvent.Post evt) {
     Screen screen = evt.getGui();
-    RecipeConflictManager conflictManager = null;
+    RecipeSelectionManager conflictManager = null;
 
     if (screen instanceof ContainerScreen) {
       ContainerScreen<?> containerScreen = (ContainerScreen<?>) screen;
       conflictManager = PolymorphApi.getProvider(containerScreen.getContainer())
-          .map(provider -> RecipeConflictManager.refreshInstance(containerScreen, provider))
+          .map(provider -> RecipeSelectionManager.createInstance(containerScreen, provider))
           .orElse(null);
     }
 
     if (conflictManager == null) {
-      RecipeConflictManager.clearInstance();
+      RecipeSelectionManager.clearInstance();
     }
   }
 
@@ -64,8 +64,8 @@ public class ClientEventHandler {
   public void guiRender(GuiScreenEvent.DrawScreenEvent.Post evt) {
 
     if (evt.getGui() instanceof ContainerScreen) {
-      RecipeConflictManager.getInstance().ifPresent(conflictManager -> conflictManager
-          .renderRecipeSelectionGui(evt.getMouseX(), evt.getMouseY(), evt.getRenderPartialTicks()));
+      RecipeSelectionManager.getInstance().ifPresent(conflictManager -> conflictManager
+          .render(evt.getMouseX(), evt.getMouseY(), evt.getRenderPartialTicks()));
     }
   }
 
@@ -73,9 +73,9 @@ public class ClientEventHandler {
   public void guiMouseClick(GuiScreenEvent.MouseClickedEvent.Pre evt) {
 
     if (evt.getGui() instanceof ContainerScreen) {
-      RecipeConflictManager.getInstance().ifPresent(RecipeConflictManager::markPositionChanged);
+      RecipeSelectionManager.getInstance().ifPresent(RecipeSelectionManager::markPositionChanged);
 
-      if (RecipeConflictManager.getInstance().map(conflictManager -> conflictManager
+      if (RecipeSelectionManager.getInstance().map(conflictManager -> conflictManager
           .mouseClicked(evt.getMouseX(), evt.getMouseY(), evt.getButton())).orElse(false)) {
         evt.setCanceled(true);
       }

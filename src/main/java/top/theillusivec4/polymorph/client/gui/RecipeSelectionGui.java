@@ -21,16 +21,19 @@ package top.theillusivec4.polymorph.client.gui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.IRenderable;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.crafting.ICraftingRecipe;
-import top.theillusivec4.polymorph.client.RecipeConflictManager;
+import net.minecraft.item.crafting.IRecipe;
 
 public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGuiEventListener {
 
-  private final RecipeConflictManager conflictManager;
+  private final Consumer<IRecipe<CraftingInventory>> recipeSelector;
+  private final CraftingInventory craftingInventory;
 
   private List<RecipeSelectWidget> buttons = new ArrayList<>();
   private RecipeSelectWidget hoveredButton;
@@ -39,10 +42,11 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
   private int y;
   private List<ICraftingRecipe> recipes = new ArrayList<>();
 
-  public RecipeSelectionGui(RecipeConflictManager conflictManager, int x, int y) {
-    this.conflictManager = conflictManager;
-    this.x = x;
-    this.y = y;
+  public RecipeSelectionGui(int x, int y, CraftingInventory craftingInventory,
+      Consumer<IRecipe<CraftingInventory>> recipeSelector) {
+    this.setPosition(x, y);
+    this.recipeSelector = recipeSelector;
+    this.craftingInventory = craftingInventory;
   }
 
   public void setPosition(int x, int y) {
@@ -72,10 +76,8 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
   public void setRecipes(List<ICraftingRecipe> recipes) {
     this.recipes = recipes;
     this.buttons.clear();
-    this.conflictManager.getCurrentCraftingMatrix().ifPresent(craftingInventory -> recipes
-        .forEach(recipe -> this.buttons.add(new RecipeSelectWidget(craftingInventory, recipe))));
+    recipes.forEach(recipe -> this.buttons.add(new RecipeSelectWidget(craftingInventory, recipe)));
     this.updateButtonPositions();
-    this.conflictManager.getSwitchButton().visible = recipes.size() > 1;
   }
 
   public void setVisible(boolean visible) {
@@ -110,7 +112,6 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
       });
       this.renderTooltip(p_render_1_, p_render_2_);
     }
-    conflictManager.getSwitchButton().render(p_render_1_, p_render_2_, p_render_3_);
   }
 
   @Override
@@ -122,7 +123,7 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
       for (RecipeSelectWidget button : this.buttons) {
 
         if (button.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_)) {
-          this.conflictManager.selectRecipe(button.recipe);
+          recipeSelector.accept(button.recipe);
           return true;
         }
       }

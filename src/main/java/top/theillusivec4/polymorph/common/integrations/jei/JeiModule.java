@@ -25,7 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import top.theillusivec4.polymorph.client.RecipeConflictManager;
+import top.theillusivec4.polymorph.client.RecipeSelectionManager;
 import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
 
 public class JeiModule extends CompatibilityModule {
@@ -59,7 +59,7 @@ public class JeiModule extends CompatibilityModule {
     }
 
     if (!chosenStack.isEmpty()) {
-      RecipeConflictManager.setPreferredStack(chosenStack);
+      RecipeSelectionManager.setPreferredStack(chosenStack);
     }
   }
 }

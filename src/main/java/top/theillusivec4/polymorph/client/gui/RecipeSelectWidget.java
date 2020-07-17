@@ -30,7 +30,7 @@ import top.theillusivec4.polymorph.Polymorph;
 
 public class RecipeSelectWidget extends Widget {
 
-  private static final ResourceLocation SWITCH = new ResourceLocation(Polymorph.MODID,
+  private static final ResourceLocation TOGGLE = new ResourceLocation(Polymorph.MODID,
       "textures/gui/toggle.png");
   public IRecipe<CraftingInventory> recipe;
   public CraftingInventory craftingMatrix;
@@ -49,7 +49,7 @@ public class RecipeSelectWidget extends Widget {
   @Override
   public void renderButton(int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
     Minecraft minecraft = Minecraft.getInstance();
-    minecraft.getTextureManager().bindTexture(SWITCH);
+    minecraft.getTextureManager().bindTexture(TOGGLE);
     int i = 16;
     int j = 0;
 

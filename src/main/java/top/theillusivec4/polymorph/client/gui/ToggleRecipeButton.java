@@ -24,9 +24,9 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.util.ResourceLocation;
 
-public class ToggleOutputButton extends ImageButton {
+public class ToggleRecipeButton extends ImageButton {
 
-  public ToggleOutputButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn,
+  public ToggleRecipeButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn,
       int yDiffTextIn, ResourceLocation resourceLocationIn, Button.IPressable onPressIn) {
     super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn,
         256, 256, onPressIn);
