@@ -74,7 +74,7 @@ public class RecipeSelectionManager {
   private IRecipe<CraftingInventory> lastSelectedRecipe;
 
   private boolean needsUpdate;
-  private boolean canUpdate;
+  private boolean canUpdate = true;
   private boolean needsPositionUpdate;
 
   private ContainerScreen<?> parent;
@@ -103,7 +103,12 @@ public class RecipeSelectionManager {
   }
 
   public static void updateManager() {
-    RecipeSelectionManager.getInstance().ifPresent(RecipeSelectionManager::markUpdate);
+    RecipeSelectionManager.getInstance().ifPresent(manager -> {
+
+      if (manager.canUpdate) {
+        manager.markUpdate();
+      }
+    });
   }
 
   public RecipeSelectionManager(ContainerScreen<?> screen, PolyProvider provider) {
@@ -169,7 +174,7 @@ public class RecipeSelectionManager {
       this.toggleButton.setPosition(x, y);
     }
 
-    if (this.needsUpdate && this.canUpdate) {
+    if (this.needsUpdate) {
       ClientWorld world = Minecraft.getInstance().world;
       this.needsUpdate = false;
 
