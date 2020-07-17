@@ -31,6 +31,10 @@ public interface PolyProvider {
 
   Container getContainer();
 
+  default boolean isActive() {
+    return true;
+  }
+
   default CraftingInventory getCraftingInventory() {
 
     for (Slot slot : this.getContainer().inventorySlots) {

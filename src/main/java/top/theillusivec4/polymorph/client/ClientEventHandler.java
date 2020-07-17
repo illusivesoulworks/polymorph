@@ -50,9 +50,13 @@ public class ClientEventHandler {
 
     if (screen instanceof ContainerScreen) {
       ContainerScreen<?> containerScreen = (ContainerScreen<?>) screen;
-      conflictManager = PolymorphApi.getProvider(containerScreen.getContainer())
-          .map(provider -> RecipeSelectionManager.createInstance(containerScreen, provider))
-          .orElse(null);
+      conflictManager = PolymorphApi.getProvider(containerScreen.getContainer()).map(provider -> {
+
+        if (provider.getCraftingInventory() != null && provider.isActive()) {
+          return RecipeSelectionManager.createInstance(containerScreen, provider);
+        }
+        return null;
+      }).orElse(null);
     }
 
     if (conflictManager == null) {
