@@ -125,8 +125,6 @@ public class RefinedStorageModule extends CompatibilityModule {
               .onCrafted(grid, recipe, player, availableItems, usedItems);
           craftedItemsList.add(crafted.copy());
           amountCrafted += crafted.getCount();
-          ItemStack stack = recipe.getCraftingResult(matrix);
-          Polymorph.LOGGER.info(stack.toString());
         } while (API.instance().getComparer().isEqual(crafted, recipe.getCraftingResult(matrix))
             && amountCrafted < maxCrafted && amountCrafted + crafted.getCount() <= maxCrafted
             && recipe.matches(matrix, player.world));

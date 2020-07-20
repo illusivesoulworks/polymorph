@@ -35,7 +35,7 @@ public class JeiModule extends CompatibilityModule {
 
   @Override
   public void clientSetup() {
-    MinecraftForge.EVENT_BUS.register(new PolymorphJeiPlugin());
+    MinecraftForge.EVENT_BUS.register(this);
   }
 
   @SubscribeEvent
