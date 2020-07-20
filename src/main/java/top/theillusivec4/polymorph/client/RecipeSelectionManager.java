@@ -19,6 +19,7 @@
 
 package top.theillusivec4.polymorph.client;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -258,9 +259,9 @@ public class RecipeSelectionManager {
     return recipes;
   }
 
-  public void render(int mouseX, int mouseY, float partialTicks) {
-    this.recipeSelectionGui.render(mouseX, mouseY, partialTicks);
-    this.toggleButton.render(mouseX, mouseY, partialTicks);
+  public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    this.recipeSelectionGui.render(matrixStack, mouseX, mouseY, partialTicks);
+    this.toggleButton.render(matrixStack, mouseX, mouseY, partialTicks);
   }
 
   public boolean mouseClicked(double mouseX, double mouseY, int button) {

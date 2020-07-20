@@ -19,13 +19,17 @@
 
 package top.theillusivec4.polymorph.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import java.util.List;
+import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import top.theillusivec4.polymorph.Polymorph;
 
 public class RecipeSelectWidget extends Widget {
@@ -36,7 +40,7 @@ public class RecipeSelectWidget extends Widget {
   public CraftingInventory craftingMatrix;
 
   public RecipeSelectWidget(CraftingInventory craftingMatrix, IRecipe<CraftingInventory> recipe) {
-    super(0, 0, 25, 25, "");
+    super(0, 0, 25, 25, StringTextComponent.EMPTY/**/);
     this.recipe = recipe;
     this.craftingMatrix = craftingMatrix;
   }
@@ -47,7 +51,8 @@ public class RecipeSelectWidget extends Widget {
   }
 
   @Override
-  public void renderButton(int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
+  public void renderButton(@Nonnull MatrixStack matrixStack, int p_renderButton_1_,
+      int p_renderButton_2_, float p_renderButton_3_) {
     Minecraft minecraft = Minecraft.getInstance();
     minecraft.getTextureManager().bindTexture(TOGGLE);
     int i = 16;
@@ -59,14 +64,14 @@ public class RecipeSelectWidget extends Widget {
         j += 25;
       }
     }
-    this.blit(this.x, this.y, i, j, this.width, this.height);
+    this.blit(matrixStack, this.x, this.y, i, j, this.width, this.height);
     int k = 4;
     minecraft.getItemRenderer()
         .renderItemAndEffectIntoGUI(this.recipe.getCraftingResult(this.craftingMatrix), this.x + k,
             this.y + k);
   }
 
-  public List<String> getTooltipText(Screen screen) {
+  public List<ITextComponent> getTooltipText(Screen screen) {
     return screen.getTooltipFromItem(this.recipe.getCraftingResult(this.craftingMatrix));
   }
 

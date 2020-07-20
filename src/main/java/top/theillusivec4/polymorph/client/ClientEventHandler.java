@@ -69,7 +69,7 @@ public class ClientEventHandler {
 
     if (evt.getGui() instanceof ContainerScreen) {
       RecipeSelectionManager.getInstance().ifPresent(conflictManager -> conflictManager
-          .render(evt.getMouseX(), evt.getMouseY(), evt.getRenderPartialTicks()));
+          .render(evt.getMatrixStack(), evt.getMouseX(), evt.getMouseY(), evt.getRenderPartialTicks()));
     }
   }
 

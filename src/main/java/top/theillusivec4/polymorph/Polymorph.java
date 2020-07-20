@@ -27,12 +27,12 @@ import java.util.function.Supplier;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,12 +40,9 @@ import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.client.ClientEventHandler;
 import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
 import top.theillusivec4.polymorph.common.integrations.craftingcraft.CraftingCraftModule;
-import top.theillusivec4.polymorph.common.integrations.craftingstation.CraftingStationModule;
 import top.theillusivec4.polymorph.common.integrations.fastbench.FastWorkbenchModule;
 import top.theillusivec4.polymorph.common.integrations.jei.JeiModule;
 import top.theillusivec4.polymorph.common.integrations.refinedstorage.RefinedStorageModule;
-import top.theillusivec4.polymorph.common.integrations.silentgear.SilentGearModule;
-import top.theillusivec4.polymorph.common.integrations.storagenetwork.StorageNetworkModule;
 import top.theillusivec4.polymorph.common.network.NetworkHandler;
 import top.theillusivec4.polymorph.common.provider.InventoryProvider;
 import top.theillusivec4.polymorph.common.provider.WorkbenchProvider;
@@ -63,9 +60,6 @@ public class Polymorph {
   static {
     INTEGRATIONS.put("fastbench", FastWorkbenchModule::new);
     INTEGRATIONS.put("jei", JeiModule::new);
-    INTEGRATIONS.put("silentgear", SilentGearModule::new);
-    INTEGRATIONS.put("craftingstation", CraftingStationModule::new);
-    INTEGRATIONS.put("storagenetwork", StorageNetworkModule::new);
     INTEGRATIONS.put("refinedstorage", RefinedStorageModule::new);
     INTEGRATIONS.put("craftingcraft", CraftingCraftModule::new);
   }
@@ -74,7 +68,7 @@ public class Polymorph {
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
     eventBus.addListener(this::setup);
     eventBus.addListener(this::clientSetup);
-    MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
+    MinecraftForge.EVENT_BUS.addListener(this::registerCommand);
     ModList modList = ModList.get();
     INTEGRATIONS.forEach((modid, supplier) -> {
 
@@ -96,7 +90,7 @@ public class Polymorph {
     ACTIVE_INTEGRATIONS.forEach(CompatibilityModule::clientSetup);
   }
 
-  private void serverStarting(final FMLServerStartingEvent evt) {
-    PolymorphCommand.register(evt.getCommandDispatcher());
+  private void registerCommand(final RegisterCommandsEvent evt) {
+    PolymorphCommand.register(evt.getDispatcher());
   }
 }

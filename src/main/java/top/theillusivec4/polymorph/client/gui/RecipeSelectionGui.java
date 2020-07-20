@@ -19,9 +19,11 @@
 
 package top.theillusivec4.polymorph.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.IGuiEventListener;
@@ -88,29 +90,30 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
     return this.visible;
   }
 
-  public void renderTooltip(int p_193721_1_, int p_193721_2_) {
+  public void renderTooltip(MatrixStack matrixStack, int p_193721_1_, int p_193721_2_) {
     Minecraft mc = Minecraft.getInstance();
 
     if (mc.currentScreen != null && this.hoveredButton != null) {
       mc.currentScreen
-          .renderTooltip(this.hoveredButton.getTooltipText(mc.currentScreen), p_193721_1_,
-              p_193721_2_);
+          .renderTooltip(matrixStack, this.hoveredButton.getTooltipText(mc.currentScreen),
+              p_193721_1_, p_193721_2_);
     }
   }
 
   @Override
-  public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
+  public void render(@Nonnull MatrixStack matrixStack, int p_render_1_, int p_render_2_,
+      float p_render_3_) {
 
     if (this.isVisible()) {
       this.hoveredButton = null;
       buttons.forEach(button -> {
-        button.render(p_render_1_, p_render_2_, p_render_3_);
+        button.render(matrixStack, p_render_1_, p_render_2_, p_render_3_);
 
         if (button.visible && button.isHovered()) {
           this.hoveredButton = button;
         }
       });
-      this.renderTooltip(p_render_1_, p_render_2_);
+      this.renderTooltip(matrixStack, p_render_1_, p_render_2_);
     }
   }
 

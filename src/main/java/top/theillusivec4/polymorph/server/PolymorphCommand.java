@@ -43,13 +43,12 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import top.theillusivec4.polymorph.Polymorph;
 
 public class PolymorphCommand {
 
   public static void register(CommandDispatcher<CommandSource> dispatcher) {
-    final int opPermissionLevel = ServerLifecycleHooks.getCurrentServer().getOpPermissionLevel();
+    final int opPermissionLevel = 2;
     LiteralArgumentBuilder<CommandSource> command = Commands.literal("polymorph")
         .requires(player -> player.hasPermissionLevel(opPermissionLevel));
 

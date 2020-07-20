@@ -145,8 +145,9 @@ public class RefinedStorageModule extends CompatibilityModule {
             }
 
             if (!remainder.isEmpty()) {
-              InventoryHelper.spawnItemStack(player.getEntityWorld(), player.getPosition().getX(),
-                  player.getPosition().getY(), player.getPosition().getZ(), remainder);
+              InventoryHelper
+                  .spawnItemStack(player.getEntityWorld(), player.getPositionVec().getX(),
+                      player.getPositionVec().getY(), player.getPositionVec().getZ(), remainder);
             }
           }
         }

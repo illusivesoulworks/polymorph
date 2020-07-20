@@ -19,7 +19,9 @@
 
 package top.theillusivec4.polymorph.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import javax.annotation.Nonnull;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.util.ResourceLocation;
@@ -32,9 +34,10 @@ public class ToggleRecipeButton extends ImageButton {
         256, 256, onPressIn);
   }
 
+  @SuppressWarnings("deprecation")
   @Override
-  public void renderButton(int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
+  public void renderButton(@Nonnull MatrixStack matrixStack, int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
     RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-    super.renderButton(p_renderButton_1_, p_renderButton_2_, p_renderButton_3_);
+    super.renderButton(matrixStack, p_renderButton_1_, p_renderButton_2_, p_renderButton_3_);
   }
 }
