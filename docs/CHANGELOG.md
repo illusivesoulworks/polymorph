@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [0.8] - 2020.07.19
+### Added
+- Added Refined Storage integration [#7](https://github.com/TheIllusiveC4/Polymorph/issues/7)
+- Added CraftingCraft integration [#13](https://github.com/TheIllusiveC4/Polymorph/issues/13)
+
 ## [0.7] - 2020.07.15
 ### Fixed
 - Fixed not being able to select recipe outputs for FastWorkbench [#14](https://github.com/TheIllusiveC4/Polymorph/issues/14)
