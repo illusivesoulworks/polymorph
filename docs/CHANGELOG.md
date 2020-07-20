@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [0.9] - 2020.07.19
+### Fixed
+- Removed debug line of code
+
 ## [0.8] - 2020.07.19
 ### Added
 - Added Refined Storage integration [#7](https://github.com/TheIllusiveC4/Polymorph/issues/7)
