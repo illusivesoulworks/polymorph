@@ -39,6 +39,7 @@ import org.apache.logging.log4j.Logger;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.client.ClientEventHandler;
 import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
+import top.theillusivec4.polymorph.common.integrations.byg.BygModule;
 import top.theillusivec4.polymorph.common.integrations.craftingcraft.CraftingCraftModule;
 import top.theillusivec4.polymorph.common.integrations.fastbench.FastWorkbenchModule;
 import top.theillusivec4.polymorph.common.integrations.jei.JeiModule;
@@ -62,6 +63,7 @@ public class Polymorph {
     INTEGRATIONS.put("jei", JeiModule::new);
     INTEGRATIONS.put("refinedstorage", RefinedStorageModule::new);
     INTEGRATIONS.put("craftingcraft", CraftingCraftModule::new);
+    INTEGRATIONS.put("byg", BygModule::new);
   }
 
   public Polymorph() {

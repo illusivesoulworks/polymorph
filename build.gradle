@@ -72,6 +72,7 @@ dependencies {
     compile fg.deobf("curse.maven:refined-storage:3007496")
     compile fg.deobf("curse.maven:refined-storage-addons:3005729")
     compile fg.deobf("curse.maven:crafting-craft:2989179")
+    compile fg.deobf("curse.maven:oh-the-biomes-youll-go:3009912")
     compileOnly fg.deobf("mezz.jei:jei-${version_minecraft}:${version_jei}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${version_minecraft}:${version_jei}")
 
