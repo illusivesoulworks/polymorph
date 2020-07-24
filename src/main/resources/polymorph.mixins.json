@@ -7,8 +7,8 @@
     "CraftingResultInventoryMixin",
     "CraftingScreenHandlerAccessor",
     "IngredientAccessor",
-    "PlayerScreenHandlerAccessor",
-    "ShapelessRecipeMixin"
+    "IngredientMixin",
+    "PlayerScreenHandlerAccessor"
   ],
   "client": [
     "GameRendererMixin",

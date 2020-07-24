@@ -68,58 +68,62 @@ public class PolymorphCommands {
     AtomicInteger conflictCount = new AtomicInteger();
     source.sendFeedback(new TranslatableText("commands.polymorph.conflicts.starting"), true);
 
-    recipes.forEach(recipe -> {
-      String id = recipe.getId().toString();
-      List<String> conflicts = new ArrayList<>();
+    try {
+      recipes.forEach(recipe -> {
+        String id = recipe.getId().toString();
+        List<String> conflicts = new ArrayList<>();
 
-      if (!processed.contains(id)) {
-        processed.add(id);
-        recipes.forEach(otherRecipe -> {
-          String otherId = otherRecipe.getId().toString();
+        if (!processed.contains(id)) {
+          processed.add(id);
+          recipes.forEach(otherRecipe -> {
+            String otherId = otherRecipe.getId().toString();
 
-          // Algorithm based on the one from NoMoreRecipeConflict by stimmedCow & GotoLink
-          // License is Public Domain
-          if (!processed.contains(otherId) && !ItemStack
-              .areEqual(otherRecipe.getOutput(), recipe.getOutput())
-              && recipe.getType() == RecipeType.CRAFTING && recipe.getType() == otherRecipe
-              .getType() && !recipe.isIgnoredInRecipeBook()
-              && recipe.isIgnoredInRecipeBook() == otherRecipe.isIgnoredInRecipeBook()
-              && areSameShape(recipe, otherRecipe)) {
-            recipeItemHelper.clear();
-            recipe.getPreviewInputs().forEach(ingredient -> {
-              for (ItemStack matchingStack : Polymorph.getLoader().getAccessor()
-                  .getMatchingStacks(ingredient)) {
-                recipeItemHelper.addItem(matchingStack);
-              }
-            });
-            second.clear();
-
-            if (recipeItemHelper.findRecipe(recipe, second)) {
+            // Algorithm based on the one from NoMoreRecipeConflict by stimmedCow & GotoLink
+            // License is Public Domain
+            if (!processed.contains(otherId) && !ItemStack
+                .areEqual(otherRecipe.getOutput(), recipe.getOutput()) && recipe.getType() == RecipeType.CRAFTING && recipe.getType() == otherRecipe
+                .getType() && !recipe.isIgnoredInRecipeBook() && recipe.isIgnoredInRecipeBook() == otherRecipe.isIgnoredInRecipeBook()
+                && areSameShape(recipe, otherRecipe)) {
               recipeItemHelper.clear();
-              otherRecipe.getPreviewInputs().forEach(ingredient -> {
-                for (ItemStack matchingStack : Polymorph.getLoader().getAccessor()
-                    .getMatchingStacks(ingredient)) {
+              recipe.getPreviewInputs().forEach(ingredient -> {
+                ItemStack[] stacks = Polymorph.getLoader().getAccessor().getMatchingStacks(ingredient);
+
+                for (ItemStack matchingStack : stacks) {
                   recipeItemHelper.addItem(matchingStack);
                 }
               });
-              first.clear();
+              second.clear();
 
-              if (recipeItemHelper.findRecipe(otherRecipe, first) && first.equals(second)) {
-                processed.add(otherId);
-                conflicts.add(otherId);
+              if (recipeItemHelper.findRecipe(recipe, second)) {
+                recipeItemHelper.clear();
+                otherRecipe.getPreviewInputs().forEach(ingredient -> {
+                  ItemStack[] stacks = Polymorph.getLoader().getAccessor().getMatchingStacks(ingredient);
+
+                  for (ItemStack matchingStack : stacks) {
+                    recipeItemHelper.addItem(matchingStack);
+                  }
+                });
+                first.clear();
+
+                if (recipeItemHelper.findRecipe(otherRecipe, first) && first.equals(second)) {
+                  processed.add(otherId);
+                  conflicts.add(otherId);
+                }
               }
             }
-          }
-        });
-      }
+          });
+        }
 
-      if (!conflicts.isEmpty()) {
-        conflictCount.addAndGet(conflicts.size());
-        lines.add("Conflicts with " + id + ":");
-        lines.addAll(conflicts);
-        lines.add("");
-      }
-    });
+        if (!conflicts.isEmpty()) {
+          conflictCount.addAndGet(conflicts.size());
+          lines.add("Conflicts with " + id + ":");
+          lines.addAll(conflicts);
+          lines.add("");
+        }
+      });
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
     if (!lines.isEmpty()) {
       try {
