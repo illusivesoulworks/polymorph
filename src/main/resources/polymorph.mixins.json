@@ -1,0 +1,24 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "top.theillusivec4.polymorph.loader.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "CraftingResultInventoryMixin",
+    "CraftingScreenHandlerAccessor",
+    "IngredientAccessor",
+    "PlayerScreenHandlerAccessor",
+    "ShapelessRecipeMixin"
+  ],
+  "client": [
+    "GameRendererMixin",
+    "HandledScreenAccessor",
+    "MouseMixin",
+    "RecipeBookWidgetAccessor",
+    "ScreenMixin"
+  ],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

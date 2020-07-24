@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "polymorph",
+  "version": "${version}",
+  "name": "Polymorph",
+  "description": "No more recipe conflicts! Adds an option to choose the crafting result if more than one is available.",
+  "authors": ["C4"],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/polymorph-fabric",
+    "sources": "https://github.com/TheIllusiveC4/Polymorph",
+    "issues": "https://github.com/TheIllusiveC4/Polymorph/issues"
+  },
+  "license": "LGPLv3.0",
+  "icon": "assets/polymorph/polymorph_icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "top.theillusivec4.polymorph.loader.client.PolymorphClientMod"
+    ],
+    "main": [
+      "top.theillusivec4.polymorph.loader.common.PolymorphMod"
+    ]
+  },
+  "mixins": [
+    "polymorph.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "minecraft": "1.16.x"
+  }
+}

@@ -23,22 +23,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.screen.ScreenHandler;
 
 public class PolymorphApi {
 
-  private static final Map<Class<? extends Container>, Function<? extends Container, PolyProvider>> providerFunctions = new HashMap<>();
+  private static final Map<Class<? extends ScreenHandler>, Function<? extends ScreenHandler, PolyProvider>> providerFunctions = new HashMap<>();
 
-  public static <T extends Container> void addProvider(Class<T> clazz,
+  public static <T extends ScreenHandler> void addProvider(Class<T> clazz,
       Function<T, PolyProvider> providerFunction) {
     providerFunctions.put(clazz, providerFunction);
   }
 
   @SuppressWarnings("unchecked")
-  public static <T extends Container> Optional<PolyProvider> getProvider(T container) {
+  public static <T extends ScreenHandler> Optional<PolyProvider> getProvider(T screenHandler) {
     Function<T, PolyProvider> providerFunction = (Function<T, PolyProvider>) providerFunctions
-        .get(container.getClass());
-    return providerFunction != null ? Optional.of(providerFunction.apply(container))
+        .get(screenHandler.getClass());
+    return providerFunction != null ? Optional.of(providerFunction.apply(screenHandler))
         : Optional.empty();
   }
 }

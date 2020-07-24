@@ -20,16 +20,16 @@
 package top.theillusivec4.polymorph.api;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
+import net.minecraft.recipe.CraftingRecipe;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.slot.Slot;
 
 public interface PolyProvider {
 
-  Container getContainer();
+  ScreenHandler getHandler();
 
   default boolean isActive() {
     return true;
@@ -37,7 +37,7 @@ public interface PolyProvider {
 
   default CraftingInventory getCraftingInventory() {
 
-    for (Slot slot : this.getContainer().inventorySlots) {
+    for (Slot slot : this.getHandler().slots) {
 
       if (slot.inventory instanceof CraftingInventory) {
         return (CraftingInventory) slot.inventory;
@@ -48,35 +48,35 @@ public interface PolyProvider {
 
   default Slot getOutputSlot() {
 
-    for (Slot slot : this.getContainer().inventorySlots) {
+    for (Slot slot : this.getHandler().slots) {
 
-      if (slot.inventory instanceof CraftResultInventory) {
+      if (slot.inventory instanceof CraftingResultInventory) {
         return slot;
       }
     }
-    return this.getContainer().inventorySlots.get(0);
+    return this.getHandler().slots.get(0);
   }
 
   int getXOffset();
 
   int getYOffset();
 
-  default void transfer(PlayerEntity playerIn, ICraftingRecipe recipe) {
-    Container container = getContainer();
+  default void transfer(PlayerEntity playerIn, CraftingRecipe recipe) {
+    ScreenHandler handler = getHandler();
     Slot slot = getOutputSlot();
     CraftingInventory inventory = getCraftingInventory();
 
     if (inventory != null && slot != null) {
-      ItemStack itemstack = container.transferStackInSlot(playerIn, slot.slotNumber);
+      ItemStack itemstack = handler.transferSlot(playerIn, slot.id);
 
       if (recipe.matches(inventory, playerIn.world)) {
-        slot.putStack(recipe.getCraftingResult(inventory));
+        slot.setStack(recipe.craft(inventory));
 
         while (!itemstack.isEmpty() && ItemStack.areItemsEqual(slot.getStack(), itemstack)) {
-          itemstack = container.transferStackInSlot(playerIn, slot.slotNumber);
+          itemstack = handler.transferSlot(playerIn, slot.id);
 
           if (recipe.matches(inventory, playerIn.world)) {
-            slot.putStack(recipe.getCraftingResult(inventory));
+            slot.setStack(recipe.craft(inventory));
           }
         }
       }

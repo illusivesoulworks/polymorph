@@ -1,82 +1,46 @@
-buildscript {
-    repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        maven { url = 'https://plugins.gradle.org/m2/' }
-        jcenter()
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.4.0'
-        classpath 'com.wynprice.cursemaven:CurseMaven:2.1.1'
-    }
+plugins {
+    id 'fabric-loom' version '0.4-SNAPSHOT'
+    id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'com.matthewprenger.cursegradle'
-apply plugin: 'com.wynprice.cursemaven'
 
-version = "FORGE-${version_minecraft}-${mod_version}"
-group = "${mod_group}"
-archivesBaseName = "${mod_id}"
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
 
 minecraft {
-    mappings channel: "snapshot", version: "${version_mcp}".toString()
-
-    runs {
-        client {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                polymorph {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                polymorph {
-                    source sourceSets.main
-                }
-            }
-        }
-    }
-}
-
-repositories {
-    maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
-    }
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${version_forge}"
-    compile fg.deobf("curse.maven:fastworkbench:3003117")
-    compile fg.deobf("curse.maven:refined-storage:3007496")
-    compile fg.deobf("curse.maven:refined-storage-addons:3005729")
-    compile fg.deobf("curse.maven:crafting-craft:2989179")
-    compile fg.deobf("curse.maven:oh-the-biomes-youll-go:3009912")
-    compileOnly fg.deobf("mezz.jei:jei-${version_minecraft}:${version_jei}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${version_minecraft}:${version_jei}")
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 
-    runtimeOnly fg.deobf("curse.maven:placebo:2999632")
+    modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+    modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include "fabric.mod.json"
+        expand 'version': project.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude "fabric.mod.json"
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier.set("sources")
+    from sourceSets.main.allSource
 }
 
 sourceSets {
@@ -87,49 +51,24 @@ sourceSets {
     }
 }
 
-jar {
-    manifest {
-        attributes(["Specification-Title": "${mod_name}",
-                    "Specification-Vendor": "${mod_author}",
-                    "Specification-Version": "${version}",
-                    "Implementation-Title": "${mod_name}",
-                    "Implementation-Version": "${version}",
-                    "Implementation-Vendor" :"${mod_author}",
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
-    }
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allJava
-}
-
-tasks.build.dependsOn sourcesJar
-
-processResources {
-
-    from(sourceSets.main.resources.srcDirs) {
-        include 'META-INF/mods.toml'
-        expand 'version': project.version, 'mod_id' : mod_id, 'mod_name': mod_name, 'mod_url': mod_url, 'mod_author': mod_author, 'mod_description': mod_description, 'mod_icon': mod_icon
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'META-INF/mods.toml'
-    }
-}
-
 curseforge {
-
     project {
         apiKey = findProperty('curseKey') ?: 0
         id = "${curse_id}"
         releaseType = "${curse_release}"
         changelogType = 'markdown'
         changelog = file('docs/CHANGELOG.md')
+        addGameVersion "Java 8"
+        addGameVersion "Fabric"
+        addGameVersion project.minecraft_version
         addArtifact(sourcesJar)
-        relations {
-            optionalDependency 'fastworkbench'
-            optionalDependency 'crafting-station'
+        mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
+
+        afterEvaluate {
+            uploadTask.dependsOn(remapJar)
         }
+    }
+    options {
+        forgeGradleIntegration = false
     }
 }
