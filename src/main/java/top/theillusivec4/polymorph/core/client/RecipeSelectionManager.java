@@ -167,15 +167,7 @@ public class RecipeSelectionManager {
       this.needsUpdate = false;
 
       if (world != null) {
-        List<CraftingRecipe> recipesList = this.getLastPlacedRecipe().map(recipe -> {
-          if (recipe.matches(craftingInventory, world)) {
-            return this.getLastRecipesList().orElse(new ArrayList<>());
-          }
-          return null;
-        }).orElseGet(() -> this.fetchRecipes(craftingInventory, world));
-
-        this.recipeSelectionGui.setRecipes(recipesList);
-        this.toggleButton.visible = recipesList.size() > 1;
+        List<CraftingRecipe> recipesList = this.refreshRecipes(world);
 
         if (!preferredStack.isEmpty()) {
 
@@ -202,6 +194,19 @@ public class RecipeSelectionManager {
         });
       }
     }
+  }
+
+  public List<CraftingRecipe> refreshRecipes(World world) {
+    List<CraftingRecipe> recipesList = this.getLastPlacedRecipe().map(recipe -> {
+      if (recipe.matches(craftingInventory, world)) {
+        return this.getLastRecipesList().orElse(new ArrayList<>());
+      }
+      return null;
+    }).orElseGet(() -> this.fetchRecipes(craftingInventory, world));
+
+    this.recipeSelectionGui.setRecipes(recipesList);
+    this.toggleButton.visible = recipesList.size() > 1;
+    return recipesList;
   }
 
   private List<CraftingRecipe> fetchRecipes(CraftingInventory craftingInventory, World world) {

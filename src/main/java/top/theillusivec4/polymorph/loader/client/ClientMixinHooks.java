@@ -28,19 +28,24 @@ public class ClientMixinHooks {
     }
   }
 
-  public static void renderConflictManager(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-    RecipeSelectionManager.getInstance().ifPresent(conflictManager -> conflictManager
-        .render(matrices, mouseX, mouseY, delta));
+  public static void renderConflictManager(Screen screen, MatrixStack matrices, int mouseX,
+      int mouseY, float delta) {
+
+    if (screen instanceof HandledScreen) {
+      RecipeSelectionManager.getInstance()
+          .ifPresent(conflictManager -> conflictManager.render(matrices, mouseX, mouseY, delta));
+    }
   }
 
-  public static boolean clickConflictManager(Screen screen, double mouseX, double mouseY, int button) {
+  public static boolean clickConflictManager(Screen screen, double mouseX, double mouseY,
+      int button) {
 
     if (screen instanceof HandledScreen) {
       RecipeSelectionManager.getInstance().ifPresent(RecipeSelectionManager::markPositionChanged);
 
       return !RecipeSelectionManager.getInstance()
           .map(conflictManager -> conflictManager.mouseClicked(mouseX, mouseY, button))
-          .orElse(false);
+          .orElse(true);
     }
     return true;
   }
