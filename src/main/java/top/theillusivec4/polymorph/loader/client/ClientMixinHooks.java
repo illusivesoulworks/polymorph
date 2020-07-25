@@ -62,10 +62,10 @@ public class ClientMixinHooks {
     if (screen instanceof HandledScreen) {
       RecipeSelectionManager.getInstance().ifPresent(RecipeSelectionManager::markPositionChanged);
 
-      return !RecipeSelectionManager.getInstance()
+      return RecipeSelectionManager.getInstance()
           .map(conflictManager -> conflictManager.mouseClicked(mouseX, mouseY, button))
-          .orElse(true);
+          .orElse(false);
     }
-    return true;
+    return false;
   }
 }
