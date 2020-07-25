@@ -13,12 +13,18 @@ group = project.maven_group
 minecraft {
 }
 
+repositories {
+    maven {
+        url = "https://www.cursemaven.com"
+    }
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 
-    modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
-    modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 
 processResources {
@@ -63,6 +69,10 @@ curseforge {
         addGameVersion project.minecraft_version
         addArtifact(sourcesJar)
         mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
+
+        relations {
+            requiredDependency 'fabric-api'
+        }
 
         afterEvaluate {
             uploadTask.dependsOn(remapJar)

@@ -19,10 +19,8 @@
 
 package top.theillusivec4.polymorph.loader.common;
 
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.collection.DefaultedList;
-import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.core.client.RecipeSelectionManager;
 import top.theillusivec4.polymorph.loader.util.EnvironmentExecutor;
 

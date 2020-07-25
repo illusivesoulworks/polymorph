@@ -25,7 +25,6 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import top.theillusivec4.polymorph.api.PolyProvider;
 import top.theillusivec4.polymorph.core.Polymorph;
-import top.theillusivec4.polymorph.loader.impl.AccessorImpl;
 
 public class CraftingProvider implements PolyProvider {
 

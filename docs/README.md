@@ -1,4 +1,4 @@
-# Polymorph [![](http://cf.way2muchnoise.eu/versions/polymorph.svg)](https://www.curseforge.com/minecraft/mc-mods/polymorph) [![](http://cf.way2muchnoise.eu/short_polymorph_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/polymorph/files) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg?&style=flat-square)](https://www.gnu.org/licenses/lgpl-3.0) [![Discord](https://img.shields.io/discord/500852157503766538.svg?color=green&label=Discord&style=flat-square)](https://discord.gg/JWgrdwt) [![ko-fi](https://img.shields.io/badge/Support%20Me-Ko--fi-%23FF5E5B?style=flat-square)](https://ko-fi.com/C0C1NL4O)
+# Polymorph [![](http://cf.way2muchnoise.eu/versions/polymorph-fabric.svg)](https://www.curseforge.com/minecraft/mc-mods/polymorph-fabric) [![](http://cf.way2muchnoise.eu/short_polymorph-fabric_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/polymorph-fabric/files) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg?&style=flat-square)](https://www.gnu.org/licenses/lgpl-3.0) [![Discord](https://img.shields.io/discord/500852157503766538.svg?color=green&label=Discord&style=flat-square)](https://discord.gg/JWgrdwt) [![ko-fi](https://img.shields.io/badge/Support%20Me-Ko--fi-%23FF5E5B?style=flat-square)](https://ko-fi.com/C0C1NL4O)
 
 ## Overview
 
@@ -12,6 +12,4 @@ To assist identifying potential conflicts, there's a command `/polymorph conflic
 
 Currently, only the vanilla crafting table, the vanilla player crafting grid, and a select number of modded crafting tables are supported. Please open an issue on the issue tracker if you'd like to request support for specific additional mods.
 
-### Supported Crafting Tables
-- [FastWorkbench](https://www.curseforge.com/minecraft/mc-mods/fastworkbench)
-- [Crafting Station](https://www.curseforge.com/minecraft/mc-mods/crafting-station)
+Requires [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api).
