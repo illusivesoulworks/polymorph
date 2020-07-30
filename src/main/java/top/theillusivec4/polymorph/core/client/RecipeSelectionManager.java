@@ -181,6 +181,9 @@ public class RecipeSelectionManager {
           preferredStack = ItemStack.EMPTY;
         }
 
+        if (recipesList.size() <= 1) {
+          return;
+        }
         this.getLastSelectedRecipe().ifPresent(recipe -> {
 
           if (recipe.matches(craftingInventory, world)) {
