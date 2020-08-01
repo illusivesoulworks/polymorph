@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import net.minecraft.screen.CraftingScreenHandler;
+import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 
 public class PolymorphApi {
@@ -38,6 +40,17 @@ public class PolymorphApi {
   public static <T extends ScreenHandler> Optional<PolyProvider> getProvider(T screenHandler) {
     Function<T, PolyProvider> providerFunction = (Function<T, PolyProvider>) providerFunctions
         .get(screenHandler.getClass());
+
+    if (providerFunction == null) {
+
+      if (screenHandler instanceof CraftingScreenHandler) {
+        providerFunction = (Function<T, PolyProvider>) providerFunctions
+            .get(CraftingScreenHandler.class);
+      } else if (screenHandler instanceof PlayerScreenHandler) {
+        providerFunction = (Function<T, PolyProvider>) providerFunctions
+            .get(PlayerScreenHandler.class);
+      }
+    }
     return providerFunction != null ? Optional.of(providerFunction.apply(screenHandler))
         : Optional.empty();
   }
