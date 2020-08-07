@@ -28,6 +28,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -98,7 +99,7 @@ public class StorageNetworkModule extends CompatibilityModule {
         } catch (Exception e) {
           Polymorph.LOGGER.error("Reflection error!", e);
         }
-        NetworkCraftingInventory matrix = containerNetwork.matrix;
+        CraftingInventory matrix = containerNetwork.matrix;
         ItemStack res = recipe.getCraftingResult(matrix);
         int crafted = 0;
         List<ItemStack> recipeCopy = new ArrayList<>();
