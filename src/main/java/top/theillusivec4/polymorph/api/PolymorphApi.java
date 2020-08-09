@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.inventory.container.WorkbenchContainer;
 
 public class PolymorphApi {
 
@@ -38,6 +40,16 @@ public class PolymorphApi {
   public static <T extends Container> Optional<PolyProvider> getProvider(T container) {
     Function<T, PolyProvider> providerFunction = (Function<T, PolyProvider>) providerFunctions
         .get(container.getClass());
+
+    if (providerFunction == null) {
+
+      if (container instanceof WorkbenchContainer) {
+        providerFunction = (Function<T, PolyProvider>) providerFunctions
+            .get(WorkbenchContainer.class);
+      } else if (container instanceof PlayerContainer) {
+        providerFunction = (Function<T, PolyProvider>) providerFunctions.get(PlayerContainer.class);
+      }
+    }
     return providerFunction != null ? Optional.of(providerFunction.apply(container))
         : Optional.empty();
   }
