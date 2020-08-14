@@ -52,11 +52,10 @@ public class SPacketSyncOutput {
 
       if (clientPlayerEntity != null) {
         Container container = clientPlayerEntity.openContainer;
-        PolymorphApi.getProvider(container)
-            .ifPresent(provider -> {
-              Slot slot = provider.getOutputSlot();
-              slot.inventory.setInventorySlotContents(slot.getSlotIndex(), msg.stack);
-            });
+        PolymorphApi.getProvider(container).ifPresent(provider -> {
+          Slot slot = provider.getOutputSlot();
+          slot.inventory.setInventorySlotContents(slot.getSlotIndex(), msg.stack);
+        });
         RecipeSelectionManager.getInstance().ifPresent(RecipeSelectionManager::unlockUpdates);
       }
     });

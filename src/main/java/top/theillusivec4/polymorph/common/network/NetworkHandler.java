@@ -28,8 +28,10 @@ import net.minecraftforge.fml.network.NetworkEvent.Context;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import top.theillusivec4.polymorph.Polymorph;
+import top.theillusivec4.polymorph.common.network.client.CPacketFetchRecipes;
 import top.theillusivec4.polymorph.common.network.client.CPacketSetRecipe;
 import top.theillusivec4.polymorph.common.network.client.CPacketTransferRecipe;
+import top.theillusivec4.polymorph.common.network.server.SPacketSendRecipes;
 import top.theillusivec4.polymorph.common.network.server.SPacketSyncOutput;
 
 public class NetworkHandler {
@@ -49,9 +51,13 @@ public class NetworkHandler {
         CPacketSetRecipe::handle);
     register(CPacketTransferRecipe.class, CPacketTransferRecipe::encode,
         CPacketTransferRecipe::decode, CPacketTransferRecipe::handle);
+    register(CPacketFetchRecipes.class, CPacketFetchRecipes::encode, CPacketFetchRecipes::decode,
+        CPacketFetchRecipes::handle);
 
     register(SPacketSyncOutput.class, SPacketSyncOutput::encode, SPacketSyncOutput::decode,
         SPacketSyncOutput::handle);
+    register(SPacketSendRecipes.class, SPacketSendRecipes::encode, SPacketSendRecipes::decode,
+        SPacketSendRecipes::handle);
   }
 
   private static <M> void register(Class<M> messageType, BiConsumer<M, PacketBuffer> encoder,

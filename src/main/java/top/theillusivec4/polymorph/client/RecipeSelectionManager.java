@@ -22,7 +22,6 @@ package top.theillusivec4.polymorph.client;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -41,7 +40,6 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeBook;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -52,6 +50,7 @@ import top.theillusivec4.polymorph.api.PolyProvider;
 import top.theillusivec4.polymorph.client.gui.RecipeSelectionGui;
 import top.theillusivec4.polymorph.client.gui.ToggleRecipeButton;
 import top.theillusivec4.polymorph.common.network.NetworkHandler;
+import top.theillusivec4.polymorph.common.network.client.CPacketFetchRecipes;
 import top.theillusivec4.polymorph.common.network.client.CPacketSetRecipe;
 import top.theillusivec4.polymorph.common.network.client.CPacketTransferRecipe;
 
@@ -180,72 +179,27 @@ public class RecipeSelectionManager {
       this.needsUpdate = false;
 
       if (world != null) {
-        List<ICraftingRecipe> recipesList = this.getLastPlacedRecipe().map(recipe -> {
-          if (recipe.matches(craftingInventory, world)) {
-            return this.getLastRecipesList().orElse(new ArrayList<>());
-          }
-          return null;
-        }).orElseGet(() -> this.fetchRecipes(craftingInventory, world));
-
-        this.recipeSelectionGui.setRecipes(recipesList);
-        this.toggleButton.visible = recipesList.size() > 1;
-
-        if (!preferredStack.isEmpty()) {
-
-          for (ICraftingRecipe craftingRecipe : recipesList) {
-
-            if (craftingRecipe.getCraftingResult(craftingInventory).getItem() == preferredStack
-                .getItem()) {
-              this.setLastSelectedRecipe(craftingRecipe);
-              break;
-            }
-          }
-          preferredStack = ItemStack.EMPTY;
-        }
-
-        this.getLastSelectedRecipe().ifPresent(recipe -> {
+        this.getLastPlacedRecipe().ifPresent(recipe -> {
 
           if (recipe.matches(craftingInventory, world)) {
-            ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
-            this.lockUpdates();
-
-            if (playerEntity != null) {
-              NetworkHandler.INSTANCE.send(PacketDistributor.SERVER.noArg(),
-                  new CPacketSetRecipe(recipe.getId().toString()));
-            }
+            List<ICraftingRecipe> recipes = this.getLastRecipesList().orElse(new ArrayList<>());
+            this.setRecipes(recipes, world, false);
+          } else {
+            this.fetchRecipes();
           }
         });
+
+        if (!this.getLastPlacedRecipe().isPresent()) {
+          this.fetchRecipes();
+        }
       }
     }
   }
 
-  private List<ICraftingRecipe> fetchRecipes(CraftingInventory craftingInventory, World world) {
-    List<ICraftingRecipe> recipes = new ArrayList<>();
-    boolean isCraftingEmpty = true;
+  public void setRecipes(List<ICraftingRecipe> recipes, World world, boolean refresh) {
 
-    for (int i = 0; i < craftingInventory.getSizeInventory(); i++) {
-
-      if (!craftingInventory.getStackInSlot(i).isEmpty()) {
-        isCraftingEmpty = false;
-        break;
-      }
-    }
-
-    if (!isCraftingEmpty) {
+    if (refresh) {
       Set<RecipeOutputWrapper> recipeOutputs = new HashSet<>();
-
-      try {
-        recipes = world.getRecipeManager()
-            .getRecipes(IRecipeType.CRAFTING, craftingInventory, world);
-      } catch (Exception e) {
-        List<String> stacks = new ArrayList<>();
-
-        for (int i = 0; i < craftingInventory.getSizeInventory(); i++) {
-          stacks.add(craftingInventory.getStackInSlot(i).toString());
-        }
-        Polymorph.LOGGER.error("Attempted to craft using " + Arrays.toString(stacks.toArray())
-            + " but an error occurred while fetching recipes!", e);
-      }
       recipes.removeIf(rec -> !recipeOutputs
           .add(new RecipeOutputWrapper(rec.getCraftingResult(craftingInventory))));
 
@@ -256,7 +210,38 @@ public class RecipeSelectionManager {
         this.setLastRecipesList(recipes);
       }
     }
-    return recipes;
+    this.recipeSelectionGui.setRecipes(recipes);
+    this.toggleButton.visible = recipes.size() > 1;
+
+    if (!preferredStack.isEmpty()) {
+
+      for (ICraftingRecipe craftingRecipe : recipes) {
+
+        if (craftingRecipe.getCraftingResult(craftingInventory).getItem() == preferredStack
+            .getItem()) {
+          this.setLastSelectedRecipe(craftingRecipe);
+          break;
+        }
+      }
+      preferredStack = ItemStack.EMPTY;
+    }
+
+    this.getLastSelectedRecipe().ifPresent(recipe -> {
+
+      if (recipe.matches(craftingInventory, world)) {
+        ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
+        this.lockUpdates();
+
+        if (playerEntity != null) {
+          NetworkHandler.INSTANCE.send(PacketDistributor.SERVER.noArg(),
+              new CPacketSetRecipe(recipe.getId().toString()));
+        }
+      }
+    });
+  }
+
+  private void fetchRecipes() {
+    NetworkHandler.INSTANCE.sendToServer(new CPacketFetchRecipes());
   }
 
   public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
