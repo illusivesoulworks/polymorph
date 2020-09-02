@@ -15,9 +15,9 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'com.matthewprenger.cursegradle'
 apply plugin: 'com.wynprice.cursemaven'
 
-version = "FORGE-${version_minecraft}-${mod_version}"
+version = "${mod_version}"
 group = "${mod_group}"
-archivesBaseName = "${mod_id}"
+archivesBaseName = "${mod_id}-forge"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -68,15 +68,15 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
-    compile fg.deobf("curse.maven:fastworkbench:3003117")
-    compile fg.deobf("curse.maven:refined-storage:3007496")
-    compile fg.deobf("curse.maven:refined-storage-addons:3005729")
-    compile fg.deobf("curse.maven:crafting-craft:2989179")
-    compile fg.deobf("curse.maven:oh-the-biomes-youll-go:3009912")
-    compileOnly fg.deobf("mezz.jei:jei-${version_minecraft}:${version_jei}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${version_minecraft}:${version_jei}")
+    compile fg.deobf("curse.maven:fastworkbench:3046632")
+    compile fg.deobf("curse.maven:refined-storage:3045898")
+    compile fg.deobf("curse.maven:refined-storage-addons:3045912")
+    compile fg.deobf("curse.maven:craftingcraft:3032235")
+    compile fg.deobf("curse.maven:oh-the-biomes-youll-go:3046308")
+    compileOnly fg.deobf("mezz.jei:jei-${version_mc}:${version_jei}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${version_mc}:${version_jei}")
 
-    runtimeOnly fg.deobf("curse.maven:placebo:2999632")
+    runtimeOnly fg.deobf("curse.maven:placebo:3046559")
 }
 
 sourceSets {

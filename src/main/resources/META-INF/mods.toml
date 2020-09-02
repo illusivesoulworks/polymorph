@@ -1,7 +1,8 @@
 modLoader="javafml"
-loaderVersion="[32,)"
+loaderVersion="[33,)"
 issueTrackerURL="https://github.com/TheIllusiveC4/Polymorph/issues"
 logoFile="${mod_icon}"
+license="LGPL-3.0-or-later"
 [[mods]]
 modId="${mod_id}"
 version="${version}"
@@ -14,12 +15,12 @@ ${mod_description}
 [[dependencies.polymorph]]
     modId="forge"
     mandatory=true
-    versionRange="[32,)"
+    versionRange="[33,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.polymorph]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.1, 1.17)"
+    versionRange="[1.16.2, 1.17)"
     ordering="NONE"
     side="BOTH"

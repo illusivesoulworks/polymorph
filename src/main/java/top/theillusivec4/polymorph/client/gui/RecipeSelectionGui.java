@@ -95,7 +95,7 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
 
     if (mc.currentScreen != null && this.hoveredButton != null) {
       mc.currentScreen
-          .renderTooltip(matrixStack, this.hoveredButton.getTooltipText(mc.currentScreen),
+          .func_243308_b(matrixStack, this.hoveredButton.getTooltipText(mc.currentScreen),
               p_193721_1_, p_193721_2_);
     }
   }
