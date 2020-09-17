@@ -10,7 +10,7 @@
     "sources": "https://github.com/TheIllusiveC4/Polymorph",
     "issues": "https://github.com/TheIllusiveC4/Polymorph/issues"
   },
-  "license": "LGPLv3.0",
+  "license": "LGPL-3.0-or-later",
   "icon": "assets/polymorph/polymorph_icon.png",
   "environment": "*",
   "entrypoints": {

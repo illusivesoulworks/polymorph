@@ -7,7 +7,6 @@
     "CraftingResultInventoryMixin",
     "CraftingScreenHandlerAccessor",
     "IngredientAccessor",
-    "IngredientMixin",
     "PlayerScreenHandlerAccessor"
   ],
   "client": [
