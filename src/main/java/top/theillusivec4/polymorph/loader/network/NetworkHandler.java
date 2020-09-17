@@ -20,8 +20,11 @@
 package top.theillusivec4.polymorph.loader.network;
 
 import io.netty.buffer.Unpooled;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
@@ -29,10 +32,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
 import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.core.Polymorph;
 
 public class NetworkHandler {
 
@@ -97,6 +102,23 @@ public class NetworkHandler {
             }
           });
         })));
+
+    ServerSidePacketRegistry.INSTANCE.register(NetworkPackets.FETCH_RECIPES,
+        (((packetContext, packetByteBuf) -> packetContext.getTaskQueue().execute(() -> {
+          PlayerEntity player = packetContext.getPlayer();
+
+          if (player != null && player.getServer() != null) {
+            ScreenHandler screenHandler = player.currentScreenHandler;
+            List<String> recipes = PolymorphApi.getProvider(screenHandler).map(provider -> {
+              CraftingInventory craftingInventory = provider.getCraftingInventory();
+              List<CraftingRecipe> result = player.getServer().getRecipeManager()
+                  .getAllMatches(RecipeType.CRAFTING, craftingInventory, player.getEntityWorld());
+              return result.stream().map(recipe -> recipe.getId().toString())
+                  .collect(Collectors.toList());
+            }).orElse(new ArrayList<>());
+            Polymorph.getLoader().getPacketVendor().sendRecipes(recipes, player);
+          }
+        }))));
   }
 
 }

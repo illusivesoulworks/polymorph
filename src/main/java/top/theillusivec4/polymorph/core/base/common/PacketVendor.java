@@ -19,9 +19,16 @@
 
 package top.theillusivec4.polymorph.core.base.common;
 
+import java.util.List;
+import net.minecraft.entity.player.PlayerEntity;
+
 public interface PacketVendor {
 
   void sendSetRecipe(String recipeId);
 
   void sendTransferRecipe(String recipeId);
+
+  void sendRecipes(List<String> recipes, PlayerEntity player);
+
+  void fetchRecipes();
 }

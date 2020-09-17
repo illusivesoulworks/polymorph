@@ -44,6 +44,6 @@ public class PolymorphLoader implements Loader {
 
   @Override
   public File getGameDirectory() {
-    return FabricLoader.getInstance().getGameDirectory();
+    return FabricLoader.getInstance().getGameDir().toFile();
   }
 }

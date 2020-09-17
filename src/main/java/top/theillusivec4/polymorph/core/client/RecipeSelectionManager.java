@@ -20,7 +20,6 @@
 package top.theillusivec4.polymorph.core.client;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -39,7 +38,6 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.book.RecipeBook;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
@@ -167,78 +165,27 @@ public class RecipeSelectionManager {
       this.needsUpdate = false;
 
       if (world != null) {
-        List<CraftingRecipe> recipesList = this.refreshRecipes(world);
-
-        if (!preferredStack.isEmpty()) {
-
-          for (CraftingRecipe craftingRecipe : recipesList) {
-
-            if (craftingRecipe.craft(craftingInventory).getItem() == preferredStack.getItem()) {
-              this.setLastSelectedRecipe(craftingRecipe);
-              break;
-            }
-          }
-          preferredStack = ItemStack.EMPTY;
-        }
-
-        if (recipesList.size() <= 1) {
-          return;
-        }
-        this.getLastSelectedRecipe().ifPresent(recipe -> {
+        this.getLastPlacedRecipe().ifPresent(recipe -> {
 
           if (recipe.matches(craftingInventory, world)) {
-            ClientPlayerEntity playerEntity = MinecraftClient.getInstance().player;
-            this.lockUpdates();
-
-            if (playerEntity != null) {
-              Polymorph.getLoader().getPacketVendor().sendSetRecipe(recipe.getId().toString());
-            }
+            List<CraftingRecipe> recipes = this.getLastRecipesList().orElse(new ArrayList<>());
+            this.setRecipes(recipes, world, false);
+          } else {
+            this.fetchRecipes();
           }
         });
-      }
-    }
-  }
 
-  public List<CraftingRecipe> refreshRecipes(World world) {
-    List<CraftingRecipe> recipesList = this.getLastPlacedRecipe().map(recipe -> {
-      if (recipe.matches(craftingInventory, world)) {
-        return this.getLastRecipesList().orElse(new ArrayList<>());
-      }
-      return null;
-    }).orElseGet(() -> this.fetchRecipes(craftingInventory, world));
-
-    this.recipeSelectionGui.setRecipes(recipesList);
-    this.toggleButton.visible = recipesList.size() > 1;
-    return recipesList;
-  }
-
-  private List<CraftingRecipe> fetchRecipes(CraftingInventory craftingInventory, World world) {
-    List<CraftingRecipe> recipes = new ArrayList<>();
-    boolean isCraftingEmpty = true;
-
-    for (int i = 0; i < craftingInventory.size(); i++) {
-
-      if (!craftingInventory.getStack(i).isEmpty()) {
-        isCraftingEmpty = false;
-        break;
-      }
-    }
-
-    if (!isCraftingEmpty) {
-      Set<RecipeOutputWrapper> recipeOutputs = new HashSet<>();
-
-      try {
-        recipes = world.getRecipeManager()
-            .getAllMatches(RecipeType.CRAFTING, craftingInventory, world);
-      } catch (Exception e) {
-        List<String> stacks = new ArrayList<>();
-
-        for (int i = 0; i < craftingInventory.size(); i++) {
-          stacks.add(craftingInventory.getStack(i).toString());
+        if (!this.getLastPlacedRecipe().isPresent()) {
+          this.fetchRecipes();
         }
-        Polymorph.LOGGER.error("Attempted to craft using " + Arrays.toString(stacks.toArray())
-            + " but an error occurred while fetching recipes!", e);
       }
+    }
+  }
+
+  public void setRecipes(List<CraftingRecipe> recipes, World world, boolean refresh) {
+
+    if (refresh) {
+      Set<RecipeOutputWrapper> recipeOutputs = new HashSet<>();
       recipes.removeIf(
           rec -> !recipeOutputs.add(new RecipeOutputWrapper(rec.craft(craftingInventory))));
 
@@ -249,7 +196,36 @@ public class RecipeSelectionManager {
         this.setLastRecipesList(recipes);
       }
     }
-    return recipes;
+    this.recipeSelectionGui.setRecipes(recipes);
+    this.toggleButton.visible = recipes.size() > 1;
+
+    if (!preferredStack.isEmpty()) {
+
+      for (CraftingRecipe craftingRecipe : recipes) {
+
+        if (craftingRecipe.craft(craftingInventory).getItem() == preferredStack.getItem()) {
+          this.setLastSelectedRecipe(craftingRecipe);
+          break;
+        }
+      }
+      preferredStack = ItemStack.EMPTY;
+    }
+
+    this.getLastSelectedRecipe().ifPresent(recipe -> {
+
+      if (recipe.matches(craftingInventory, world)) {
+        ClientPlayerEntity playerEntity = MinecraftClient.getInstance().player;
+        this.lockUpdates();
+
+        if (playerEntity != null) {
+          Polymorph.getLoader().getPacketVendor().sendSetRecipe(recipe.getId().toString());
+        }
+      }
+    });
+  }
+
+  private void fetchRecipes() {
+    Polymorph.getLoader().getPacketVendor().fetchRecipes();
   }
 
   public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {

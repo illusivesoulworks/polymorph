@@ -20,7 +20,10 @@
 package top.theillusivec4.polymorph.loader.impl;
 
 import io.netty.buffer.Unpooled;
+import java.util.List;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import top.theillusivec4.polymorph.core.base.common.PacketVendor;
 import top.theillusivec4.polymorph.loader.network.NetworkPackets;
@@ -39,5 +42,21 @@ public class PacketVendorImpl implements PacketVendor {
     PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
     buf.writeString(recipeId);
     ClientSidePacketRegistry.INSTANCE.sendToServer(NetworkPackets.TRANSFER_RECIPE, buf);
+  }
+
+  @Override
+  public void sendRecipes(List<String> recipes, PlayerEntity player) {
+    PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+
+    for (String recipe : recipes) {
+      buf.writeString(recipe);
+    }
+    ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, NetworkPackets.SEND_RECIPES, buf);
+  }
+
+  @Override
+  public void fetchRecipes() {
+    ClientSidePacketRegistry.INSTANCE
+        .sendToServer(NetworkPackets.FETCH_RECIPES, new PacketByteBuf(Unpooled.buffer()));
   }
 }
