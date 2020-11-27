@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [0.18] - 2020.11.27
+### Fixed
+- Fixed dedicated server crash [#38](https://github.com/TheIllusiveC4/Polymorph/issues/38)
+
 ## [0.17] - 2020.11.27
 ### Changed
 - Added automatic integration with the majority of modded crafting tables

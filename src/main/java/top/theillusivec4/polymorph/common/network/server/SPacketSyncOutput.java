@@ -60,7 +60,7 @@ public class SPacketSyncOutput {
           selector.setUpdatable(true);
 
           if (msg.stack.isEmpty()) {
-            selector.clearRecipes(Minecraft.getInstance().world);
+            selector.clearRecipes(clientPlayerEntity.world);
           }
         });
       }
