@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [0.17] - 2020.11.27
+### Changed
+- Added automatic integration with the majority of modded crafting tables
+
 ## [0.16] - 2020.10.26
 ### Added
 - Added French localization (thanks Lykrast!)
