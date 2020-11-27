@@ -29,6 +29,10 @@ import net.minecraft.item.crafting.ICraftingRecipe;
 
 public interface PolyProvider {
 
+  default boolean isValid() {
+    return true;
+  }
+
   Container getContainer();
 
   @Nonnull

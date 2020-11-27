@@ -53,8 +53,12 @@ public class ClientEventHandler {
 
     if (screen instanceof ContainerScreen) {
       ContainerScreen<?> containerScreen = (ContainerScreen<?>) screen;
-      RecipeSelectorManager.tryCreate(containerScreen);
+
+      if (RecipeSelectorManager.tryCreate(containerScreen)) {
+        return;
+      }
     }
+    RecipeSelectorManager.clear();
   }
 
   @SubscribeEvent

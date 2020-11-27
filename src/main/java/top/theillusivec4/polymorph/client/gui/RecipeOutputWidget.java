@@ -26,6 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -62,15 +63,22 @@ public class RecipeOutputWidget extends Widget {
         this.y + 25 > p_renderButton_2_ && this.y <= p_renderButton_2_) {
       j += 25;
     }
-    this.blit(matrixStack, this.x, this.y, i, j, this.width, this.height);
+    blit(matrixStack, this.x, this.y, 600, i, j, this.width, this.height, 256, 256);
     int k = 4;
+    float zLevel = minecraft.getItemRenderer().zLevel;
+    minecraft.getItemRenderer().zLevel = 600.0F;
     minecraft.getItemRenderer()
         .renderItemAndEffectIntoGUI(this.recipe.getCraftingResult(this.craftingMatrix), this.x + k,
             this.y + k);
+    minecraft.getItemRenderer().zLevel = zLevel;
+  }
+
+  public ItemStack getOutput() {
+    return this.recipe.getCraftingResult(this.craftingMatrix);
   }
 
   public List<ITextComponent> getTooltipText(Screen screen) {
-    return screen.getTooltipFromItem(this.recipe.getCraftingResult(this.craftingMatrix));
+    return screen.getTooltipFromItem(this.getOutput());
   }
 
   @Override

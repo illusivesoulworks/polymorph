@@ -21,9 +21,15 @@ public class RecipeSelectorManager {
     return Optional.ofNullable(selector);
   }
 
-  public static void tryCreate(ContainerScreen<?> screen) {
-    PolymorphApi.getInstance().getProvider(screen.getContainer()).ifPresent(provider ->
-        selector = new RecipeSelector(screen, provider));
+  public static boolean tryCreate(ContainerScreen<?> screen) {
+    return PolymorphApi.getInstance().getProvider(screen.getContainer()).map(provider -> {
+      if (provider.isValid()) {
+        selector = new RecipeSelector(screen, provider);
+        return true;
+      } else {
+        return false;
+      }
+    }).orElse(false);
   }
 
   public static void clear() {

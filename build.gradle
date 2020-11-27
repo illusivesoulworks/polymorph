@@ -31,6 +31,7 @@ minecraft {
         client {
             workingDirectory project.file('run')
             arg "-mixin.config=" + "${mod_id}".toString() + ".mixins.json"
+            jvmArg "-Dmixin.env.disableRefMap=true"
 
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
@@ -45,6 +46,7 @@ minecraft {
         server {
             workingDirectory project.file('run')
             arg "-mixin.config=" + "${mod_id}".toString() + ".mixins.json"
+            jvmArg "-Dmixin.env.disableRefMap=true"
 
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
@@ -78,8 +80,21 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
+
     compileOnly fg.deobf("mezz.jei:jei-${version_mc}:${version_jei}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${version_mc}:${version_jei}")
+
+    compile fg.deobf("curse.maven:craftingcraft:${file_craftingcraft}")
+    compile fg.deobf("curse.maven:refined-storage:${file_refinedstorage}")
+    compile fg.deobf("curse.maven:refined-storage-addons:${file_refinedaddons}")
+
+//    compile fg.deobf("curse.maven:toms-storage:${file_tom}")
+//    compile fg.deobf("curse.maven:crafting-station:${file_craftingstation}")
+//    compile fg.deobf("curse.maven:vanillatweaks:${file_vanillatweaks}")
+//    compile fg.deobf("curse.maven:simple-storage-network:${file_ssn}")
+//    compile fg.deobf("curse.maven:oh-the-biomes-youll-go:${file_byg}")
+//    compile fg.deobf("curse.maven:fastworkbench:${file_fastworkbench}")
+//    runtimeOnly fg.deobf("curse.maven:placebo:${file_placebo}")
 }
 
 sourceSets {

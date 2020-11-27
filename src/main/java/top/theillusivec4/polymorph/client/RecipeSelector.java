@@ -78,7 +78,7 @@ public class RecipeSelector {
     int y = screen.getGuiTop() + provider.getYPos();
     this.recipeSelectorGui =
         new RecipeSelectorGui(x + SELECTOR_X_OFFSET, y + SELECTOR_Y_OFFSET,
-            provider.getCraftingInventory(), this::selectRecipe);
+            provider.getCraftingInventory(), this::selectRecipe, this.parent);
     this.toggleButton = new ToggleRecipeButton(x, y, 16, 16, 0, 0, 17, TOGGLE,
         clickWidget -> recipeSelectorGui.setVisible(!recipeSelectorGui.isVisible()));
     this.toggleButton.visible = this.recipeSelectorGui.getButtons().size() > 1;
