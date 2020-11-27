@@ -34,7 +34,7 @@ import top.theillusivec4.polymorph.common.network.client.CPacketTransferRecipe;
 import top.theillusivec4.polymorph.common.network.server.SPacketSendRecipes;
 import top.theillusivec4.polymorph.common.network.server.SPacketSyncOutput;
 
-public class NetworkHandler {
+public class NetworkManager {
 
   private static final String PTC_VERSION = "1";
 
@@ -61,7 +61,8 @@ public class NetworkHandler {
   }
 
   private static <M> void register(Class<M> messageType, BiConsumer<M, PacketBuffer> encoder,
-      Function<PacketBuffer, M> decoder, BiConsumer<M, Supplier<Context>> messageConsumer) {
+                                   Function<PacketBuffer, M> decoder,
+                                   BiConsumer<M, Supplier<Context>> messageConsumer) {
     INSTANCE.registerMessage(id++, messageType, encoder, decoder, messageConsumer);
   }
 }

@@ -10,7 +10,7 @@ import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
-import top.theillusivec4.polymorph.client.RecipeSelectionManager;
+import top.theillusivec4.polymorph.client.RecipeSelectorManager;
 
 public class SPacketSendRecipes {
 
@@ -49,8 +49,9 @@ public class SPacketSendRecipes {
             recipes.add((ICraftingRecipe) recipe);
           }
         }));
-        RecipeSelectionManager.getInstance().ifPresent(
-            selectionManager -> selectionManager.setRecipes(recipes, clientPlayerEntity.world, true));
+        RecipeSelectorManager.getSelector().ifPresent(
+            selectionManager -> selectionManager
+                .setRecipes(recipes, clientPlayerEntity.world, true));
       }
     });
     ctx.get().setPacketHandled(true);

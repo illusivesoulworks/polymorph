@@ -17,16 +17,15 @@
  * License along with Polymorph.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.common.integrations.fastbench;
+package top.theillusivec4.polymorph.common;
 
-import shadows.fastbench.gui.ContainerFastBench;
-import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
-import top.theillusivec4.polymorph.common.provider.WorkbenchProvider;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
+import top.theillusivec4.polymorph.client.RecipeSelectorManager;
 
-public class FastWorkbenchModule extends CompatibilityModule {
+public class MixinHooks {
 
-  public void setup() {
-    PolymorphApi.addProvider(ContainerFastBench.class, WorkbenchProvider::new);
+  public static void sendUpdate() {
+    DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> RecipeSelectorManager::update);
   }
 }

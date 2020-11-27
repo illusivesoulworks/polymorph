@@ -19,8 +19,8 @@
 
 package top.theillusivec4.polymorph.api;
 
+import javax.annotation.Nonnull;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
@@ -31,53 +31,34 @@ public interface PolyProvider {
 
   Container getContainer();
 
-  default boolean isActive() {
-    return true;
+  @Nonnull
+  CraftingInventory getCraftingInventory();
+
+  @Nonnull
+  Slot getOutputSlot();
+
+  default int getXPos() {
+    return getOutputSlot().xPos;
   }
 
-  default CraftingInventory getCraftingInventory() {
-
-    for (Slot slot : this.getContainer().inventorySlots) {
-
-      if (slot.inventory instanceof CraftingInventory) {
-        return (CraftingInventory) slot.inventory;
-      }
-    }
-    return null;
+  default int getYPos() {
+    return getOutputSlot().yPos - 22;
   }
-
-  default Slot getOutputSlot() {
-
-    for (Slot slot : this.getContainer().inventorySlots) {
-
-      if (slot.inventory instanceof CraftResultInventory) {
-        return slot;
-      }
-    }
-    return this.getContainer().inventorySlots.get(0);
-  }
-
-  int getXOffset();
-
-  int getYOffset();
 
   default void transfer(PlayerEntity playerIn, ICraftingRecipe recipe) {
     Container container = getContainer();
     Slot slot = getOutputSlot();
     CraftingInventory inventory = getCraftingInventory();
+    ItemStack itemstack = container.transferStackInSlot(playerIn, slot.slotNumber);
 
-    if (inventory != null && slot != null) {
-      ItemStack itemstack = container.transferStackInSlot(playerIn, slot.slotNumber);
+    if (recipe.matches(inventory, playerIn.world)) {
+      slot.putStack(recipe.getCraftingResult(inventory));
 
-      if (recipe.matches(inventory, playerIn.world)) {
-        slot.putStack(recipe.getCraftingResult(inventory));
+      while (!itemstack.isEmpty() && ItemStack.areItemsEqual(slot.getStack(), itemstack)) {
+        itemstack = container.transferStackInSlot(playerIn, slot.slotNumber);
 
-        while (!itemstack.isEmpty() && ItemStack.areItemsEqual(slot.getStack(), itemstack)) {
-          itemstack = container.transferStackInSlot(playerIn, slot.slotNumber);
-
-          if (recipe.matches(inventory, playerIn.world)) {
-            slot.putStack(recipe.getCraftingResult(inventory));
-          }
+        if (recipe.matches(inventory, playerIn.world)) {
+          slot.putStack(recipe.getCraftingResult(inventory));
         }
       }
     }

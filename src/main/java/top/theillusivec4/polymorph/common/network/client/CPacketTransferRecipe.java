@@ -31,7 +31,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.common.network.NetworkHandler;
+import top.theillusivec4.polymorph.common.network.NetworkManager;
 import top.theillusivec4.polymorph.common.network.server.SPacketSyncOutput;
 
 public class CPacketTransferRecipe {
@@ -57,7 +57,7 @@ public class CPacketTransferRecipe {
       if (sender != null) {
         Container container = sender.openContainer;
 
-        PolymorphApi.getProvider(container).ifPresent(provider -> {
+        PolymorphApi.getInstance().getProvider(container).ifPresent(provider -> {
           Optional<? extends IRecipe<?>> result = sender.getServerWorld().getRecipeManager()
               .getRecipe(new ResourceLocation(msg.recipe));
           result.ifPresent(res -> {
@@ -68,7 +68,7 @@ public class CPacketTransferRecipe {
             }
           });
         });
-        NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> sender),
+        NetworkManager.INSTANCE.send(PacketDistributor.PLAYER.with(() -> sender),
             new SPacketSyncOutput(ItemStack.EMPTY));
       }
     });

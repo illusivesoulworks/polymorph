@@ -32,15 +32,15 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import top.theillusivec4.polymorph.Polymorph;
 
-public class RecipeSelectWidget extends Widget {
+public class RecipeOutputWidget extends Widget {
 
   private static final ResourceLocation TOGGLE = new ResourceLocation(Polymorph.MODID,
       "textures/gui/toggle.png");
   public IRecipe<CraftingInventory> recipe;
   public CraftingInventory craftingMatrix;
 
-  public RecipeSelectWidget(CraftingInventory craftingMatrix, IRecipe<CraftingInventory> recipe) {
-    super(0, 0, 25, 25, StringTextComponent.EMPTY/**/);
+  public RecipeOutputWidget(CraftingInventory craftingMatrix, IRecipe<CraftingInventory> recipe) {
+    super(0, 0, 25, 25, StringTextComponent.EMPTY);
     this.recipe = recipe;
     this.craftingMatrix = craftingMatrix;
   }
@@ -52,17 +52,15 @@ public class RecipeSelectWidget extends Widget {
 
   @Override
   public void renderButton(@Nonnull MatrixStack matrixStack, int p_renderButton_1_,
-      int p_renderButton_2_, float p_renderButton_3_) {
+                           int p_renderButton_2_, float p_renderButton_3_) {
     Minecraft minecraft = Minecraft.getInstance();
     minecraft.getTextureManager().bindTexture(TOGGLE);
     int i = 16;
     int j = 0;
 
-    if (this.x + 25 > p_renderButton_1_ && this.x <= p_renderButton_1_) {
-
-      if (this.y + 25 > p_renderButton_2_ && this.y <= p_renderButton_2_) {
-        j += 25;
-      }
+    if (this.x + 25 > p_renderButton_1_ && this.x <= p_renderButton_1_ &&
+        this.y + 25 > p_renderButton_2_ && this.y <= p_renderButton_2_) {
+      j += 25;
     }
     this.blit(matrixStack, this.x, this.y, i, j, this.width, this.height);
     int k = 4;

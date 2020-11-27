@@ -2,18 +2,21 @@ buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
         maven { url = 'https://plugins.gradle.org/m2/' }
+        maven { url='https://dist.creeper.host/Sponge/maven' }
         jcenter()
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.4.0'
-        classpath 'com.wynprice.cursemaven:CurseMaven:2.1.1'
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath group: 'gradle.plugin.com.matthewprenger', name: 'CurseGradle', version: '1.4.0'
+        classpath group: 'com.wynprice.cursemaven', name: 'CurseMaven', version: '2.1.1'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'com.matthewprenger.cursegradle'
 apply plugin: 'com.wynprice.cursemaven'
+apply plugin: 'org.spongepowered.mixin'
 
 version = "${mod_version}"
 group = "${mod_group}"
@@ -27,6 +30,7 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
+            arg "-mixin.config=" + "${mod_id}".toString() + ".mixins.json"
 
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
@@ -40,6 +44,7 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
+            arg "-mixin.config=" + "${mod_id}".toString() + ".mixins.json"
 
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
@@ -52,6 +57,11 @@ minecraft {
         }
     }
 }
+
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+}
+
 
 repositories {
     maven {
@@ -68,15 +78,8 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
-    compile fg.deobf("curse.maven:fastworkbench:3060329")
-    compile fg.deobf("curse.maven:refined-storage:3065675")
-    compile fg.deobf("curse.maven:refined-storage-addons:3065694")
-    compile fg.deobf("curse.maven:craftingcraft:3066100")
-    compile fg.deobf("curse.maven:oh-the-biomes-youll-go:3092097")
     compileOnly fg.deobf("mezz.jei:jei-${version_mc}:${version_jei}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${version_mc}:${version_jei}")
-
-    runtimeOnly fg.deobf("curse.maven:placebo:3046559")
 }
 
 sourceSets {
@@ -95,7 +98,8 @@ jar {
                     "Implementation-Title": "${mod_name}",
                     "Implementation-Version": "${version}",
                     "Implementation-Vendor" :"${mod_author}",
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    "MixinConfigs": "${mod_id}.mixins.json"],)
     }
 }
 

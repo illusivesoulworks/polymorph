@@ -22,12 +22,10 @@ package top.theillusivec4.polymorph.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import top.theillusivec4.polymorph.api.PolymorphApi;
 
 public class ClientEventHandler {
 
@@ -35,10 +33,16 @@ public class ClientEventHandler {
   public void tick(ClientTickEvent evt) {
 
     if (evt.phase == Phase.END) {
-      ClientWorld world = Minecraft.getInstance().world;
+      Minecraft mc = Minecraft.getInstance();
 
-      if (world != null) {
-        RecipeSelectionManager.getInstance().ifPresent(RecipeSelectionManager::tick);
+      if (mc.world != null && mc.player != null) {
+        RecipeSelectorManager.getSelector().ifPresent(selector -> {
+          if (mc.player.openContainer == null) {
+            RecipeSelectorManager.clear();
+          } else {
+            selector.tick();
+          }
+        });
       }
     }
   }
@@ -46,41 +50,32 @@ public class ClientEventHandler {
   @SubscribeEvent
   public void initGui(GuiScreenEvent.InitGuiEvent.Post evt) {
     Screen screen = evt.getGui();
-    RecipeSelectionManager conflictManager = null;
 
     if (screen instanceof ContainerScreen) {
       ContainerScreen<?> containerScreen = (ContainerScreen<?>) screen;
-      conflictManager = PolymorphApi.getProvider(containerScreen.getContainer()).map(provider -> {
-
-        if (provider.getCraftingInventory() != null && provider.isActive()) {
-          return RecipeSelectionManager.createInstance(containerScreen, provider);
-        }
-        return null;
-      }).orElse(null);
-    }
-
-    if (conflictManager == null) {
-      RecipeSelectionManager.clearInstance();
+      RecipeSelectorManager.tryCreate(containerScreen);
     }
   }
 
   @SubscribeEvent
-  public void guiRender(GuiScreenEvent.DrawScreenEvent.Post evt) {
+  public void render(GuiScreenEvent.DrawScreenEvent.Post evt) {
 
     if (evt.getGui() instanceof ContainerScreen) {
-      RecipeSelectionManager.getInstance().ifPresent(conflictManager -> conflictManager
-          .render(evt.getMatrixStack(), evt.getMouseX(), evt.getMouseY(), evt.getRenderPartialTicks()));
+      RecipeSelectorManager.getSelector().ifPresent(selector -> selector
+          .render(evt.getMatrixStack(), evt.getMouseX(), evt.getMouseY(),
+              evt.getRenderPartialTicks()));
     }
   }
 
   @SubscribeEvent
-  public void guiMouseClick(GuiScreenEvent.MouseClickedEvent.Pre evt) {
+  public void mouseClick(GuiScreenEvent.MouseClickedEvent.Pre evt) {
 
     if (evt.getGui() instanceof ContainerScreen) {
-      RecipeSelectionManager.getInstance().ifPresent(RecipeSelectionManager::markPositionChanged);
+      RecipeSelectorManager.getSelector().ifPresent(RecipeSelector::markUpdatePosition);
 
-      if (RecipeSelectionManager.getInstance().map(conflictManager -> conflictManager
-          .mouseClicked(evt.getMouseX(), evt.getMouseY(), evt.getButton())).orElse(false)) {
+      if (RecipeSelectorManager.getSelector().map(
+          selector -> selector.mouseClicked(evt.getMouseX(), evt.getMouseY(), evt.getButton()))
+          .orElse(false)) {
         evt.setCanceled(true);
       }
     }

@@ -32,20 +32,21 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 
-public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGuiEventListener {
+public class RecipeSelectorGui extends AbstractGui implements IRenderable, IGuiEventListener {
 
   private final Consumer<IRecipe<CraftingInventory>> recipeSelector;
   private final CraftingInventory craftingInventory;
 
-  private List<RecipeSelectWidget> buttons = new ArrayList<>();
-  private RecipeSelectWidget hoveredButton;
+  private final List<RecipeOutputWidget> buttons = new ArrayList<>();
+
+  private RecipeOutputWidget hoveredButton;
   private boolean visible = false;
   private int x;
   private int y;
   private List<ICraftingRecipe> recipes = new ArrayList<>();
 
-  public RecipeSelectionGui(int x, int y, CraftingInventory craftingInventory,
-      Consumer<IRecipe<CraftingInventory>> recipeSelector) {
+  public RecipeSelectorGui(int x, int y, CraftingInventory craftingInventory,
+                           Consumer<IRecipe<CraftingInventory>> recipeSelector) {
     this.setPosition(x, y);
     this.recipeSelector = recipeSelector;
     this.craftingInventory = craftingInventory;
@@ -71,14 +72,14 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
     });
   }
 
-  public List<RecipeSelectWidget> getButtons() {
+  public List<RecipeOutputWidget> getButtons() {
     return buttons;
   }
 
   public void setRecipes(List<ICraftingRecipe> recipes) {
     this.recipes = recipes;
     this.buttons.clear();
-    recipes.forEach(recipe -> this.buttons.add(new RecipeSelectWidget(craftingInventory, recipe)));
+    recipes.forEach(recipe -> this.buttons.add(new RecipeOutputWidget(craftingInventory, recipe)));
     this.updateButtonPositions();
   }
 
@@ -102,7 +103,7 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
 
   @Override
   public void render(@Nonnull MatrixStack matrixStack, int p_render_1_, int p_render_2_,
-      float p_render_3_) {
+                     float p_render_3_) {
 
     if (this.isVisible()) {
       this.hoveredButton = null;
@@ -119,11 +120,11 @@ public class RecipeSelectionGui extends AbstractGui implements IRenderable, IGui
 
   @Override
   public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_,
-      int p_mouseClicked_5_) {
+                              int p_mouseClicked_5_) {
 
     if (this.isVisible()) {
 
-      for (RecipeSelectWidget button : this.buttons) {
+      for (RecipeOutputWidget button : this.buttons) {
 
         if (button.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_)) {
           recipeSelector.accept(button.recipe);

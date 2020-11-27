@@ -19,38 +19,19 @@
 
 package top.theillusivec4.polymorph.api;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.inventory.container.WorkbenchContainer;
+import top.theillusivec4.polymorph.common.impl.PolymorphApiImpl;
 
-public class PolymorphApi {
+public interface PolymorphApi {
 
-  private static final Map<Class<? extends Container>, Function<? extends Container, PolyProvider>> providerFunctions = new HashMap<>();
-
-  public static <T extends Container> void addProvider(Class<T> clazz,
-      Function<T, PolyProvider> providerFunction) {
-    providerFunctions.put(clazz, providerFunction);
+  static PolymorphApi getInstance() {
+    return PolymorphApiImpl.INSTANCE;
   }
 
-  @SuppressWarnings("unchecked")
-  public static <T extends Container> Optional<PolyProvider> getProvider(T container) {
-    Function<T, PolyProvider> providerFunction = (Function<T, PolyProvider>) providerFunctions
-        .get(container.getClass());
+  <T extends Container> void addProvider(Class<T> clazz,
+                                         Function<T, PolyProvider> providerFunction);
 
-    if (providerFunction == null) {
-
-      if (container instanceof WorkbenchContainer) {
-        providerFunction = (Function<T, PolyProvider>) providerFunctions
-            .get(WorkbenchContainer.class);
-      } else if (container instanceof PlayerContainer) {
-        providerFunction = (Function<T, PolyProvider>) providerFunctions.get(PlayerContainer.class);
-      }
-    }
-    return providerFunction != null ? Optional.of(providerFunction.apply(container))
-        : Optional.empty();
-  }
+  Optional<PolyProvider> getProvider(Container container);
 }

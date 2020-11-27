@@ -25,7 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import top.theillusivec4.polymorph.client.RecipeSelectionManager;
+import top.theillusivec4.polymorph.client.RecipeSelectorManager;
 import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
 
 public class JeiModule extends CompatibilityModule {
@@ -40,26 +40,26 @@ public class JeiModule extends CompatibilityModule {
 
   @SubscribeEvent
   public void guiClick(GuiScreenEvent.MouseClickedEvent.Pre evt) {
-    ItemStack chosenStack = ItemStack.EMPTY;
+    ItemStack stack = ItemStack.EMPTY;
 
     if (ingredientListOverlay != null) {
       Object ingredient = ingredientListOverlay.getIngredientUnderMouse();
 
       if (ingredient instanceof ItemStack) {
-        chosenStack = (ItemStack) ingredient;
+        stack = (ItemStack) ingredient;
       }
     }
 
-    if (chosenStack.isEmpty() && bookmarkOverlay != null) {
+    if (stack.isEmpty() && bookmarkOverlay != null) {
       Object ingredient = bookmarkOverlay.getIngredientUnderMouse();
 
       if (ingredient instanceof ItemStack) {
-        chosenStack = (ItemStack) ingredient;
+        stack = (ItemStack) ingredient;
       }
     }
 
-    if (!chosenStack.isEmpty()) {
-      RecipeSelectionManager.setPreferredStack(chosenStack);
+    if (!stack.isEmpty()) {
+      RecipeSelectorManager.setPreferredStack(stack);
     }
   }
 }

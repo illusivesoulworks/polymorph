@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -36,17 +34,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.client.ClientEventHandler;
 import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
-import top.theillusivec4.polymorph.common.integrations.byg.BygModule;
-import top.theillusivec4.polymorph.common.integrations.craftingcraft.CraftingCraftModule;
-import top.theillusivec4.polymorph.common.integrations.fastbench.FastWorkbenchModule;
 import top.theillusivec4.polymorph.common.integrations.jei.JeiModule;
-import top.theillusivec4.polymorph.common.integrations.refinedstorage.RefinedStorageModule;
-import top.theillusivec4.polymorph.common.network.NetworkHandler;
-import top.theillusivec4.polymorph.common.provider.InventoryProvider;
-import top.theillusivec4.polymorph.common.provider.WorkbenchProvider;
+import top.theillusivec4.polymorph.common.network.NetworkManager;
 import top.theillusivec4.polymorph.server.PolymorphCommand;
 
 @Mod(Polymorph.MODID)
@@ -59,11 +50,7 @@ public class Polymorph {
   private static final List<CompatibilityModule> ACTIVE_INTEGRATIONS = new ArrayList<>();
 
   static {
-    INTEGRATIONS.put("fastbench", FastWorkbenchModule::new);
     INTEGRATIONS.put("jei", JeiModule::new);
-    INTEGRATIONS.put("refinedstorage", RefinedStorageModule::new);
-    INTEGRATIONS.put("craftingcraft", CraftingCraftModule::new);
-    INTEGRATIONS.put("byg", BygModule::new);
   }
 
   public Polymorph() {
@@ -81,9 +68,7 @@ public class Polymorph {
   }
 
   private void setup(final FMLCommonSetupEvent evt) {
-    NetworkHandler.register();
-    PolymorphApi.addProvider(WorkbenchContainer.class, WorkbenchProvider::new);
-    PolymorphApi.addProvider(PlayerContainer.class, InventoryProvider::new);
+    NetworkManager.register();
     ACTIVE_INTEGRATIONS.forEach(CompatibilityModule::setup);
   }
 
