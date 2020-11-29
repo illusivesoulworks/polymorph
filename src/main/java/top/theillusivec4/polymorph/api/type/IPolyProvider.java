@@ -17,17 +17,16 @@
  * License along with Polymorph.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.api;
+package top.theillusivec4.polymorph.api.type;
 
 import javax.annotation.Nonnull;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
+import net.minecraft.item.crafting.IRecipe;
 
-public interface PolyProvider {
+public interface IPolyProvider<I extends IInventory> {
 
   default boolean isValid() {
     return true;
@@ -36,7 +35,7 @@ public interface PolyProvider {
   Container getContainer();
 
   @Nonnull
-  CraftingInventory getCraftingInventory();
+  I getInventory();
 
   @Nonnull
   Slot getOutputSlot();
@@ -49,22 +48,5 @@ public interface PolyProvider {
     return getOutputSlot().yPos - 22;
   }
 
-  default void transfer(PlayerEntity playerIn, ICraftingRecipe recipe) {
-    Container container = getContainer();
-    Slot slot = getOutputSlot();
-    CraftingInventory inventory = getCraftingInventory();
-    ItemStack itemstack = container.transferStackInSlot(playerIn, slot.slotNumber);
-
-    if (recipe.matches(inventory, playerIn.world)) {
-      slot.putStack(recipe.getCraftingResult(inventory));
-
-      while (!itemstack.isEmpty() && ItemStack.areItemsEqual(slot.getStack(), itemstack)) {
-        itemstack = container.transferStackInSlot(playerIn, slot.slotNumber);
-
-        if (recipe.matches(inventory, playerIn.world)) {
-          slot.putStack(recipe.getCraftingResult(inventory));
-        }
-      }
-    }
-  }
+  IRecipeSelector<I, ? extends IRecipe<I>> createSelector(ContainerScreen<?> screen);
 }

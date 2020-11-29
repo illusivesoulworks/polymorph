@@ -33,9 +33,8 @@ import net.minecraft.client.gui.IRenderable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
@@ -46,21 +45,22 @@ import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
-public class RecipeSelectorGui extends AbstractGui implements IRenderable, IGuiEventListener {
+public class RecipeSelectorGui<I extends IInventory, R extends IRecipe<I>> extends AbstractGui
+    implements IRenderable, IGuiEventListener {
 
-  private final Consumer<IRecipe<CraftingInventory>> recipeSelector;
-  private final CraftingInventory craftingInventory;
+  private final Consumer<R> recipeSelector;
+  private final I craftingInventory;
   private final Screen screen;
-  private final List<RecipeOutputWidget> buttons = new ArrayList<>();
+  private final List<RecipeOutputWidget<I, R>> buttons = new ArrayList<>();
 
-  private RecipeOutputWidget hoveredButton;
+  private RecipeOutputWidget<I, R> hoveredButton;
   private boolean visible = false;
   private int x;
   private int y;
-  private List<ICraftingRecipe> recipes = new ArrayList<>();
+  private List<R> recipes = new ArrayList<>();
 
-  public RecipeSelectorGui(int x, int y, CraftingInventory craftingInventory,
-                           Consumer<IRecipe<CraftingInventory>> recipeSelector, Screen screen) {
+  public RecipeSelectorGui(int x, int y, I craftingInventory,
+                           Consumer<R> recipeSelector, Screen screen) {
     this.setPosition(x, y);
     this.recipeSelector = recipeSelector;
     this.craftingInventory = craftingInventory;
@@ -87,14 +87,15 @@ public class RecipeSelectorGui extends AbstractGui implements IRenderable, IGuiE
     });
   }
 
-  public List<RecipeOutputWidget> getButtons() {
+  public List<RecipeOutputWidget<I, R>> getButtons() {
     return buttons;
   }
 
-  public void setRecipes(List<ICraftingRecipe> recipes) {
+  public void setRecipes(List<R> recipes) {
     this.recipes = recipes;
     this.buttons.clear();
-    recipes.forEach(recipe -> this.buttons.add(new RecipeOutputWidget(craftingInventory, recipe)));
+    recipes
+        .forEach(recipe -> this.buttons.add(new RecipeOutputWidget<>(craftingInventory, recipe)));
     this.updateButtonPositions();
   }
 
@@ -139,7 +140,7 @@ public class RecipeSelectorGui extends AbstractGui implements IRenderable, IGuiE
 
     if (this.isVisible()) {
 
-      for (RecipeOutputWidget button : this.buttons) {
+      for (RecipeOutputWidget<I, R> button : this.buttons) {
 
         if (button.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_)) {
           recipeSelector.accept(button.recipe);

@@ -28,7 +28,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.client.RecipeSelectorManager;
+import top.theillusivec4.polymorph.client.selector.CraftingRecipeSelector;
+import top.theillusivec4.polymorph.client.selector.RecipeSelectorManager;
 
 public class SPacketSyncOutput {
 
@@ -57,10 +58,13 @@ public class SPacketSyncOutput {
           slot.inventory.setInventorySlotContents(slot.getSlotIndex(), msg.stack);
         });
         RecipeSelectorManager.getSelector().ifPresent(selector -> {
-          selector.setUpdatable(true);
+          if (selector instanceof CraftingRecipeSelector) {
+            CraftingRecipeSelector craftingRecipeSelector = (CraftingRecipeSelector) selector;
+            craftingRecipeSelector.setUpdatable(true);
 
-          if (msg.stack.isEmpty()) {
-            selector.clearRecipes(clientPlayerEntity.world);
+            if (msg.stack.isEmpty()) {
+              craftingRecipeSelector.clearRecipes(clientPlayerEntity.world);
+            }
           }
         });
       }

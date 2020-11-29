@@ -19,13 +19,38 @@
 
 package top.theillusivec4.polymorph.common;
 
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import top.theillusivec4.polymorph.client.RecipeSelectorManager;
+import top.theillusivec4.polymorph.Polymorph;
+import top.theillusivec4.polymorph.api.PolymorphCapability;
+import top.theillusivec4.polymorph.api.type.IPersistentSelector;
+import top.theillusivec4.polymorph.client.selector.CraftingRecipeSelector;
+import top.theillusivec4.polymorph.client.selector.RecipeSelectorManager;
 
 public class MixinHooks {
 
   public static void sendUpdate() {
-    DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> RecipeSelectorManager::update);
+    DistExecutor.safeRunWhenOn(Dist.CLIENT,
+        () -> () -> RecipeSelectorManager.getSelector().ifPresent(selector -> {
+          if (selector instanceof CraftingRecipeSelector) {
+            CraftingRecipeSelector craftingRecipeSelector = (CraftingRecipeSelector) selector;
+
+            if (craftingRecipeSelector.updatable()) {
+              craftingRecipeSelector.markUpdate();
+            }
+          }
+        }));
+  }
+
+  public static IRecipe<?> getSelectedRecipe(IInventory inventoryIn) {
+    if (inventoryIn instanceof AbstractFurnaceTileEntity) {
+      AbstractFurnaceTileEntity te = (AbstractFurnaceTileEntity) inventoryIn;
+      Polymorph.LOGGER.info("Getting!");
+      return null;
+    }
+    return null;
   }
 }

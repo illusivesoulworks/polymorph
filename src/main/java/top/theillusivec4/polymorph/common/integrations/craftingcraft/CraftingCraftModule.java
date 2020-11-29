@@ -5,8 +5,8 @@ import net.blay09.mods.craftingcraft.container.InventoryCraftingContainer;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import top.theillusivec4.polymorph.api.PolyProvider;
 import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.api.type.ICraftingProvider;
 import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
 
 public class CraftingCraftModule extends CompatibilityModule {
@@ -17,7 +17,7 @@ public class CraftingCraftModule extends CompatibilityModule {
         .addProvider(InventoryCraftingContainer.class, InventoryCraftingProvider::new);
   }
 
-  public static class InventoryCraftingProvider implements PolyProvider {
+  public static class InventoryCraftingProvider implements ICraftingProvider {
 
     InventoryCraftingContainer craftingContainer;
 
@@ -32,7 +32,7 @@ public class CraftingCraftModule extends CompatibilityModule {
 
     @Nonnull
     @Override
-    public CraftingInventory getCraftingInventory() {
+    public CraftingInventory getInventory() {
       return craftingContainer.getCraftMatrix();
     }
 

@@ -26,6 +26,8 @@ import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import top.theillusivec4.polymorph.api.type.IRecipeSelector;
+import top.theillusivec4.polymorph.client.selector.RecipeSelectorManager;
 
 public class ClientEventHandler {
 
@@ -75,7 +77,7 @@ public class ClientEventHandler {
   public void mouseClick(GuiScreenEvent.MouseClickedEvent.Pre evt) {
 
     if (evt.getGui() instanceof ContainerScreen) {
-      RecipeSelectorManager.getSelector().ifPresent(RecipeSelector::markUpdatePosition);
+      RecipeSelectorManager.getSelector().ifPresent(IRecipeSelector::markUpdatePosition);
 
       if (RecipeSelectorManager.getSelector().map(
           selector -> selector.mouseClicked(evt.getMouseX(), evt.getMouseY(), evt.getButton()))

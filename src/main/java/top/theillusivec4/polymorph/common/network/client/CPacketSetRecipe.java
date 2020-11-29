@@ -34,6 +34,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.api.type.ICraftingProvider;
 import top.theillusivec4.polymorph.common.network.NetworkManager;
 import top.theillusivec4.polymorph.common.network.server.SPacketSyncOutput;
 
@@ -61,21 +62,24 @@ public class CPacketSetRecipe {
         Container container = sender.openContainer;
         AtomicReference<ItemStack> output = new AtomicReference<>(ItemStack.EMPTY);
         PolymorphApi.getInstance().getProvider(container).ifPresent(provider -> {
-          Slot slot = provider.getOutputSlot();
-          Optional<? extends IRecipe<?>> result = sender.getServerWorld().getRecipeManager()
-              .getRecipe(new ResourceLocation(msg.recipe));
-          CraftingInventory craftingInventory = provider.getCraftingInventory();
-          result.ifPresent(res -> {
+          if (provider instanceof ICraftingProvider) {
+            ICraftingProvider craftingProvider = (ICraftingProvider) provider;
+            Slot slot = provider.getOutputSlot();
+            Optional<? extends IRecipe<?>> result = sender.getServerWorld().getRecipeManager()
+                .getRecipe(new ResourceLocation(msg.recipe));
+            CraftingInventory craftingInventory = craftingProvider.getInventory();
+            result.ifPresent(res -> {
 
-            if (res instanceof ICraftingRecipe) {
-              ICraftingRecipe craftingRecipe = (ICraftingRecipe) res;
+              if (res instanceof ICraftingRecipe) {
+                ICraftingRecipe craftingRecipe = (ICraftingRecipe) res;
 
-              if (craftingRecipe.matches(craftingInventory, sender.world)) {
-                output.set(craftingRecipe.getCraftingResult(craftingInventory));
-                slot.inventory.setInventorySlotContents(slot.getSlotIndex(), output.get());
+                if (craftingRecipe.matches(craftingInventory, sender.world)) {
+                  output.set(craftingRecipe.getCraftingResult(craftingInventory));
+                  slot.inventory.setInventorySlotContents(slot.getSlotIndex(), output.get());
+                }
               }
-            }
-          });
+            });
+          }
         });
         NetworkManager.INSTANCE
             .send(PacketDistributor.PLAYER.with(() -> sender), new SPacketSyncOutput(output.get()));

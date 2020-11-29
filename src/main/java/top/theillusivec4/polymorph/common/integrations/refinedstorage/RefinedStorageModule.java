@@ -23,7 +23,8 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.hooks.BasicEventHooks;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.SlotItemHandler;
-import top.theillusivec4.polymorph.api.PolyProvider;
+import top.theillusivec4.polymorph.api.type.ICraftingProvider;
+import top.theillusivec4.polymorph.api.type.IPolyProvider;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
 
@@ -34,7 +35,7 @@ public class RefinedStorageModule extends CompatibilityModule {
     PolymorphApi.getInstance().addProvider(GridContainer.class, GridProvider::new);
   }
 
-  public static class GridProvider implements PolyProvider {
+  public static class GridProvider implements ICraftingProvider {
 
     GridContainer gridContainer;
 
@@ -55,7 +56,7 @@ public class RefinedStorageModule extends CompatibilityModule {
 
     @Nonnull
     @Override
-    public CraftingInventory getCraftingInventory() {
+    public CraftingInventory getInventory() {
       CraftingInventory craftingInventory = gridContainer.getGrid().getCraftingMatrix();
       return craftingInventory != null ? craftingInventory :
           new CraftingInventory(this.gridContainer, 0, 0);

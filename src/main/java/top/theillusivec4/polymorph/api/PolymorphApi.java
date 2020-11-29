@@ -21,7 +21,16 @@ package top.theillusivec4.polymorph.api;
 
 import java.util.Optional;
 import java.util.function.Function;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.crafting.AbstractCookingRecipe;
+import net.minecraft.item.crafting.ICraftingRecipe;
+import top.theillusivec4.polymorph.api.type.ICraftingProvider;
+import top.theillusivec4.polymorph.api.type.IFurnaceProvider;
+import top.theillusivec4.polymorph.api.type.IPolyProvider;
+import top.theillusivec4.polymorph.api.type.IRecipeSelector;
 import top.theillusivec4.polymorph.common.impl.PolymorphApiImpl;
 
 public interface PolymorphApi {
@@ -31,7 +40,13 @@ public interface PolymorphApi {
   }
 
   <T extends Container> void addProvider(Class<T> clazz,
-                                         Function<T, PolyProvider> providerFunction);
+                                         Function<T, IPolyProvider<?>> providerFunction);
 
-  Optional<PolyProvider> getProvider(Container container);
+  Optional<IPolyProvider<?>> getProvider(Container container);
+
+  IRecipeSelector<CraftingInventory, ICraftingRecipe> createCraftingSelector(
+      ContainerScreen<?> screen, ICraftingProvider provider);
+
+  IRecipeSelector<IInventory, AbstractCookingRecipe> createFurnaceSelector(
+      ContainerScreen<?> screen, IFurnaceProvider provider);
 }

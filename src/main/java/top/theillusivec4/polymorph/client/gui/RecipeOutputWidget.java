@@ -26,6 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
@@ -33,14 +34,14 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import top.theillusivec4.polymorph.Polymorph;
 
-public class RecipeOutputWidget extends Widget {
+public class RecipeOutputWidget<T extends IInventory, R extends IRecipe<T>> extends Widget {
 
   private static final ResourceLocation TOGGLE = new ResourceLocation(Polymorph.MODID,
       "textures/gui/toggle.png");
-  public IRecipe<CraftingInventory> recipe;
-  public CraftingInventory craftingMatrix;
+  public R recipe;
+  public T craftingMatrix;
 
-  public RecipeOutputWidget(CraftingInventory craftingMatrix, IRecipe<CraftingInventory> recipe) {
+  public RecipeOutputWidget(T craftingMatrix, R recipe) {
     super(0, 0, 25, 25, StringTextComponent.EMPTY);
     this.recipe = recipe;
     this.craftingMatrix = craftingMatrix;

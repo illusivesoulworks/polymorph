@@ -25,7 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import top.theillusivec4.polymorph.client.RecipeSelectorManager;
+import top.theillusivec4.polymorph.client.selector.RecipeSelectorManager;
 import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
 
 public class JeiModule extends CompatibilityModule {

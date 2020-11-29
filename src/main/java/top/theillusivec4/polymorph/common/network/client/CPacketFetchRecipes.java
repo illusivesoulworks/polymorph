@@ -13,6 +13,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.api.type.ICraftingProvider;
 import top.theillusivec4.polymorph.common.network.NetworkManager;
 import top.theillusivec4.polymorph.common.network.server.SPacketSendRecipes;
 
@@ -32,11 +33,15 @@ public class CPacketFetchRecipes {
       if (sender != null) {
         Container container = sender.openContainer;
         List<String> recipes = PolymorphApi.getInstance().getProvider(container).map(provider -> {
-          CraftingInventory craftingInventory = provider.getCraftingInventory();
-          List<ICraftingRecipe> result = sender.getServerWorld().getRecipeManager()
-              .getRecipes(IRecipeType.CRAFTING, craftingInventory, sender.getServerWorld());
-          return result.stream().map(recipe -> recipe.getId().toString())
-              .collect(Collectors.toList());
+          if (provider instanceof ICraftingProvider) {
+            ICraftingProvider craftingProvider = (ICraftingProvider) provider;
+            CraftingInventory inventory = craftingProvider.getInventory();
+            List<ICraftingRecipe> result = sender.getServerWorld().getRecipeManager()
+                .getRecipes(IRecipeType.CRAFTING, inventory, sender.getServerWorld());
+            return result.stream().map(recipe -> recipe.getId().toString())
+                .collect(Collectors.toList());
+          }
+          return new ArrayList<String>();
         }).orElse(new ArrayList<>());
         NetworkManager.INSTANCE
             .send(PacketDistributor.PLAYER.with(() -> sender), new SPacketSendRecipes(recipes));

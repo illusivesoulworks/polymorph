@@ -10,7 +10,8 @@ import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
-import top.theillusivec4.polymorph.client.RecipeSelectorManager;
+import top.theillusivec4.polymorph.client.selector.CraftingRecipeSelector;
+import top.theillusivec4.polymorph.client.selector.RecipeSelectorManager;
 
 public class SPacketSendRecipes {
 
@@ -50,8 +51,12 @@ public class SPacketSendRecipes {
           }
         }));
         RecipeSelectorManager.getSelector().ifPresent(
-            selectionManager -> selectionManager
-                .setRecipes(recipes, clientPlayerEntity.world, true));
+            selector -> {
+              if (selector instanceof CraftingRecipeSelector) {
+                ((CraftingRecipeSelector) selector)
+                    .setRecipes(recipes, clientPlayerEntity.world, true);
+              }
+            });
       }
     });
     ctx.get().setPacketHandled(true);
