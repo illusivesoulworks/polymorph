@@ -40,6 +40,7 @@ import top.theillusivec4.polymorph.common.capability.SelectorCapability;
 import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
 import top.theillusivec4.polymorph.common.integrations.craftingcraft.CraftingCraftModule;
 import top.theillusivec4.polymorph.common.integrations.jei.JeiModule;
+import top.theillusivec4.polymorph.common.integrations.prettypipes.PrettyPipesModule;
 import top.theillusivec4.polymorph.common.integrations.refinedstorage.RefinedStorageModule;
 import top.theillusivec4.polymorph.common.network.NetworkManager;
 import top.theillusivec4.polymorph.server.PolymorphCommand;
@@ -57,6 +58,7 @@ public class Polymorph {
     INTEGRATIONS.put("jei", JeiModule::new);
     INTEGRATIONS.put("craftingcraft", CraftingCraftModule::new);
     INTEGRATIONS.put("refinedstorage", RefinedStorageModule::new);
+    INTEGRATIONS.put("prettypipes", PrettyPipesModule::new);
   }
 
   public Polymorph() {

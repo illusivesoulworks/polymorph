@@ -10,12 +10,10 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
         classpath group: 'gradle.plugin.com.matthewprenger', name: 'CurseGradle', version: '1.4.0'
-        classpath group: 'com.wynprice.cursemaven', name: 'CurseMaven', version: '2.1.1'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'com.matthewprenger.cursegradle'
-apply plugin: 'com.wynprice.cursemaven'
 apply plugin: 'org.spongepowered.mixin'
 
 version = "${mod_version}"
@@ -76,6 +74,9 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
     }
+    maven {
+        url "https://www.cursemaven.com"
+    }
 }
 
 dependencies {
@@ -84,10 +85,12 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${version_mc}:${version_jei}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${version_mc}:${version_jei}")
 
-    compile fg.deobf("curse.maven:craftingcraft:${file_craftingcraft}")
-    compile fg.deobf("curse.maven:refined-storage:${file_refinedstorage}")
-    compile fg.deobf("curse.maven:refined-storage-addons:${file_refinedaddons}")
+    compile fg.deobf("curse.maven:craftingcraft-237581:${file_craftingcraft}")
+    compile fg.deobf("curse.maven:refinedstorage-243076:${file_refinedstorage}")
+    compile fg.deobf("curse.maven:refinedstorageaddons-272302:${file_refinedaddons}")
+    compile fg.deobf("curse.maven:prettypipes-376737:${file_prettypipes}")
 
+//    todo: update these to the new CurseMaven format
 //    runtimeOnly fg.deobf("curse.maven:toms-storage:${file_tom}")
 //    runtimeOnly fg.deobf("curse.maven:crafting-station:${file_craftingstation}")
 //    runtimeOnly fg.deobf("curse.maven:vanillatweaks:${file_vanillatweaks}")
@@ -146,9 +149,5 @@ curseforge {
         changelogType = 'markdown'
         changelog = file('docs/CHANGELOG.md')
         addArtifact(sourcesJar)
-        relations {
-            optionalDependency 'fastworkbench'
-            optionalDependency 'crafting-station'
-        }
     }
 }
