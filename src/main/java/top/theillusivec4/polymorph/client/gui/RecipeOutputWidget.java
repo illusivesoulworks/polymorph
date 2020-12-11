@@ -25,7 +25,6 @@ import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -39,12 +38,12 @@ public class RecipeOutputWidget<T extends IInventory, R extends IRecipe<T>> exte
   private static final ResourceLocation TOGGLE = new ResourceLocation(Polymorph.MODID,
       "textures/gui/toggle.png");
   public R recipe;
-  public T craftingMatrix;
+  public T inventory;
 
-  public RecipeOutputWidget(T craftingMatrix, R recipe) {
+  public RecipeOutputWidget(T inventory, R recipe) {
     super(0, 0, 25, 25, StringTextComponent.EMPTY);
     this.recipe = recipe;
-    this.craftingMatrix = craftingMatrix;
+    this.inventory = inventory;
   }
 
   public void setPosition(int x, int y) {
@@ -69,13 +68,13 @@ public class RecipeOutputWidget<T extends IInventory, R extends IRecipe<T>> exte
     float zLevel = minecraft.getItemRenderer().zLevel;
     minecraft.getItemRenderer().zLevel = 600.0F;
     minecraft.getItemRenderer()
-        .renderItemAndEffectIntoGUI(this.recipe.getCraftingResult(this.craftingMatrix), this.x + k,
+        .renderItemAndEffectIntoGUI(this.recipe.getCraftingResult(this.inventory), this.x + k,
             this.y + k);
     minecraft.getItemRenderer().zLevel = zLevel;
   }
 
   public ItemStack getOutput() {
-    return this.recipe.getCraftingResult(this.craftingMatrix);
+    return this.recipe.getCraftingResult(this.inventory);
   }
 
   public List<ITextComponent> getTooltipText(Screen screen) {

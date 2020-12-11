@@ -40,9 +40,9 @@ public interface PolymorphApi {
   }
 
   <T extends Container> void addProvider(Class<T> clazz,
-                                         Function<T, IPolyProvider<?>> providerFunction);
+                                         Function<T, IPolyProvider<?, ?>> providerFunction);
 
-  Optional<IPolyProvider<?>> getProvider(Container container);
+  Optional<IPolyProvider<?, ?>> getProvider(Container container);
 
   IRecipeSelector<CraftingInventory, ICraftingRecipe> createCraftingSelector(
       ContainerScreen<?> screen, ICraftingProvider provider);

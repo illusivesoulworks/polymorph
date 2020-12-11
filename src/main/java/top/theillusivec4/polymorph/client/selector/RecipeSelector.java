@@ -39,7 +39,7 @@ import top.theillusivec4.polymorph.client.gui.ToggleRecipeButton;
 import top.theillusivec4.polymorph.common.network.NetworkManager;
 import top.theillusivec4.polymorph.common.network.client.CPacketFetchRecipes;
 
-public abstract class RecipeSelector<I extends IInventory, P extends IPolyProvider<I>, R extends IRecipe<I>>
+public abstract class RecipeSelector<I extends IInventory, R extends IRecipe<I>>
     implements IRecipeSelector<I, R> {
 
   private static final ResourceLocation TOGGLE = new ResourceLocation(Polymorph.MODID,
@@ -49,12 +49,12 @@ public abstract class RecipeSelector<I extends IInventory, P extends IPolyProvid
 
   protected final RecipeSelectorGui<I, R> recipeSelectorGui;
   protected final ImageButton toggleButton;
-  protected final P provider;
+  protected final IPolyProvider<I, R> provider;
   protected final ContainerScreen<?> parent;
 
   private boolean updatePosition = false;
 
-  public RecipeSelector(ContainerScreen<?> screen, P provider) {
+  public RecipeSelector(ContainerScreen<?> screen, IPolyProvider<I, R> provider) {
     this.parent = screen;
     this.provider = provider;
     int x = screen.getGuiLeft() + provider.getXPos();
@@ -65,6 +65,11 @@ public abstract class RecipeSelector<I extends IInventory, P extends IPolyProvid
     this.toggleButton = new ToggleRecipeButton(x, y, 16, 16, 0, 0, 17, TOGGLE,
         clickWidget -> recipeSelectorGui.setVisible(!recipeSelectorGui.isVisible()));
     this.toggleButton.visible = this.recipeSelectorGui.getButtons().size() > 1;
+  }
+
+  @Override
+  public IPolyProvider<I, R> getProvider() {
+    return this.provider;
   }
 
   public void reposition() {

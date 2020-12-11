@@ -48,8 +48,8 @@ import net.minecraftforge.fml.client.gui.GuiUtils;
 public class RecipeSelectorGui<I extends IInventory, R extends IRecipe<I>> extends AbstractGui
     implements IRenderable, IGuiEventListener {
 
-  private final Consumer<R> recipeSelector;
-  private final I craftingInventory;
+  private final Consumer<R> select;
+  private final I inventory;
   private final Screen screen;
   private final List<RecipeOutputWidget<I, R>> buttons = new ArrayList<>();
 
@@ -59,11 +59,10 @@ public class RecipeSelectorGui<I extends IInventory, R extends IRecipe<I>> exten
   private int y;
   private List<R> recipes = new ArrayList<>();
 
-  public RecipeSelectorGui(int x, int y, I craftingInventory,
-                           Consumer<R> recipeSelector, Screen screen) {
+  public RecipeSelectorGui(int x, int y, I inventory, Consumer<R> select, Screen screen) {
     this.setPosition(x, y);
-    this.recipeSelector = recipeSelector;
-    this.craftingInventory = craftingInventory;
+    this.select = select;
+    this.inventory = inventory;
     this.screen = screen;
   }
 
@@ -95,7 +94,7 @@ public class RecipeSelectorGui<I extends IInventory, R extends IRecipe<I>> exten
     this.recipes = recipes;
     this.buttons.clear();
     recipes
-        .forEach(recipe -> this.buttons.add(new RecipeOutputWidget<>(craftingInventory, recipe)));
+        .forEach(recipe -> this.buttons.add(new RecipeOutputWidget<>(inventory, recipe)));
     this.updateButtonPositions();
   }
 
@@ -143,7 +142,7 @@ public class RecipeSelectorGui<I extends IInventory, R extends IRecipe<I>> exten
       for (RecipeOutputWidget<I, R> button : this.buttons) {
 
         if (button.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_)) {
-          recipeSelector.accept(button.recipe);
+          select.accept(button.recipe);
           return true;
         }
       }
@@ -160,6 +159,7 @@ public class RecipeSelectorGui<I extends IInventory, R extends IRecipe<I>> exten
         this.screen.getMinecraft().fontRenderer);
   }
 
+  @SuppressWarnings("deprecation")
   public static void drawHoveringText(@Nonnull final ItemStack stack, MatrixStack mStack,
                                       List<? extends ITextProperties> textLines, int mouseX,
                                       int mouseY, int screenWidth, int screenHeight,

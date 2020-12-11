@@ -36,6 +36,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.theillusivec4.polymorph.client.ClientEventHandler;
 import top.theillusivec4.polymorph.common.CommonEventHandler;
+import top.theillusivec4.polymorph.common.capability.SelectorCapability;
 import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
 import top.theillusivec4.polymorph.common.integrations.craftingcraft.CraftingCraftModule;
 import top.theillusivec4.polymorph.common.integrations.jei.JeiModule;
@@ -74,6 +75,7 @@ public class Polymorph {
 
   private void setup(final FMLCommonSetupEvent evt) {
     NetworkManager.register();
+    SelectorCapability.register();
     MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
     ACTIVE_INTEGRATIONS.forEach(CompatibilityModule::setup);
   }

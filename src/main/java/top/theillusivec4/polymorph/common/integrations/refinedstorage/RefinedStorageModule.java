@@ -44,11 +44,12 @@ public class RefinedStorageModule extends CompatibilityModule {
     }
 
     @Override
-    public boolean isValid() {
+    public boolean isActive() {
       GridType gridType = this.gridContainer.getGrid().getGridType();
       return gridType == GridType.CRAFTING || gridType == GridType.PATTERN;
     }
 
+    @Nonnull
     @Override
     public Container getContainer() {
       return this.gridContainer;

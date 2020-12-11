@@ -1,16 +1,14 @@
 package top.theillusivec4.polymorph.common.network.server;
 
+import com.google.common.collect.Sets;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
-import top.theillusivec4.polymorph.client.selector.CraftingRecipeSelector;
 import top.theillusivec4.polymorph.client.selector.RecipeSelectorManager;
 
 public class SPacketSendRecipes {
@@ -42,21 +40,9 @@ public class SPacketSendRecipes {
       ClientPlayerEntity clientPlayerEntity = Minecraft.getInstance().player;
 
       if (clientPlayerEntity != null) {
-        RecipeManager manager = clientPlayerEntity.world.getRecipeManager();
-        List<ICraftingRecipe> recipes = new ArrayList<>();
-        msg.recipes.forEach(id -> manager.getRecipe(new ResourceLocation(id)).ifPresent(recipe -> {
-
-          if (recipe instanceof ICraftingRecipe) {
-            recipes.add((ICraftingRecipe) recipe);
-          }
-        }));
         RecipeSelectorManager.getSelector().ifPresent(
-            selector -> {
-              if (selector instanceof CraftingRecipeSelector) {
-                ((CraftingRecipeSelector) selector)
-                    .setRecipes(recipes, clientPlayerEntity.world, true);
-              }
-            });
+            selector -> selector
+                .setRecipes(new HashSet<>(msg.recipes), clientPlayerEntity.world, true));
       }
     });
     ctx.get().setPacketHandled(true);

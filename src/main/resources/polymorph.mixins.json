@@ -4,7 +4,9 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "polymorph.refmap.json",
   "mixins": [
-    "CraftResultInventoryMixin"
+    "CraftResultInventoryMixin",
+    "RecipeManagerMixin",
+    "AbstractFurnaceContainerMixin"
   ],
   "minVersion": "0.8"
 }

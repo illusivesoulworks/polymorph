@@ -70,10 +70,10 @@ public class CPacketTransferRecipe {
                 craftingProvider.transfer(sender, craftingRecipe);
               }
             });
+            NetworkManager.INSTANCE.send(PacketDistributor.PLAYER.with(() -> sender),
+                new SPacketSyncOutput(ItemStack.EMPTY));
           }
         });
-        NetworkManager.INSTANCE.send(PacketDistributor.PLAYER.with(() -> sender),
-            new SPacketSyncOutput(ItemStack.EMPTY));
       }
     });
     ctx.get().setPacketHandled(true);

@@ -22,12 +22,10 @@ package top.theillusivec4.polymorph.common.network.server;
 import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
-import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.client.selector.CraftingRecipeSelector;
 import top.theillusivec4.polymorph.client.selector.RecipeSelectorManager;
 
@@ -52,13 +50,10 @@ public class SPacketSyncOutput {
       ClientPlayerEntity clientPlayerEntity = Minecraft.getInstance().player;
 
       if (clientPlayerEntity != null) {
-        Container container = clientPlayerEntity.openContainer;
-        PolymorphApi.getInstance().getProvider(container).ifPresent(provider -> {
-          Slot slot = provider.getOutputSlot();
-          slot.inventory.setInventorySlotContents(slot.getSlotIndex(), msg.stack);
-        });
         RecipeSelectorManager.getSelector().ifPresent(selector -> {
           if (selector instanceof CraftingRecipeSelector) {
+            Slot slot = selector.getProvider().getOutputSlot();
+            slot.inventory.setInventorySlotContents(slot.getSlotIndex(), msg.stack);
             CraftingRecipeSelector craftingRecipeSelector = (CraftingRecipeSelector) selector;
             craftingRecipeSelector.setUpdatable(true);
 

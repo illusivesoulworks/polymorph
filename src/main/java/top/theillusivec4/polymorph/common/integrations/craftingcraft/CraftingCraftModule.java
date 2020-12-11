@@ -25,6 +25,7 @@ public class CraftingCraftModule extends CompatibilityModule {
       this.craftingContainer = craftingContainer;
     }
 
+    @Nonnull
     @Override
     public Container getContainer() {
       return this.craftingContainer;

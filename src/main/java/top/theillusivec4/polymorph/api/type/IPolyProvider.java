@@ -19,19 +19,23 @@
 
 package top.theillusivec4.polymorph.api.type;
 
+import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.World;
 
-public interface IPolyProvider<I extends IInventory> {
+public interface IPolyProvider<I extends IInventory, R extends IRecipe<I>> {
 
-  default boolean isValid() {
+  default boolean isActive() {
     return true;
   }
 
+  @Nonnull
   Container getContainer();
 
   @Nonnull
@@ -40,6 +44,12 @@ public interface IPolyProvider<I extends IInventory> {
   @Nonnull
   Slot getOutputSlot();
 
+  @Nonnull
+  List<? extends R> getRecipes(World world, RecipeManager recipeManager);
+
+  @Nonnull
+  IRecipeSelector<I, R> createSelector(ContainerScreen<?> screen);
+
   default int getXPos() {
     return getOutputSlot().xPos;
   }
@@ -47,6 +57,4 @@ public interface IPolyProvider<I extends IInventory> {
   default int getYPos() {
     return getOutputSlot().yPos - 22;
   }
-
-  IRecipeSelector<I, ? extends IRecipe<I>> createSelector(ContainerScreen<?> screen);
 }

@@ -15,6 +15,7 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.api.type.ICraftingProvider;
@@ -22,8 +23,7 @@ import top.theillusivec4.polymorph.common.network.NetworkManager;
 import top.theillusivec4.polymorph.common.network.client.CPacketSetRecipe;
 import top.theillusivec4.polymorph.common.network.client.CPacketTransferRecipe;
 
-public class CraftingRecipeSelector
-    extends RecipeSelector<CraftingInventory, ICraftingProvider, ICraftingRecipe> {
+public class CraftingRecipeSelector extends RecipeSelector<CraftingInventory, ICraftingRecipe> {
 
   private static IRecipe<CraftingInventory> lastPlacedRecipe;
   private static List<ICraftingRecipe> lastRecipesList;
@@ -31,6 +31,18 @@ public class CraftingRecipeSelector
 
   private boolean update = true;
   private boolean updatable = true;
+
+  public static void update() {
+    RecipeSelectorManager.getSelector().ifPresent(selector -> {
+      if (selector instanceof CraftingRecipeSelector) {
+        CraftingRecipeSelector craftingRecipeSelector = (CraftingRecipeSelector) selector;
+
+        if (craftingRecipeSelector.updatable()) {
+          craftingRecipeSelector.markUpdate();
+        }
+      }
+    });
+  }
 
   public static Optional<List<ICraftingRecipe>> getLastRecipesList() {
     return Optional.ofNullable(lastRecipesList);
@@ -88,20 +100,8 @@ public class CraftingRecipeSelector
   }
 
   @Override
-  public void selectRecipe(ICraftingRecipe recipe) {
-    setLastSelectedRecipe(recipe);
-    ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
-
-    if (playerEntity != null) {
-      ItemStack stack = recipe.getCraftingResult(this.provider.getInventory());
-      this.provider.getOutputSlot().putStack(stack.copy());
-      NetworkManager.INSTANCE
-          .send(PacketDistributor.SERVER.noArg(), new CPacketSetRecipe(recipe.getId().toString()));
-    }
-  }
-
-  @Override
   public void setRecipes(List<ICraftingRecipe> recipes, World world, boolean refresh) {
+
     if (refresh) {
       Set<RecipeOutput> recipeOutputs = new HashSet<>();
       recipes.removeIf(rec -> !recipeOutputs
@@ -143,6 +143,30 @@ public class CraftingRecipeSelector
         }
       }
     });
+  }
+
+  @Override
+  public void selectRecipe(ICraftingRecipe recipe) {
+    setLastSelectedRecipe(recipe);
+    ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
+
+    if (playerEntity != null) {
+      ItemStack stack = recipe.getCraftingResult(this.provider.getInventory());
+      this.provider.getOutputSlot().putStack(stack.copy());
+      NetworkManager.INSTANCE
+          .send(PacketDistributor.SERVER.noArg(), new CPacketSetRecipe(recipe.getId().toString()));
+    }
+  }
+
+  @Override
+  public void setRecipes(Set<String> recipeIds, World world, boolean refresh) {
+    List<ICraftingRecipe> recipes = new ArrayList<>();
+    recipeIds.forEach(id -> world.getRecipeManager().getRecipe(new ResourceLocation(id)).ifPresent(recipe -> {
+      if (recipe instanceof ICraftingRecipe) {
+        recipes.add((ICraftingRecipe) recipe);
+      }
+    }));
+    this.setRecipes(recipes, world, false);
   }
 
   @Override

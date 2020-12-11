@@ -12,6 +12,6 @@ public class CraftResultInventoryMixin {
 
   @Inject(at = @At("HEAD"), method = "setInventorySlotContents")
   private void _polymorph_sendUpdate(CallbackInfo cb) {
-    MixinHooks.sendUpdate();
+    MixinHooks.sendCraftingUpdate();
   }
 }

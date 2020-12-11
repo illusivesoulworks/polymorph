@@ -16,8 +16,8 @@ import top.theillusivec4.polymorph.common.MixinHooks;
 public class RecipeManagerMixin {
 
   @SuppressWarnings("unchecked")
-  @Inject(at = @At("HEAD"), method = "getRecipe<C::Lnet/minecraft/inventory/IInventory;T::Lnet/minecraft/item/crafting/IRecipe<TC;>;>(Lnet/minecraft/item/crafting/IRecipeType<TT;>;TC;Lnet/minecraft/world/World;)Ljava/util/Optional<TT;>;", cancellable = true)
-  public static <C extends IInventory, T extends IRecipe<C>> void _polymorph_getRecipe(
+  @Inject(at = @At("HEAD"), method = "getRecipe(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;", cancellable = true)
+  private <C extends IInventory, T extends IRecipe<C>> void _polymorph_getRecipe(
       IRecipeType<T> recipeTypeIn, C inventoryIn, World worldIn,
       CallbackInfoReturnable<Optional<T>> cb) {
     T recipe = (T) MixinHooks.getSelectedRecipe(inventoryIn);

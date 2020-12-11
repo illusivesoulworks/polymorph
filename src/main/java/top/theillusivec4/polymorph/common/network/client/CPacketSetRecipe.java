@@ -79,10 +79,10 @@ public class CPacketSetRecipe {
                 }
               }
             });
+            NetworkManager.INSTANCE
+                .send(PacketDistributor.PLAYER.with(() -> sender), new SPacketSyncOutput(output.get()));
           }
         });
-        NetworkManager.INSTANCE
-            .send(PacketDistributor.PLAYER.with(() -> sender), new SPacketSyncOutput(output.get()));
       }
     });
     ctx.get().setPacketHandled(true);

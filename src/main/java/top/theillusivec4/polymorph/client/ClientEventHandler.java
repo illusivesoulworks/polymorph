@@ -26,7 +26,6 @@ import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import top.theillusivec4.polymorph.api.type.IRecipeSelector;
 import top.theillusivec4.polymorph.client.selector.RecipeSelectorManager;
 
 public class ClientEventHandler {
@@ -53,14 +52,10 @@ public class ClientEventHandler {
   public void initGui(GuiScreenEvent.InitGuiEvent.Post evt) {
     Screen screen = evt.getGui();
 
-    if (screen instanceof ContainerScreen) {
-      ContainerScreen<?> containerScreen = (ContainerScreen<?>) screen;
-
-      if (RecipeSelectorManager.tryCreate(containerScreen)) {
-        return;
-      }
+    if (!(screen instanceof ContainerScreen) ||
+        !RecipeSelectorManager.tryCreate((ContainerScreen<?>) screen)) {
+      RecipeSelectorManager.clear();
     }
-    RecipeSelectorManager.clear();
   }
 
   @SubscribeEvent
@@ -77,13 +72,13 @@ public class ClientEventHandler {
   public void mouseClick(GuiScreenEvent.MouseClickedEvent.Pre evt) {
 
     if (evt.getGui() instanceof ContainerScreen) {
-      RecipeSelectorManager.getSelector().ifPresent(IRecipeSelector::markUpdatePosition);
+      RecipeSelectorManager.getSelector().ifPresent(selector -> {
+        selector.markUpdatePosition();
 
-      if (RecipeSelectorManager.getSelector().map(
-          selector -> selector.mouseClicked(evt.getMouseX(), evt.getMouseY(), evt.getButton()))
-          .orElse(false)) {
-        evt.setCanceled(true);
-      }
+        if (selector.mouseClicked(evt.getMouseX(), evt.getMouseY(), evt.getButton())) {
+          evt.setCanceled(true);
+        }
+      });
     }
   }
 }
