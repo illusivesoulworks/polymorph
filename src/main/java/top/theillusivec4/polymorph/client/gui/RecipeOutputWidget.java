@@ -39,6 +39,7 @@ public class RecipeOutputWidget<T extends IInventory, R extends IRecipe<T>> exte
       "textures/gui/toggle.png");
   public R recipe;
   public T inventory;
+  public boolean highlighted = false;
 
   public RecipeOutputWidget(T inventory, R recipe) {
     super(0, 0, 25, 25, StringTextComponent.EMPTY);
@@ -56,14 +57,14 @@ public class RecipeOutputWidget<T extends IInventory, R extends IRecipe<T>> exte
                            int p_renderButton_2_, float p_renderButton_3_) {
     Minecraft minecraft = Minecraft.getInstance();
     minecraft.getTextureManager().bindTexture(TOGGLE);
-    int i = 16;
     int j = 0;
 
     if (this.x + 25 > p_renderButton_1_ && this.x <= p_renderButton_1_ &&
         this.y + 25 > p_renderButton_2_ && this.y <= p_renderButton_2_) {
       j += 25;
     }
-    blit(matrixStack, this.x, this.y, 600, i, j, this.width, this.height, 256, 256);
+    blit(matrixStack, this.x, this.y, 600, this.highlighted ? 32 : 16, j, this.width, this.height,
+        256, 256);
     int k = 4;
     float zLevel = minecraft.getItemRenderer().zLevel;
     minecraft.getItemRenderer().zLevel = 600.0F;

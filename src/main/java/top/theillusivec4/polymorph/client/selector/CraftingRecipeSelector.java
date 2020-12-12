@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.api.type.ICraftingProvider;
 import top.theillusivec4.polymorph.common.network.NetworkManager;
-import top.theillusivec4.polymorph.common.network.client.CPacketSetRecipe;
+import top.theillusivec4.polymorph.common.network.client.CPacketSetCraftingRecipe;
 import top.theillusivec4.polymorph.common.network.client.CPacketTransferRecipe;
 
 public class CraftingRecipeSelector extends RecipeSelector<CraftingInventory, ICraftingRecipe> {
@@ -139,7 +139,7 @@ public class CraftingRecipeSelector extends RecipeSelector<CraftingInventory, IC
 
         if (playerEntity != null) {
           NetworkManager.INSTANCE.send(PacketDistributor.SERVER.noArg(),
-              new CPacketSetRecipe(recipe.getId().toString()));
+              new CPacketSetCraftingRecipe(recipe.getId().toString()));
         }
       }
     });
@@ -154,7 +154,7 @@ public class CraftingRecipeSelector extends RecipeSelector<CraftingInventory, IC
       ItemStack stack = recipe.getCraftingResult(this.provider.getInventory());
       this.provider.getOutputSlot().putStack(stack.copy());
       NetworkManager.INSTANCE
-          .send(PacketDistributor.SERVER.noArg(), new CPacketSetRecipe(recipe.getId().toString()));
+          .send(PacketDistributor.SERVER.noArg(), new CPacketSetCraftingRecipe(recipe.getId().toString()));
     }
   }
 

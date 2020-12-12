@@ -23,6 +23,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import java.util.ArrayList;
 import java.util.Objects;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -42,13 +43,13 @@ import top.theillusivec4.polymorph.common.network.client.CPacketFetchRecipes;
 public abstract class RecipeSelector<I extends IInventory, R extends IRecipe<I>>
     implements IRecipeSelector<I, R> {
 
-  private static final ResourceLocation TOGGLE = new ResourceLocation(Polymorph.MODID,
+  public static final ResourceLocation TOGGLE = new ResourceLocation(Polymorph.MODID,
       "textures/gui/toggle.png");
   private static final int SELECTOR_X_OFFSET = -4;
   private static final int SELECTOR_Y_OFFSET = -26;
 
   protected final RecipeSelectorGui<I, R> recipeSelectorGui;
-  protected final ImageButton toggleButton;
+  protected final Widget toggleButton;
   protected final IPolyProvider<I, R> provider;
   protected final ContainerScreen<?> parent;
 
@@ -76,7 +77,8 @@ public abstract class RecipeSelector<I extends IInventory, R extends IRecipe<I>>
     int x = this.parent.getGuiLeft() + provider.getXPos();
     int y = this.parent.getGuiTop() + provider.getYPos();
     this.recipeSelectorGui.setPosition(x + SELECTOR_X_OFFSET, y + SELECTOR_Y_OFFSET);
-    this.toggleButton.setPosition(x, y);
+    this.toggleButton.x = x;
+    this.toggleButton.y = y;
   }
 
   public void tick() {

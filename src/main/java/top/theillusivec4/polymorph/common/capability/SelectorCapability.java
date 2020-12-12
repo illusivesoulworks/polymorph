@@ -1,8 +1,11 @@
 package top.theillusivec4.polymorph.common.capability;
 
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.Nonnull;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.AbstractCookingRecipe;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.tileentity.TileEntity;
@@ -40,19 +43,34 @@ public class SelectorCapability {
     }
 
     @Override
-    public List<AbstractCookingRecipe> getRecipes() {
+    public List<IRecipe<?>> getRecipes() {
       return null;
     }
 
     @Override
-    public void setRecipes(List<AbstractCookingRecipe> recipes) {
+    public void setRecipes(List<? extends IRecipe<?>> recipes) {
 
     }
 
     @Nonnull
     @Override
-    public AbstractCookingRecipe getSelectedRecipe() {
-      return null;
+    public Optional<IRecipe<?>> getSelectedRecipe() {
+      return Optional.empty();
+    }
+
+    @Override
+    public void setSelectedRecipe(IRecipe<?> recipe) {
+
+    }
+
+    @Override
+    public Optional<IRecipe<?>> getLastRecipe() {
+      return Optional.empty();
+    }
+
+    @Override
+    public void setLastRecipe(IRecipe<?> recipe) {
+
     }
 
     @Override

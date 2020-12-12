@@ -29,6 +29,7 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.common.network.client.CPacketFetchRecipes;
+import top.theillusivec4.polymorph.common.network.client.CPacketSetCraftingRecipe;
 import top.theillusivec4.polymorph.common.network.client.CPacketSetRecipe;
 import top.theillusivec4.polymorph.common.network.client.CPacketTransferRecipe;
 import top.theillusivec4.polymorph.common.network.server.SPacketSendRecipes;
@@ -49,6 +50,9 @@ public class NetworkManager {
 
     register(CPacketSetRecipe.class, CPacketSetRecipe::encode, CPacketSetRecipe::decode,
         CPacketSetRecipe::handle);
+    register(CPacketSetCraftingRecipe.class, CPacketSetCraftingRecipe::encode,
+        CPacketSetCraftingRecipe::decode,
+        CPacketSetCraftingRecipe::handle);
     register(CPacketTransferRecipe.class, CPacketTransferRecipe::encode,
         CPacketTransferRecipe::decode, CPacketTransferRecipe::handle);
     register(CPacketFetchRecipes.class, CPacketFetchRecipes::encode, CPacketFetchRecipes::decode,

@@ -19,14 +19,20 @@
 
 package top.theillusivec4.polymorph.common;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.DistExecutor;
-import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.api.PolymorphCapability;
+import top.theillusivec4.polymorph.api.type.IPersistentSelector;
 import top.theillusivec4.polymorph.client.selector.CraftingRecipeSelector;
 
 public class MixinHooks {
@@ -35,13 +41,18 @@ public class MixinHooks {
     DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> CraftingRecipeSelector::update);
   }
 
-  public static IRecipe<?> getSelectedRecipe(IInventory inventoryIn) {
-    if (inventoryIn instanceof AbstractFurnaceTileEntity) {
-      AbstractFurnaceTileEntity te = (AbstractFurnaceTileEntity) inventoryIn;
-      te.getCapability(PolymorphCapability.PERSISTENT_SELECTOR).ifPresent(selector -> {
-        AbstractCookingRecipe recipe = selector.getSelectedRecipe();
-      });
+  @SuppressWarnings("unchecked")
+  public static <C extends IInventory, T extends IRecipe<C>> Optional<T> getSelectedRecipe(
+      IRecipeType<T> recipeType, C inventory, World world) {
+
+    if (inventory instanceof TileEntity) {
+      TileEntity te = (TileEntity) inventory;
+      LazyOptional<IPersistentSelector> cap =
+          te.getCapability(PolymorphCapability.PERSISTENT_SELECTOR);
+      List<T> recipe = new ArrayList<>();
+      cap.ifPresent(selector -> selector.getSelectedRecipe().ifPresent(res -> recipe.add((T) res)));
+      return recipe.isEmpty() ? Optional.empty() : Optional.of(recipe.get(0));
     }
-    return null;
+    return Optional.empty();
   }
 }
