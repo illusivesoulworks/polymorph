@@ -13,6 +13,8 @@ public interface IRecipeSelector<I extends IInventory, R extends IRecipe<I>> {
 
   void selectRecipe(R recipe);
 
+  void highlightRecipe(String recipe);
+
   void setRecipes(List<R> recipes, World world, boolean refresh);
 
   void setRecipes(Set<String> recipes, World world, boolean refresh);

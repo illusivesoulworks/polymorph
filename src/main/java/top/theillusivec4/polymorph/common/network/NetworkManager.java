@@ -32,6 +32,7 @@ import top.theillusivec4.polymorph.common.network.client.CPacketFetchRecipes;
 import top.theillusivec4.polymorph.common.network.client.CPacketSetCraftingRecipe;
 import top.theillusivec4.polymorph.common.network.client.CPacketSetRecipe;
 import top.theillusivec4.polymorph.common.network.client.CPacketTransferRecipe;
+import top.theillusivec4.polymorph.common.network.server.SPacketHighlightRecipe;
 import top.theillusivec4.polymorph.common.network.server.SPacketSendRecipes;
 import top.theillusivec4.polymorph.common.network.server.SPacketSyncOutput;
 
@@ -48,6 +49,7 @@ public class NetworkManager {
         .networkProtocolVersion(() -> PTC_VERSION).clientAcceptedVersions(PTC_VERSION::equals)
         .serverAcceptedVersions(PTC_VERSION::equals).simpleChannel();
 
+    // Client-to-Server
     register(CPacketSetRecipe.class, CPacketSetRecipe::encode, CPacketSetRecipe::decode,
         CPacketSetRecipe::handle);
     register(CPacketSetCraftingRecipe.class, CPacketSetCraftingRecipe::encode,
@@ -58,6 +60,9 @@ public class NetworkManager {
     register(CPacketFetchRecipes.class, CPacketFetchRecipes::encode, CPacketFetchRecipes::decode,
         CPacketFetchRecipes::handle);
 
+    // Server-to-Client
+    register(SPacketHighlightRecipe.class, SPacketHighlightRecipe::encode,
+        SPacketHighlightRecipe::decode, SPacketHighlightRecipe::handle);
     register(SPacketSyncOutput.class, SPacketSyncOutput::encode, SPacketSyncOutput::decode,
         SPacketSyncOutput::handle);
     register(SPacketSendRecipes.class, SPacketSendRecipes::encode, SPacketSendRecipes::decode,

@@ -159,6 +159,11 @@ public class CraftingRecipeSelector extends RecipeSelector<CraftingInventory, IC
   }
 
   @Override
+  public void highlightRecipe(String recipe) {
+    // NO-OP
+  }
+
+  @Override
   public void setRecipes(Set<String> recipeIds, World world, boolean refresh) {
     List<ICraftingRecipe> recipes = new ArrayList<>();
     recipeIds.forEach(id -> world.getRecipeManager().getRecipe(new ResourceLocation(id)).ifPresent(recipe -> {

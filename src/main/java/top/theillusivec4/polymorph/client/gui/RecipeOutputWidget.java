@@ -63,7 +63,7 @@ public class RecipeOutputWidget<T extends IInventory, R extends IRecipe<T>> exte
         this.y + 25 > p_renderButton_2_ && this.y <= p_renderButton_2_) {
       j += 25;
     }
-    blit(matrixStack, this.x, this.y, 600, this.highlighted ? 32 : 16, j, this.width, this.height,
+    blit(matrixStack, this.x, this.y, 600, this.highlighted ? 41 : 16, j, this.width, this.height,
         256, 256);
     int k = 4;
     float zLevel = minecraft.getItemRenderer().zLevel;

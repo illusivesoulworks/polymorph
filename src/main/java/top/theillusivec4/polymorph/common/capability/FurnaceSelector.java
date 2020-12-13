@@ -4,12 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nonnull;
+import net.minecraft.inventory.container.AbstractFurnaceContainer;
 import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.api.type.IPersistentSelector;
+import top.theillusivec4.polymorph.common.network.NetworkManager;
+import top.theillusivec4.polymorph.common.network.server.SPacketHighlightRecipe;
+import top.theillusivec4.polymorph.mixin.AbstractFurnaceContainerMixin;
 
 public class FurnaceSelector implements IPersistentSelector {
 
@@ -53,6 +60,18 @@ public class FurnaceSelector implements IPersistentSelector {
   @Override
   public void setSelectedRecipe(IRecipe<?> recipe) {
     this.selectedRecipe = (AbstractCookingRecipe) recipe;
+    World world = this.parent.getWorld();
+
+    if (world instanceof ServerWorld) {
+      ((ServerWorld) world).getPlayers().forEach(player -> {
+        if (player.openContainer instanceof AbstractFurnaceContainer &&
+            ((AbstractFurnaceContainerMixin) player.openContainer).getFurnaceInventory() ==
+                this.parent) {
+          NetworkManager.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
+              new SPacketHighlightRecipe(recipe.getId().toString()));
+        }
+      });
+    }
   }
 
   @Override

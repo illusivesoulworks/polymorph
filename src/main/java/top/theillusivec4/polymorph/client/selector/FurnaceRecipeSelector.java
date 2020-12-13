@@ -12,7 +12,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.api.type.IFurnaceProvider;
 import top.theillusivec4.polymorph.common.network.NetworkManager;
-import top.theillusivec4.polymorph.common.network.client.CPacketSetCraftingRecipe;
 import top.theillusivec4.polymorph.common.network.client.CPacketSetRecipe;
 
 public class FurnaceRecipeSelector extends RecipeSelector<IInventory, AbstractCookingRecipe> {
@@ -39,6 +38,11 @@ public class FurnaceRecipeSelector extends RecipeSelector<IInventory, AbstractCo
   public void selectRecipe(AbstractCookingRecipe recipe) {
     NetworkManager.INSTANCE.send(PacketDistributor.SERVER.noArg(),
         new CPacketSetRecipe(recipe.getId().toString()));
+  }
+
+  @Override
+  public void highlightRecipe(String recipe) {
+    this.recipeSelectorGui.highlightButton(recipe);
   }
 
   @Override

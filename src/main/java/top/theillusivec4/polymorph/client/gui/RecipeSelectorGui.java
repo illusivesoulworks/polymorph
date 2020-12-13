@@ -22,7 +22,9 @@ package top.theillusivec4.polymorph.client.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
@@ -70,6 +72,13 @@ public class RecipeSelectorGui<I extends IInventory, R extends IRecipe<I>> exten
     this.x = x;
     this.y = y;
     this.updateButtonPositions();
+  }
+
+  public void highlightButton(String recipe) {
+    this.buttons.forEach(button -> {
+      String id = button.recipe.getId().toString();
+      button.highlighted = id.equals(recipe);
+    });
   }
 
   private void updateButtonPositions() {

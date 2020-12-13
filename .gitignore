@@ -22,3 +22,4 @@ build
 # other
 eclipse
 run
+src/test/
