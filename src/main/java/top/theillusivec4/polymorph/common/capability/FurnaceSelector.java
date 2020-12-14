@@ -1,18 +1,26 @@
 package top.theillusivec4.polymorph.common.capability;
 
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.AbstractFurnaceContainer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
+import net.minecraft.tileentity.BlastFurnaceTileEntity;
+import net.minecraft.tileentity.SmokerTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.PacketDistributor;
+import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.api.type.IPersistentSelector;
 import top.theillusivec4.polymorph.common.network.NetworkManager;
 import top.theillusivec4.polymorph.common.network.server.SPacketHighlightRecipe;
@@ -22,44 +30,70 @@ public class FurnaceSelector implements IPersistentSelector {
 
   private final AbstractFurnaceTileEntity parent;
 
-  private ResourceLocation recipeKey;
   private AbstractCookingRecipe selectedRecipe;
-  private AbstractCookingRecipe lastRecipe;
-  private List<AbstractCookingRecipe> lastRecipesList;
+  private ItemStack lastFailedInput = ItemStack.EMPTY;
+  private String savedRecipe = "";
 
   public FurnaceSelector(AbstractFurnaceTileEntity tileEntity) {
     this.parent = tileEntity;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
-  public ResourceLocation getRecipeKey() {
-    return null;
+  public Optional<IRecipe<?>> fetchRecipe(World world) {
+    ItemStack input = parent.getStackInSlot(0);
+
+    if (input == lastFailedInput) {
+      return Optional.empty();
+    }
+
+    if (!savedRecipe.isEmpty()) {
+      Optional<IRecipe<?>> saved =
+          (Optional<IRecipe<?>>) world.getRecipeManager()
+              .getRecipe(new ResourceLocation(savedRecipe));
+
+      if (!saved.isPresent() || !((IRecipe<IInventory>) saved.get()).matches(parent, world)) {
+        savedRecipe = "";
+      } else {
+        this.setSelectedRecipe(saved.get());
+        return saved;
+      }
+    }
+    Optional<IRecipe<?>> maybeRecipe = world.getRecipeManager().getRecipes().stream()
+        .filter((val) -> val.getType() == this.getRecipeType()).flatMap((val) -> Util
+            .streamOptional(this.getRecipeType().matches((IRecipe<IInventory>) val, world, parent)))
+        .min(Comparator.comparing((recipe) -> recipe.getRecipeOutput().getTranslationKey()))
+        .map((val) -> {
+          this.setSelectedRecipe(val);
+          return val;
+        });
+
+    if (!maybeRecipe.isPresent()) {
+      lastFailedInput = input;
+    }
+    return maybeRecipe;
   }
 
   @Override
-  public List<IRecipe<?>> getRecipes() {
-    return null;
-  }
-
-  @Override
-  public void fetchRecipes() {
-
-  }
-
-  @Override
-  public void setRecipes(List<? extends IRecipe<?>> recipes) {
-
+  public IRecipeType<? extends IRecipe<?>> getRecipeType() {
+    if (this.parent instanceof SmokerTileEntity) {
+      return IRecipeType.SMOKING;
+    } else if (this.parent instanceof BlastFurnaceTileEntity) {
+      return IRecipeType.BLASTING;
+    } else {
+      return IRecipeType.SMELTING;
+    }
   }
 
   @Nonnull
   @Override
   public Optional<IRecipe<?>> getSelectedRecipe() {
-
-    if (selectedRecipe != null && this.parent.getWorld() != null &&
-        !selectedRecipe.matches(this.parent, this.parent.getWorld())) {
-      this.selectedRecipe = null;
-    }
     return Optional.ofNullable(selectedRecipe);
+  }
+
+  @Override
+  public void setSavedRecipe(String recipe) {
+    this.savedRecipe = recipe;
   }
 
   @Override
@@ -77,27 +111,6 @@ public class FurnaceSelector implements IPersistentSelector {
         }
       });
     }
-  }
-
-  @Override
-  public Optional<IRecipe<?>> getLastRecipe() {
-    return Optional.ofNullable(lastRecipe);
-  }
-
-  @Override
-  public void setLastRecipe(IRecipe<?> recipe) {
-    this.lastRecipe = (AbstractCookingRecipe) recipe;
-  }
-
-  @Override
-  public List<? extends IRecipe<?>> getLastRecipes() {
-    return this.lastRecipesList;
-  }
-
-  @SuppressWarnings("unchecked")
-  @Override
-  public void setLastRecipes(List<? extends IRecipe<?>> recipes) {
-    this.lastRecipesList = (List<AbstractCookingRecipe>) recipes;
   }
 
   @Override

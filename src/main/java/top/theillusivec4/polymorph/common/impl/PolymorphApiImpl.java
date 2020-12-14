@@ -15,6 +15,7 @@ import net.minecraft.inventory.container.BlastFurnaceContainer;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.FurnaceContainer;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.inventory.container.SmokerContainer;
 import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
@@ -103,12 +104,12 @@ public class PolymorphApiImpl implements PolymorphApi {
 
     private IRecipeType<? extends AbstractCookingRecipe> getRecipeType() {
 
-      if (this.container instanceof FurnaceContainer) {
-        return IRecipeType.SMELTING;
+      if (this.container instanceof SmokerContainer) {
+        return IRecipeType.SMOKING;
       } else if (this.container instanceof BlastFurnaceContainer) {
         return IRecipeType.BLASTING;
       } else {
-        return IRecipeType.SMOKING;
+        return IRecipeType.SMELTING;
       }
     }
 

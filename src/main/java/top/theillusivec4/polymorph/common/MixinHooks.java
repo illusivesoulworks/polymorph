@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -51,7 +51,22 @@ public class MixinHooks {
           te.getCapability(PolymorphCapability.PERSISTENT_SELECTOR);
       List<T> recipe = new ArrayList<>();
       cap.ifPresent(selector -> {
-        selector.getSelectedRecipe().ifPresent(res -> recipe.add((T) res));
+        ItemStack input = inventory.getStackInSlot(0);
+
+        if (!input.isEmpty()) {
+          Optional<T> maybeSelected = (Optional<T>) selector.getSelectedRecipe();
+          maybeSelected.ifPresent(res -> {
+            if (res.matches(inventory, world)) {
+              recipe.add(res);
+            } else {
+              selector.fetchRecipe(world).ifPresent(res1 -> recipe.add((T) res1));
+            }
+          });
+
+          if (!maybeSelected.isPresent()) {
+            selector.fetchRecipe(world).ifPresent(res1 -> recipe.add((T) res1));
+          }
+        }
       });
       return recipe.isEmpty() ? Optional.empty() : Optional.of(recipe.get(0));
     }

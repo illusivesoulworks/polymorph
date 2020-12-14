@@ -82,7 +82,8 @@ public class CraftingRecipeSelector extends RecipeSelector<CraftingInventory, IC
       this.update = false;
 
       if (world != null) {
-        getLastPlacedRecipe().ifPresent(recipe -> {
+        Optional<IRecipe<CraftingInventory>> maybeLast = getLastPlacedRecipe();
+        maybeLast.ifPresent(recipe -> {
 
           if (recipe.matches(this.provider.getInventory(), world)) {
             List<ICraftingRecipe> recipes =
@@ -93,7 +94,7 @@ public class CraftingRecipeSelector extends RecipeSelector<CraftingInventory, IC
           }
         });
 
-        if (!getLastPlacedRecipe().isPresent()) {
+        if (!maybeLast.isPresent()) {
           this.fetchRecipes();
         }
       }
