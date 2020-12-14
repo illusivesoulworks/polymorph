@@ -20,6 +20,7 @@
 package top.theillusivec4.polymorph.api;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.inventory.CraftingInventory;
@@ -27,8 +28,10 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.crafting.AbstractCookingRecipe;
 import net.minecraft.item.crafting.ICraftingRecipe;
+import net.minecraft.tileentity.TileEntity;
 import top.theillusivec4.polymorph.api.type.ICraftingProvider;
 import top.theillusivec4.polymorph.api.type.IFurnaceProvider;
+import top.theillusivec4.polymorph.api.type.IPersistentSelector;
 import top.theillusivec4.polymorph.api.type.IPolyProvider;
 import top.theillusivec4.polymorph.api.type.IRecipeSelector;
 import top.theillusivec4.polymorph.common.impl.PolymorphApiImpl;
@@ -39,10 +42,13 @@ public interface PolymorphApi {
     return PolymorphApiImpl.INSTANCE;
   }
 
-  <T extends Container> void addProvider(Class<T> clazz,
-                                         Function<T, IPolyProvider<?, ?>> providerFunction);
+  void addProvider(Function<Container, IPolyProvider<?, ?>> providerFunction);
+
+  void addEntityProvider(Function<TileEntity, IPersistentSelector> entityFunction, Function<Container, IPolyProvider<?, ?>> providerFunction);
 
   Optional<IPolyProvider<?, ?>> getProvider(Container container);
+
+  Optional<IPersistentSelector> getSelector(TileEntity te);
 
   IRecipeSelector<CraftingInventory, ICraftingRecipe> createCraftingSelector(
       ContainerScreen<?> screen, ICraftingProvider provider);

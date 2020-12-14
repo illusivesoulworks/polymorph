@@ -14,7 +14,12 @@ public class CraftingCraftModule extends CompatibilityModule {
   @Override
   public void setup() {
     PolymorphApi.getInstance()
-        .addProvider(InventoryCraftingContainer.class, InventoryCraftingProvider::new);
+        .addProvider(container -> {
+          if (container.getClass() == InventoryCraftingContainer.class) {
+            return new InventoryCraftingProvider((InventoryCraftingContainer) container);
+          }
+          return null;
+        });
   }
 
   public static class InventoryCraftingProvider implements ICraftingProvider {

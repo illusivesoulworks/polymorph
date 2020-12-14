@@ -32,7 +32,12 @@ public class RefinedStorageModule extends CompatibilityModule {
 
   @Override
   public void setup() {
-    PolymorphApi.getInstance().addProvider(GridContainer.class, GridProvider::new);
+    PolymorphApi.getInstance().addProvider(container -> {
+      if (container.getClass() == GridContainer.class) {
+        return new GridProvider((GridContainer) container);
+      }
+      return null;
+    });
   }
 
   public static class GridProvider implements ICraftingProvider {

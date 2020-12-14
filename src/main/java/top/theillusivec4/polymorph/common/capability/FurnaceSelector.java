@@ -20,6 +20,7 @@ import net.minecraft.util.Util;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.PacketDistributor;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.api.type.IPersistentSelector;
 import top.theillusivec4.polymorph.common.network.NetworkManager;
@@ -102,6 +103,14 @@ public class FurnaceSelector implements IPersistentSelector {
     World world = this.parent.getWorld();
 
     if (world instanceof ServerWorld) {
+
+      if (Polymorph.isFastFurnaceLoaded) {
+        try {
+          FieldUtils.writeField(this.parent, "curRecipe", this.selectedRecipe, true);
+        } catch (IllegalAccessException e) {
+          Polymorph.LOGGER.error("Error accessing curRecipe from FastFurnace!");
+        }
+      }
       ((ServerWorld) world).getPlayers().forEach(player -> {
         if (player.openContainer instanceof AbstractFurnaceContainer &&
             ((AbstractFurnaceContainerMixin) player.openContainer).getFurnaceInventory() ==

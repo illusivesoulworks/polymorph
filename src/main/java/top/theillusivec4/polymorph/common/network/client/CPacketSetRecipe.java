@@ -1,6 +1,7 @@
 package top.theillusivec4.polymorph.common.network.client;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -9,9 +10,13 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
+import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.PolymorphCapability;
+import top.theillusivec4.polymorph.api.type.IPersistentSelector;
+import top.theillusivec4.polymorph.api.type.IPolyProvider;
 import top.theillusivec4.polymorph.mixin.AbstractFurnaceContainerMixin;
 
 public class CPacketSetRecipe {
@@ -36,21 +41,18 @@ public class CPacketSetRecipe {
 
       if (sender != null) {
         Container container = sender.openContainer;
-
-        if (container instanceof AbstractFurnaceContainer) {
-          AbstractFurnaceContainer furnaceContainer = (AbstractFurnaceContainer) container;
-          IInventory inventory =
-              ((AbstractFurnaceContainerMixin) furnaceContainer).getFurnaceInventory();
-
-          if (inventory instanceof AbstractFurnaceTileEntity) {
-            AbstractFurnaceTileEntity te = (AbstractFurnaceTileEntity) inventory;
+        Optional<IPolyProvider<?, ?>> maybeProvider =
+            PolymorphApi.getInstance().getProvider(container);
+        maybeProvider.ifPresent(provider -> {
+          if (provider.getInventory() instanceof TileEntity) {
+            TileEntity te = (TileEntity) provider.getInventory();
             te.getCapability(PolymorphCapability.PERSISTENT_SELECTOR).ifPresent(selector -> {
               Optional<? extends IRecipe<?>> recipe = sender.getServerWorld().getRecipeManager()
                   .getRecipe(new ResourceLocation(msg.recipe));
               recipe.ifPresent(selector::setSelectedRecipe);
             });
           }
-        }
+        });
       }
     });
     ctx.get().setPacketHandled(true);

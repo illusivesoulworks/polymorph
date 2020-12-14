@@ -34,11 +34,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.client.ClientEventHandler;
 import top.theillusivec4.polymorph.common.CommonEventHandler;
 import top.theillusivec4.polymorph.common.capability.SelectorCapability;
 import top.theillusivec4.polymorph.common.integrations.CompatibilityModule;
 import top.theillusivec4.polymorph.common.integrations.craftingcraft.CraftingCraftModule;
+import top.theillusivec4.polymorph.common.integrations.ironfurnaces.IronFurnacesModule;
 import top.theillusivec4.polymorph.common.integrations.jei.JeiModule;
 import top.theillusivec4.polymorph.common.integrations.prettypipes.PrettyPipesModule;
 import top.theillusivec4.polymorph.common.integrations.refinedstorage.RefinedStorageModule;
@@ -59,7 +61,10 @@ public class Polymorph {
     INTEGRATIONS.put("craftingcraft", CraftingCraftModule::new);
     INTEGRATIONS.put("refinedstorage", RefinedStorageModule::new);
     INTEGRATIONS.put("prettypipes", PrettyPipesModule::new);
+    INTEGRATIONS.put("ironfurnaces", IronFurnacesModule::new);
   }
+
+  public static boolean isFastFurnaceLoaded = false;
 
   public Polymorph() {
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -67,6 +72,7 @@ public class Polymorph {
     eventBus.addListener(this::clientSetup);
     MinecraftForge.EVENT_BUS.addListener(this::registerCommand);
     ModList modList = ModList.get();
+    isFastFurnaceLoaded = modList.isLoaded("fastfurnace");
     INTEGRATIONS.forEach((modid, supplier) -> {
 
       if (modList.isLoaded(modid)) {

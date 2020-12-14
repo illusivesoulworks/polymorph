@@ -89,6 +89,7 @@ dependencies {
     compile fg.deobf("curse.maven:refinedstorage-243076:${file_refinedstorage}")
     compile fg.deobf("curse.maven:refinedstorageaddons-272302:${file_refinedaddons}")
     compile fg.deobf("curse.maven:prettypipes-376737:${file_prettypipes}")
+    compile fg.deobf("curse.maven:ironfurnaces-237664:${file_ironfurnaces}")
 
 //    todo: update these to the new CurseMaven format
 //    runtimeOnly fg.deobf("curse.maven:toms-storage:${file_tom}")
@@ -97,7 +98,8 @@ dependencies {
 //    runtimeOnly fg.deobf("curse.maven:simple-storage-network:${file_ssn}")
 //    runtimeOnly fg.deobf("curse.maven:oh-the-biomes-youll-go:${file_byg}")
 //    runtimeOnly fg.deobf("curse.maven:fastworkbench:${file_fastworkbench}")
-//    runtimeOnly fg.deobf("curse.maven:placebo:${file_placebo}")
+//    runtimeOnly fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
+//    runtimeOnly fg.deobf("curse.maven:placebo-283644:${file_placebo}")
 }
 
 sourceSets {
