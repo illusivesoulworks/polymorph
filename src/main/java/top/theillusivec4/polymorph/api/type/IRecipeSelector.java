@@ -15,9 +15,9 @@ public interface IRecipeSelector<I extends IInventory, R extends IRecipe<I>> {
 
   void highlightRecipe(String recipe);
 
-  void setRecipes(List<R> recipes, World world, boolean refresh);
+  void setRecipes(List<R> recipes, World world, boolean refresh, String selected);
 
-  void setRecipes(Set<String> recipes, World world, boolean refresh);
+  void setRecipes(Set<String> recipes, World world, boolean refresh, String selected);
 
   void tick();
 

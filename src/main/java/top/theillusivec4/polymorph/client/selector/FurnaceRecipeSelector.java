@@ -1,6 +1,7 @@
 package top.theillusivec4.polymorph.client.selector;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -46,13 +47,17 @@ public class FurnaceRecipeSelector extends RecipeSelector<IInventory, AbstractCo
   }
 
   @Override
-  public void setRecipes(List<AbstractCookingRecipe> recipes, World world, boolean refresh) {
+  public void setRecipes(List<AbstractCookingRecipe> recipes, World world, boolean refresh, String selected) {
     this.recipeSelectorGui.setRecipes(recipes);
     this.toggleButton.visible = recipes.size() > 1;
+
+    if (!recipes.isEmpty()) {
+      this.highlightRecipe(selected.isEmpty() ? recipes.get(0).getId().toString() : selected);
+    }
   }
 
   @Override
-  public void setRecipes(Set<String> recipeIds, World world, boolean refresh) {
+  public void setRecipes(Set<String> recipeIds, World world, boolean refresh, String selected) {
     List<AbstractCookingRecipe> recipes = new ArrayList<>();
     recipeIds.forEach(
         id -> world.getRecipeManager().getRecipe(new ResourceLocation(id)).ifPresent(recipe -> {
@@ -60,6 +65,7 @@ public class FurnaceRecipeSelector extends RecipeSelector<IInventory, AbstractCo
             recipes.add((AbstractCookingRecipe) recipe);
           }
         }));
-    this.setRecipes(recipes, world, false);
+    recipes.sort(Comparator.comparing((recipe) -> recipe.getRecipeOutput().getTranslationKey()));
+    this.setRecipes(recipes, world, false, selected);
   }
 }

@@ -90,7 +90,7 @@ public abstract class RecipeSelector<I extends IInventory, R extends IRecipe<I>>
   }
 
   public void clearRecipes(World world) {
-    this.setRecipes(new ArrayList<>(), world, false);
+    this.setRecipes(new ArrayList<>(), world, false, "");
   }
 
   protected void fetchRecipes() {

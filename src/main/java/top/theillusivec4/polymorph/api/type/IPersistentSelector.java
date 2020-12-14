@@ -16,6 +16,8 @@ public interface IPersistentSelector {
 
   List<IRecipe<?>> getRecipes();
 
+  void fetchRecipes();
+
   void setRecipes(List<? extends IRecipe<?>> recipes);
 
   @Nonnull
@@ -26,6 +28,10 @@ public interface IPersistentSelector {
   Optional<IRecipe<?>> getLastRecipe();
 
   void setLastRecipe(IRecipe<?> recipe);
+
+  List<? extends IRecipe<?>> getLastRecipes();
+
+  void setLastRecipes(List<? extends IRecipe<?>> recipes);
 
   TileEntity getParent();
 }

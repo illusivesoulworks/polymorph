@@ -50,7 +50,9 @@ public class MixinHooks {
       LazyOptional<IPersistentSelector> cap =
           te.getCapability(PolymorphCapability.PERSISTENT_SELECTOR);
       List<T> recipe = new ArrayList<>();
-      cap.ifPresent(selector -> selector.getSelectedRecipe().ifPresent(res -> recipe.add((T) res)));
+      cap.ifPresent(selector -> {
+        selector.getSelectedRecipe().ifPresent(res -> recipe.add((T) res));
+      });
       return recipe.isEmpty() ? Optional.empty() : Optional.of(recipe.get(0));
     }
     return Optional.empty();

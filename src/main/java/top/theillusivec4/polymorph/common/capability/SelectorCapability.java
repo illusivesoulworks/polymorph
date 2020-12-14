@@ -48,6 +48,11 @@ public class SelectorCapability {
     }
 
     @Override
+    public void fetchRecipes() {
+
+    }
+
+    @Override
     public void setRecipes(List<? extends IRecipe<?>> recipes) {
 
     }
@@ -70,6 +75,16 @@ public class SelectorCapability {
 
     @Override
     public void setLastRecipe(IRecipe<?> recipe) {
+
+    }
+
+    @Override
+    public List<? extends IRecipe<?>> getLastRecipes() {
+      return null;
+    }
+
+    @Override
+    public void setLastRecipes(List<? extends IRecipe<?>> recipes) {
 
     }
 

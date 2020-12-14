@@ -21,11 +21,11 @@ import top.theillusivec4.polymorph.mixin.AbstractFurnaceContainerMixin;
 public class FurnaceSelector implements IPersistentSelector {
 
   private final AbstractFurnaceTileEntity parent;
-  private final List<AbstractCookingRecipe> recipes = new ArrayList<>();
 
   private ResourceLocation recipeKey;
   private AbstractCookingRecipe selectedRecipe;
   private AbstractCookingRecipe lastRecipe;
+  private List<AbstractCookingRecipe> lastRecipesList;
 
   public FurnaceSelector(AbstractFurnaceTileEntity tileEntity) {
     this.parent = tileEntity;
@@ -39,6 +39,11 @@ public class FurnaceSelector implements IPersistentSelector {
   @Override
   public List<IRecipe<?>> getRecipes() {
     return null;
+  }
+
+  @Override
+  public void fetchRecipes() {
+
   }
 
   @Override
@@ -82,6 +87,17 @@ public class FurnaceSelector implements IPersistentSelector {
   @Override
   public void setLastRecipe(IRecipe<?> recipe) {
     this.lastRecipe = (AbstractCookingRecipe) recipe;
+  }
+
+  @Override
+  public List<? extends IRecipe<?>> getLastRecipes() {
+    return this.lastRecipesList;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public void setLastRecipes(List<? extends IRecipe<?>> recipes) {
+    this.lastRecipesList = (List<AbstractCookingRecipe>) recipes;
   }
 
   @Override

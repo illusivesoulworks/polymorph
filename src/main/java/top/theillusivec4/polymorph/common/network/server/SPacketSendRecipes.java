@@ -1,6 +1,5 @@
 package top.theillusivec4.polymorph.common.network.server;
 
-import com.google.common.collect.Sets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,25 +13,33 @@ import top.theillusivec4.polymorph.client.selector.RecipeSelectorManager;
 public class SPacketSendRecipes {
 
   private final List<String> recipes;
+  private final String selected;
+  private final int length;
 
-  public SPacketSendRecipes(List<String> recipes) {
+  public SPacketSendRecipes(List<String> recipes, String selected) {
     this.recipes = recipes;
+    this.selected = selected;
+    this.length = recipes.size();
   }
 
   public static void encode(SPacketSendRecipes msg, PacketBuffer buf) {
+    buf.writeInt(msg.length);
 
     for (String id : msg.recipes) {
       buf.writeString(id);
     }
+    buf.writeString(msg.selected);
   }
 
   public static SPacketSendRecipes decode(PacketBuffer buf) {
     List<String> recipes = new ArrayList<>();
+    int length = buf.readInt();
 
-    while (buf.isReadable()) {
+    for (int i = 0; i < length; i++) {
       recipes.add(buf.readString(32767));
     }
-    return new SPacketSendRecipes(recipes);
+    String selected = buf.readString(32767);
+    return new SPacketSendRecipes(recipes, selected);
   }
 
   public static void handle(SPacketSendRecipes msg, Supplier<Context> ctx) {
@@ -42,7 +49,8 @@ public class SPacketSendRecipes {
       if (clientPlayerEntity != null) {
         RecipeSelectorManager.getSelector().ifPresent(
             selector -> selector
-                .setRecipes(new HashSet<>(msg.recipes), clientPlayerEntity.world, true));
+                .setRecipes(new HashSet<>(msg.recipes), clientPlayerEntity.world, true,
+                    msg.selected));
       }
     });
     ctx.get().setPacketHandled(true);

@@ -1,6 +1,7 @@
 package top.theillusivec4.polymorph.client.selector;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -86,7 +87,7 @@ public class CraftingRecipeSelector extends RecipeSelector<CraftingInventory, IC
           if (recipe.matches(this.provider.getInventory(), world)) {
             List<ICraftingRecipe> recipes =
                 getLastRecipesList().orElse(new ArrayList<>());
-            this.setRecipes(recipes, world, false);
+            this.setRecipes(recipes, world, false, "");
           } else {
             this.fetchRecipes();
           }
@@ -100,7 +101,7 @@ public class CraftingRecipeSelector extends RecipeSelector<CraftingInventory, IC
   }
 
   @Override
-  public void setRecipes(List<ICraftingRecipe> recipes, World world, boolean refresh) {
+  public void setRecipes(List<ICraftingRecipe> recipes, World world, boolean refresh, String selected) {
 
     if (refresh) {
       Set<RecipeOutput> recipeOutputs = new HashSet<>();
@@ -154,7 +155,8 @@ public class CraftingRecipeSelector extends RecipeSelector<CraftingInventory, IC
       ItemStack stack = recipe.getCraftingResult(this.provider.getInventory());
       this.provider.getOutputSlot().putStack(stack.copy());
       NetworkManager.INSTANCE
-          .send(PacketDistributor.SERVER.noArg(), new CPacketSetCraftingRecipe(recipe.getId().toString()));
+          .send(PacketDistributor.SERVER.noArg(),
+              new CPacketSetCraftingRecipe(recipe.getId().toString()));
     }
   }
 
@@ -164,14 +166,16 @@ public class CraftingRecipeSelector extends RecipeSelector<CraftingInventory, IC
   }
 
   @Override
-  public void setRecipes(Set<String> recipeIds, World world, boolean refresh) {
+  public void setRecipes(Set<String> recipeIds, World world, boolean refresh, String selected) {
     List<ICraftingRecipe> recipes = new ArrayList<>();
-    recipeIds.forEach(id -> world.getRecipeManager().getRecipe(new ResourceLocation(id)).ifPresent(recipe -> {
-      if (recipe instanceof ICraftingRecipe) {
-        recipes.add((ICraftingRecipe) recipe);
-      }
-    }));
-    this.setRecipes(recipes, world, false);
+    recipeIds.forEach(
+        id -> world.getRecipeManager().getRecipe(new ResourceLocation(id)).ifPresent(recipe -> {
+          if (recipe instanceof ICraftingRecipe) {
+            recipes.add((ICraftingRecipe) recipe);
+          }
+        }));
+    recipes.sort(Comparator.comparing((recipe) -> recipe.getRecipeOutput().getTranslationKey()));
+    this.setRecipes(recipes, world, false, selected);
   }
 
   @Override
