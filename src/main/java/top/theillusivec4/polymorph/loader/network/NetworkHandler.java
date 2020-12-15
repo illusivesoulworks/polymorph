@@ -19,104 +19,139 @@
 
 package top.theillusivec4.polymorph.loader.network;
 
-import io.netty.buffer.Unpooled;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
-import net.minecraft.entity.player.PlayerEntity;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.api.PolymorphComponent;
+import top.theillusivec4.polymorph.api.type.CraftingProvider;
+import top.theillusivec4.polymorph.api.type.PersistentSelector;
+import top.theillusivec4.polymorph.api.type.PolyProvider;
 import top.theillusivec4.polymorph.core.Polymorph;
 
 public class NetworkHandler {
 
   public static void setup() {
-    ServerSidePacketRegistry.INSTANCE
-        .register(NetworkPackets.SET_RECIPE, ((packetContext, packetByteBuf) -> {
-          String id = packetByteBuf.readString(32767);
-          packetContext.getTaskQueue().execute(() -> {
-            PlayerEntity player = packetContext.getPlayer();
+    ServerPlayNetworking.registerGlobalReceiver(NetworkPackets.SET_RECIPE,
+        (((server, player, handler, buf, responseSender) -> server.execute(() -> {
+          String id = buf.readString(32767);
+          server.execute(() -> {
+
+            if (player != null && player.getServer() != null) {
+              ScreenHandler container = player.currentScreenHandler;
+              Optional<PolyProvider<?, ?>> maybeProvider =
+                  PolymorphApi.getInstance().getProvider(container);
+              maybeProvider.ifPresent(provider -> {
+                if (provider.getInventory() instanceof BlockEntity) {
+                  BlockEntity te = (BlockEntity) provider.getInventory();
+                  PolymorphComponent.SELECTOR.maybeGet(te).ifPresent(selector -> {
+                    Optional<? extends Recipe<?>> recipe =
+                        player.getServerWorld().getRecipeManager().get(new Identifier(id));
+                    recipe.ifPresent(selector::setSelectedRecipe);
+                  });
+                }
+              });
+            }
+          });
+        }))));
+
+    ServerPlayNetworking.registerGlobalReceiver(NetworkPackets.SET_CRAFTING_RECIPE,
+        (((server, player, handler, buf, responseSender) -> server.execute(() -> {
+          String id = buf.readString(32767);
+          server.execute(() -> {
 
             if (player != null && player.getServer() != null) {
               ScreenHandler container = player.currentScreenHandler;
               AtomicReference<ItemStack> output = new AtomicReference<>(ItemStack.EMPTY);
-              PolymorphApi.getProvider(container).ifPresent(provider -> {
-                Slot slot = provider.getOutputSlot();
-                Optional<? extends Recipe<?>> result = player.getServer().getRecipeManager()
-                    .get(new Identifier(id));
-                CraftingInventory craftingInventory = provider.getCraftingInventory();
-                result.ifPresent(res -> {
+              PolymorphApi.getInstance().getProvider(container).ifPresent(provider -> {
+                if (provider instanceof CraftingProvider) {
+                  CraftingProvider craftingProvider = (CraftingProvider) provider;
+                  Slot slot = provider.getOutputSlot();
+                  Optional<? extends Recipe<?>> result = player.getServerWorld().getRecipeManager()
+                      .get(new Identifier(id));
+                  CraftingInventory craftingInventory = craftingProvider.getInventory();
+                  result.ifPresent(res -> {
 
-                  if (res instanceof CraftingRecipe && craftingInventory != null) {
-                    CraftingRecipe craftingRecipe = (CraftingRecipe) res;
+                    if (res instanceof CraftingRecipe) {
+                      CraftingRecipe craftingRecipe = (CraftingRecipe) res;
 
-                    if (craftingRecipe.matches(craftingInventory, player.world)) {
-                      output.set(craftingRecipe.craft(craftingInventory));
-                      slot.inventory.setStack(slot.id, output.get());
+                      if (craftingRecipe.matches(craftingInventory, player.world)) {
+                        output.set(craftingRecipe.craft(craftingInventory));
+                        slot.inventory.setStack(slot.id, output.get());
+                      }
                     }
-                  }
-                });
+                  });
+                  Polymorph.getLoader().getPacketVendor().syncOutput(output.get(), player);
+                }
               });
-              PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-              buf.writeItemStack(output.get());
-              ServerSidePacketRegistry.INSTANCE
-                  .sendToPlayer(player, NetworkPackets.SYNC_OUTPUT, buf);
             }
           });
-        }));
+        }))));
 
-    ServerSidePacketRegistry.INSTANCE
-        .register(NetworkPackets.TRANSFER_RECIPE, (((packetContext, packetByteBuf) -> {
-          String id = packetByteBuf.readString(32767);
-          packetContext.getTaskQueue().execute(() -> {
-            PlayerEntity player = packetContext.getPlayer();
+    ServerPlayNetworking.registerGlobalReceiver(NetworkPackets.TRANSFER_RECIPE,
+        (((server, player, handler, buf, responseSender) -> server.execute(() -> {
+          String id = buf.readString(32767);
+          server.execute(() -> {
 
             if (player != null && player.getServer() != null) {
               ScreenHandler screenHandler = player.currentScreenHandler;
-              PolymorphApi.getProvider(screenHandler).ifPresent(provider -> {
-                Optional<? extends Recipe<?>> result = player.getServer().getRecipeManager()
-                    .get(new Identifier(id));
-                result.ifPresent(res -> {
+              PolymorphApi.getInstance().getProvider(screenHandler).ifPresent(provider -> {
+                if (provider instanceof CraftingProvider) {
+                  CraftingProvider craftingProvider = (CraftingProvider) provider;
+                  Optional<? extends Recipe<?>> result = player.getServerWorld().getRecipeManager()
+                      .get(new Identifier(id));
+                  result.ifPresent(res -> {
 
-                  if (res instanceof CraftingRecipe) {
-                    CraftingRecipe craftingRecipe = (CraftingRecipe) res;
-                    provider.transfer(player, craftingRecipe);
-                  }
-                });
+                    if (res instanceof CraftingRecipe) {
+                      CraftingRecipe craftingRecipe = (CraftingRecipe) res;
+                      craftingProvider.transfer(player, craftingRecipe);
+                    }
+                  });
+                  Polymorph.getLoader().getPacketVendor().syncOutput(ItemStack.EMPTY, player);
+                }
               });
-              PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-              buf.writeItemStack(ItemStack.EMPTY);
-              ServerSidePacketRegistry.INSTANCE
-                  .sendToPlayer(player, NetworkPackets.SYNC_OUTPUT, buf);
             }
           });
-        })));
+        }))));
 
-    ServerSidePacketRegistry.INSTANCE.register(NetworkPackets.FETCH_RECIPES,
-        (((packetContext, packetByteBuf) -> packetContext.getTaskQueue().execute(() -> {
-          PlayerEntity player = packetContext.getPlayer();
+    ServerPlayNetworking.registerGlobalReceiver(NetworkPackets.FETCH_RECIPES,
+        (((server, player, handler, buf, responseSender) -> server.execute(() -> {
 
           if (player != null && player.getServer() != null) {
-            ScreenHandler screenHandler = player.currentScreenHandler;
-            List<String> recipes = PolymorphApi.getProvider(screenHandler).map(provider -> {
-              CraftingInventory craftingInventory = provider.getCraftingInventory();
-              List<CraftingRecipe> result = player.getServer().getRecipeManager()
-                  .getAllMatches(RecipeType.CRAFTING, craftingInventory, player.getEntityWorld());
-              return result.stream().map(recipe -> recipe.getId().toString())
-                  .collect(Collectors.toList());
-            }).orElse(new ArrayList<>());
-            Polymorph.getLoader().getPacketVendor().sendRecipes(recipes, player);
+            ScreenHandler container = player.currentScreenHandler;
+            AtomicReference<String> selectedRecipe = new AtomicReference<>("");
+            Optional<PolyProvider<?, ?>> maybeProvider =
+                PolymorphApi.getInstance().getProvider(container);
+            maybeProvider.ifPresent(provider -> {
+              if (provider.getInventory() instanceof BlockEntity) {
+                BlockEntity te = (BlockEntity) provider.getInventory();
+                Optional<PersistentSelector> maybeSelector =
+                    PolymorphComponent.SELECTOR.maybeGet(te);
+                selectedRecipe.set(maybeSelector.flatMap(selector -> selector.getSelectedRecipe()
+                    .map(recipe -> recipe.getId().toString())).orElse(""));
+              }
+            });
+            World world = player.getServerWorld();
+            List<String> recipes = PolymorphApi.getInstance()
+                .getProvider(container)
+                .map(provider -> provider
+                    .getRecipes(world, world.getRecipeManager()).stream()
+                    .map(recipe -> recipe.getId().toString())
+                    .collect(Collectors.toList())).orElse(new ArrayList<>());
+            Polymorph.getLoader().getPacketVendor()
+                .sendRecipes(recipes, selectedRecipe.get(), player);
           }
         }))));
   }

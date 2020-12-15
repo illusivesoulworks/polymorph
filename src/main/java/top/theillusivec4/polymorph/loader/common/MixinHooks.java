@@ -19,24 +19,54 @@
 
 package top.theillusivec4.polymorph.loader.common;
 
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.util.collection.DefaultedList;
-import top.theillusivec4.polymorph.core.client.RecipeSelectionManager;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeType;
+import net.minecraft.world.World;
+import top.theillusivec4.polymorph.api.PolymorphComponent;
+import top.theillusivec4.polymorph.api.type.PersistentSelector;
+import top.theillusivec4.polymorph.core.client.selector.CraftingRecipeSelector;
 import top.theillusivec4.polymorph.loader.util.EnvironmentExecutor;
 
 public class MixinHooks {
 
   public static void updateConflictManager() {
-    EnvironmentExecutor.runOnClient(() -> RecipeSelectionManager::updateManager);
+    EnvironmentExecutor.runOnClient(() -> CraftingRecipeSelector::update);
   }
 
-  public static void cacheIngredients(DefaultedList<Ingredient> ingredients) {
+  @SuppressWarnings("unchecked")
+  public static <C extends Inventory, T extends Recipe<C>> Optional<T> getSelectedRecipe(
+      RecipeType<T> recipeType, C inventory, World world) {
 
-    if (ingredients != null) {
+    if (inventory instanceof BlockEntity) {
+      BlockEntity te = (BlockEntity) inventory;
+      Optional<PersistentSelector> cap = PolymorphComponent.SELECTOR.maybeGet(te);
+      List<T> recipe = new ArrayList<>();
+      cap.ifPresent(selector -> {
+        ItemStack input = inventory.getStack(0);
 
-      for (Ingredient ingredient : ingredients) {
-        ingredient.getIds();
-      }
+        if (!input.isEmpty()) {
+          Optional<T> maybeSelected = (Optional<T>) selector.getSelectedRecipe();
+          maybeSelected.ifPresent(res -> {
+            if (res.matches(inventory, world)) {
+              recipe.add(res);
+            } else {
+              selector.fetchRecipe(world).ifPresent(res1 -> recipe.add((T) res1));
+            }
+          });
+
+          if (!maybeSelected.isPresent()) {
+            selector.fetchRecipe(world).ifPresent(res1 -> recipe.add((T) res1));
+          }
+        }
+      });
+      return recipe.isEmpty() ? Optional.empty() : Optional.of(recipe.get(0));
     }
+    return Optional.empty();
   }
 }

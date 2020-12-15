@@ -81,12 +81,15 @@ public class PolymorphCommands {
             // Algorithm based on the one from NoMoreRecipeConflict by stimmedCow & GotoLink
             // License is Public Domain
             if (!processed.contains(otherId) && !ItemStack
-                .areEqual(otherRecipe.getOutput(), recipe.getOutput()) && recipe.getType() == RecipeType.CRAFTING && recipe.getType() == otherRecipe
-                .getType() && !recipe.isIgnoredInRecipeBook() && recipe.isIgnoredInRecipeBook() == otherRecipe.isIgnoredInRecipeBook()
+                .areEqual(otherRecipe.getOutput(), recipe.getOutput()) &&
+                recipe.getType() == RecipeType.CRAFTING && recipe.getType() == otherRecipe
+                .getType() && !recipe.isIgnoredInRecipeBook() &&
+                recipe.isIgnoredInRecipeBook() == otherRecipe.isIgnoredInRecipeBook()
                 && areSameShape(recipe, otherRecipe)) {
               recipeItemHelper.clear();
               recipe.getPreviewInputs().forEach(ingredient -> {
-                ItemStack[] stacks = Polymorph.getLoader().getAccessor().getMatchingStacks(ingredient);
+                ItemStack[] stacks =
+                    Polymorph.getLoader().getAccessor().getMatchingStacks(ingredient);
 
                 for (ItemStack matchingStack : stacks) {
                   recipeItemHelper.addItem(matchingStack);
@@ -97,7 +100,8 @@ public class PolymorphCommands {
               if (recipeItemHelper.findRecipe(recipe, second)) {
                 recipeItemHelper.clear();
                 otherRecipe.getPreviewInputs().forEach(ingredient -> {
-                  ItemStack[] stacks = Polymorph.getLoader().getAccessor().getMatchingStacks(ingredient);
+                  ItemStack[] stacks =
+                      Polymorph.getLoader().getAccessor().getMatchingStacks(ingredient);
 
                   for (ItemStack matchingStack : stacks) {
                     recipeItemHelper.addItem(matchingStack);

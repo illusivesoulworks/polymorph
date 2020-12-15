@@ -24,24 +24,27 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import top.theillusivec4.polymorph.core.Polymorph;
 
-public class RecipeSelectWidget extends AbstractButtonWidget {
+public class RecipeOutputWidget<T extends Inventory, R extends Recipe<T>>
+    extends AbstractButtonWidget {
 
   private static final Identifier TOGGLE = new Identifier(Polymorph.MODID,
       "textures/gui/toggle.png");
-  public Recipe<CraftingInventory> recipe;
-  public CraftingInventory craftingMatrix;
+  public R recipe;
+  public T inventory;
+  public boolean highlighted = false;
 
-  public RecipeSelectWidget(CraftingInventory craftingMatrix, Recipe<CraftingInventory> recipe) {
+  public RecipeOutputWidget(T inventory, R recipe) {
     super(0, 0, 25, 25, LiteralText.EMPTY);
     this.recipe = recipe;
-    this.craftingMatrix = craftingMatrix;
+    this.inventory = inventory;
   }
 
   public void setPosition(int x, int y) {
@@ -51,26 +54,32 @@ public class RecipeSelectWidget extends AbstractButtonWidget {
 
   @Override
   public void renderButton(MatrixStack matrixStack, int p_renderButton_1_, int p_renderButton_2_,
-      float p_renderButton_3_) {
+                           float p_renderButton_3_) {
     MinecraftClient minecraft = MinecraftClient.getInstance();
     minecraft.getTextureManager().bindTexture(TOGGLE);
     int i = 16;
     int j = 0;
 
-    if (this.x + 25 > p_renderButton_1_ && this.x <= p_renderButton_1_) {
-
-      if (this.y + 25 > p_renderButton_2_ && this.y <= p_renderButton_2_) {
-        j += 25;
-      }
+    if (this.x + 25 > p_renderButton_1_ && this.x <= p_renderButton_1_ &&
+        this.y + 25 > p_renderButton_2_ && this.y <= p_renderButton_2_) {
+      j += 25;
     }
     this.drawTexture(matrixStack, this.x, this.y, i, j, this.width, this.height);
     int k = 4;
+    float zLevel = minecraft.getItemRenderer().zOffset;
+    minecraft.getItemRenderer().zOffset = 600.0F;
     minecraft.getItemRenderer()
-        .renderGuiItemIcon(this.recipe.craft(this.craftingMatrix), this.x + k, this.y + k);
+        .renderGuiItemIcon(this.recipe.craft(this.inventory), this.x + k,
+            this.y + k);
+    minecraft.getItemRenderer().zOffset = zLevel;
+  }
+
+  public ItemStack getOutput() {
+    return this.recipe.craft(this.inventory);
   }
 
   public List<Text> getTooltipText(Screen screen) {
-    return screen.getTooltipFromItem(this.recipe.craft(this.craftingMatrix));
+    return screen.getTooltipFromItem(this.getOutput());
   }
 
   @Override

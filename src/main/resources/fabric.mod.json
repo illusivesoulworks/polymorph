@@ -19,6 +19,14 @@
     ],
     "main": [
       "top.theillusivec4.polymorph.loader.common.PolymorphMod"
+    ],
+    "cardinal-components-block": [
+      "top.theillusivec4.polymorph.loader.common.PolymorphMod"
+    ]
+  },
+  "custom": {
+    "cardinal-components": [
+      "polymorph:selector"
     ]
   },
   "mixins": [

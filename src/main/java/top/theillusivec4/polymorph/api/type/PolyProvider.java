@@ -17,17 +17,38 @@
  * License along with Polymorph.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.loader.impl;
+package top.theillusivec4.polymorph.api.type;
 
+import java.util.List;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeManager;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
-import top.theillusivec4.polymorph.core.base.client.ClientAccessor;
-import top.theillusivec4.polymorph.loader.mixin.HandledScreenAccessor;
+import net.minecraft.world.World;
 
-public class ClientAccessorImpl implements ClientAccessor {
+public interface PolyProvider<I extends Inventory, R extends Recipe<I>> {
 
-  @Override
-  public Slot getFocusedSlot(HandledScreen<?> screen) {
-    return ((HandledScreenAccessor) screen).getFocusedSlot();
+  default boolean isActive() {
+    return true;
+  }
+
+  ScreenHandler getScreenHandler();
+
+  I getInventory();
+
+  Slot getOutputSlot();
+
+  List<? extends R> getRecipes(World world, RecipeManager recipeManager);
+
+  RecipeSelector<I, R> createSelector(HandledScreen<?> screen);
+
+  default int getXPos() {
+    return getOutputSlot().x;
+  }
+
+  default int getYPos() {
+    return getOutputSlot().y - 22;
   }
 }

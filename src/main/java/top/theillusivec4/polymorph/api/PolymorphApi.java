@@ -19,39 +19,33 @@
 
 package top.theillusivec4.polymorph.api;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-import net.minecraft.screen.CraftingScreenHandler;
-import net.minecraft.screen.PlayerScreenHandler;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.recipe.AbstractCookingRecipe;
+import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.screen.ScreenHandler;
+import top.theillusivec4.polymorph.api.type.CraftingProvider;
+import top.theillusivec4.polymorph.api.type.FurnaceProvider;
+import top.theillusivec4.polymorph.api.type.PolyProvider;
+import top.theillusivec4.polymorph.api.type.RecipeSelector;
+import top.theillusivec4.polymorph.loader.impl.PolymorphApiImpl;
 
-public class PolymorphApi {
+public interface PolymorphApi {
 
-  private static final Map<Class<? extends ScreenHandler>, Function<? extends ScreenHandler, PolyProvider>> providerFunctions = new HashMap<>();
-
-  public static <T extends ScreenHandler> void addProvider(Class<T> clazz,
-      Function<T, PolyProvider> providerFunction) {
-    providerFunctions.put(clazz, providerFunction);
+  static PolymorphApi getInstance() {
+    return PolymorphApiImpl.INSTANCE;
   }
 
-  @SuppressWarnings("unchecked")
-  public static <T extends ScreenHandler> Optional<PolyProvider> getProvider(T screenHandler) {
-    Function<T, PolyProvider> providerFunction = (Function<T, PolyProvider>) providerFunctions
-        .get(screenHandler.getClass());
+  void addProvider(Function<ScreenHandler, PolyProvider<?, ?>> providerFunction);
 
-    if (providerFunction == null) {
+  Optional<PolyProvider<?, ?>> getProvider(ScreenHandler screenHandler);
 
-      if (screenHandler instanceof CraftingScreenHandler) {
-        providerFunction = (Function<T, PolyProvider>) providerFunctions
-            .get(CraftingScreenHandler.class);
-      } else if (screenHandler instanceof PlayerScreenHandler) {
-        providerFunction = (Function<T, PolyProvider>) providerFunctions
-            .get(PlayerScreenHandler.class);
-      }
-    }
-    return providerFunction != null ? Optional.of(providerFunction.apply(screenHandler))
-        : Optional.empty();
-  }
+  RecipeSelector<CraftingInventory, CraftingRecipe> createCraftingSelector(
+      HandledScreen<?> screen, CraftingProvider provider);
+
+  RecipeSelector<Inventory, AbstractCookingRecipe> createFurnaceSelector(
+      HandledScreen<?> screen, FurnaceProvider provider);
 }

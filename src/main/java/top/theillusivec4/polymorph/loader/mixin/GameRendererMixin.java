@@ -41,7 +41,7 @@ public class GameRendererMixin {
         / (double) this.client.getWindow().getWidth());
     int j = (int) (this.client.mouse.getY() * (double) this.client.getWindow().getScaledHeight()
         / (double) this.client.getWindow().getHeight());
-    ClientMixinHooks.renderConflictManager(this.client.currentScreen, new MatrixStack(), i, j,
+    ClientMixinHooks.renderSelector(this.client.currentScreen, new MatrixStack(), i, j,
         this.client.getLastFrameDuration());
   }
 }

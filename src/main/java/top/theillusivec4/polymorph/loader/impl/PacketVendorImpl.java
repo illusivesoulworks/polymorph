@@ -19,12 +19,13 @@
 
 package top.theillusivec4.polymorph.loader.impl;
 
-import io.netty.buffer.Unpooled;
 import java.util.List;
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
-import net.minecraft.entity.player.PlayerEntity;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import top.theillusivec4.polymorph.core.base.common.PacketVendor;
 import top.theillusivec4.polymorph.loader.network.NetworkPackets;
 
@@ -32,31 +33,53 @@ public class PacketVendorImpl implements PacketVendor {
 
   @Override
   public void sendSetRecipe(String recipeId) {
-    PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+    PacketByteBuf buf = PacketByteBufs.create();
     buf.writeString(recipeId);
-    ClientSidePacketRegistry.INSTANCE.sendToServer(NetworkPackets.SET_RECIPE, buf);
+    ClientPlayNetworking.send(NetworkPackets.SET_RECIPE, buf);
+  }
+
+  @Override
+  public void sendSetCraftingRecipe(String recipeId) {
+    PacketByteBuf buf = PacketByteBufs.create();
+    buf.writeString(recipeId);
+    ClientPlayNetworking.send(NetworkPackets.SET_RECIPE, buf);
   }
 
   @Override
   public void sendTransferRecipe(String recipeId) {
-    PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+    PacketByteBuf buf = PacketByteBufs.create();
     buf.writeString(recipeId);
-    ClientSidePacketRegistry.INSTANCE.sendToServer(NetworkPackets.TRANSFER_RECIPE, buf);
+    ClientPlayNetworking.send(NetworkPackets.TRANSFER_RECIPE, buf);
   }
 
   @Override
-  public void sendRecipes(List<String> recipes, PlayerEntity player) {
-    PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+  public void sendRecipes(List<String> recipes, String selectedRecipe, ServerPlayerEntity player) {
+    PacketByteBuf buf = PacketByteBufs.create();
+    buf.writeInt(recipes.size());
 
-    for (String recipe : recipes) {
-      buf.writeString(recipe);
+    for (String id : recipes) {
+      buf.writeString(id);
     }
-    ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, NetworkPackets.SEND_RECIPES, buf);
+    buf.writeString(selectedRecipe);
+    ServerPlayNetworking.send(player, NetworkPackets.SEND_RECIPES, buf);
+  }
+
+  @Override
+  public void syncOutput(ItemStack stack, ServerPlayerEntity player) {
+    PacketByteBuf buf = PacketByteBufs.create();
+    buf.writeItemStack(ItemStack.EMPTY);
+    ServerPlayNetworking.send(player, NetworkPackets.SYNC_OUTPUT, buf);
+  }
+
+  @Override
+  public void highlightRecipe(String recipeId, ServerPlayerEntity player) {
+    PacketByteBuf buf = PacketByteBufs.create();
+    buf.writeString(recipeId);
+    ServerPlayNetworking.send(player, NetworkPackets.HIGHLIGHT_RECIPE, buf);
   }
 
   @Override
   public void fetchRecipes() {
-    ClientSidePacketRegistry.INSTANCE
-        .sendToServer(NetworkPackets.FETCH_RECIPES, new PacketByteBuf(Unpooled.buffer()));
+    ClientPlayNetworking.send(NetworkPackets.FETCH_RECIPES, PacketByteBufs.create());
   }
 }

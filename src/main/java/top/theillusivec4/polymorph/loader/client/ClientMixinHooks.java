@@ -22,49 +22,34 @@ package top.theillusivec4.polymorph.loader.client;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
-import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.core.client.RecipeSelectionManager;
+import top.theillusivec4.polymorph.core.client.selector.RecipeSelectorManager;
 
 public class ClientMixinHooks {
 
-  public static void initConflictManager(Screen screen) {
-    RecipeSelectionManager conflictManager = null;
+  public static void initSelector(Screen screen) {
 
-    if (screen instanceof HandledScreen) {
-      HandledScreen<?> containerScreen = (HandledScreen<?>) screen;
-      conflictManager = PolymorphApi.getProvider(containerScreen.getScreenHandler())
-          .map(provider -> {
-
-            if (provider.getCraftingInventory() != null && provider.isActive()) {
-              return RecipeSelectionManager.createInstance(containerScreen, provider);
-            }
-            return null;
-          }).orElse(null);
-    }
-
-    if (conflictManager == null) {
-      RecipeSelectionManager.clearInstance();
+    if (!(screen instanceof HandledScreen) ||
+        !RecipeSelectorManager.tryCreate((HandledScreen<?>) screen)) {
+      RecipeSelectorManager.clear();
     }
   }
 
-  public static void renderConflictManager(Screen screen, MatrixStack matrices, int mouseX,
-      int mouseY, float delta) {
+  public static void renderSelector(Screen screen, MatrixStack matrices, int mouseX, int mouseY,
+                                    float delta) {
 
     if (screen instanceof HandledScreen) {
-      RecipeSelectionManager.getInstance()
-          .ifPresent(conflictManager -> conflictManager.render(matrices, mouseX, mouseY, delta));
+      RecipeSelectorManager.getSelector()
+          .ifPresent(recipeSelector -> recipeSelector.render(matrices, mouseX, mouseY, delta));
     }
   }
 
-  public static boolean clickConflictManager(Screen screen, double mouseX, double mouseY,
-      int button) {
+  public static boolean clickSelector(Screen screen, double mouseX, double mouseY, int button) {
 
     if (screen instanceof HandledScreen) {
-      RecipeSelectionManager.getInstance().ifPresent(RecipeSelectionManager::markPositionChanged);
-
-      return RecipeSelectionManager.getInstance()
-          .map(conflictManager -> conflictManager.mouseClicked(mouseX, mouseY, button))
-          .orElse(false);
+      return RecipeSelectorManager.getSelector().map(selector -> {
+        selector.markUpdatePosition();
+        return selector.mouseClicked(mouseX, mouseY, button);
+      }).orElse(false);
     }
     return false;
   }

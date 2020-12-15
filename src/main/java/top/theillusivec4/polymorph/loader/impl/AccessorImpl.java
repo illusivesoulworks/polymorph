@@ -44,7 +44,7 @@ public class AccessorImpl implements Accessor {
   public ItemStack[] getMatchingStacks(Ingredient ingredient) {
     IngredientAccessor accessor = (IngredientAccessor) Proxy
         .newProxyInstance(IngredientAccessor.class.getClassLoader(),
-            new Class[]{IngredientAccessor.class}, (proxy, method, args) -> Ingredient.class
+            new Class[] {IngredientAccessor.class}, (proxy, method, args) -> Ingredient.class
                 .getMethod(method.getName(), method.getParameterTypes()).invoke(ingredient, args));
     return accessor.getMatchingStacks();
   }

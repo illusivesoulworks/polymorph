@@ -28,5 +28,11 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface HandledScreenAccessor {
 
   @Accessor
+  int getX();
+
+  @Accessor
+  int getY();
+
+  @Accessor
   Slot getFocusedSlot();
 }

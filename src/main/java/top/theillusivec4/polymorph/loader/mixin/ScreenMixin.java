@@ -32,6 +32,6 @@ public class ScreenMixin {
   @Inject(at = @At("TAIL"), method = "init(Lnet/minecraft/client/MinecraftClient;II)V")
   public void init(CallbackInfo cb) {
     @SuppressWarnings("ConstantConditions") Screen screen = (Screen) (Object) this;
-    ClientMixinHooks.initConflictManager(screen);
+    ClientMixinHooks.initSelector(screen);
   }
 }

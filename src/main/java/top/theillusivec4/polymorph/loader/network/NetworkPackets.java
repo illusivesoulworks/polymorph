@@ -24,9 +24,15 @@ import top.theillusivec4.polymorph.core.Polymorph;
 
 public class NetworkPackets {
 
-  public static final Identifier SET_RECIPE = new Identifier(Polymorph.MODID, "set_recipe");
-  public static final Identifier TRANSFER_RECIPE = new Identifier(Polymorph.MODID, "transfer_recipe");
-  public static final Identifier SYNC_OUTPUT = new Identifier(Polymorph.MODID, "sync_output");
-  public static final Identifier FETCH_RECIPES = new Identifier(Polymorph.MODID, "fetch_recipes");
-  public static final Identifier SEND_RECIPES = new Identifier(Polymorph.MODID, "send_recipes");
+  public static final Identifier SET_RECIPE = create("set_recipe");
+  public static final Identifier SET_CRAFTING_RECIPE = create("set_crafting_recipe");
+  public static final Identifier TRANSFER_RECIPE = create("transfer_recipe");
+  public static final Identifier SYNC_OUTPUT = create("sync_output");
+  public static final Identifier FETCH_RECIPES = create("fetch_recipes");
+  public static final Identifier SEND_RECIPES = create("send_recipes");
+  public static final Identifier HIGHLIGHT_RECIPE = create("highlight_recipe");
+
+  private static Identifier create(String id) {
+    return new Identifier(Polymorph.MODID, id);
+  }
 }

@@ -41,14 +41,14 @@ public class MouseMixin {
 
   @Inject(at = @At("HEAD"), method = "method_1611([ZDDI)V", cancellable = true)
   public void mouseClick(boolean[] unused, double mouseX, double mouseY, int button,
-      CallbackInfo cb) {
+                         CallbackInfo cb) {
     Screen screen = this.client.currentScreen;
     double d = this.x * (double) this.client.getWindow().getScaledWidth() / (double) this.client
         .getWindow().getWidth();
     double e = this.y * (double) this.client.getWindow().getScaledHeight() / (double) this.client
         .getWindow().getHeight();
 
-    if (ClientMixinHooks.clickConflictManager(screen, d, e, button)) {
+    if (ClientMixinHooks.clickSelector(screen, d, e, button)) {
       cb.cancel();
     }
   }

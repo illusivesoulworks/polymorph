@@ -28,15 +28,15 @@ import net.minecraft.util.Identifier;
 public class ToggleRecipeButton extends TexturedButtonWidget {
 
   public ToggleRecipeButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn,
-      int yTexStartIn, int yDiffTextIn, Identifier identifier, ButtonWidget.PressAction onPressIn) {
+                            int yTexStartIn, int yDiffTextIn, Identifier identifier,
+                            ButtonWidget.PressAction onPressIn) {
     super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, identifier, 256, 256,
         onPressIn);
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public void renderButton(MatrixStack matrixStack, int p_renderButton_1_, int p_renderButton_2_,
-      float p_renderButton_3_) {
+                           float p_renderButton_3_) {
     RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
     super.renderButton(matrixStack, p_renderButton_1_, p_renderButton_2_, p_renderButton_3_);
   }
