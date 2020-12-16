@@ -57,6 +57,7 @@ public class FurnaceSelector implements IPersistentSelector {
         savedRecipe = "";
       } else {
         this.setSelectedRecipe(saved.get());
+        savedRecipe = "";
         return saved;
       }
     }

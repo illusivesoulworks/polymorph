@@ -76,6 +76,7 @@ public class IronFurnacesModule extends CompatibilityModule {
           savedRecipe = "";
         } else {
           this.setSelectedRecipe(saved.get());
+          savedRecipe = "";
           return saved;
         }
       }
