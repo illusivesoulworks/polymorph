@@ -148,6 +148,7 @@ public class NetworkHandler {
                 .getProvider(container)
                 .map(provider -> provider
                     .getRecipes(world, world.getRecipeManager()).stream()
+                    .filter(recipe -> !recipe.getOutput().isEmpty())
                     .map(recipe -> recipe.getId().toString())
                     .collect(Collectors.toList())).orElse(new ArrayList<>());
             Polymorph.getLoader().getPacketVendor()
