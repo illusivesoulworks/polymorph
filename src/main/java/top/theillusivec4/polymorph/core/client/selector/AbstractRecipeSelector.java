@@ -17,7 +17,7 @@ import top.theillusivec4.polymorph.api.type.RecipeSelector;
 import top.theillusivec4.polymorph.core.Polymorph;
 import top.theillusivec4.polymorph.core.client.gui.RecipeSelectorGui;
 import top.theillusivec4.polymorph.core.client.gui.ToggleRecipeButton;
-import top.theillusivec4.polymorph.loader.mixin.HandledScreenAccessor;
+import top.theillusivec4.polymorph.loader.mixin.core.HandledScreenAccessor;
 
 public abstract class AbstractRecipeSelector<I extends Inventory, R extends Recipe<I>>
     implements RecipeSelector<I, R> {

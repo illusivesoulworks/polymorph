@@ -17,16 +17,22 @@
  * License along with Polymorph.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.loader.mixin;
+package top.theillusivec4.polymorph.loader.mixin.core;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Ingredient;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.screen.slot.Slot;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(Ingredient.class)
-public interface IngredientAccessor {
+@Mixin(HandledScreen.class)
+public interface HandledScreenAccessor {
 
   @Accessor
-  ItemStack[] getMatchingStacks();
+  int getX();
+
+  @Accessor
+  int getY();
+
+  @Accessor
+  Slot getFocusedSlot();
 }

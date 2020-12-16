@@ -5,13 +5,14 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Recipe;
+import net.minecraft.util.Identifier;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.type.RecipeSelector;
 
 public class RecipeSelectorManager {
 
   private static RecipeSelector<? extends Inventory, ? extends Recipe<?>> selector = null;
-  private static ItemStack preferredStack = ItemStack.EMPTY;
+  private static Identifier preferredRecipe = null;
 
   public static Optional<RecipeSelector<? extends Inventory, ? extends Recipe<?>>> getSelector() {
     return Optional.ofNullable(selector);
@@ -31,11 +32,11 @@ public class RecipeSelectorManager {
     selector = null;
   }
 
-  public static void setPreferredStack(ItemStack stack) {
-    preferredStack = stack;
+  public static void setPreferredRecipe(Identifier id) {
+    preferredRecipe = id;
   }
 
-  public static ItemStack getPreferredStack() {
-    return preferredStack;
+  public static Optional<Identifier> getPreferredRecipe() {
+    return Optional.ofNullable(preferredRecipe);
   }
 }

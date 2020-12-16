@@ -28,7 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 import top.theillusivec4.polymorph.core.client.selector.CraftingRecipeSelector;
 import top.theillusivec4.polymorph.core.client.selector.RecipeSelectorManager;
-import top.theillusivec4.polymorph.loader.mixin.SlotAccessor;
+import top.theillusivec4.polymorph.loader.mixin.core.SlotAccessor;
 
 public class ClientNetworkHandler {
 

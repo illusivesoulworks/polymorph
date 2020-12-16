@@ -17,22 +17,16 @@
  * License along with Polymorph.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.loader.mixin;
+package top.theillusivec4.polymorph.loader.mixin.core;
 
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.screen.CraftingScreenHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(HandledScreen.class)
-public interface HandledScreenAccessor {
+@Mixin(CraftingScreenHandler.class)
+public interface CraftingScreenHandlerAccessor {
 
   @Accessor
-  int getX();
-
-  @Accessor
-  int getY();
-
-  @Accessor
-  Slot getFocusedSlot();
+  CraftingInventory getInput();
 }

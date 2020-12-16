@@ -43,7 +43,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Language;
 import net.minecraft.util.math.Matrix4f;
 import org.lwjgl.opengl.GL11;
-import top.theillusivec4.polymorph.loader.mixin.ScreenAccessor;
+import top.theillusivec4.polymorph.loader.mixin.core.ScreenAccessor;
 
 public class RecipeSelectorGui<I extends Inventory, R extends Recipe<I>> extends DrawableHelper
     implements Drawable, Element {

@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.AbstractCookingRecipe;
+import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import top.theillusivec4.polymorph.api.type.FurnaceProvider;
@@ -53,6 +54,17 @@ public class FurnaceRecipeSelector
     if (!recipes.isEmpty()) {
       this.highlightRecipe(selected.isEmpty() ? recipes.get(0).getId().toString() : selected);
     }
+
+    RecipeSelectorManager.getPreferredRecipe().ifPresent(id -> {
+      for (AbstractCookingRecipe recipe : recipes) {
+
+        if (recipe.getId() == id) {
+          RecipeSelectorManager.setPreferredRecipe(null);
+          selectRecipe(recipe);
+          return;
+        }
+      }
+    });
   }
 
   @Override

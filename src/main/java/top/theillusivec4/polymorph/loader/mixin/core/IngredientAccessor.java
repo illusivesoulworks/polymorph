@@ -17,16 +17,16 @@
  * License along with Polymorph.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.loader.mixin;
+package top.theillusivec4.polymorph.loader.mixin.core;
 
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.screen.CraftingScreenHandler;
+import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.Ingredient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(CraftingScreenHandler.class)
-public interface CraftingScreenHandlerAccessor {
+@Mixin(Ingredient.class)
+public interface IngredientAccessor {
 
   @Accessor
-  CraftingInventory getInput();
+  ItemStack[] getMatchingStacks();
 }

@@ -26,9 +26,9 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.screen.CraftingScreenHandler;
 import net.minecraft.screen.PlayerScreenHandler;
 import top.theillusivec4.polymorph.core.base.common.Accessor;
-import top.theillusivec4.polymorph.loader.mixin.CraftingScreenHandlerAccessor;
-import top.theillusivec4.polymorph.loader.mixin.IngredientAccessor;
-import top.theillusivec4.polymorph.loader.mixin.PlayerScreenHandlerAccessor;
+import top.theillusivec4.polymorph.loader.mixin.core.CraftingScreenHandlerAccessor;
+import top.theillusivec4.polymorph.loader.mixin.core.IngredientAccessor;
+import top.theillusivec4.polymorph.loader.mixin.core.PlayerScreenHandlerAccessor;
 
 public class AccessorImpl implements Accessor {
 

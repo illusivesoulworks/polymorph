@@ -1,4 +1,4 @@
-package top.theillusivec4.polymorph.loader.mixin;
+package top.theillusivec4.polymorph.loader.mixin.core;
 
 import net.minecraft.screen.slot.Slot;
 import org.spongepowered.asm.mixin.Mixin;

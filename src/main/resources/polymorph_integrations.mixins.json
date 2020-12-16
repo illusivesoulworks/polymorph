@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "top.theillusivec4.polymorph.loader.mixin.integration",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [],
+  "client": [
+    "ReiMixin"
+  ],
+  "server": [],
+  "plugin": "top.theillusivec4.polymorph.loader.mixin.IntegratedMixinPlugin",
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

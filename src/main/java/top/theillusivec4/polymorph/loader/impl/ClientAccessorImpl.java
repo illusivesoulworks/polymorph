@@ -22,7 +22,7 @@ package top.theillusivec4.polymorph.loader.impl;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.screen.slot.Slot;
 import top.theillusivec4.polymorph.core.base.client.ClientAccessor;
-import top.theillusivec4.polymorph.loader.mixin.HandledScreenAccessor;
+import top.theillusivec4.polymorph.loader.mixin.core.HandledScreenAccessor;
 
 public class ClientAccessorImpl implements ClientAccessor {
 

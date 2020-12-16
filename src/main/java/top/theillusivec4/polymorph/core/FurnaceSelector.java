@@ -18,7 +18,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.world.World;
 import top.theillusivec4.polymorph.api.type.PersistentSelector;
-import top.theillusivec4.polymorph.loader.mixin.AbstractFurnaceScreenHandlerAccessor;
+import top.theillusivec4.polymorph.loader.mixin.core.AbstractFurnaceScreenHandlerAccessor;
 
 public class FurnaceSelector implements PersistentSelector {
 

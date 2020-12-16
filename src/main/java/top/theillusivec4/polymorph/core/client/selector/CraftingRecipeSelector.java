@@ -117,20 +117,6 @@ public class CraftingRecipeSelector
     }
     this.recipeSelectorGui.setRecipes(recipes);
     this.toggleButton.visible = recipes.size() > 1;
-    ItemStack stack = RecipeSelectorManager.getPreferredStack();
-
-    if (!stack.isEmpty()) {
-
-      for (CraftingRecipe craftingRecipe : recipes) {
-
-        if (craftingRecipe.craft(this.provider.getInventory()).getItem() ==
-            stack.getItem()) {
-          setLastSelectedRecipe(craftingRecipe);
-          break;
-        }
-      }
-      RecipeSelectorManager.setPreferredStack(ItemStack.EMPTY);
-    }
 
     getLastSelectedRecipe().ifPresent(recipe -> {
 
@@ -140,6 +126,17 @@ public class CraftingRecipeSelector
 
         if (playerEntity != null) {
           Polymorph.getLoader().getPacketVendor().sendSetCraftingRecipe(recipe.getId().toString());
+        }
+      }
+    });
+
+    RecipeSelectorManager.getPreferredRecipe().ifPresent(id -> {
+      for (CraftingRecipe recipe : recipes) {
+
+        if (recipe.getId() == id) {
+          RecipeSelectorManager.setPreferredRecipe(null);
+          selectRecipe(recipe);
+          return;
         }
       }
     });

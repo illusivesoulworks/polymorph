@@ -1,4 +1,4 @@
-package top.theillusivec4.polymorph.loader.mixin;
+package top.theillusivec4.polymorph.loader.mixin.core;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.FontManager;
