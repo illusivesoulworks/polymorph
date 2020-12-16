@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 import top.theillusivec4.polymorph.core.client.selector.CraftingRecipeSelector;
 import top.theillusivec4.polymorph.core.client.selector.RecipeSelectorManager;
+import top.theillusivec4.polymorph.loader.mixin.SlotAccessor;
 
 public class ClientNetworkHandler {
 
@@ -42,7 +43,7 @@ public class ClientNetworkHandler {
               RecipeSelectorManager.getSelector().ifPresent(selector -> {
                 if (selector instanceof CraftingRecipeSelector) {
                   Slot slot = selector.getProvider().getOutputSlot();
-                  slot.inventory.setStack(slot.id, stack);
+                  slot.inventory.setStack(((SlotAccessor) slot).getIndex(), stack);
                   CraftingRecipeSelector craftingRecipeSelector = (CraftingRecipeSelector) selector;
                   craftingRecipeSelector.setUpdatable(true);
 

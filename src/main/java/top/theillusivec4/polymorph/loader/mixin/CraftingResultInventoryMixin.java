@@ -29,8 +29,8 @@ import top.theillusivec4.polymorph.loader.common.MixinHooks;
 @Mixin(CraftingResultInventory.class)
 public class CraftingResultInventoryMixin {
 
-  @Inject(at = @At("TAIL"), method = "setStack")
+  @Inject(at = @At("HEAD"), method = "setStack")
   public void update(CallbackInfo cb) {
-    MixinHooks.updateConflictManager();
+    MixinHooks.updateSelector();
   }
 }

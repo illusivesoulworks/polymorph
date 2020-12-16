@@ -35,7 +35,7 @@ import top.theillusivec4.polymorph.loader.util.EnvironmentExecutor;
 
 public class MixinHooks {
 
-  public static void updateConflictManager() {
+  public static void updateSelector() {
     EnvironmentExecutor.runOnClient(() -> CraftingRecipeSelector::update);
   }
 

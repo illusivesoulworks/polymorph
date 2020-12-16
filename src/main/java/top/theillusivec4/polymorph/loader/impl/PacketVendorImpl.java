@@ -42,7 +42,7 @@ public class PacketVendorImpl implements PacketVendor {
   public void sendSetCraftingRecipe(String recipeId) {
     PacketByteBuf buf = PacketByteBufs.create();
     buf.writeString(recipeId);
-    ClientPlayNetworking.send(NetworkPackets.SET_RECIPE, buf);
+    ClientPlayNetworking.send(NetworkPackets.SET_CRAFTING_RECIPE, buf);
   }
 
   @Override
@@ -67,7 +67,7 @@ public class PacketVendorImpl implements PacketVendor {
   @Override
   public void syncOutput(ItemStack stack, ServerPlayerEntity player) {
     PacketByteBuf buf = PacketByteBufs.create();
-    buf.writeItemStack(ItemStack.EMPTY);
+    buf.writeItemStack(stack);
     ServerPlayNetworking.send(player, NetworkPackets.SYNC_OUTPUT, buf);
   }
 

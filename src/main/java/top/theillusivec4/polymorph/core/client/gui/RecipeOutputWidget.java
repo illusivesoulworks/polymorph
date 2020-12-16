@@ -57,14 +57,13 @@ public class RecipeOutputWidget<T extends Inventory, R extends Recipe<T>>
                            float p_renderButton_3_) {
     MinecraftClient minecraft = MinecraftClient.getInstance();
     minecraft.getTextureManager().bindTexture(TOGGLE);
-    int i = 16;
     int j = 0;
 
     if (this.x + 25 > p_renderButton_1_ && this.x <= p_renderButton_1_ &&
         this.y + 25 > p_renderButton_2_ && this.y <= p_renderButton_2_) {
       j += 25;
     }
-    this.drawTexture(matrixStack, this.x, this.y, i, j, this.width, this.height);
+    this.drawTexture(matrixStack, this.x, this.y, this.highlighted ? 41 : 16, j, this.width, this.height);
     int k = 4;
     float zLevel = minecraft.getItemRenderer().zOffset;
     minecraft.getItemRenderer().zOffset = 600.0F;

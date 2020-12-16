@@ -9,7 +9,8 @@
     "IngredientAccessor",
     "PlayerScreenHandlerAccessor",
     "AbstractFurnaceScreenHandlerAccessor",
-    "RecipeManagerMixin"
+    "RecipeManagerMixin",
+    "SlotAccessor"
   ],
   "client": [
     "GameRendererMixin",

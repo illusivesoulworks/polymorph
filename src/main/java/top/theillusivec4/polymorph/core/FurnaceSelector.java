@@ -49,6 +49,7 @@ public class FurnaceSelector implements PersistentSelector {
         savedRecipe = "";
       } else {
         this.setSelectedRecipe(saved.get());
+        savedRecipe = "";
         return saved;
       }
     }
@@ -113,10 +114,16 @@ public class FurnaceSelector implements PersistentSelector {
   @Override
   public void readFromNbt(CompoundTag compoundTag) {
 
+    if (compoundTag.contains("SelectedRecipe")) {
+      this.setSavedRecipe(compoundTag.getString("SelectedRecipe"));
+    }
   }
 
   @Override
   public void writeToNbt(CompoundTag compoundTag) {
 
+    if (this.selectedRecipe != null) {
+      compoundTag.putString("SelectedRecipe", this.selectedRecipe.getId().toString());
+    }
   }
 }
