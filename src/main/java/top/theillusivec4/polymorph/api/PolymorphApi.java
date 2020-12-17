@@ -21,6 +21,7 @@ package top.theillusivec4.polymorph.api;
 
 import java.util.Optional;
 import java.util.function.Function;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.Inventory;
@@ -29,6 +30,7 @@ import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.screen.ScreenHandler;
 import top.theillusivec4.polymorph.api.type.CraftingProvider;
 import top.theillusivec4.polymorph.api.type.FurnaceProvider;
+import top.theillusivec4.polymorph.api.type.PersistentSelector;
 import top.theillusivec4.polymorph.api.type.PolyProvider;
 import top.theillusivec4.polymorph.api.type.RecipeSelector;
 import top.theillusivec4.polymorph.loader.impl.PolymorphApiImpl;
@@ -41,7 +43,11 @@ public interface PolymorphApi {
 
   void addProvider(Function<ScreenHandler, PolyProvider<?, ?>> providerFunction);
 
+  void addEntityProvider(Function<BlockEntity, PersistentSelector> entityFunction, Function<ScreenHandler, PolyProvider<?, ?>> providerFunction);
+
   Optional<PolyProvider<?, ?>> getProvider(ScreenHandler screenHandler);
+
+  Optional<PersistentSelector> getSelector(BlockEntity te);
 
   RecipeSelector<CraftingInventory, CraftingRecipe> createCraftingSelector(
       HandledScreen<?> screen, CraftingProvider provider);

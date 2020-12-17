@@ -17,7 +17,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import top.theillusivec4.polymorph.api.type.PersistentSelector;
+import top.theillusivec4.polymorph.loader.common.PolymorphLoader;
 import top.theillusivec4.polymorph.loader.mixin.core.AbstractFurnaceScreenHandlerAccessor;
 
 public class FurnaceSelector implements PersistentSelector {
@@ -95,6 +97,14 @@ public class FurnaceSelector implements PersistentSelector {
     World world = this.parent.getWorld();
 
     if (world instanceof ServerWorld) {
+
+      if (Polymorph.getLoader().isFastFurnaceLoaded()) {
+        try {
+          FieldUtils.writeField(this.parent, "cachedRecipe", this.selectedRecipe, true);
+        } catch (IllegalAccessException e) {
+          Polymorph.LOGGER.error("Error accessing cachedRecipe from FastFurnace!");
+        }
+      }
       ((ServerWorld) world).getPlayers().forEach(player -> {
         if (player.currentScreenHandler instanceof AbstractFurnaceScreenHandler &&
             ((AbstractFurnaceScreenHandlerAccessor) player.currentScreenHandler)

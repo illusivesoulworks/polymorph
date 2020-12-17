@@ -1,4 +1,4 @@
-package top.theillusivec4.polymorph.loader.common.integration;
+package top.theillusivec4.polymorph.loader.common.integration.rei;
 
 import me.shedaniel.rei.api.RecipeDisplay;
 import top.theillusivec4.polymorph.core.client.selector.RecipeSelectorManager;

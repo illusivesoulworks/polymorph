@@ -32,6 +32,8 @@ public class PolymorphLoader implements Loader {
   private static final PacketVendor PACKET_VENDOR = new PacketVendorImpl();
   private static final Accessor ACCESSOR = new AccessorImpl();
 
+  public static boolean isFastFurnaceLoaded = false;
+
   @Override
   public PacketVendor getPacketVendor() {
     return PACKET_VENDOR;
@@ -45,5 +47,10 @@ public class PolymorphLoader implements Loader {
   @Override
   public File getGameDirectory() {
     return FabricLoader.getInstance().getGameDir().toFile();
+  }
+
+  @Override
+  public boolean isFastFurnaceLoaded() {
+    return isFastFurnaceLoaded;
   }
 }

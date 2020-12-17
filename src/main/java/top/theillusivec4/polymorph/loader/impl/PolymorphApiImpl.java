@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.CraftingResultInventory;
@@ -16,6 +17,7 @@ import net.minecraft.screen.slot.Slot;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.type.CraftingProvider;
 import top.theillusivec4.polymorph.api.type.FurnaceProvider;
+import top.theillusivec4.polymorph.api.type.PersistentSelector;
 import top.theillusivec4.polymorph.api.type.PolyProvider;
 import top.theillusivec4.polymorph.api.type.RecipeSelector;
 import top.theillusivec4.polymorph.core.client.selector.CraftingRecipeSelector;
@@ -28,9 +30,32 @@ public class PolymorphApiImpl implements PolymorphApi {
   private static final List<Function<ScreenHandler, PolyProvider<? extends Inventory, ? extends Recipe<?>>>>
       providerFunctions = new ArrayList<>();
 
+  private static final List<Function<BlockEntity, PersistentSelector>> entityFunctions =
+      new ArrayList<>();
+
   @Override
   public void addProvider(Function<ScreenHandler, PolyProvider<?, ?>> providerFunction) {
     providerFunctions.add(providerFunction);
+  }
+
+  @Override
+  public void addEntityProvider(Function<BlockEntity, PersistentSelector> entityFunction,
+                                Function<ScreenHandler, PolyProvider<?, ?>> providerFunction) {
+    this.addProvider(providerFunction);
+    entityFunctions.add(entityFunction);
+  }
+
+  @Override
+  public Optional<PersistentSelector> getSelector(BlockEntity te) {
+
+    for (Function<BlockEntity, PersistentSelector> entityFunction : entityFunctions) {
+      PersistentSelector selector = entityFunction.apply(te);
+
+      if (selector != null) {
+        return Optional.of(selector);
+      }
+    }
+    return Optional.empty();
   }
 
   @Override

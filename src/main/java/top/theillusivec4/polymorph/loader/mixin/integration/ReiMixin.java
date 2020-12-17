@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.theillusivec4.polymorph.loader.common.integration.ReiMixinHooks;
+import top.theillusivec4.polymorph.loader.common.integration.rei.ReiMixinHooks;
 
 @Mixin(InternalWidgets.class)
 public class ReiMixin {

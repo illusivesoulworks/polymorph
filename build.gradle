@@ -21,6 +21,12 @@ repositories {
         name = "Ladysnake Libs"
         url = "https://dl.bintray.com/ladysnake/libs"
     }
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 dependencies {
@@ -36,6 +42,12 @@ dependencies {
 
     modCompileOnly "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
     modRuntime "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
+
+//    modRuntime "curse.maven:fastfurnace-364540:3023434"
+    modCompileOnly "curse.maven:fabricfurnaces-315534:3049271"
+    modRuntime "curse.maven:fabricfurnaces-315534:3049271"
+    modCompileOnly "curse.maven:ironfurnaces-318036:3048115"
+    modRuntime "curse.maven:ironfurnaces-318036:3048115"
 
     modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
     modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${project.cca_version}"

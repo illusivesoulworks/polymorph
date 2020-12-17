@@ -19,12 +19,10 @@
 
 package top.theillusivec4.polymorph.loader.client;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import top.theillusivec4.polymorph.core.client.selector.RecipeSelectorManager;
-import top.theillusivec4.polymorph.loader.common.integration.ReiMixinHooks;
 
 public class ClientMixinHooks {
 

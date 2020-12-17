@@ -29,4 +29,6 @@ public interface Loader {
 
   Accessor getAccessor();
 
+  boolean isFastFurnaceLoaded();
+
 }
