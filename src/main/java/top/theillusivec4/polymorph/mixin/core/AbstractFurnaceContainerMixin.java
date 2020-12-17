@@ -1,4 +1,4 @@
-package top.theillusivec4.polymorph.mixin;
+package top.theillusivec4.polymorph.mixin.core;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.AbstractFurnaceContainer;

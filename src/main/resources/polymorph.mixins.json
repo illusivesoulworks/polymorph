@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "top.theillusivec4.polymorph.mixin",
+  "package": "top.theillusivec4.polymorph.mixin.core",
   "compatibilityLevel": "JAVA_8",
   "refmap": "polymorph.refmap.json",
   "mixins": [

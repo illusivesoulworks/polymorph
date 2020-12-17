@@ -1,4 +1,4 @@
-package top.theillusivec4.polymorph.mixin;
+package top.theillusivec4.polymorph.mixin.core;
 
 import java.util.Optional;
 import net.minecraft.inventory.IInventory;

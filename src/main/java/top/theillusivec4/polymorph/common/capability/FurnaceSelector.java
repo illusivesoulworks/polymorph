@@ -1,9 +1,7 @@
 package top.theillusivec4.polymorph.common.capability;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.AbstractFurnaceContainer;
@@ -25,7 +23,7 @@ import top.theillusivec4.polymorph.Polymorph;
 import top.theillusivec4.polymorph.api.type.IPersistentSelector;
 import top.theillusivec4.polymorph.common.network.NetworkManager;
 import top.theillusivec4.polymorph.common.network.server.SPacketHighlightRecipe;
-import top.theillusivec4.polymorph.mixin.AbstractFurnaceContainerMixin;
+import top.theillusivec4.polymorph.mixin.core.AbstractFurnaceContainerMixin;
 
 public class FurnaceSelector implements IPersistentSelector {
 

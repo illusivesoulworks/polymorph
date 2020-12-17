@@ -1,4 +1,4 @@
-package top.theillusivec4.polymorph.mixin;
+package top.theillusivec4.polymorph.mixin.core;
 
 import net.minecraft.inventory.CraftResultInventory;
 import org.spongepowered.asm.mixin.Mixin;

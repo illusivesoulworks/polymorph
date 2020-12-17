@@ -29,6 +29,7 @@ minecraft {
         client {
             workingDirectory project.file('run')
             arg "-mixin.config=" + "${mod_id}".toString() + ".mixins.json"
+            arg "-mixin.config=" + "${mod_id}_integrations".toString() + ".mixins.json"
             jvmArg "-Dmixin.env.disableRefMap=true"
 
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
@@ -44,6 +45,7 @@ minecraft {
         server {
             workingDirectory project.file('run')
             arg "-mixin.config=" + "${mod_id}".toString() + ".mixins.json"
+            arg "-mixin.config=" + "${mod_id}_integrations".toString() + ".mixins.json"
             jvmArg "-Dmixin.env.disableRefMap=true"
 
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
@@ -82,8 +84,7 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
 
-    compileOnly fg.deobf("mezz.jei:jei-${version_mc}:${version_jei}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${version_mc}:${version_jei}")
+    compile fg.deobf("mezz.jei:jei-${version_mc}:${version_jei}")
 
     compile fg.deobf("curse.maven:craftingcraft-237581:${file_craftingcraft}")
     compile fg.deobf("curse.maven:refinedstorage-243076:${file_refinedstorage}")
@@ -119,7 +120,7 @@ jar {
                     "Implementation-Version": "${version}",
                     "Implementation-Vendor" :"${mod_author}",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    "MixinConfigs": "${mod_id}.mixins.json"],)
+                    "MixinConfigs": "${mod_id}.mixins.json, ${mod_id}_integrations.mixins.json"],)
     }
 }
 

@@ -54,6 +54,17 @@ public class FurnaceRecipeSelector extends RecipeSelector<IInventory, AbstractCo
     if (!recipes.isEmpty()) {
       this.highlightRecipe(selected.isEmpty() ? recipes.get(0).getId().toString() : selected);
     }
+
+    RecipeSelectorManager.getPreferredRecipe().ifPresent(id -> {
+      for (AbstractCookingRecipe recipe : recipes) {
+
+        if (recipe.getId() == id) {
+          RecipeSelectorManager.setPreferredRecipe(null);
+          selectRecipe(recipe);
+          return;
+        }
+      }
+    });
   }
 
   @Override

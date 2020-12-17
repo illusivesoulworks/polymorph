@@ -5,13 +5,14 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.type.IRecipeSelector;
 
 public class RecipeSelectorManager {
 
   private static IRecipeSelector<? extends IInventory, ? extends IRecipe<?>> selector = null;
-  private static ItemStack preferredStack = ItemStack.EMPTY;
+  private static ResourceLocation preferredRecipe = null;
 
   public static Optional<IRecipeSelector<? extends IInventory, ? extends IRecipe<?>>> getSelector() {
     return Optional.ofNullable(selector);
@@ -31,11 +32,11 @@ public class RecipeSelectorManager {
     selector = null;
   }
 
-  public static void setPreferredStack(ItemStack stack) {
-    preferredStack = stack;
+  public static void setPreferredRecipe(ResourceLocation id) {
+    preferredRecipe = id;
   }
 
-  public static ItemStack getPreferredStack() {
-    return preferredStack;
+  public static Optional<ResourceLocation> getPreferredRecipe() {
+    return Optional.ofNullable(preferredRecipe);
   }
 }

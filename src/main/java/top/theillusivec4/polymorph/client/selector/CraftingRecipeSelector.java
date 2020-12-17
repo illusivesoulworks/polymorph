@@ -118,20 +118,6 @@ public class CraftingRecipeSelector extends RecipeSelector<CraftingInventory, IC
     }
     this.recipeSelectorGui.setRecipes(recipes);
     this.toggleButton.visible = recipes.size() > 1;
-    ItemStack stack = RecipeSelectorManager.getPreferredStack();
-
-    if (!stack.isEmpty()) {
-
-      for (ICraftingRecipe craftingRecipe : recipes) {
-
-        if (craftingRecipe.getCraftingResult(this.provider.getInventory()).getItem() ==
-            stack.getItem()) {
-          setLastSelectedRecipe(craftingRecipe);
-          break;
-        }
-      }
-      RecipeSelectorManager.setPreferredStack(ItemStack.EMPTY);
-    }
 
     getLastSelectedRecipe().ifPresent(recipe -> {
 
@@ -142,6 +128,17 @@ public class CraftingRecipeSelector extends RecipeSelector<CraftingInventory, IC
         if (playerEntity != null) {
           NetworkManager.INSTANCE.send(PacketDistributor.SERVER.noArg(),
               new CPacketSetCraftingRecipe(recipe.getId().toString()));
+        }
+      }
+    });
+
+    RecipeSelectorManager.getPreferredRecipe().ifPresent(id -> {
+      for (ICraftingRecipe recipe : recipes) {
+
+        if (recipe.getId() == id) {
+          RecipeSelectorManager.setPreferredRecipe(null);
+          selectRecipe(recipe);
+          return;
         }
       }
     });
