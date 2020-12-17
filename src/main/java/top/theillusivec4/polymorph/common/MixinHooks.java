@@ -31,7 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.DistExecutor;
-import org.apache.commons.lang3.reflect.FieldUtils;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import top.theillusivec4.polymorph.api.PolymorphCapability;
 import top.theillusivec4.polymorph.api.type.IPersistentSelector;
 import top.theillusivec4.polymorph.client.selector.CraftingRecipeSelector;
@@ -39,7 +39,14 @@ import top.theillusivec4.polymorph.client.selector.CraftingRecipeSelector;
 public class MixinHooks {
 
   public static void sendCraftingUpdate() {
-    DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> CraftingRecipeSelector::update);
+
+    if (FMLEnvironment.dist == Dist.CLIENT) {
+      getRunnableUpdate().run();
+    }
+  }
+
+  private static DistExecutor.SafeRunnable getRunnableUpdate() {
+    return CraftingRecipeSelector::update;
   }
 
   @SuppressWarnings("unchecked")

@@ -102,7 +102,8 @@ public class CraftingRecipeSelector extends RecipeSelector<CraftingInventory, IC
   }
 
   @Override
-  public void setRecipes(List<ICraftingRecipe> recipes, World world, boolean refresh, String selected) {
+  public void setRecipes(List<ICraftingRecipe> recipes, World world, boolean refresh,
+                         String selected) {
 
     if (refresh) {
       Set<RecipeOutput> recipeOutputs = new HashSet<>();
