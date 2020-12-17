@@ -19,6 +19,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.type.PersistentSelector;
 import top.theillusivec4.polymorph.core.Polymorph;
+import top.theillusivec4.polymorph.loader.common.PolymorphComponentImpl;
 import top.theillusivec4.polymorph.loader.common.PolymorphMod;
 import top.theillusivec4.polymorph.loader.common.integration.CompatibilityModule;
 
@@ -33,7 +34,7 @@ public class FabricFurnacesModule extends CompatibilityModule {
       return null;
     }, screenHandler -> {
       if (screenHandler instanceof AbstractFurnaceScreenHandler) {
-        return new PolymorphMod.SimpleFurnaceProvider(screenHandler);
+        return new PolymorphComponentImpl.SimpleFurnaceProvider(screenHandler);
       }
       return null;
     });

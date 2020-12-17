@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.4-SNAPSHOT'
+    id 'fabric-loom' version '0.5-SNAPSHOT'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
@@ -35,26 +35,33 @@ dependencies {
 
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
+    modImplementation fabricApi.module("fabric-api-base", project.fabric_version)
     modImplementation fabricApi.module("fabric-lifecycle-events-v1", project.fabric_version)
     modImplementation fabricApi.module("fabric-networking-api-v1", project.fabric_version)
     modImplementation fabricApi.module("fabric-resource-loader-v0", project.fabric_version)
+    modImplementation fabricApi.module("fabric-command-api-v1", project.fabric_version)
     modImplementation fabricApi.module("fabric-commands-v0", project.fabric_version)
+    modImplementation fabricApi.module("fabric-networking-v0", project.fabric_version)
+
+    modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
+    modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${project.cca_version}"
 
     modCompileOnly "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
     modRuntime "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
+    modCompileOnly "curse.maven:fabricfurnaces-315534:${project.file_fabricfurnaces}"
+    modRuntime "curse.maven:fabricfurnaces-315534:${project.file_fabricfurnaces}"
+    modCompileOnly "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
+    modRuntime "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
+    modRuntime "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-//    modRuntime "curse.maven:fastfurnace-364540:3023434"
-    modCompileOnly "curse.maven:fabricfurnaces-315534:3049271"
-    modRuntime "curse.maven:fabricfurnaces-315534:3049271"
-    modCompileOnly "curse.maven:ironfurnaces-318036:3048115"
-    modRuntime "curse.maven:ironfurnaces-318036:3048115"
+    //    modRuntime "curse.maven:fastfurnace-364540:3023434"
 
-    modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
-    modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${project.cca_version}"
-
+    include fabricApi.module("fabric-api-base", project.fabric_version)
     include fabricApi.module("fabric-lifecycle-events-v1", project.fabric_version)
+    include fabricApi.module("fabric-networking-v0", project.fabric_version)
     include fabricApi.module("fabric-networking-api-v1", project.fabric_version)
     include fabricApi.module("fabric-resource-loader-v0", project.fabric_version)
+    include fabricApi.module("fabric-command-api-v1", project.fabric_version)
     include fabricApi.module("fabric-commands-v0", project.fabric_version)
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${project.cca_version}"

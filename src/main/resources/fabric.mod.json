@@ -21,7 +21,7 @@
       "top.theillusivec4.polymorph.loader.common.PolymorphMod"
     ],
     "cardinal-components-block": [
-      "top.theillusivec4.polymorph.loader.common.PolymorphMod"
+      "top.theillusivec4.polymorph.loader.common.PolymorphComponentImpl"
     ]
   },
   "custom": {
@@ -35,6 +35,12 @@
   ],
   "depends": {
     "fabricloader": ">=0.7.4",
+    "fabric-resource-loader-v0": "*",
+    "fabric-lifecycle-events-v1": "*",
+    "fabric-networking-api-v1": "*",
+    "fabric-command-api-v1": "*",
+    "fabric-commands-v0": "*",
+    "cardinal-components-block": ">=2.7.9",
     "minecraft": "1.16.x"
   }
 }

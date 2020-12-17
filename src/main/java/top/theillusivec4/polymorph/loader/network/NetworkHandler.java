@@ -45,7 +45,7 @@ public class NetworkHandler {
 
   public static void setup() {
     ServerPlayNetworking.registerGlobalReceiver(NetworkPackets.SET_RECIPE,
-        (((server, player, handler, buf, responseSender) -> server.execute(() -> {
+        (((server, player, handler, buf, responseSender) -> {
           String id = buf.readString(32767);
           server.execute(() -> {
 
@@ -65,10 +65,10 @@ public class NetworkHandler {
               });
             }
           });
-        }))));
+        })));
 
     ServerPlayNetworking.registerGlobalReceiver(NetworkPackets.SET_CRAFTING_RECIPE,
-        (((server, player, handler, buf, responseSender) -> server.execute(() -> {
+        (((server, player, handler, buf, responseSender) -> {
           String id = buf.readString(32767);
           server.execute(() -> {
 
@@ -98,10 +98,10 @@ public class NetworkHandler {
               });
             }
           });
-        }))));
+        })));
 
     ServerPlayNetworking.registerGlobalReceiver(NetworkPackets.TRANSFER_RECIPE,
-        (((server, player, handler, buf, responseSender) -> server.execute(() -> {
+        (((server, player, handler, buf, responseSender) -> {
           String id = buf.readString(32767);
           server.execute(() -> {
 
@@ -124,7 +124,7 @@ public class NetworkHandler {
               });
             }
           });
-        }))));
+        })));
 
     ServerPlayNetworking.registerGlobalReceiver(NetworkPackets.FETCH_RECIPES,
         (((server, player, handler, buf, responseSender) -> server.execute(() -> {

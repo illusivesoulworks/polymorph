@@ -14,7 +14,7 @@ import top.theillusivec4.polymorph.loader.common.integration.rei.ReiMixinHooks;
 @Mixin(InternalWidgets.class)
 public class ReiMixin {
 
-  @Inject(at = @At("HEAD"), method = "lambda$createAutoCraftingButtonWidget$0(Lnet/minecraft/client/gui/screen/ingame/HandledScreen;Ljava/util/function/Supplier;Lme/shedaniel/rei/api/widgets/Button;)V", remap = false)
+  @Inject(at = @At(value = "HEAD"), method = "lambda$createAutoCraftingButtonWidget$0", remap = false)
   private static void _polymorph_hookTransfer(HandledScreen<?> screen,
                                               Supplier<RecipeDisplay> recipeDisplaySupplier,
                                               Button button, CallbackInfo cb) {
