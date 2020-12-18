@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [0.19] - 2020.12.17
+### Added
+- Added smelting recipe conflict management for the Furnace, Smoker, and the Blast Furnace
+- Added smelting recipe conflict integration for FastFurnace and Iron Furnaces
+### Changed
+- JEI integration uses recipe identifiers now instead of crafting outputs
+### Fixed
+- Fixed Pretty Pipes recipe toggle button overlapping with crafting grid [#40](https://github.com/TheIllusiveC4/Polymorph/issues/40)
+
 ## [0.18] - 2020.11.27
 ### Fixed
 - Fixed dedicated server crash [#38](https://github.com/TheIllusiveC4/Polymorph/issues/38)
