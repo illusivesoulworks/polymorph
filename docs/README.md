@@ -1,15 +1,73 @@
-# Polymorph [![](http://cf.way2muchnoise.eu/versions/polymorph-fabric.svg)](https://www.curseforge.com/minecraft/mc-mods/polymorph-fabric) [![](http://cf.way2muchnoise.eu/short_polymorph-fabric_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/polymorph-fabric/files) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg?&style=flat-square)](https://www.gnu.org/licenses/lgpl-3.0) [![Discord](https://img.shields.io/discord/500852157503766538.svg?color=green&label=Discord&style=flat-square)](https://discord.gg/JWgrdwt) [![ko-fi](https://img.shields.io/badge/Support%20Me-Ko--fi-%23FF5E5B?style=flat-square)](https://ko-fi.com/C0C1NL4O)
+# Polymorph
+[![](http://cf.way2muchnoise.eu/versions/polymorph.svg)](https://www.curseforge.com/minecraft/mc-mods/polymorph)
+[![](http://cf.way2muchnoise.eu/short_polymorph_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/polymorph/files)
+[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg?&style=flat-square)](https://www.gnu.org/licenses/lgpl-3.0)
+[![ko-fi](https://img.shields.io/badge/Support%20Me-Ko--fi-%23FF5E5B?style=flat-square)](https://ko-fi.com/C0C1NL4O)
 
-## Overview
+Polymorph is a mod that solves recipe conflicts by letting players choose between all potential
+outputs shared by the same ingredients.
 
-Polymorph is a mod that solves recipe conflicts by letting players choose between all potential outputs shared by the same ingredients. With a sufficiently large amount of mods, recipe conflicts are a common occurrence and the responsibility for resolving these usually falls on the user or modpack developer, using datapacks or other tools to ensure that each recipe is unique. Polymorph offers an alternative solution, allowing all possible crafting recipes to co-exist regardless of conflicts.
+With a sufficiently large amount of mods, recipe conflicts are a common occurrence and the
+responsibility for resolving these usually falls on the user or modpack developer, using datapacks
+or other tools to ensure that each recipe is unique.
 
-When a group of ingredients matches more than one recipe, a button will appear above the output slot. Pushing this button will show a list of all possible results and selecting one will change the crafting output to match. Polymorph will also remember the last selection as long as the ingredients don't change, so repeated crafting actions are possible on the same selection.
+Polymorph offers an alternative solution, allowing all possible crafting and smelting recipes to
+co-exist regardless of conflicts.
+
+![](https://i.postimg.cc/prDcRzJ8/logo-final.png)
+
+## Features
+
+### Crafting
 
 ![](https://i.ibb.co/TkWswkG/polymorph.gif)
 
-To assist identifying potential conflicts, there's a command `/polymorph conflicts` that will try to identify recipes that conflict with each other and outputs a list of them to your logs folder.
+When a group of ingredients matches more than one recipe, a button will appear above the output
+slot. Pushing this button will show a list of all possible results and selecting one will change the
+crafting output to match. Polymorph will also remember the last selection as long as the ingredients
+don't change, so repeated crafting actions are possible on the same selection.
 
-Currently, only the vanilla crafting table, the vanilla player crafting grid, and a select number of modded crafting tables are supported. Please open an issue on the issue tracker if you'd like to request support for specific additional mods.
+### Smelting
 
-Requires [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api).
+![](https://i.ibb.co/QX9MNYM/polymorph-furnacedemo.gif)
+
+When a valid input matches more than one output, a button will appear above the output slot. Pushing
+this button will show a list of all possible results with the currently selected result highlighted
+in green. Selecting one of the listed results will change the smelting output to match. This
+selection will be saved to the block itself and persist across world loading and unloading.
+
+### Commands
+
+To assist identifying potential conflicts, there's a command `/polymorph conflicts` that will try to
+identify recipes that conflict with each other and outputs a list of them to your logs folder.
+
+## Downloads
+
+**CurseForge**
+- [Polymorph for Forge](https://www.curseforge.com/minecraft/mc-mods/polymorph/files)
+- [Polymorph for Fabric](https://www.curseforge.com/minecraft/mc-mods/polymorph-fabric/files)
+
+## Developing
+
+**Help! I'm getting Mixin crashes when I try to launch in development on Forge!**
+
+Polymorph uses Mixins to implement its core features. This may cause issues when depending on
+Polymorph for your project inside a development environment since ForgeGradle/MixinGradle do not yet
+support this natively like on the Fabric toolchain. As a workaround, please disable the refmaps in
+development by setting the `mixin.env.disableRefMap` JVM argument to `true` in your run
+configuration.
+
+## Support
+
+Please report all bugs, issues, and feature requests to the
+[issue tracker](https://github.com/TheIllusiveC4/Polymorph/issues).
+
+For non-technical support and questions, join the developer's [Discord](https://discord.gg/JWgrdwt).
+
+## License
+
+All source code and assets are licensed under LGPL 3.0.
+
+## Donations
+
+Donations to the developer can be sent through [Ko-fi](https://ko-fi.com/C0C1NL4O).
