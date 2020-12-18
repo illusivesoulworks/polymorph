@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.6-1.16.4] - 2020.12.17
+### Added
+- Added automatic integration with the majority of modded crafting tables
+- Added smelting recipe conflict management for the Furnace, Smoker, and the Blast Furnace
+- Added smelting recipe conflict integration for FastFurnace, Iron Furnaces, and Fabric Furnaces
+- Added French, Croatian, and Russian localization
+- Added REI integration to automatically select the recipe that players clicked on for transferring
+ingredients
+### Changed
+- Updated to Minecraft 1.16.4
+
 ## [0.0.5-1.16.3] - 2020.09.17
 ### Changed
 - Updated to Minecraft 1.16.3
