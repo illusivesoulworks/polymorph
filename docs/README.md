@@ -14,7 +14,7 @@ or other tools to ensure that each recipe is unique.
 Polymorph offers an alternative solution, allowing all possible crafting and smelting recipes to
 co-exist regardless of conflicts.
 
-![](https://i.postimg.cc/prDcRzJ8/logo-final.png)
+[![BisectHosting](https://i.postimg.cc/prDcRzJ8/logo-final.png)](https://bisecthosting.com/illusive)
 
 ## Features
 
