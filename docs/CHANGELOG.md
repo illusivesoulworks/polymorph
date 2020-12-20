@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [0.20] - 2020.12.20
+### Fixed
+- Attempted fix for IllegalArgumentException crash with Create [#45](https://github.com/TheIllusiveC4/Polymorph/issues/45)
+
 ## [0.19] - 2020.12.17
 ### Added
 - Added smelting recipe conflict management for the Furnace, Smoker, and the Blast Furnace

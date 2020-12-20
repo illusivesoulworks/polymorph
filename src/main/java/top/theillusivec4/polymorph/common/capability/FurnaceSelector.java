@@ -125,6 +125,8 @@ public class FurnaceSelector implements IPersistentSelector {
           FieldUtils.writeField(this.parent, "curRecipe", this.selectedRecipe, true);
         } catch (IllegalAccessException e) {
           Polymorph.LOGGER.error("Error accessing curRecipe from FastFurnace!");
+        } catch (IllegalArgumentException e) {
+          Polymorph.LOGGER.debug("Cannot find FastFurnace, skipping field override!");
         }
       }
       ((ServerWorld) world).getPlayers().forEach(player -> {

@@ -139,6 +139,8 @@ public class IronFurnacesModule extends CompatibilityModule {
           FieldUtils.writeField(this.parent, "curRecipe", this.selectedRecipe, true);
         } catch (IllegalAccessException e) {
           Polymorph.LOGGER.error("Error accessing curRecipe from Iron Furnaces!");
+        } catch (IllegalArgumentException e) {
+          Polymorph.LOGGER.debug("Cannot find Iron Furnaces, skipping field override!");
         }
         ((ServerWorld) world).getPlayers().forEach(player -> {
           if (player.openContainer instanceof BlockIronFurnaceContainerBase &&
