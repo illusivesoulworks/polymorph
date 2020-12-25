@@ -71,6 +71,7 @@ public class CPacketFetchRecipes {
             .getProvider(container)
             .map(provider -> provider
                 .getRecipes(world, world.getRecipeManager()).stream()
+                .filter(recipe -> !recipe.getRecipeOutput().isEmpty())
                 .map(recipe -> recipe.getId().toString())
                 .collect(Collectors.toList())).orElse(new ArrayList<>());
         NetworkManager.INSTANCE
