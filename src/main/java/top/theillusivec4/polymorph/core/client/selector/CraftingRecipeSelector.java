@@ -186,7 +186,7 @@ public class CraftingRecipeSelector
           }
         }));
     recipes.sort(Comparator.comparing((recipe) -> recipe.getOutput().getTranslationKey()));
-    this.setRecipes(recipes, world, false, selected);
+    this.setRecipes(recipes, world, refresh, selected);
   }
 
   @Override

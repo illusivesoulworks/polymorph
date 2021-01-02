@@ -19,6 +19,7 @@ package top.theillusivec4.polymorph.core.client.selector;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -65,6 +66,12 @@ public class FurnaceRecipeSelector
   @Override
   public void setRecipes(List<AbstractCookingRecipe> recipes, World world, boolean refresh,
                          String selected) {
+
+    if (refresh) {
+      Set<RecipeOutput> recipeOutputs = new HashSet<>();
+      recipes.removeIf(rec -> !recipeOutputs
+          .add(new RecipeOutput(rec.craft(this.provider.getInventory()))));
+    }
     this.recipeSelectorGui.setRecipes(recipes);
     this.toggleButton.visible = recipes.size() > 1;
 
@@ -94,6 +101,6 @@ public class FurnaceRecipeSelector
           }
         }));
     recipes.sort(Comparator.comparing((recipe) -> recipe.getOutput().getTranslationKey()));
-    this.setRecipes(recipes, world, false, selected);
+    this.setRecipes(recipes, world, refresh, selected);
   }
 }
