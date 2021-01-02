@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 C4
+ * Copyright (c) 2021 C4
  *
  * This file is part of Polymorph, a mod made for Minecraft.
  *
@@ -19,6 +19,7 @@ package top.theillusivec4.polymorph.client.selector;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -64,7 +65,14 @@ public class FurnaceRecipeSelector extends RecipeSelector<IInventory, AbstractCo
   }
 
   @Override
-  public void setRecipes(List<AbstractCookingRecipe> recipes, World world, boolean refresh, String selected) {
+  public void setRecipes(List<AbstractCookingRecipe> recipes, World world, boolean refresh,
+                         String selected) {
+
+    if (refresh) {
+      Set<RecipeOutput> recipeOutputs = new HashSet<>();
+      recipes.removeIf(rec -> !recipeOutputs
+          .add(new RecipeOutput(rec.getCraftingResult(this.provider.getInventory()))));
+    }
     this.recipeSelectorGui.setRecipes(recipes);
     this.toggleButton.visible = recipes.size() > 1;
 
@@ -94,6 +102,6 @@ public class FurnaceRecipeSelector extends RecipeSelector<IInventory, AbstractCo
           }
         }));
     recipes.sort(Comparator.comparing((recipe) -> recipe.getRecipeOutput().getTranslationKey()));
-    this.setRecipes(recipes, world, false, selected);
+    this.setRecipes(recipes, world, refresh, selected);
   }
 }

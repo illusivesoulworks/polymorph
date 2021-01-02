@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 C4
+ * Copyright (c) 2021 C4
  *
  * This file is part of Polymorph, a mod made for Minecraft.
  *
@@ -191,7 +191,7 @@ public class CraftingRecipeSelector extends RecipeSelector<CraftingInventory, IC
           }
         }));
     recipes.sort(Comparator.comparing((recipe) -> recipe.getRecipeOutput().getTranslationKey()));
-    this.setRecipes(recipes, world, false, selected);
+    this.setRecipes(recipes, world, refresh, selected);
   }
 
   @Override
