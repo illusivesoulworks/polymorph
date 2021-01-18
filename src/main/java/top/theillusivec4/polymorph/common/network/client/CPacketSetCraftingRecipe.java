@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 C4
+ * Copyright (c) 2021 C4
  *
  * This file is part of Polymorph, a mod made for Minecraft.
  *
@@ -72,13 +72,19 @@ public class CPacketSetCraftingRecipe {
                 ICraftingRecipe craftingRecipe = (ICraftingRecipe) res;
 
                 if (craftingRecipe.matches(craftingInventory, sender.world)) {
-                  output.set(craftingRecipe.getCraftingResult(craftingInventory));
-                  slot.inventory.setInventorySlotContents(slot.getSlotIndex(), output.get());
+                  ItemStack craftResult = craftingRecipe.getCraftingResult(craftingInventory);
+                  output.set(craftResult);
+                  slot.inventory.setInventorySlotContents(slot.getSlotIndex(), craftResult);
                 }
               }
             });
-            NetworkManager.INSTANCE
-                .send(PacketDistributor.PLAYER.with(() -> sender), new SPacketSyncOutput(output.get()));
+            ItemStack outputStack = output.get();
+
+            if (!outputStack.isEmpty()) {
+              NetworkManager.INSTANCE
+                  .send(PacketDistributor.PLAYER.with(() -> sender),
+                      new SPacketSyncOutput(outputStack));
+            }
           }
         });
       }

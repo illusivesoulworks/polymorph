@@ -133,22 +133,22 @@ public class CraftingRecipeSelector extends RecipeSelector<CraftingInventory, IC
         setLastPlacedRecipe(defaultRecipe);
         setLastRecipesList(recipes);
       }
+    } else {
+      getLastSelectedRecipe().ifPresent(recipe -> {
+
+        if (recipe.matches(provider.getInventory(), world)) {
+          ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
+          this.updatable = false;
+
+          if (playerEntity != null) {
+            NetworkManager.INSTANCE.send(PacketDistributor.SERVER.noArg(),
+                new CPacketSetCraftingRecipe(recipe.getId().toString()));
+          }
+        }
+      });
     }
     this.recipeSelectorGui.setRecipes(recipes);
     this.toggleButton.visible = recipes.size() > 1;
-
-    getLastSelectedRecipe().ifPresent(recipe -> {
-
-      if (recipe.matches(provider.getInventory(), world)) {
-        ClientPlayerEntity playerEntity = Minecraft.getInstance().player;
-        this.updatable = false;
-
-        if (playerEntity != null) {
-          NetworkManager.INSTANCE.send(PacketDistributor.SERVER.noArg(),
-              new CPacketSetCraftingRecipe(recipe.getId().toString()));
-        }
-      }
-    });
 
     RecipeSelectorManager.getPreferredRecipe().ifPresent(id -> {
       for (ICraftingRecipe recipe : recipes) {
