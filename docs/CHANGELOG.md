@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [0.24] - 2021.01.31
+### Added
+- Added Korean translation (thanks othuntgithub!)
+
 ## [0.23] - 2021.01.17
 ### Fixed
 - Fixed issue with empty pattern outputs in Refined Storage [#56](https://github.com/TheIllusiveC4/Polymorph/issues/56)
