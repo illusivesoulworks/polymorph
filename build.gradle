@@ -101,7 +101,7 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
 
-    compile fg.deobf("mezz.jei:jei-${version_mc}:${version_jei}")
+    compile fg.deobf("mezz.jei:jei-1.16.4:${version_jei}")
 
     compile fg.deobf("curse.maven:craftingcraft-237581:${file_craftingcraft}")
     compile fg.deobf("curse.maven:refinedstorage-243076:${file_refinedstorage}")
