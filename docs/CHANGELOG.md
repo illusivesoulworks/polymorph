@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.10-1.16.5] - 2021.02.24
+### Fixed
+- Fixed recipe output not respecting Origins: Classes changes [#67](https://github.com/TheIllusiveC4/Polymorph/issues/67)
+
 ## [0.0.9-1.16.5] - 2021.01.31
 ### Added
 - Added Korean translation (thanks othuntgithub!)

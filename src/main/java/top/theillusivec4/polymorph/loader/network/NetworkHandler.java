@@ -38,6 +38,8 @@ import top.theillusivec4.polymorph.api.type.CraftingProvider;
 import top.theillusivec4.polymorph.api.type.PersistentSelector;
 import top.theillusivec4.polymorph.api.type.PolyProvider;
 import top.theillusivec4.polymorph.core.Polymorph;
+import top.theillusivec4.polymorph.loader.common.PolymorphMod;
+import top.theillusivec4.polymorph.loader.common.integration.originsclasses.OriginsClassesIntegration;
 
 public class NetworkHandler {
 
@@ -87,7 +89,12 @@ public class NetworkHandler {
 
                       if (craftingRecipe.matches(craftingInventory, player.world)) {
                         output.set(craftingRecipe.craft(craftingInventory));
-                        slot.inventory.setStack(slot.id, output.get());
+                        ItemStack outputStack = output.get();
+
+                        if (PolymorphMod.isOriginsClassesLoaded) {
+                          OriginsClassesIntegration.modifyCraftingResult(player, outputStack);
+                        }
+                        slot.inventory.setStack(slot.id, outputStack);
                       }
                     }
                   });

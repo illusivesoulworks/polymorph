@@ -47,6 +47,7 @@ public class PolymorphMod implements ModInitializer {
   private static final List<CompatibilityModule> ACTIVE_INTEGRATIONS = new ArrayList<>();
 
   public static boolean isFastFurnaceLoaded = false;
+  public static boolean isOriginsClassesLoaded = false;
 
   static {
     INTEGRATIONS.put("ironfurnaces", IronFurnacesModule::new);
@@ -56,6 +57,7 @@ public class PolymorphMod implements ModInitializer {
   public PolymorphMod() {
     FabricLoader loader = FabricLoader.getInstance();
     isFastFurnaceLoaded = loader.isModLoaded("fastfurnace");
+    isOriginsClassesLoaded = loader.isModLoaded("origins-classes");
     INTEGRATIONS.forEach((modid, supplier) -> {
 
       if (loader.isModLoaded(modid)) {

@@ -52,6 +52,10 @@ dependencies {
     modRuntime "curse.maven:fabricfurnaces-315534:${project.file_fabricfurnaces}"
     modCompileOnly "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
     modRuntime "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
+    modCompileOnly "curse.maven:origins-391943:${project.file_origins}"
+    modRuntime "curse.maven:origins-391943:${project.file_origins}"
+    modCompileOnly "curse.maven:originsclasses-401833:${project.file_originsclasses}"
+    modRuntime "curse.maven:originsclasses-401833:${project.file_originsclasses}"
     modRuntime "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     //    modRuntime "curse.maven:fastfurnace-364540:3023434"
