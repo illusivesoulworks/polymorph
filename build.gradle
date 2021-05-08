@@ -14,11 +14,12 @@ minecraft {
 }
 
 repositories {
-    maven {
-        url = "https://www.cursemaven.com"
-    }
     maven { 
         url = "https://jitpack.io" 
+    }
+    maven {
+        name = "Ladysnake Mods"
+        url = "https://ladysnake.jfrog.io/artifactory/mods"
     }
     maven {
         url "https://www.cursemaven.com"
