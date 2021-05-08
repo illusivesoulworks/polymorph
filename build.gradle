@@ -17,9 +17,8 @@ repositories {
     maven {
         url = "https://www.cursemaven.com"
     }
-    maven {
-        name = "Ladysnake Libs"
-        url = "https://dl.bintray.com/ladysnake/libs"
+    maven { 
+        url = "https://jitpack.io" 
     }
     maven {
         url "https://www.cursemaven.com"
