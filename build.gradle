@@ -1,26 +1,11 @@
-/*
- * Copyright (c) 2021 C4
- *
- * This file is part of Polymorph, a mod made for Minecraft.
- *
- * Polymorph is free software: you can redistribute it and/or modify it under the terms of the GNU
- * Lesser General Public License as published by the Free Software Foundation, either version 3 of
- * the License, or any later version.
- *
- * Polymorph is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License along with Polymorph.
- * If not, see <https://www.gnu.org/licenses/>.
- */
-
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
         maven { url = 'https://plugins.gradle.org/m2/' }
-        maven { url='https://dist.creeper.host/Sponge/maven' }
-        jcenter()
+        maven {
+            url "https://repo.spongepowered.org/repository/maven-public/"
+            content { includeGroup "org.spongepowered" }
+        }
         mavenCentral()
     }
     dependencies {
@@ -101,7 +86,7 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
 
-    compile fg.deobf("mezz.jei:jei-1.16.4:${version_jei}")
+    compile fg.deobf("mezz.jei:jei-1.16.5:${version_jei}")
 
     compile fg.deobf("curse.maven:craftingcraft-237581:${file_craftingcraft}")
     compile fg.deobf("curse.maven:refinedstorage-243076:${file_refinedstorage}")

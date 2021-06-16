@@ -26,16 +26,19 @@ import net.minecraft.util.ResourceLocation;
 
 public class ToggleRecipeButton extends ImageButton {
 
-  public ToggleRecipeButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn,
-      int yDiffTextIn, ResourceLocation resourceLocationIn, Button.IPressable onPressIn) {
+  public ToggleRecipeButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn,
+                            int yTexStartIn,
+                            int yDiffTextIn, ResourceLocation resourceLocationIn,
+                            Button.IPressable onPressIn) {
     super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn,
         256, 256, onPressIn);
   }
 
   @SuppressWarnings("deprecation")
   @Override
-  public void renderButton(@Nonnull MatrixStack matrixStack, int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_) {
+  public void renderWidget(@Nonnull MatrixStack matrixStack, int p_renderButton_1_,
+                           int p_renderButton_2_, float p_renderButton_3_) {
     RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-    super.renderButton(matrixStack, p_renderButton_1_, p_renderButton_2_, p_renderButton_3_);
+    super.renderWidget(matrixStack, p_renderButton_1_, p_renderButton_2_, p_renderButton_3_);
   }
 }

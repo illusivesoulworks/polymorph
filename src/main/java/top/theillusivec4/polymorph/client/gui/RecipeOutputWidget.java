@@ -51,7 +51,7 @@ public class RecipeOutputWidget<T extends IInventory, R extends IRecipe<T>> exte
   }
 
   @Override
-  public void renderButton(@Nonnull MatrixStack matrixStack, int p_renderButton_1_,
+  public void renderWidget(@Nonnull MatrixStack matrixStack, int p_renderButton_1_,
                            int p_renderButton_2_, float p_renderButton_3_) {
     Minecraft minecraft = Minecraft.getInstance();
     minecraft.getTextureManager().bindTexture(TOGGLE);
