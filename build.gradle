@@ -86,6 +86,8 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
 
+    annotationProcessor 'org.spongepowered:mixin:0.8.2:processor'
+
     compile fg.deobf("mezz.jei:jei-1.16.5:${version_jei}")
 
     compile fg.deobf("curse.maven:craftingcraft-237581:${file_craftingcraft}")
@@ -118,9 +120,9 @@ jar {
     manifest {
         attributes(["Specification-Title": "${mod_name}",
                     "Specification-Vendor": "${mod_author}",
-                    "Specification-Version": "${version}",
+                    "Specification-Version": "${getArchiveVersion()}",
                     "Implementation-Title": "${mod_name}",
-                    "Implementation-Version": "${version}",
+                    "Implementation-Version": "${getArchiveVersion()}",
                     "Implementation-Vendor" :"${mod_author}",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                     "MixinConfigs": "${mod_id}.mixins.json, ${mod_id}_integrations.mixins.json"],)
@@ -128,7 +130,7 @@ jar {
 }
 
 task sourcesJar(type: Jar) {
-    classifier = 'sources'
+    archiveClassifier.set('sources')
     from sourceSets.main.allJava
 }
 
