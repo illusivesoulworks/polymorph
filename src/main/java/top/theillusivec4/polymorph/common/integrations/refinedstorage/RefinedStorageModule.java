@@ -67,7 +67,7 @@ public class RefinedStorageModule extends CompatibilityModule {
     @Override
     public boolean isActive() {
       GridType gridType = this.gridContainer.getGrid().getGridType();
-      return gridType == GridType.CRAFTING || gridType == GridType.PATTERN;
+      return gridType == GridType.CRAFTING;
     }
 
     @Nonnull
