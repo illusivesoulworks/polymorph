@@ -31,19 +31,6 @@ repositories {
             includeGroup "curse.maven"
         }
     }
-
-//    maven {
-//        url = 'https://maven.cafeteria.dev'
-//        content {
-//            includeGroup 'net.adriantodt.fabricmc'
-//        }
-//    }
-//    maven {
-//        url "https://maven.jamieswhiteshirt.com/libs-release"
-//        content {
-//            includeGroup "com.jamieswhiteshirt"
-//        }
-//    }
 }
 
 dependencies {
@@ -86,14 +73,6 @@ dependencies {
     include fabricApi.module("fabric-commands-v0", project.fabric_version)
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${project.cca_version}"
-
-//    // temporary fix: without it runClient will not work because of missing dependencies for rei, fabric furnaces and origins
-//    modImplementation "com.github.apace100:apoli:${project.apoli_version}"
-//    include "com.github.apace100:apoli:${project.apoli_version}"
-//    include modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}")
-//    modApi("dev.architectury:architectury-fabric:${architectury_version}")
-//    modImplementation 'com.github.Draylar.omega-config:omega-config:1.17-SNAPSHOT'
-//    include 'com.github.Draylar.omega-config:omega-config:1.17-SNAPSHOT'
 }
 
 processResources {
