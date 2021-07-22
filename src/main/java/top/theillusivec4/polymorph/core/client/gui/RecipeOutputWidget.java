@@ -18,9 +18,12 @@
 package top.theillusivec4.polymorph.core.client.gui;
 
 import java.util.List;
+
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.AbstractButtonWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -31,7 +34,7 @@ import net.minecraft.util.Identifier;
 import top.theillusivec4.polymorph.core.Polymorph;
 
 public class RecipeOutputWidget<T extends Inventory, R extends Recipe<T>>
-    extends AbstractButtonWidget {
+    extends ButtonWidget {
 
   private static final Identifier TOGGLE = new Identifier(Polymorph.MODID,
       "textures/gui/toggle.png");
@@ -40,7 +43,7 @@ public class RecipeOutputWidget<T extends Inventory, R extends Recipe<T>>
   public boolean highlighted = false;
 
   public RecipeOutputWidget(T inventory, R recipe) {
-    super(0, 0, 25, 25, LiteralText.EMPTY);
+    super(0, 0, 25, 25, LiteralText.EMPTY, (button) -> {});
     this.recipe = recipe;
     this.inventory = inventory;
   }
@@ -51,24 +54,21 @@ public class RecipeOutputWidget<T extends Inventory, R extends Recipe<T>>
   }
 
   @Override
-  public void renderButton(MatrixStack matrixStack, int p_renderButton_1_, int p_renderButton_2_,
-                           float p_renderButton_3_) {
+  public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float delta) {
     MinecraftClient minecraft = MinecraftClient.getInstance();
-    minecraft.getTextureManager().bindTexture(TOGGLE);
-    int j = 0;
 
-    if (this.x + 25 > p_renderButton_1_ && this.x <= p_renderButton_1_ &&
-        this.y + 25 > p_renderButton_2_ && this.y <= p_renderButton_2_) {
+    RenderSystem.setShader(GameRenderer::getPositionTexShader);
+    RenderSystem.setShaderTexture(0, TOGGLE);
+
+    int j = 0;
+    if (this.x + 25 > mouseX && this.x <= mouseX &&
+        this.y + 25 > mouseY && this.y <= mouseY) {
       j += 25;
     }
     this.drawTexture(matrixStack, this.x, this.y, this.highlighted ? 41 : 16, j, this.width, this.height);
+
     int k = 4;
-    float zLevel = minecraft.getItemRenderer().zOffset;
-    minecraft.getItemRenderer().zOffset = 600.0F;
-    minecraft.getItemRenderer()
-        .renderGuiItemIcon(this.recipe.craft(this.inventory), this.x + k,
-            this.y + k);
-    minecraft.getItemRenderer().zOffset = zLevel;
+    minecraft.getItemRenderer().renderGuiItemIcon(this.recipe.craft(this.inventory), this.x + k, this.y + k);
   }
 
   public ItemStack getOutput() {

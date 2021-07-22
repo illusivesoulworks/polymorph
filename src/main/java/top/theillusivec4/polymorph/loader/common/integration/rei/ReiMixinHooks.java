@@ -17,12 +17,13 @@
 
 package top.theillusivec4.polymorph.loader.common.integration.rei;
 
-import me.shedaniel.rei.api.RecipeDisplay;
+import me.shedaniel.rei.plugin.common.displays.crafting.DefaultCraftingDisplay;
+import net.minecraft.util.Identifier;
 import top.theillusivec4.polymorph.core.client.selector.RecipeSelectorManager;
 
 public class ReiMixinHooks {
 
-  public static void setRecipe(RecipeDisplay recipeDisplay) {
-    recipeDisplay.getRecipeLocation().ifPresent(RecipeSelectorManager::setPreferredRecipe);
+  public static void setRecipe(DefaultCraftingDisplay recipeDisplay) {
+    recipeDisplay.getDisplayLocation().ifPresent((Object obj) -> RecipeSelectorManager.setPreferredRecipe((Identifier) obj)); // TODO: may cause crash
   }
 }

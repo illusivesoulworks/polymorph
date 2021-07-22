@@ -17,13 +17,16 @@
 
 package top.theillusivec4.polymorph.loader.common.integration.fabricfurnaces;
 
-import draylar.fabricfurnaces.entity.BaseFurnaceEntity;
+import draylar.fabricfurnaces.entity.FabricFurnaceEntity;
 import java.util.Comparator;
 import java.util.Optional;
+
+import net.minecraft.block.entity.BlastFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.SmokerBlockEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.AbstractCookingRecipe;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeType;
@@ -45,8 +48,8 @@ public class FabricFurnacesModule extends CompatibilityModule {
   @Override
   public void setup() {
     PolymorphApi.getInstance().addEntityProvider(blockEntity -> {
-      if (blockEntity instanceof BaseFurnaceEntity) {
-        return new FabricFurnaceSelector((BaseFurnaceEntity) blockEntity);
+      if (blockEntity instanceof FabricFurnaceEntity) {
+        return new FabricFurnaceSelector((FabricFurnaceEntity) blockEntity);
       }
       return null;
     }, screenHandler -> {
@@ -59,13 +62,13 @@ public class FabricFurnacesModule extends CompatibilityModule {
 
   public static class FabricFurnaceSelector implements PersistentSelector {
 
-    private final BaseFurnaceEntity parent;
+    public final FabricFurnaceEntity parent;
 
     private AbstractCookingRecipe selectedRecipe;
     private ItemStack lastFailedInput = ItemStack.EMPTY;
     private String savedRecipe = "";
 
-    public FabricFurnaceSelector(BaseFurnaceEntity tileEntity) {
+    public FabricFurnaceSelector(FabricFurnaceEntity tileEntity) {
       this.parent = tileEntity;
     }
 
@@ -73,6 +76,7 @@ public class FabricFurnacesModule extends CompatibilityModule {
     @Override
     public Optional<Recipe<?>> fetchRecipe(World world) {
       ItemStack input = parent.getStack(0);
+//      ItemStack input = MinecraftClient.getInstance().player.getActiveItem();
 
       if (input == lastFailedInput) {
         return Optional.empty();
@@ -92,7 +96,7 @@ public class FabricFurnacesModule extends CompatibilityModule {
       }
       Optional<Recipe<?>> maybeRecipe = world.getRecipeManager().values().stream()
           .filter((val) -> val.getType() == this.getRecipeType()).flatMap((val) -> Util
-              .stream(this.getRecipeType().get((Recipe<Inventory>) val, world, parent)))
+              .stream(this.getRecipeType().match((Recipe<Inventory>) val, world, parent)))
           .min(Comparator.comparing((recipe) -> recipe.getOutput().getTranslationKey()))
           .map((val) -> {
             this.setSelectedRecipe(val);
@@ -107,13 +111,14 @@ public class FabricFurnacesModule extends CompatibilityModule {
 
     @Override
     public RecipeType<? extends Recipe<?>> getRecipeType() {
-      try {
-        return (RecipeType<? extends Recipe<?>>) FieldUtils
-            .readField(this.parent, "recipeType", true);
-      } catch (IllegalAccessException e) {
-        Polymorph.LOGGER.error("Error accessing recipeType of Fabric Furnaces!");
-        e.printStackTrace();
-      }
+      // FabricFurnaceEntity extends AbstractFurnaceBlockEntity which is why it can be treated as a smelter
+//      try {
+//        return (RecipeType<? extends Recipe<?>>) FieldUtils
+//            .readField(this.parent, "recipeType", true);
+//      } catch (IllegalAccessException e) {
+//        Polymorph.LOGGER.error("Error accessing recipeType of Fabric Furnaces!");
+//        e.printStackTrace();
+//      }
       return RecipeType.SMELTING;
     }
 
@@ -149,7 +154,7 @@ public class FabricFurnacesModule extends CompatibilityModule {
     }
 
     @Override
-    public void readFromNbt(CompoundTag compoundTag) {
+    public void readFromNbt(NbtCompound compoundTag) {
 
       if (compoundTag.contains("SelectedRecipe")) {
         this.setSavedRecipe(compoundTag.getString("SelectedRecipe"));
@@ -157,7 +162,7 @@ public class FabricFurnacesModule extends CompatibilityModule {
     }
 
     @Override
-    public void writeToNbt(CompoundTag compoundTag) {
+    public void writeToNbt(NbtCompound compoundTag) {
 
       if (this.selectedRecipe != null) {
         compoundTag.putString("SelectedRecipe", this.selectedRecipe.getId().toString());

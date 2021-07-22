@@ -19,14 +19,17 @@ package top.theillusivec4.polymorph.core.client.selector;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.widget.AbstractButtonWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Recipe;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import top.theillusivec4.polymorph.api.type.PolyProvider;
@@ -45,11 +48,12 @@ public abstract class AbstractRecipeSelector<I extends Inventory, R extends Reci
   private static final int SELECTOR_Y_OFFSET = -26;
 
   protected final RecipeSelectorGui<I, R> recipeSelectorGui;
-  protected final AbstractButtonWidget toggleButton;
+  protected final ButtonWidget toggleButton;
   protected final PolyProvider<I, R> provider;
   protected final HandledScreen<?> parent;
 
   private boolean updatePosition = false;
+  private boolean mouseDown = false;
 
   public AbstractRecipeSelector(HandledScreen<?> screen, PolyProvider<I, R> provider) {
     this.parent = screen;
@@ -59,8 +63,8 @@ public abstract class AbstractRecipeSelector<I extends Inventory, R extends Reci
     this.recipeSelectorGui =
         new RecipeSelectorGui<>(x + SELECTOR_X_OFFSET, y + SELECTOR_Y_OFFSET,
             provider.getInventory(), this::selectRecipe, this.parent);
-    this.toggleButton = new ToggleRecipeButton(x, y, 16, 16, 0, 0, 17, TOGGLE,
-        clickWidget -> recipeSelectorGui.setVisible(!recipeSelectorGui.isVisible()));
+    this.toggleButton = new ToggleRecipeButton(x, y, 16, 16, 0, 0, 17, TOGGLE, clickWidget -> {
+    });
     this.toggleButton.visible = this.recipeSelectorGui.getButtons().size() > 1;
   }
 
@@ -100,17 +104,20 @@ public abstract class AbstractRecipeSelector<I extends Inventory, R extends Reci
 
   public boolean mouseClicked(double mouseX, double mouseY, int button) {
 
-    if (this.toggleButton.mouseClicked(mouseX, mouseY, button)) {
-      return true;
-    } else if (this.recipeSelectorGui.mouseClicked(mouseX, mouseY, button)) {
-      this.recipeSelectorGui.setVisible(false);
-      return true;
-    } else if (this.recipeSelectorGui.isVisible()) {
+    mouseDown = !mouseDown;
 
-      if (!this.toggleButton.mouseClicked(mouseX, mouseY, button)) {
+    if (mouseDown) {
+      if (this.toggleButton.mouseClicked(mouseX, mouseY, button)) {
+        this.recipeSelectorGui.setVisible(!this.recipeSelectorGui.isVisible());
+        return true;
+      } else if (this.recipeSelectorGui.mouseClicked(mouseX, mouseY, button)) {
         this.recipeSelectorGui.setVisible(false);
+        return true;
       }
-      return true;
+      else if (this.recipeSelectorGui.isVisible()) {
+        this.recipeSelectorGui.setVisible(false);
+        return true;
+      }
     }
     return false;
   }
@@ -123,12 +130,12 @@ public abstract class AbstractRecipeSelector<I extends Inventory, R extends Reci
 
     private final Item item;
     private final int count;
-    private final CompoundTag tag;
+    private final NbtCompound tag;
 
     public RecipeOutput(ItemStack stack) {
       this.item = stack.getItem();
       this.count = stack.getCount();
-      this.tag = stack.getTag();
+      this.tag = stack.getNbt();
     }
 
     @Override

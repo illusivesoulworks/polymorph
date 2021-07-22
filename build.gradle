@@ -1,10 +1,11 @@
 plugins {
-    id 'fabric-loom' version '0.5-SNAPSHOT'
+    id 'fabric-loom' version '0.9-SNAPSHOT'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
+    id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -18,6 +19,9 @@ repositories {
         url = "https://jitpack.io" 
     }
     maven {
+        url "https://maven.shedaniel.me/"
+    }
+    maven {
         name = "Ladysnake Mods"
         url = "https://ladysnake.jfrog.io/artifactory/mods"
     }
@@ -27,6 +31,19 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+
+//    maven {
+//        url = 'https://maven.cafeteria.dev'
+//        content {
+//            includeGroup 'net.adriantodt.fabricmc'
+//        }
+//    }
+//    maven {
+//        url "https://maven.jamieswhiteshirt.com/libs-release"
+//        content {
+//            includeGroup "com.jamieswhiteshirt"
+//        }
+//    }
 }
 
 dependencies {
@@ -46,12 +63,12 @@ dependencies {
     modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
     modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${project.cca_version}"
 
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
-    modRuntime "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
+    modCompileOnly "curse.maven:roughly-enough-items-310111:${project.rei_version}"
+    modRuntime "curse.maven:roughly-enough-items-310111:${project.rei_version}"
     modCompileOnly "curse.maven:fabricfurnaces-315534:${project.file_fabricfurnaces}"
     modRuntime "curse.maven:fabricfurnaces-315534:${project.file_fabricfurnaces}"
-    modCompileOnly "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
-    modRuntime "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
+//    modCompileOnly "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
+//    modRuntime "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
     modCompileOnly "curse.maven:origins-391943:${project.file_origins}"
     modRuntime "curse.maven:origins-391943:${project.file_origins}"
     modCompileOnly "curse.maven:originsclasses-401833:${project.file_originsclasses}"
@@ -69,23 +86,28 @@ dependencies {
     include fabricApi.module("fabric-commands-v0", project.fabric_version)
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${project.cca_version}"
+
+//    // temporary fix: without it runClient will not work because of missing dependencies for rei, fabric furnaces and origins
+//    modImplementation "com.github.apace100:apoli:${project.apoli_version}"
+//    include "com.github.apace100:apoli:${project.apoli_version}"
+//    include modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}")
+//    modApi("dev.architectury:architectury-fabric:${architectury_version}")
+//    modImplementation 'com.github.Draylar.omega-config:omega-config:1.17-SNAPSHOT'
+//    include 'com.github.Draylar.omega-config:omega-config:1.17-SNAPSHOT'
 }
 
 processResources {
     inputs.property "version", project.version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include "fabric.mod.json"
+    filesMatching("fabric.mod.json") {
         expand 'version': project.version
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "fabric.mod.json"
     }
 }
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
+
+    it.options.release = 16
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -108,7 +130,7 @@ curseforge {
         releaseType = "${curse_release}"
         changelogType = 'markdown'
         changelog = file('docs/CHANGELOG.md')
-        addGameVersion "Java 8"
+        addGameVersion "Java 16"
         addGameVersion "Fabric"
         "${curse_versions}".split(',').each {
             addGameVersion "${it}"

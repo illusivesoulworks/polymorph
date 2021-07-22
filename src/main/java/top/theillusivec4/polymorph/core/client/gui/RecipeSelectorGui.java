@@ -27,10 +27,7 @@ import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -122,32 +119,32 @@ public class RecipeSelectorGui<I extends Inventory, R extends Recipe<I>> extends
   }
 
   @Override
-  public void render(MatrixStack matrixStack, int p_render_1_, int p_render_2_,
-                     float p_render_3_) {
+  public void render(MatrixStack matrixStack, int mouseX, int mouseY,
+                     float delta) {
 
     if (this.isVisible()) {
       this.hoveredButton = null;
       buttons.forEach(button -> {
-        button.render(matrixStack, p_render_1_, p_render_2_, p_render_3_);
+        button.render(matrixStack, mouseX, mouseY, delta);
 
         if (button.visible && button.isHovered()) {
           this.hoveredButton = button;
         }
       });
-      this.renderTooltip(matrixStack, p_render_1_, p_render_2_);
+      this.renderTooltip(matrixStack, mouseX, mouseY);
     }
   }
 
   @Override
-  public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_,
-                              int p_mouseClicked_5_) {
+  public boolean mouseClicked(double mouseX, double mouseY,
+                              int button) {
 
     if (this.isVisible()) {
 
-      for (RecipeOutputWidget<I, R> button : this.buttons) {
+      for (RecipeOutputWidget<I, R> _button : this.buttons) {
 
-        if (button.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_)) {
-          select.accept(button.recipe);
+        if (_button.mouseClicked(mouseX, mouseY, button)) {
+          select.accept(_button.recipe);
           return true;
         }
       }
@@ -174,137 +171,146 @@ public class RecipeSelectorGui<I extends Inventory, R extends Recipe<I>> extends
                                       int mouseY, int screenWidth, int screenHeight,
                                       int maxTextWidth, int backgroundColor, int borderColorStart,
                                       int borderColorEnd, TextRenderer font) {
-    if (!textLines.isEmpty()) {
-      RenderSystem.disableRescaleNormal();
-      RenderSystem.disableDepthTest();
-      int tooltipTextWidth = 0;
 
-      for (StringVisitable textLine : textLines) {
-        int textLineWidth = font.getWidth(textLine);
+    MinecraftClient minecraft = MinecraftClient.getInstance();
 
-        if (textLineWidth > tooltipTextWidth) {
-          tooltipTextWidth = textLineWidth;
-        }
-      }
-      boolean needsWrap = false;
-      int titleLinesCount = 1;
-      int tooltipX = mouseX + 12;
-
-      if (tooltipX + tooltipTextWidth + 4 > screenWidth) {
-        tooltipX = mouseX - 16 - tooltipTextWidth;
-
-        if (tooltipX < 4) {
-
-          if (mouseX > screenWidth / 2) {
-            tooltipTextWidth = mouseX - 12 - 8;
-          } else {
-            tooltipTextWidth = screenWidth - 16 - mouseX;
-          }
-          needsWrap = true;
-        }
-      }
-
-      if (maxTextWidth > 0 && tooltipTextWidth > maxTextWidth) {
-        tooltipTextWidth = maxTextWidth;
-        needsWrap = true;
-      }
-
-      if (needsWrap) {
-        int wrappedTooltipWidth = 0;
-        List<StringVisitable> wrappedTextLines = new ArrayList<>();
-
-        for (int i = 0; i < textLines.size(); i++) {
-          StringVisitable textLine = textLines.get(i);
-          List<StringVisitable> wrappedLine =
-              font.getTextHandler().wrapLines(textLine, tooltipTextWidth, Style.EMPTY);
-
-          if (i == 0) {
-            titleLinesCount = wrappedLine.size();
-          }
-
-          for (StringVisitable line : wrappedLine) {
-            int lineWidth = font.getWidth(line);
-            if (lineWidth > wrappedTooltipWidth) {
-              wrappedTooltipWidth = lineWidth;
-            }
-            wrappedTextLines.add(line);
-          }
-        }
-        tooltipTextWidth = wrappedTooltipWidth;
-        textLines = wrappedTextLines;
-
-        if (mouseX > screenWidth / 2) {
-          tooltipX = mouseX - 16 - tooltipTextWidth;
-        } else {
-          tooltipX = mouseX + 12;
-        }
-      }
-      int tooltipY = mouseY - 12;
-      int tooltipHeight = 8;
-
-      if (textLines.size() > 1) {
-        tooltipHeight += (textLines.size() - 1) * 10;
-
-        if (textLines.size() > titleLinesCount) {
-          tooltipHeight += 2;
-        }
-      }
-
-      if (tooltipY < 4) {
-        tooltipY = 4;
-      } else if (tooltipY + tooltipHeight + 4 > screenHeight) {
-        tooltipY = screenHeight - tooltipHeight - 4;
-      }
-      final int zLevel = 900;
-      mStack.push();
-      Matrix4f mat = mStack.peek().getModel();
-      drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY - 4,
-          tooltipX + tooltipTextWidth + 3,
-          tooltipY - 3, backgroundColor, backgroundColor);
-      drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY + tooltipHeight + 3,
-          tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 4, backgroundColor,
-          backgroundColor);
-      drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY - 3,
-          tooltipX + tooltipTextWidth + 3,
-          tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
-      drawGradientRect(mat, zLevel, tooltipX - 4, tooltipY - 3, tooltipX - 3,
-          tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
-      drawGradientRect(mat, zLevel, tooltipX + tooltipTextWidth + 3, tooltipY - 3,
-          tooltipX + tooltipTextWidth + 4, tooltipY + tooltipHeight + 3, backgroundColor,
-          backgroundColor);
-      drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY - 3 + 1, tooltipX - 3 + 1,
-          tooltipY + tooltipHeight + 3 - 1, borderColorStart, borderColorEnd);
-      drawGradientRect(mat, zLevel, tooltipX + tooltipTextWidth + 2, tooltipY - 3 + 1,
-          tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3 - 1, borderColorStart,
-          borderColorEnd);
-      drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY - 3,
-          tooltipX + tooltipTextWidth + 3,
-          tooltipY - 3 + 1, borderColorStart, borderColorStart);
-      drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2,
-          tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, borderColorEnd,
-          borderColorEnd);
-      VertexConsumerProvider.Immediate renderType =
-          VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-      mStack.translate(0.0D, 0.0D, zLevel);
-
-      for (int lineNumber = 0; lineNumber < textLines.size(); ++lineNumber) {
-        StringVisitable line = textLines.get(lineNumber);
-
-        if (line != null) {
-          font.draw(Language.getInstance().reorder(line), (float) tooltipX,
-              (float) tooltipY, -1, true, mat, renderType, false, 0, 15728880);
-        }
-
-        if (lineNumber + 1 == titleLinesCount) {
-          tooltipY += 2;
-        }
-        tooltipY += 10;
-      }
-      renderType.draw();
-      mStack.pop();
-      RenderSystem.enableDepthTest();
-      RenderSystem.enableRescaleNormal();
+    if (minecraft != null && minecraft.currentScreen != null) {
+      minecraft.currentScreen.renderTooltip(mStack, minecraft.currentScreen.getTooltipFromItem(stack), mouseX, mouseY);
     }
+
+//    if (!textLines.isEmpty()) {
+//
+//      RenderSystem.disableRescaleNormal();
+//
+//      RenderSystem.disableDepthTest();
+//      int tooltipTextWidth = 0;
+//
+//      for (StringVisitable textLine : textLines) {
+//        int textLineWidth = font.getWidth(textLine);
+//
+//        if (textLineWidth > tooltipTextWidth) {
+//          tooltipTextWidth = textLineWidth;
+//        }
+//      }
+//      boolean needsWrap = false;
+//      int titleLinesCount = 1;
+//      int tooltipX = mouseX + 12;
+//
+//      if (tooltipX + tooltipTextWidth + 4 > screenWidth) {
+//        tooltipX = mouseX - 16 - tooltipTextWidth;
+//
+//        if (tooltipX < 4) {
+//
+//          if (mouseX > screenWidth / 2) {
+//            tooltipTextWidth = mouseX - 12 - 8;
+//          } else {
+//            tooltipTextWidth = screenWidth - 16 - mouseX;
+//          }
+//          needsWrap = true;
+//        }
+//      }
+//
+//      if (maxTextWidth > 0 && tooltipTextWidth > maxTextWidth) {
+//        tooltipTextWidth = maxTextWidth;
+//        needsWrap = true;
+//      }
+//
+//      if (needsWrap) {
+//        int wrappedTooltipWidth = 0;
+//        List<StringVisitable> wrappedTextLines = new ArrayList<>();
+//
+//        for (int i = 0; i < textLines.size(); i++) {
+//          StringVisitable textLine = textLines.get(i);
+//          List<StringVisitable> wrappedLine =
+//              font.getTextHandler().wrapLines(textLine, tooltipTextWidth, Style.EMPTY);
+//
+//          if (i == 0) {
+//            titleLinesCount = wrappedLine.size();
+//          }
+//
+//          for (StringVisitable line : wrappedLine) {
+//            int lineWidth = font.getWidth(line);
+//            if (lineWidth > wrappedTooltipWidth) {
+//              wrappedTooltipWidth = lineWidth;
+//            }
+//            wrappedTextLines.add(line);
+//          }
+//        }
+//        tooltipTextWidth = wrappedTooltipWidth;
+//        textLines = wrappedTextLines;
+//
+//        if (mouseX > screenWidth / 2) {
+//          tooltipX = mouseX - 16 - tooltipTextWidth;
+//        } else {
+//          tooltipX = mouseX + 12;
+//        }
+//      }
+//      int tooltipY = mouseY - 12;
+//      int tooltipHeight = 8;
+//
+//      if (textLines.size() > 1) {
+//        tooltipHeight += (textLines.size() - 1) * 10;
+//
+//        if (textLines.size() > titleLinesCount) {
+//          tooltipHeight += 2;
+//        }
+//      }
+//
+//      if (tooltipY < 4) {
+//        tooltipY = 4;
+//      } else if (tooltipY + tooltipHeight + 4 > screenHeight) {
+//        tooltipY = screenHeight - tooltipHeight - 4;
+//      }
+//      final int zLevel = 900;
+//      mStack.push();
+//      Matrix4f mat = mStack.peek().getModel();
+//      drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY - 4,
+//          tooltipX + tooltipTextWidth + 3,
+//          tooltipY - 3, backgroundColor, backgroundColor);
+//      drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY + tooltipHeight + 3,
+//          tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 4, backgroundColor,
+//          backgroundColor);
+//      drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY - 3,
+//          tooltipX + tooltipTextWidth + 3,
+//          tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
+//      drawGradientRect(mat, zLevel, tooltipX - 4, tooltipY - 3, tooltipX - 3,
+//          tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
+//      drawGradientRect(mat, zLevel, tooltipX + tooltipTextWidth + 3, tooltipY - 3,
+//          tooltipX + tooltipTextWidth + 4, tooltipY + tooltipHeight + 3, backgroundColor,
+//          backgroundColor);
+//      drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY - 3 + 1, tooltipX - 3 + 1,
+//          tooltipY + tooltipHeight + 3 - 1, borderColorStart, borderColorEnd);
+//      drawGradientRect(mat, zLevel, tooltipX + tooltipTextWidth + 2, tooltipY - 3 + 1,
+//          tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3 - 1, borderColorStart,
+//          borderColorEnd);
+//      drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY - 3,
+//          tooltipX + tooltipTextWidth + 3,
+//          tooltipY - 3 + 1, borderColorStart, borderColorStart);
+//      drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2,
+//          tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, borderColorEnd,
+//          borderColorEnd);
+//      VertexConsumerProvider.Immediate renderType =
+//          VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+//      mStack.translate(0.0D, 0.0D, zLevel);
+//
+//      for (int lineNumber = 0; lineNumber < textLines.size(); ++lineNumber) {
+//        StringVisitable line = textLines.get(lineNumber);
+//
+//        if (line != null) {
+//          font.draw(Language.getInstance().reorder(line), (float) tooltipX,
+//              (float) tooltipY, -1, true, mat, renderType, false, 0, 15728880);
+//        }
+//
+//        if (lineNumber + 1 == titleLinesCount) {
+//          tooltipY += 2;
+//        }
+//        tooltipY += 10;
+//      }
+//      renderType.draw();
+//      mStack.pop();
+//      RenderSystem.enableDepthTest();
+//      RenderSystem.enableRescaleNormal();
+//    }
   }
 
   public static void drawGradientRect(Matrix4f mat, int zLevel, int left, int top, int right,
@@ -321,10 +327,10 @@ public class RecipeSelectorGui<I extends Inventory, R extends Recipe<I>> extends
     RenderSystem.disableTexture();
     RenderSystem.enableBlend();
     RenderSystem.defaultBlendFunc();
-    RenderSystem.shadeModel(GL11.GL_SMOOTH);
+
     Tessellator tessellator = Tessellator.getInstance();
     BufferBuilder buffer = tessellator.getBuffer();
-    buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR);
+    buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
     buffer.vertex(mat, right, top, zLevel).color(startRed, startGreen, startBlue, startAlpha)
         .next();
     buffer.vertex(mat, left, top, zLevel).color(startRed, startGreen, startBlue, startAlpha)
@@ -332,7 +338,6 @@ public class RecipeSelectorGui<I extends Inventory, R extends Recipe<I>> extends
     buffer.vertex(mat, left, bottom, zLevel).color(endRed, endGreen, endBlue, endAlpha).next();
     buffer.vertex(mat, right, bottom, zLevel).color(endRed, endGreen, endBlue, endAlpha).next();
     tessellator.draw();
-    RenderSystem.shadeModel(GL11.GL_FLAT);
     RenderSystem.disableBlend();
     RenderSystem.enableTexture();
   }

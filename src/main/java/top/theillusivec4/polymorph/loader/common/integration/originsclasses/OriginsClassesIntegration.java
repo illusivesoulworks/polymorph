@@ -42,24 +42,24 @@ import net.minecraft.item.ToolItem;
 public class OriginsClassesIntegration {
 
   public static void modifyCraftingResult(PlayerEntity player, ItemStack itemStack) {
-
-    if(itemStack.getItem().isFood() && ClassPowerTypes.BETTER_CRAFTED_FOOD.isActive(player)) {
-      FoodComponent food = itemStack.getItem().getFoodComponent();
-      int foodBonus = (int)Math.ceil((float)food.getHunger() / 3F);
-      if(foodBonus < 1) {
-        foodBonus = 1;
-      }
-      itemStack.getOrCreateTag().putInt("FoodBonus", foodBonus);
-    }
-
-    if(ClassPowerTypes.QUALITY_EQUIPMENT.isActive(player) && isEquipment(itemStack)) {
-      addQualityAttribute(itemStack);
-    }
-    int baseValue = itemStack.getCount();
-    int newValue = (int) OriginComponent.modify(player, CraftAmountPower.class, baseValue, (p -> p.doesApply(itemStack)));
-    if(newValue != baseValue) {
-      itemStack.setCount(newValue < 0 ? 0 : Math.min(newValue, itemStack.getMaxCount()));
-    }
+      // TODO: fix origins integration
+//    if(itemStack.getItem().isFood() && ClassPowerTypes.BETTER_CRAFTED_FOOD.isActive(player)) {
+//      FoodComponent food = itemStack.getItem().getFoodComponent();
+//      int foodBonus = (int)Math.ceil((float)food.getHunger() / 3F);
+//      if(foodBonus < 1) {
+//        foodBonus = 1;
+//      }
+//      itemStack.getOrCreateNbt().putInt("FoodBonus", foodBonus);
+//    }
+//
+//    if(ClassPowerTypes.QUALITY_EQUIPMENT.isActive(player) && isEquipment(itemStack)) {
+//      addQualityAttribute(itemStack);
+//    }
+//    int baseValue = itemStack.getCount();
+//    int newValue = (int) OriginComponent.modify(player, CraftAmountPower.class, baseValue, (p -> p.doesApply(itemStack)));
+//    if(newValue != baseValue) {
+//      itemStack.setCount(newValue < 0 ? 0 : Math.min(newValue, itemStack.getMaxCount()));
+//    }
   }
 
   private static void addQualityAttribute(ItemStack stack) {
@@ -70,7 +70,7 @@ public class OriginsClassesIntegration {
     } else if(item instanceof SwordItem || item instanceof RangedWeaponItem) {
       stack.addAttributeModifier(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier("Blacksmith quality", 0.5D, EntityAttributeModifier.Operation.ADDITION), EquipmentSlot.MAINHAND);
     } else if(item instanceof MiningToolItem || item instanceof ShearsItem) {
-      stack.getOrCreateTag().putFloat("MiningSpeedMultiplier", 1.05F);
+      stack.getOrCreateNbt().putFloat("MiningSpeedMultiplier", 1.05F);
     } else if(item instanceof ShieldItem) {
       stack.addAttributeModifier(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, new EntityAttributeModifier("Blacksmith quality", 0.1D, EntityAttributeModifier.Operation.ADDITION), EquipmentSlot.OFFHAND);
     }

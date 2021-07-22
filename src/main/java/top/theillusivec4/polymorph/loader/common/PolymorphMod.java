@@ -50,7 +50,7 @@ public class PolymorphMod implements ModInitializer {
   public static boolean isOriginsClassesLoaded = false;
 
   static {
-    INTEGRATIONS.put("ironfurnaces", IronFurnacesModule::new);
+//    INTEGRATIONS.put("ironfurnaces", IronFurnacesModule::new);
     INTEGRATIONS.put("fabric-furnaces", FabricFurnacesModule::new);
   }
 

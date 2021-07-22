@@ -33,7 +33,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeFinder;
+import net.minecraft.recipe.RecipeMatcher;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.server.command.CommandManager;
@@ -60,7 +60,7 @@ public class PolymorphCommands {
     List<String> lines = new ArrayList<>();
     Set<String> processed = new HashSet<>();
     Collection<Recipe<?>> recipes = world.getRecipeManager().values();
-    RecipeFinder recipeItemHelper = new RecipeFinder();
+    RecipeMatcher recipeItemHelper = new RecipeMatcher();
     IntArrayList first = new IntArrayList();
     IntArrayList second = new IntArrayList();
     AtomicInteger conflictCount = new AtomicInteger();
@@ -85,29 +85,29 @@ public class PolymorphCommands {
                 recipe.isIgnoredInRecipeBook() == otherRecipe.isIgnoredInRecipeBook()
                 && areSameShape(recipe, otherRecipe)) {
               recipeItemHelper.clear();
-              recipe.getPreviewInputs().forEach(ingredient -> {
+              recipe.getIngredients().forEach(ingredient -> {
                 ItemStack[] stacks =
                     Polymorph.getLoader().getAccessor().getMatchingStacks(ingredient);
 
                 for (ItemStack matchingStack : stacks) {
-                  recipeItemHelper.addItem(matchingStack);
+                  recipeItemHelper.addInput(matchingStack);
                 }
               });
               second.clear();
 
-              if (recipeItemHelper.findRecipe(recipe, second)) {
+              if (recipeItemHelper.match(recipe, second)) { // TODO: may cause crash
                 recipeItemHelper.clear();
-                otherRecipe.getPreviewInputs().forEach(ingredient -> {
+                otherRecipe.getIngredients().forEach(ingredient -> {
                   ItemStack[] stacks =
                       Polymorph.getLoader().getAccessor().getMatchingStacks(ingredient);
 
                   for (ItemStack matchingStack : stacks) {
-                    recipeItemHelper.addItem(matchingStack);
+                    recipeItemHelper.addInput(matchingStack);
                   }
                 });
                 first.clear();
 
-                if (recipeItemHelper.findRecipe(otherRecipe, first) && first.equals(second)) {
+                if (recipeItemHelper.match(otherRecipe, first) && first.equals(second)) {
                   processed.add(otherId);
                   conflicts.add(otherId);
                 }

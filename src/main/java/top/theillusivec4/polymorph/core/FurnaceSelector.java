@@ -25,7 +25,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.SmokerBlockEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.AbstractCookingRecipe;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeType;
@@ -74,7 +74,7 @@ public class FurnaceSelector implements PersistentSelector {
     }
     Optional<Recipe<?>> maybeRecipe = world.getRecipeManager().values().stream()
         .filter((val) -> val.getType() == this.getRecipeType()).flatMap((val) -> Util
-            .stream(this.getRecipeType().get((Recipe<Inventory>) val, world, parent)))
+            .stream(this.getRecipeType().match((Recipe<Inventory>) val, world, parent)))
         .min(Comparator.comparing((recipe) -> recipe.getOutput().getTranslationKey()))
         .map((val) -> {
           this.setSelectedRecipe(val);
@@ -141,7 +141,7 @@ public class FurnaceSelector implements PersistentSelector {
   }
 
   @Override
-  public void readFromNbt(CompoundTag compoundTag) {
+  public void readFromNbt(NbtCompound compoundTag) {
 
     if (compoundTag.contains("SelectedRecipe")) {
       this.setSavedRecipe(compoundTag.getString("SelectedRecipe"));
@@ -149,7 +149,7 @@ public class FurnaceSelector implements PersistentSelector {
   }
 
   @Override
-  public void writeToNbt(CompoundTag compoundTag) {
+  public void writeToNbt(NbtCompound compoundTag) {
 
     if (this.selectedRecipe != null) {
       compoundTag.putString("SelectedRecipe", this.selectedRecipe.getId().toString());

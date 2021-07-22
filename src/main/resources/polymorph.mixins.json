@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "top.theillusivec4.polymorph.loader.mixin.core",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "mixins": [
     "CraftingResultInventoryMixin",
     "CraftingScreenHandlerAccessor",
@@ -16,6 +16,7 @@
     "GameRendererMixin",
     "HandledScreenAccessor",
     "MouseMixin",
+    "MouseAccessor",
     "RecipeBookWidgetAccessor",
     "ScreenMixin",
     "ScreenAccessor",

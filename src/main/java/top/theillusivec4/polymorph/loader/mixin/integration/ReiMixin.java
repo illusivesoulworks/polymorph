@@ -17,10 +17,9 @@
 
 package top.theillusivec4.polymorph.loader.mixin.integration;
 
-import java.util.function.Supplier;
-import me.shedaniel.rei.api.RecipeDisplay;
-import me.shedaniel.rei.api.widgets.Button;
-import me.shedaniel.rei.impl.InternalWidgets;
+import me.shedaniel.rei.api.client.gui.widgets.Button;
+import me.shedaniel.rei.impl.client.gui.widget.InternalWidgets;
+import me.shedaniel.rei.plugin.common.displays.crafting.DefaultCraftingDisplay;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,12 +27,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.theillusivec4.polymorph.loader.common.integration.rei.ReiMixinHooks;
 
+import java.util.function.Supplier;
+
 @Mixin(InternalWidgets.class)
 public class ReiMixin {
 
-  @Inject(at = @At(value = "HEAD"), method = "lambda$createAutoCraftingButtonWidget$0", remap = false)
+  @Inject(at = @At(value = "HEAD"), method = "lambda$createAutoCraftingButtonWidget$0", remap = false) // TODO: may cause crash
   private static void _polymorph_hookTransfer(HandledScreen<?> screen,
-                                              Supplier<RecipeDisplay> recipeDisplaySupplier,
+                                              Supplier<DefaultCraftingDisplay> recipeDisplaySupplier,
                                               Button button, CallbackInfo cb) {
     ReiMixinHooks.setRecipe(recipeDisplaySupplier.get());
   }

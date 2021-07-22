@@ -30,20 +30,13 @@ import top.theillusivec4.polymorph.loader.client.ClientMixinHooks;
 @Mixin(Mouse.class)
 public class MouseMixin {
 
-  @Shadow
-  MinecraftClient client;
-  @Shadow
-  double x;
-  @Shadow
-  double y;
-
-  @Inject(at = @At("HEAD"), method = "method_1611([ZDDI)V", cancellable = true)
-  public void mouseClick(boolean[] unused, double mouseX, double mouseY, int button,
-                         CallbackInfo cb) {
-    Screen screen = this.client.currentScreen;
-    double d = this.x * (double) this.client.getWindow().getScaledWidth() / (double) this.client
+  @Inject(at = @At("HEAD"), method = "onMouseButton", cancellable = true)
+  public void mouseClick(long window, int button, int action, int mods, CallbackInfo cb) {
+    MinecraftClient client = ((MouseAccessor)this).getClient();
+    Screen screen = ((MouseAccessor)this).getClient().currentScreen;
+    double d = ((MouseAccessor)this).getX() * (double) client.getWindow().getScaledWidth() / (double) client
         .getWindow().getWidth();
-    double e = this.y * (double) this.client.getWindow().getScaledHeight() / (double) this.client
+    double e = ((MouseAccessor)this).getY() * (double) client.getWindow().getScaledHeight() / (double) client
         .getWindow().getHeight();
 
     if (ClientMixinHooks.clickSelector(screen, d, e, button)) {
