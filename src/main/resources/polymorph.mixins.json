@@ -1,25 +1,26 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "top.theillusivec4.polymorph.loader.mixin.core",
+  "package": "top.theillusivec4.polymorph.mixin.core",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "CraftingResultInventoryMixin",
-    "CraftingScreenHandlerAccessor",
-    "IngredientAccessor",
-    "PlayerScreenHandlerAccessor",
-    "AbstractFurnaceScreenHandlerAccessor",
-    "RecipeManagerMixin",
-    "SlotAccessor"
+    "AccessorAbstractFurnaceScreenHandler",
+    "AccessorCraftingScreenHandler",
+    "AccessorIngredient",
+    "AccessorPlayerScreenHandler",
+    "AccessorSlot",
+    "MixinCraftingScreenHandler",
+    "MixinPolymorphApi",
+    "MixinRecipeManager"
   ],
   "client": [
-    "GameRendererMixin",
-    "HandledScreenAccessor",
-    "MouseMixin",
-    "RecipeBookWidgetAccessor",
-    "ScreenMixin",
-    "ScreenAccessor",
-    "MinecraftClientAccessor"
+    "AccessorHandledScreen",
+    "AccessorMinecraftClient",
+    "AccessorRecipeBookWidget",
+    "AccessorScreen",
+    "MixinGameRenderer",
+    "MixinMouse",
+    "MixinScreen"
   ],
   "server": [],
   "injectors": {

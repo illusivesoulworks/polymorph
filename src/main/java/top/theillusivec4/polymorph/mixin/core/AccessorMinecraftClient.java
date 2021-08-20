@@ -15,17 +15,16 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.api;
+package top.theillusivec4.polymorph.mixin.core;
 
-import java.util.Optional;
-import net.minecraft.screen.ScreenHandler;
-import top.theillusivec4.polymorph.api.type.Polymorphable;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.FontManager;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-public abstract class PolymorphApi {
+@Mixin(MinecraftClient.class)
+public interface AccessorMinecraftClient {
 
-  public static PolymorphApi getInstance() {
-    throw new IllegalStateException("No Polymorph API instance defined!");
-  }
-
-  public abstract Optional<Polymorphable<?, ?>> getPolymorphable(ScreenHandler screenHandler);
+  @Accessor
+  FontManager getFontManager();
 }

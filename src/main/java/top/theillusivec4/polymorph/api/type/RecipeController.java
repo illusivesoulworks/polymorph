@@ -15,18 +15,31 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.api;
+package top.theillusivec4.polymorph.api.type;
 
-import dev.onyxstudios.cca.api.v3.component.ComponentKey;
-import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
+import java.util.List;
+import java.util.Set;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.recipe.Recipe;
 import net.minecraft.util.Identifier;
-import top.theillusivec4.polymorph.api.type.BlockEntityRecipeController;
-import top.theillusivec4.polymorph.common.PolymorphMod;
+import net.minecraft.world.World;
 
-public class PolymorphComponent {
+public interface RecipeController<I extends Inventory, R extends Recipe<I>> {
 
-  public static final ComponentKey<BlockEntityRecipeController> BLOCK_ENTITY_RECIPE_CONTROLLER =
-      ComponentRegistry
-          .getOrCreate(new Identifier(PolymorphMod.MOD_ID, "block_entity_recipe_controller"),
-              BlockEntityRecipeController.class);
+  Polymorphable<I, R> getPolymorphable();
+
+  void selectRecipe(R recipe);
+
+  void highlightRecipe(String recipe);
+
+  void setRecipes(Set<Identifier> recipes, World world, Identifier selected);
+
+  void tick();
+
+  void render(MatrixStack matrixStack, int mouseX, int mouseY, float renderPartialTicks);
+
+  boolean mouseClicked(double mouseX, double mouseY, int button);
+
+  void markUpdatePosition();
 }

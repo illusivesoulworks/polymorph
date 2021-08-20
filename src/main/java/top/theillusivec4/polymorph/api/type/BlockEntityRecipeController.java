@@ -15,17 +15,26 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.api;
+package top.theillusivec4.polymorph.api.type;
 
+import dev.onyxstudios.cca.api.v3.component.Component;
 import java.util.Optional;
-import net.minecraft.screen.ScreenHandler;
-import top.theillusivec4.polymorph.api.type.Polymorphable;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeType;
+import net.minecraft.world.World;
 
-public abstract class PolymorphApi {
+public interface BlockEntityRecipeController extends Component {
 
-  public static PolymorphApi getInstance() {
-    throw new IllegalStateException("No Polymorph API instance defined!");
-  }
+  Optional<Recipe<?>> fetchRecipe(World world);
 
-  public abstract Optional<Polymorphable<?, ?>> getPolymorphable(ScreenHandler screenHandler);
+  RecipeType<? extends Recipe<?>> getRecipeType();
+
+  Optional<? extends Recipe<?>> getSelectedRecipe();
+
+  void setSavedRecipe(String recipe);
+
+  void setSelectedRecipe(Recipe<?> recipe);
+
+  BlockEntity getParent();
 }

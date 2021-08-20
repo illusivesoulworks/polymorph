@@ -15,17 +15,22 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.api;
+package top.theillusivec4.polymorph.mixin.core;
 
-import java.util.Optional;
-import net.minecraft.screen.ScreenHandler;
-import top.theillusivec4.polymorph.api.type.Polymorphable;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.screen.slot.Slot;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-public abstract class PolymorphApi {
+@Mixin(HandledScreen.class)
+public interface AccessorHandledScreen {
 
-  public static PolymorphApi getInstance() {
-    throw new IllegalStateException("No Polymorph API instance defined!");
-  }
+  @Accessor
+  int getX();
 
-  public abstract Optional<Polymorphable<?, ?>> getPolymorphable(ScreenHandler screenHandler);
+  @Accessor
+  int getY();
+
+  @Accessor
+  Slot getFocusedSlot();
 }

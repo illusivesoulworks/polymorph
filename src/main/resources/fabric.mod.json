@@ -15,18 +15,10 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "top.theillusivec4.polymorph.loader.client.PolymorphClientMod"
+      "top.theillusivec4.polymorph.client.PolymorphClientMod"
     ],
     "main": [
-      "top.theillusivec4.polymorph.loader.common.PolymorphMod"
-    ],
-    "cardinal-components-block": [
-      "top.theillusivec4.polymorph.loader.common.PolymorphComponentImpl"
-    ]
-  },
-  "custom": {
-    "cardinal-components": [
-      "polymorph:selector"
+      "top.theillusivec4.polymorph.common.PolymorphMod"
     ]
   },
   "mixins": [

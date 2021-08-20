@@ -15,17 +15,21 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.api;
+package top.theillusivec4.polymorph.mixin.core;
 
-import java.util.Optional;
-import net.minecraft.screen.ScreenHandler;
-import top.theillusivec4.polymorph.api.type.Polymorphable;
+import net.minecraft.client.gui.screen.Screen;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import top.theillusivec4.polymorph.mixin.ClientMixinHooks;
 
-public abstract class PolymorphApi {
+@Mixin(Screen.class)
+public class MixinScreen {
 
-  public static PolymorphApi getInstance() {
-    throw new IllegalStateException("No Polymorph API instance defined!");
+  @Inject(at = @At("TAIL"), method = "init(Lnet/minecraft/client/MinecraftClient;II)V")
+  public void init(CallbackInfo cb) {
+    @SuppressWarnings("ConstantConditions") Screen screen = (Screen) (Object) this;
+    ClientMixinHooks.initSelector(screen);
   }
-
-  public abstract Optional<Polymorphable<?, ?>> getPolymorphable(ScreenHandler screenHandler);
 }

@@ -15,17 +15,16 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.api;
+package top.theillusivec4.polymorph.mixin.core;
 
-import java.util.Optional;
-import net.minecraft.screen.ScreenHandler;
-import top.theillusivec4.polymorph.api.type.Polymorphable;
+import net.minecraft.client.gui.screen.recipebook.RecipeBookWidget;
+import net.minecraft.client.recipebook.ClientRecipeBook;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-public abstract class PolymorphApi {
+@Mixin(RecipeBookWidget.class)
+public interface AccessorRecipeBookWidget {
 
-  public static PolymorphApi getInstance() {
-    throw new IllegalStateException("No Polymorph API instance defined!");
-  }
-
-  public abstract Optional<Polymorphable<?, ?>> getPolymorphable(ScreenHandler screenHandler);
+  @Accessor
+  ClientRecipeBook getRecipeBook();
 }
