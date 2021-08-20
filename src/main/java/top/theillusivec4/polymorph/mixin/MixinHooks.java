@@ -38,7 +38,11 @@ public class MixinHooks {
       }
       buf.writeString(id.toString());
     }
+
+    if (result == null) {
+      CraftingPlayers.remove((ServerPlayerEntity) player);
+    }
     ServerPlayNetworking.send((ServerPlayerEntity) player, PolymorphPackets.SEND_RECIPES, buf);
-    return recipes.size() > 0 ? Optional.of(recipes.get(0)) : Optional.empty();
+    return Optional.of(result != null ? result : recipes.get(0));
   }
 }

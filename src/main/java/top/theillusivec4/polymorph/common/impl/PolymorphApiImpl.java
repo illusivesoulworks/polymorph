@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.type.Polymorphable;
 import top.theillusivec4.polymorph.api.type.RecipeController;
+import top.theillusivec4.polymorph.client.recipe.SimpleRecipeController;
 
 public class PolymorphApiImpl extends PolymorphApi {
 
@@ -77,7 +78,7 @@ public class PolymorphApiImpl extends PolymorphApi {
     @Override
     public RecipeController<CraftingInventory, CraftingRecipe> getRecipeController(
         HandledScreen<?> screen) {
-      return null;
+      return new SimpleRecipeController<>(screen, this);
     }
   }
 }

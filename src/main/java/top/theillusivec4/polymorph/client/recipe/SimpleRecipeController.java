@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -30,6 +32,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.util.Identifier;
@@ -39,6 +42,7 @@ import top.theillusivec4.polymorph.api.type.RecipeController;
 import top.theillusivec4.polymorph.client.gui.RecipeSelectorWidget;
 import top.theillusivec4.polymorph.client.gui.ToggleSelectorButton;
 import top.theillusivec4.polymorph.common.PolymorphMod;
+import top.theillusivec4.polymorph.common.network.PolymorphPackets;
 import top.theillusivec4.polymorph.mixin.core.AccessorHandledScreen;
 
 public class SimpleRecipeController<I extends Inventory, R extends Recipe<I>>
@@ -75,7 +79,9 @@ public class SimpleRecipeController<I extends Inventory, R extends Recipe<I>>
 
   @Override
   public void selectRecipe(R recipe) {
-
+    PacketByteBuf buf = PacketByteBufs.create();
+    buf.writeIdentifier(recipe.getId());
+    ClientPlayNetworking.send(PolymorphPackets.SELECT_CRAFT, buf);
   }
 
   @Override

@@ -18,4 +18,8 @@ public class CraftingPlayers {
   public static Optional<Identifier> getRecipe(ServerPlayerEntity playerEntity) {
     return Optional.ofNullable(PLAYER_TO_RECIPE.get(playerEntity.getUuid()));
   }
+
+  public static void remove(ServerPlayerEntity playerEntity) {
+    PLAYER_TO_RECIPE.remove(playerEntity.getUuid());
+  }
 }
