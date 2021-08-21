@@ -26,14 +26,15 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import top.theillusivec4.polymorph.mixin.util.integration.RoughlyEnoughItemsMixinHooks;
 
 @Mixin(InternalWidgets.class)
 public class MixinRoughlyEnoughItems {
 
   @Inject(at = @At(value = "HEAD"), method = "lambda$createAutoCraftingButtonWidget$0", remap = false)
   private static void polymorph$hookTransfer(HandledScreen<?> screen,
-                                              Supplier<RecipeDisplay> recipeDisplaySupplier,
-                                              Button button, CallbackInfo cb) {
-//    ReiMixinHooks.setRecipe(recipeDisplaySupplier.get());
+                                             Supplier<RecipeDisplay> recipeDisplaySupplier,
+                                             Button button, CallbackInfo cb) {
+    RoughlyEnoughItemsMixinHooks.setRecipe(recipeDisplaySupplier.get());
   }
 }

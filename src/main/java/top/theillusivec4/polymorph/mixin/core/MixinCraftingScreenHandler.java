@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import top.theillusivec4.polymorph.mixin.MixinHooks;
+import top.theillusivec4.polymorph.mixin.util.MixinHooks;
 
 @Mixin(CraftingScreenHandler.class)
 public class MixinCraftingScreenHandler {

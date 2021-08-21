@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.theillusivec4.polymorph.mixin.ClientMixinHooks;
+import top.theillusivec4.polymorph.mixin.util.ClientMixinHooks;
 
 @Mixin(Screen.class)
 public class MixinScreen {

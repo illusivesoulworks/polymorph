@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import top.theillusivec4.polymorph.mixin.MixinHooks;
+import top.theillusivec4.polymorph.mixin.util.MixinHooks;
 
 @Mixin(value = RecipeManager.class, priority = 1200)
 public class MixinRecipeManager {
