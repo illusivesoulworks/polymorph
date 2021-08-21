@@ -1,7 +1,10 @@
 package top.theillusivec4.polymorph.common.impl;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlastFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
@@ -9,13 +12,18 @@ import net.minecraft.block.entity.SmokerBlockEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.AbstractCookingRecipe;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.screen.AbstractFurnaceScreenHandler;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.world.World;
 import top.theillusivec4.polymorph.api.type.BlockEntityRecipeSelector;
+import top.theillusivec4.polymorph.common.network.PolymorphPackets;
+import top.theillusivec4.polymorph.mixin.core.AccessorAbstractFurnaceScreenHandler;
 
 public class FurnaceRecipeSelector implements BlockEntityRecipeSelector {
 
@@ -86,6 +94,19 @@ public class FurnaceRecipeSelector implements BlockEntityRecipeSelector {
 
     if (recipe instanceof AbstractCookingRecipe) {
       this.selectedRecipe = (AbstractCookingRecipe) recipe;
+      World world = this.parent.getWorld();
+
+      if (world instanceof ServerWorld) {
+        ((ServerWorld) world).getPlayers().forEach(player -> {
+          if (player.currentScreenHandler instanceof AbstractFurnaceScreenHandler &&
+              ((AccessorAbstractFurnaceScreenHandler) player.currentScreenHandler)
+                  .getInventory() == this.parent) {
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeIdentifier(recipe.getId());
+            ServerPlayNetworking.send(player, PolymorphPackets.HIGHLIGHT_RECIPE, buf);
+          }
+        });
+      }
     }
   }
 

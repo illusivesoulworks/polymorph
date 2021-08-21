@@ -35,6 +35,7 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import top.theillusivec4.polymorph.api.type.RecipeController;
+import top.theillusivec4.polymorph.client.gui.RecipeOutputWidget;
 import top.theillusivec4.polymorph.client.gui.RecipeSelectorWidget;
 import top.theillusivec4.polymorph.client.gui.ToggleSelectorButton;
 import top.theillusivec4.polymorph.common.PolymorphMod;
@@ -79,8 +80,12 @@ public abstract class AbstractRecipeController<I extends Inventory, R extends Re
   @Override
   public void highlightRecipe(String recipe) {
 
+    for (RecipeOutputWidget<I, R> outputWidget : this.recipeSelectorWidget.getOutputWidgets()) {
+      outputWidget.highlighted = outputWidget.getRecipe().getId().toString().equals(recipe);
+    }
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void setRecipes(Set<Identifier> recipes, World world, Identifier selected) {
     List<R> list = new ArrayList<>();
@@ -91,6 +96,10 @@ public abstract class AbstractRecipeController<I extends Inventory, R extends Re
     }
     this.recipeSelectorWidget.setRecipes(list);
     this.toggleButton.visible = recipes.size() > 1;
+
+    if (selected != null) {
+      this.highlightRecipe(selected.toString());
+    }
   }
 
   public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {

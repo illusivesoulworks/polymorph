@@ -19,6 +19,7 @@ package top.theillusivec4.polymorph.api.type;
 
 import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import java.util.List;
 import java.util.Optional;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventory;

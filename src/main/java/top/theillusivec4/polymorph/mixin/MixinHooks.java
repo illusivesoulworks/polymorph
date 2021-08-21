@@ -30,11 +30,12 @@ public class MixinHooks {
 
     if (recipes.isEmpty()) {
       ServerPlayNetworking.send((ServerPlayerEntity) player, PolymorphPackets.SEND_RECIPES,
-          PacketByteBufs.create());
+          PacketByteBufs.empty());
       return Optional.empty();
     }
     T result = null;
     PacketByteBuf buf = PacketByteBufs.create();
+    buf.writeIdentifier(new Identifier(""));
 
     for (T recipe : recipes) {
       Identifier id = recipe.getId();

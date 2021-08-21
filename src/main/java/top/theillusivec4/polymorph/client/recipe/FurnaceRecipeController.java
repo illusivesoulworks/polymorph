@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.inventory.Inventory;
@@ -63,13 +64,7 @@ public class FurnaceRecipeController
       World world = MinecraftClient.getInstance().world;
 
       if (world != null) {
-        List<? extends AbstractCookingRecipe> recipes = this.getRecipes(world);
-        Set<Identifier> identifiers = new HashSet<>();
-
-        for (AbstractCookingRecipe recipe : recipes) {
-          identifiers.add(recipe.getId());
-        }
-        this.setRecipes(identifiers, world, null);
+        ClientPlayNetworking.send(PolymorphPackets.GET_RECIPES, PacketByteBufs.empty());
       }
     }
   }

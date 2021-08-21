@@ -16,13 +16,25 @@ public class PolymorphClientMod implements ClientModInitializer {
     ClientPlayNetworking.registerGlobalReceiver(PolymorphPackets.SEND_RECIPES,
         (minecraftClient, clientPlayNetworkHandler, packetByteBuf, packetSender) -> {
           Set<Identifier> recipes = new HashSet<>();
+          Identifier selected = null;
 
-          while (packetByteBuf.isReadable()) {
-            recipes.add(Identifier.tryParse(packetByteBuf.readString(32767)));
+          if (packetByteBuf.isReadable()) {
+            selected = packetByteBuf.readIdentifier();
+
+            while (packetByteBuf.isReadable()) {
+              recipes.add(Identifier.tryParse(packetByteBuf.readString(32767)));
+            }
           }
+          Identifier finalSelected = selected;
           minecraftClient.execute(() -> RecipeControllerHub.getController().ifPresent(
               recipeController -> recipeController
-                  .setRecipes(recipes, minecraftClient.world, null)));
+                  .setRecipes(recipes, minecraftClient.world, finalSelected)));
+        });
+    ClientPlayNetworking.registerGlobalReceiver(PolymorphPackets.HIGHLIGHT_RECIPE,
+        (minecraftClient, clientPlayNetworkHandler, packetByteBuf, packetSender) -> {
+          Identifier id = packetByteBuf.readIdentifier();
+          minecraftClient.execute(() -> RecipeControllerHub.getController()
+              .ifPresent(recipeController -> recipeController.highlightRecipe(id.toString())));
         });
     ClientTickEvents.END_CLIENT_TICK
         .register(client -> RecipeControllerHub.getController().ifPresent(recipeSelector -> {
