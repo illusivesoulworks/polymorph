@@ -17,12 +17,10 @@
 
 package top.theillusivec4.polymorph.api.type;
 
-import java.util.List;
 import java.util.Set;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeManager;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
@@ -36,7 +34,7 @@ public interface RecipeController<I extends Inventory, R extends Recipe<I>> {
   void setRecipes(Set<Identifier> recipes, World world, Identifier selected);
 
   default void tick() {
-
+    // NO-OP
   }
 
   void render(MatrixStack matrixStack, int mouseX, int mouseY, float renderPartialTicks);
@@ -47,17 +45,11 @@ public interface RecipeController<I extends Inventory, R extends Recipe<I>> {
 
   Slot getOutputSlot();
 
-  List<? extends R> getRecipes(World world);
-
   default int getXPos() {
     return getOutputSlot().x;
   }
 
   default int getYPos() {
     return getOutputSlot().y - 22;
-  }
-
-  default boolean isActive() {
-    return true;
   }
 }

@@ -35,6 +35,6 @@ public class MixinRoughlyEnoughItems {
   private static void polymorph$hookTransfer(HandledScreen<?> screen,
                                              Supplier<RecipeDisplay> recipeDisplaySupplier,
                                              Button button, CallbackInfo cb) {
-    RoughlyEnoughItemsMixinHooks.setRecipe(recipeDisplaySupplier.get());
+    RoughlyEnoughItemsMixinHooks.selectRecipe(recipeDisplaySupplier.get());
   }
 }

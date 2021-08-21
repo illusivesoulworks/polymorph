@@ -18,6 +18,7 @@
 package top.theillusivec4.polymorph.client.recipe;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -35,7 +36,6 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import top.theillusivec4.polymorph.api.type.RecipeController;
-import top.theillusivec4.polymorph.client.gui.RecipeOutputWidget;
 import top.theillusivec4.polymorph.client.gui.RecipeSelectorWidget;
 import top.theillusivec4.polymorph.client.gui.ToggleSelectorButton;
 import top.theillusivec4.polymorph.common.PolymorphMod;
@@ -79,21 +79,20 @@ public abstract class AbstractRecipeController<I extends Inventory, R extends Re
 
   @Override
   public void highlightRecipe(String recipe) {
-
-    for (RecipeOutputWidget<I, R> outputWidget : this.recipeSelectorWidget.getOutputWidgets()) {
-      outputWidget.highlighted = outputWidget.getRecipe().getId().toString().equals(recipe);
-    }
+    this.recipeSelectorWidget.highlightButton(recipe);
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public void setRecipes(Set<Identifier> recipes, World world, Identifier selected) {
     List<R> list = new ArrayList<>();
+
     for (Identifier recipe : recipes) {
-      world.getRecipeManager().get(recipe).ifPresent(result -> {
-        list.add((R) result);
-      });
+      world.getRecipeManager().get(recipe).ifPresent(result -> list.add((R) result));
     }
+    Set<RecipeOutput> recipeOutputs = new HashSet<>();
+    list.removeIf(rec -> !recipeOutputs
+        .add(new RecipeOutput(rec.craft(this.getInventory()))));
     this.recipeSelectorWidget.setRecipes(list);
     this.toggleButton.visible = recipes.size() > 1;
 

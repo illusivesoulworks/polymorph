@@ -8,7 +8,7 @@ import top.theillusivec4.polymorph.common.network.PolymorphPackets;
 
 public class RoughlyEnoughItemsMixinHooks {
 
-  public static void setRecipe(RecipeDisplay recipeDisplay) {
+  public static void selectRecipe(RecipeDisplay recipeDisplay) {
     recipeDisplay.getRecipeLocation().ifPresent(recipe -> {
       PacketByteBuf buf = PacketByteBufs.create();
       buf.writeIdentifier(recipe);
