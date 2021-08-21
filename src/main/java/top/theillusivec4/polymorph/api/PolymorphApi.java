@@ -18,8 +18,11 @@
 package top.theillusivec4.polymorph.api;
 
 import java.util.Optional;
-import net.minecraft.screen.ScreenHandler;
-import top.theillusivec4.polymorph.api.type.Polymorphable;
+import java.util.function.Function;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import top.theillusivec4.polymorph.api.type.BlockEntityRecipeSelector;
+import top.theillusivec4.polymorph.api.type.RecipeController;
 
 public abstract class PolymorphApi {
 
@@ -27,5 +30,15 @@ public abstract class PolymorphApi {
     throw new IllegalStateException("No Polymorph API instance defined!");
   }
 
-  public abstract Optional<Polymorphable<?, ?>> getPolymorphable(ScreenHandler screenHandler);
+  public abstract Optional<RecipeController<?, ?>> getRecipeController(
+      HandledScreen<?> handledScreen);
+
+  public abstract Optional<BlockEntityRecipeSelector> getBlockEntityRecipeSelector(BlockEntity be);
+
+  public abstract void addRecipeController(
+      Function<HandledScreen<?>, RecipeController<?, ?>> controllerFunction);
+
+  public abstract void addBlockEntity(
+      Function<BlockEntity, BlockEntityRecipeSelector> selectorFunction,
+      Function<HandledScreen<?>, RecipeController<?, ?>> controllerFunction);
 }

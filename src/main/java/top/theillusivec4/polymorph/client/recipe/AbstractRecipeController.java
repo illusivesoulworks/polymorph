@@ -23,21 +23,17 @@ import java.util.Objects;
 import java.util.Set;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-import top.theillusivec4.polymorph.api.type.Polymorphable;
 import top.theillusivec4.polymorph.api.type.RecipeController;
 import top.theillusivec4.polymorph.client.gui.RecipeSelectorWidget;
 import top.theillusivec4.polymorph.client.gui.ToggleSelectorButton;
@@ -45,7 +41,7 @@ import top.theillusivec4.polymorph.common.PolymorphMod;
 import top.theillusivec4.polymorph.common.network.PolymorphPackets;
 import top.theillusivec4.polymorph.mixin.core.AccessorHandledScreen;
 
-public class SimpleRecipeController<I extends Inventory, R extends Recipe<I>>
+public abstract class AbstractRecipeController<I extends Inventory, R extends Recipe<I>>
     implements RecipeController<I, R> {
 
   public static final Identifier TOGGLE = new Identifier(PolymorphMod.MOD_ID,
@@ -54,27 +50,23 @@ public class SimpleRecipeController<I extends Inventory, R extends Recipe<I>>
   private static final int SELECTOR_X_OFFSET = -4;
   private static final int SELECTOR_Y_OFFSET = -26;
 
-  protected final RecipeSelectorWidget<I, R> recipeSelectorWidget;
-  protected final ButtonWidget toggleButton;
-  protected final Polymorphable<I, R> polymorphable;
+  protected RecipeSelectorWidget<I, R> recipeSelectorWidget;
+  protected ButtonWidget toggleButton;
   protected final HandledScreen<?> parentScreen;
 
-  public SimpleRecipeController(HandledScreen<?> screen, Polymorphable<I, R> polymorphable) {
+  public AbstractRecipeController(HandledScreen<?> screen) {
     this.parentScreen = screen;
-    this.polymorphable = polymorphable;
-    int x = ((AccessorHandledScreen) screen).getX() + polymorphable.getXPos();
-    int y = ((AccessorHandledScreen) screen).getY() + polymorphable.getYPos();
+  }
+
+  protected void init() {
+    int x = ((AccessorHandledScreen) this.parentScreen).getX() + this.getXPos();
+    int y = ((AccessorHandledScreen) this.parentScreen).getY() + this.getYPos();
     this.recipeSelectorWidget =
         new RecipeSelectorWidget<>(x + SELECTOR_X_OFFSET, y + SELECTOR_Y_OFFSET,
-            polymorphable.getInventory(), this::selectRecipe, this.parentScreen);
+            this.getInventory(), this::selectRecipe, this.parentScreen);
     this.toggleButton = new ToggleSelectorButton(x, y, 16, 16, 0, 0, 17, TOGGLE,
         clickWidget -> recipeSelectorWidget.setActive(!recipeSelectorWidget.isActive()));
     this.toggleButton.visible = this.recipeSelectorWidget.getOutputWidgets().size() > 1;
-  }
-
-  @Override
-  public Polymorphable<I, R> getPolymorphable() {
-    return this.polymorphable;
   }
 
   @Override
@@ -101,11 +93,6 @@ public class SimpleRecipeController<I extends Inventory, R extends Recipe<I>>
     this.toggleButton.visible = recipes.size() > 1;
   }
 
-  @Override
-  public void tick() {
-
-  }
-
   public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
     this.recipeSelectorWidget.render(matrixStack, mouseX, mouseY, partialTicks);
     this.toggleButton.render(matrixStack, mouseX, mouseY, partialTicks);
@@ -126,11 +113,6 @@ public class SimpleRecipeController<I extends Inventory, R extends Recipe<I>>
       return true;
     }
     return false;
-  }
-
-  @Override
-  public void markUpdatePosition() {
-
   }
 
   static class RecipeOutput {

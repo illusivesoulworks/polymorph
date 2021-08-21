@@ -17,47 +17,26 @@
 
 package top.theillusivec4.polymorph.api.type;
 
-import java.util.List;
-import java.util.Set;
-import net.minecraft.client.util.math.MatrixStack;
+import dev.onyxstudios.cca.api.v3.component.Component;
+import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import java.util.Optional;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeManager;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.Identifier;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.world.World;
 
-public interface RecipeController<I extends Inventory, R extends Recipe<I>> {
+public interface BlockEntityRecipeSelector extends Component, AutoSyncedComponent {
 
-  void selectRecipe(R recipe);
+  Optional<? extends Recipe<?>> getRecipe(World world);
 
-  void highlightRecipe(String recipe);
+  Optional<? extends Recipe<?>> getSelectedRecipe();
 
-  void setRecipes(Set<Identifier> recipes, World world, Identifier selected);
+  RecipeType<? extends Recipe<?>> getRecipeType();
 
-  default void tick() {
+  void setSelectedRecipe(Recipe<?> recipe);
 
-  }
+  void setSavedRecipe(String recipe);
 
-  void render(MatrixStack matrixStack, int mouseX, int mouseY, float renderPartialTicks);
-
-  boolean mouseClicked(double mouseX, double mouseY, int button);
-
-  I getInventory();
-
-  Slot getOutputSlot();
-
-  List<? extends R> getRecipes(World world);
-
-  default int getXPos() {
-    return getOutputSlot().x;
-  }
-
-  default int getYPos() {
-    return getOutputSlot().y - 22;
-  }
-
-  default boolean isActive() {
-    return true;
-  }
+  BlockEntity getParent();
 }

@@ -15,38 +15,31 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.polymorph.api.type;
+package top.theillusivec4.polymorph.client.recipe;
 
-import java.util.List;
+import java.util.Optional;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeManager;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.world.World;
+import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.api.type.RecipeController;
 
-public interface Polymorphable<I extends Inventory, R extends Recipe<I>> {
+public class RecipeControllerHub {
 
-  ScreenHandler getScreenHandler();
+  private static RecipeController<? extends Inventory, ? extends Recipe<?>> controller = null;
 
-  I getInventory();
-
-  Slot getOutputSlot();
-
-  List<R> getRecipes(World world, RecipeManager recipeManager);
-
-  RecipeController<I, R> getRecipeController(HandledScreen<?> screen);
-
-  default int getXPos() {
-    return getOutputSlot().x;
+  public static Optional<RecipeController<? extends Inventory, ? extends Recipe<?>>> getController() {
+    return Optional.ofNullable(controller);
   }
 
-  default int getYPos() {
-    return getOutputSlot().y - 22;
+  public static boolean startController(HandledScreen<?> screen) {
+    return PolymorphApi.getInstance().getRecipeController(screen).map(result -> {
+      controller = result;
+      return true;
+    }).orElse(false);
   }
 
-  default boolean isActive() {
-    return true;
+  public static void clear() {
+    controller = null;
   }
 }

@@ -1,29 +1,43 @@
 package top.theillusivec4.polymorph.common.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.CraftingResultInventory;
-import net.minecraft.recipe.CraftingRecipe;
-import net.minecraft.recipe.RecipeManager;
-import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.world.World;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.api.type.Polymorphable;
+import top.theillusivec4.polymorph.api.type.BlockEntityRecipeSelector;
 import top.theillusivec4.polymorph.api.type.RecipeController;
-import top.theillusivec4.polymorph.client.recipe.SimpleRecipeController;
+import top.theillusivec4.polymorph.client.recipe.CraftingRecipeController;
 
 public class PolymorphApiImpl extends PolymorphApi {
 
   public static final PolymorphApi INSTANCE = new PolymorphApiImpl();
 
+  private static final List<Function<HandledScreen<?>, RecipeController<?, ?>>> CONTROLLERS =
+      new ArrayList<>();
+
+  private static final List<Function<BlockEntity, BlockEntityRecipeSelector>> SELECTORS =
+      new ArrayList<>();
+
   @Override
-  public Optional<Polymorphable<?, ?>> getPolymorphable(ScreenHandler screenHandler) {
+  public Optional<RecipeController<?, ?>> getRecipeController(HandledScreen<?> handledScreen) {
+
+    for (Function<HandledScreen<?>, RecipeController<?, ?>> controllerFunction : CONTROLLERS) {
+      RecipeController<?, ?> controller = controllerFunction.apply(handledScreen);
+
+      if (controller != null) {
+        return Optional.of(controller);
+      }
+    }
     Slot resultSlot = null;
     CraftingInventory craftingInventory = null;
+    ScreenHandler screenHandler = handledScreen.getScreenHandler();
 
     for (Slot slot : screenHandler.slots) {
 
@@ -38,47 +52,32 @@ public class PolymorphApiImpl extends PolymorphApi {
       }
     }
     return Optional.ofNullable(resultSlot != null && craftingInventory != null ?
-        new SimpleCraftingPolymorphable(screenHandler, craftingInventory, resultSlot) : null);
+        new CraftingRecipeController(handledScreen, craftingInventory, resultSlot) : null);
   }
 
-  private static class SimpleCraftingPolymorphable
-      implements Polymorphable<CraftingInventory, CraftingRecipe> {
+  @Override
+  public Optional<BlockEntityRecipeSelector> getBlockEntityRecipeSelector(BlockEntity be) {
 
-    final ScreenHandler screenHandler;
-    final CraftingInventory craftingInventory;
-    final Slot resultSlot;
+    for (Function<BlockEntity, BlockEntityRecipeSelector> controllerFunction : SELECTORS) {
+      BlockEntityRecipeSelector controller = controllerFunction.apply(be);
 
-    public SimpleCraftingPolymorphable(ScreenHandler screenHandler, CraftingInventory craftingInventory,
-                                       Slot resultSlot) {
-      this.screenHandler = screenHandler;
-      this.craftingInventory = craftingInventory;
-      this.resultSlot = resultSlot;
+      if (controller != null) {
+        return Optional.of(controller);
+      }
     }
+    return Optional.empty();
+  }
 
-    @Override
-    public ScreenHandler getScreenHandler() {
-      return this.screenHandler;
-    }
+  @Override
+  public void addRecipeController(
+      Function<HandledScreen<?>, RecipeController<?, ?>> controllerFunction) {
+    CONTROLLERS.add(controllerFunction);
+  }
 
-    @Override
-    public CraftingInventory getInventory() {
-      return this.craftingInventory;
-    }
-
-    @Override
-    public Slot getOutputSlot() {
-      return this.resultSlot;
-    }
-
-    @Override
-    public List<CraftingRecipe> getRecipes(World world, RecipeManager recipeManager) {
-      return recipeManager.getAllMatches(RecipeType.CRAFTING, this.craftingInventory, world);
-    }
-
-    @Override
-    public RecipeController<CraftingInventory, CraftingRecipe> getRecipeController(
-        HandledScreen<?> screen) {
-      return new SimpleRecipeController<>(screen, this);
-    }
+  @Override
+  public void addBlockEntity(Function<BlockEntity, BlockEntityRecipeSelector> selectorFunction,
+                             Function<HandledScreen<?>, RecipeController<?, ?>> controllerFunction) {
+    this.addRecipeController(controllerFunction);
+    SELECTORS.add(selectorFunction);
   }
 }

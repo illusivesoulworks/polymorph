@@ -7,4 +7,5 @@ public class PolymorphPackets {
 
   public static final Identifier SEND_RECIPES = new Identifier(PolymorphMod.MOD_ID, "send_recipes");
   public static final Identifier SELECT_CRAFT = new Identifier(PolymorphMod.MOD_ID, "select_craft");
+  public static final Identifier SELECT_PERSIST = new Identifier(PolymorphMod.MOD_ID, "select_persist");
 }

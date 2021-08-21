@@ -20,15 +20,15 @@ package top.theillusivec4.polymorph.mixin;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
-import top.theillusivec4.polymorph.client.recipe.RecipeSelector;
+import top.theillusivec4.polymorph.client.recipe.RecipeControllerHub;
 
 public class ClientMixinHooks {
 
   public static void initSelector(Screen screen) {
 
     if (!(screen instanceof HandledScreen) ||
-        !RecipeSelector.startController((HandledScreen<?>) screen)) {
-      RecipeSelector.clear();
+        !RecipeControllerHub.startController((HandledScreen<?>) screen)) {
+      RecipeControllerHub.clear();
     }
   }
 
@@ -36,7 +36,7 @@ public class ClientMixinHooks {
                                     float delta) {
 
     if (screen instanceof HandledScreen) {
-      RecipeSelector.getController()
+      RecipeControllerHub.getController()
           .ifPresent(recipeSelector -> recipeSelector.render(matrices, mouseX, mouseY, delta));
     }
   }
@@ -44,7 +44,7 @@ public class ClientMixinHooks {
   public static boolean clickSelector(Screen screen, double mouseX, double mouseY, int button) {
 
     if (screen instanceof HandledScreen) {
-      return RecipeSelector.getController()
+      return RecipeControllerHub.getController()
           .map(selector -> selector.mouseClicked(mouseX, mouseY, button))
           .orElse(false);
     }
