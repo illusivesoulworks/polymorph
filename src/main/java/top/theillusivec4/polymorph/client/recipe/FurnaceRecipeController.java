@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.inventory.Inventory;
@@ -25,14 +24,14 @@ public class FurnaceRecipeController
     extends AbstractRecipeController<Inventory, AbstractCookingRecipe> {
 
   private final ScreenHandler screenHandler;
-  private final Inventory input;
+  private final Inventory inventory;
   private final RecipeType<? extends AbstractCookingRecipe> recipeType;
   private ItemStack lastStack = ItemStack.EMPTY;
 
   public FurnaceRecipeController(HandledScreen<?> screen) {
     super(screen);
     this.screenHandler = screen.getScreenHandler();
-    this.input = screenHandler.slots.get(0).inventory;
+    this.inventory = screenHandler.slots.get(0).inventory;
     this.recipeType = this.getRecipeType();
     this.init();
   }
@@ -50,13 +49,9 @@ public class FurnaceRecipeController
 
   @Override
   public void selectRecipe(AbstractCookingRecipe recipe) {
-
-    if (input instanceof BlockEntity) {
-      PacketByteBuf buf = PacketByteBufs.create();
-      buf.writeIdentifier(recipe.getId());
-      buf.writeBlockPos(((BlockEntity) input).getPos());
-      ClientPlayNetworking.send(PolymorphPackets.SELECT_PERSIST, buf);
-    }
+    PacketByteBuf buf = PacketByteBufs.create();
+    buf.writeIdentifier(recipe.getId());
+    ClientPlayNetworking.send(PolymorphPackets.SELECT_PERSIST, buf);
   }
 
   @Override
@@ -81,7 +76,7 @@ public class FurnaceRecipeController
 
   @Override
   public Inventory getInventory() {
-    return this.input;
+    return this.inventory;
   }
 
   @Override
