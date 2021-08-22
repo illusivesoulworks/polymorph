@@ -59,7 +59,8 @@ public class PolymorphNetwork {
           Identifier id = packetByteBuf.readIdentifier();
           minecraftServer.execute(() -> {
             CraftingPlayers.add(serverPlayerEntity, id);
-            serverPlayerEntity.currentScreenHandler.onContentChanged(serverPlayerEntity.inventory);
+            serverPlayerEntity.currentScreenHandler.onContentChanged(
+                serverPlayerEntity.currentScreenHandler.slots.get(0).inventory);
           });
         });
     ServerPlayNetworking.registerGlobalReceiver(PolymorphPackets.SELECT_PERSIST,

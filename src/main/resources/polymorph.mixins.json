@@ -12,7 +12,8 @@
     "AccessorSlot",
     "MixinCraftingScreenHandler",
     "MixinPolymorphApi",
-    "MixinRecipeManager"
+    "MixinRecipeManager",
+    "MixinSmithingScreenHandler"
   ],
   "client": [
     "AccessorHandledScreen",

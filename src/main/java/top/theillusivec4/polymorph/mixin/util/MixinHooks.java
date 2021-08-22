@@ -13,6 +13,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
@@ -83,5 +84,33 @@ public class MixinHooks {
       return recipe.isEmpty() ? Optional.empty() : Optional.of(recipe.get(0));
     }
     return Optional.empty();
+  }
+
+  public static SmithingRecipe getSmithingRecipe(PlayerEntity player,
+                                                 List<SmithingRecipe> recipes) {
+    SmithingRecipe defaultRecipe = recipes.get(0);
+
+    if (player instanceof ServerPlayerEntity) {
+      SmithingRecipe result = null;
+      PacketByteBuf buf = PacketByteBufs.create();
+      buf.writeIdentifier(new Identifier(""));
+
+      for (SmithingRecipe recipe : recipes) {
+        Identifier id = recipe.getId();
+
+        if (result == null && CraftingPlayers.getRecipe((ServerPlayerEntity) player)
+            .map(identifier -> identifier.equals(id)).orElse(false)) {
+          result = recipe;
+        }
+        buf.writeString(id.toString());
+      }
+
+      if (result == null) {
+        CraftingPlayers.remove((ServerPlayerEntity) player);
+      }
+      ServerPlayNetworking.send((ServerPlayerEntity) player, PolymorphPackets.SEND_RECIPES, buf);
+      return result != null ? result : defaultRecipe;
+    }
+    return defaultRecipe;
   }
 }
