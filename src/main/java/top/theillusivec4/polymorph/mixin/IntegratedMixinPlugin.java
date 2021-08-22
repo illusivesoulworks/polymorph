@@ -38,10 +38,17 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
 
   @Override
   public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+    FabricLoader loader = FabricLoader.getInstance();
 
     if (targetClassName.equals("me.shedaniel.rei.impl.InternalWidgets") &&
-        mixinClassName.equals("top.theillusivec4.polymorph.mixin.integration.MixinRoughlyEnoughItems")) {
-      return FabricLoader.getInstance().isModLoaded("roughlyenoughitems-runtime");
+        mixinClassName.equals(
+            "top.theillusivec4.polymorph.mixin.integration.MixinRoughlyEnoughItems")) {
+      return loader.isModLoaded("roughlyenoughitems-runtime");
+    } else if (
+        targetClassName.equals("me.shedaniel.istations.containers.CraftingStationScreenHandler") &&
+            mixinClassName.equals(
+                "top.theillusivec4.polymorph.mixin.integration.MixinImprovedStations")) {
+      return loader.isModLoaded("improved-stations");
     }
     return true;
   }

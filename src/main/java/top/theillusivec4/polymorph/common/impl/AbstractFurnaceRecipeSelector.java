@@ -5,9 +5,7 @@ import java.util.Optional;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraft.block.entity.BlastFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.SmokerBlockEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -24,6 +22,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import top.theillusivec4.polymorph.api.type.BlockEntityRecipeSelector;
 import top.theillusivec4.polymorph.common.PolymorphMod;
 import top.theillusivec4.polymorph.common.network.PolymorphPackets;
+import top.theillusivec4.polymorph.mixin.core.AccessorAbstractFurnaceBlockEntity;
 import top.theillusivec4.polymorph.mixin.core.AccessorAbstractFurnaceScreenHandler;
 
 public abstract class AbstractFurnaceRecipeSelector<T extends BlockEntity & Inventory>
@@ -82,13 +81,11 @@ public abstract class AbstractFurnaceRecipeSelector<T extends BlockEntity & Inve
 
   @Override
   public RecipeType<? extends AbstractCookingRecipe> getRecipeType() {
-    if (this.parent instanceof SmokerBlockEntity) {
-      return RecipeType.SMOKING;
-    } else if (this.parent instanceof BlastFurnaceBlockEntity) {
-      return RecipeType.BLASTING;
-    } else {
-      return RecipeType.SMELTING;
+
+    if (this.parent instanceof AbstractFurnaceBlockEntity) {
+      return ((AccessorAbstractFurnaceBlockEntity) this.parent).getRecipeType();
     }
+    return RecipeType.SMELTING;
   }
 
   @Override

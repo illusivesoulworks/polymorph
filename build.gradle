@@ -60,6 +60,8 @@ dependencies {
     modCompileOnly "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
     modRuntime "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
     modRuntime "teamreborn:energy:0.1.1"
+    modCompileOnly "curse.maven:improvedstations-355914:3032328"
+    modRuntime "curse.maven:improvedstations-355914:3032328"
     modRuntime "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modRuntime "curse.maven:fastfurnace-364540:${project.file_fastfurnace}"
 
