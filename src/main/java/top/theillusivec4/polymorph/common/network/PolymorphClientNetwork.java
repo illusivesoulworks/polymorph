@@ -2,9 +2,11 @@ package top.theillusivec4.polymorph.common.network;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.util.Identifier;
 import top.theillusivec4.polymorph.client.recipe.RecipeControllerHub;
+import top.theillusivec4.polymorph.common.util.CraftingPlayers;
 
 public class PolymorphClientNetwork {
 
@@ -32,5 +34,14 @@ public class PolymorphClientNetwork {
           minecraftClient.execute(() -> RecipeControllerHub.getController()
               .ifPresent(recipeController -> recipeController.highlightRecipe(id.toString())));
         });
+    ClientPlayNetworking.registerGlobalReceiver(PolymorphPackets.ADD_CRAFTER, (client, handler, buf, responseSender) -> {
+      UUID uuid = buf.readUuid();
+      Identifier id = buf.readIdentifier();
+      client.execute(() -> CraftingPlayers.add(uuid, id));
+    });
+    ClientPlayNetworking.registerGlobalReceiver(PolymorphPackets.REMOVE_CRAFTER, (client, handler, buf, responseSender) -> {
+      UUID uuid = buf.readUuid();
+      client.execute(() -> CraftingPlayers.remove(uuid));
+    });
   }
 }

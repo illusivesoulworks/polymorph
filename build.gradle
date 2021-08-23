@@ -25,7 +25,7 @@ repositories {
         url = "https://ladysnake.jfrog.io/artifactory/mods"
     }
     maven {
-        url "https://www.cursemaven.com"
+        url = "https://www.cursemaven.com"
         content {
             includeGroup "curse.maven"
         }
@@ -33,6 +33,25 @@ repositories {
     maven {
         name = "Modmuss50"
         url = "https://maven.modmuss50.me/"
+    }
+    maven {
+        name = "Modmaven"
+        url = "https://modmaven.dev/"
+        content {
+            includeGroup "appeng"
+        }
+    }
+    maven {
+        name = "BuildCraft"
+        url = "https://mod-buildcraft.com/maven"
+    }
+    maven {
+        name = "Technici4n"
+        url = "https://raw.githubusercontent.com/Technici4n/Technici4n-maven/master/"
+        content {
+            includeGroup "net.fabricmc.fabric-api" // until PR # is merged
+            includeGroup "dev.technici4n"
+        }
     }
 }
 
@@ -62,6 +81,8 @@ dependencies {
     modRuntime "teamreborn:energy:0.1.1"
     modCompileOnly "curse.maven:improvedstations-355914:3032328"
     modRuntime "curse.maven:improvedstations-355914:3032328"
+    modCompileOnly "appeng:appliedenergistics2-fabric:8.4.0-alpha.2"
+    modRuntime "appeng:appliedenergistics2-fabric:8.4.0-alpha.2"
     modRuntime "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modRuntime "curse.maven:fastfurnace-364540:${project.file_fastfurnace}"
 

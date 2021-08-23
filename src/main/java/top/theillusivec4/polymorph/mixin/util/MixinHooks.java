@@ -30,8 +30,11 @@ public class MixinHooks {
     List<T> recipes = recipeManager.getAllMatches(type, inventory, world);
 
     if (recipes.isEmpty()) {
-      ServerPlayNetworking.send((ServerPlayerEntity) player, PolymorphPackets.SEND_RECIPES,
-          PacketByteBufs.empty());
+
+      if (player instanceof ServerPlayerEntity) {
+        ServerPlayNetworking.send((ServerPlayerEntity) player, PolymorphPackets.SEND_RECIPES,
+            PacketByteBufs.empty());
+      }
       return Optional.empty();
     }
     T result = null;
@@ -41,17 +44,21 @@ public class MixinHooks {
     for (T recipe : recipes) {
       Identifier id = recipe.getId();
 
-      if (result == null && CraftingPlayers.getRecipe((ServerPlayerEntity) player)
-          .map(identifier -> identifier.equals(id)).orElse(false)) {
+      if (result == null &&
+          CraftingPlayers.getRecipe(player).map(identifier -> identifier.equals(id))
+              .orElse(false)) {
         result = recipe;
       }
       buf.writeString(id.toString());
     }
 
     if (result == null) {
-      CraftingPlayers.remove((ServerPlayerEntity) player);
+      CraftingPlayers.remove(player);
     }
-    ServerPlayNetworking.send((ServerPlayerEntity) player, PolymorphPackets.SEND_RECIPES, buf);
+
+    if (player instanceof ServerPlayerEntity) {
+      ServerPlayNetworking.send((ServerPlayerEntity) player, PolymorphPackets.SEND_RECIPES, buf);
+    }
     return Optional.of(result != null ? result : recipes.get(0));
   }
 
@@ -98,15 +105,16 @@ public class MixinHooks {
       for (SmithingRecipe recipe : recipes) {
         Identifier id = recipe.getId();
 
-        if (result == null && CraftingPlayers.getRecipe((ServerPlayerEntity) player)
-            .map(identifier -> identifier.equals(id)).orElse(false)) {
+        if (result == null &&
+            CraftingPlayers.getRecipe(player).map(identifier -> identifier.equals(id))
+                .orElse(false)) {
           result = recipe;
         }
         buf.writeString(id.toString());
       }
 
       if (result == null) {
-        CraftingPlayers.remove((ServerPlayerEntity) player);
+        CraftingPlayers.remove(player);
       }
       ServerPlayNetworking.send((ServerPlayerEntity) player, PolymorphPackets.SEND_RECIPES, buf);
       return result != null ? result : defaultRecipe;

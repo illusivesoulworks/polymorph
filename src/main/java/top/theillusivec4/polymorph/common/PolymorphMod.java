@@ -11,13 +11,14 @@ import org.apache.logging.log4j.Logger;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.client.recipe.SmithingRecipeController;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
+import top.theillusivec4.polymorph.common.integration.appliedenergistics2.AppliedEnergisticsModule;
 import top.theillusivec4.polymorph.common.integration.fabricfurnaces.FabricFurnacesModule;
 import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
 import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
 
 public class PolymorphMod implements ModInitializer {
 
-  private static final Map<String, Supplier<AbstractCompatibilityModule>> INTEGRATIONS =
+  public static final Map<String, Supplier<AbstractCompatibilityModule>> INTEGRATIONS =
       new HashMap<>();
 
   public static final String MOD_ID = "polymorph";
@@ -28,6 +29,7 @@ public class PolymorphMod implements ModInitializer {
   static {
     INTEGRATIONS.put("ironfurnaces", IronFurnacesModule::new);
     INTEGRATIONS.put("fabric-furnaces", FabricFurnacesModule::new);
+    INTEGRATIONS.put("appliedenergistics2", AppliedEnergisticsModule::new);
   }
 
   @Override

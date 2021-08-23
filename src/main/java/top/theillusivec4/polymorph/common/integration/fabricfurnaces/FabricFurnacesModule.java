@@ -10,7 +10,7 @@ public class FabricFurnacesModule extends AbstractCompatibilityModule {
   public void setup() {
     PolymorphApi.getInstance().addBlockEntity(blockEntity -> {
       if (blockEntity instanceof BaseFurnaceEntity) {
-        return new FabricFurnaceRecipeSelector((BaseFurnaceEntity) blockEntity);
+        return new FabricFurnacesRecipeSelector((BaseFurnaceEntity) blockEntity);
       }
       return null;
     }, handledScreen -> null);
