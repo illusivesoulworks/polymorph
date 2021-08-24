@@ -16,13 +16,13 @@ import net.minecraft.util.Identifier;
 import top.theillusivec4.polymorph.client.recipe.AbstractRecipeController;
 import top.theillusivec4.polymorph.common.integration.PolymorphCompatibilityPackets;
 
-public class AppliedEnergisticsRecipeController
+public class CraftingTerminalRecipeController
     extends AbstractRecipeController<CraftingInventory, CraftingRecipe> {
 
   private final List<CraftingMatrixSlot> slots = new ArrayList<>();
   private Slot outputSlot = null;
 
-  public AppliedEnergisticsRecipeController(HandledScreen<?> handledScreen) {
+  public CraftingTerminalRecipeController(HandledScreen<?> handledScreen) {
     super(handledScreen);
     for (Slot slot : handledScreen.getScreenHandler().slots) {
 

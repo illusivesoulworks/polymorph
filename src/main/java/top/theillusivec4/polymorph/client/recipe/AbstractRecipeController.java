@@ -102,23 +102,29 @@ public abstract class AbstractRecipeController<I extends Inventory, R extends Re
   }
 
   public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-    this.recipeSelectorWidget.render(matrixStack, mouseX, mouseY, partialTicks);
-    this.toggleButton.render(matrixStack, mouseX, mouseY, partialTicks);
+
+    if (this.isActive()) {
+      this.recipeSelectorWidget.render(matrixStack, mouseX, mouseY, partialTicks);
+      this.toggleButton.render(matrixStack, mouseX, mouseY, partialTicks);
+    }
   }
 
   public boolean mouseClicked(double mouseX, double mouseY, int button) {
 
-    if (this.toggleButton.mouseClicked(mouseX, mouseY, button)) {
-      return true;
-    } else if (this.recipeSelectorWidget.mouseClicked(mouseX, mouseY, button)) {
-      this.recipeSelectorWidget.setActive(false);
-      return true;
-    } else if (this.recipeSelectorWidget.isActive()) {
+    if (this.isActive()) {
 
-      if (!this.toggleButton.mouseClicked(mouseX, mouseY, button)) {
+      if (this.toggleButton.mouseClicked(mouseX, mouseY, button)) {
+        return true;
+      } else if (this.recipeSelectorWidget.mouseClicked(mouseX, mouseY, button)) {
         this.recipeSelectorWidget.setActive(false);
+        return true;
+      } else if (this.recipeSelectorWidget.isActive()) {
+
+        if (!this.toggleButton.mouseClicked(mouseX, mouseY, button)) {
+          this.recipeSelectorWidget.setActive(false);
+        }
+        return true;
       }
-      return true;
     }
     return false;
   }

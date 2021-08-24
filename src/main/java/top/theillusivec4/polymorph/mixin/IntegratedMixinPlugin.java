@@ -49,7 +49,13 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
             mixinClassName.equals(
                 "top.theillusivec4.polymorph.mixin.integration.MixinImprovedStations")) {
       return loader.isModLoaded("improved-stations");
-    } else if (targetClassName.equals("appeng.container.me.items.CraftingTermContainer")) {
+    } else if (targetClassName.equals("appeng.container.me.items.CraftingTermContainer") &&
+        (mixinClassName.equals(
+            "top.theillusivec4.polymorph.mixin.integration.MixinCraftingTermContainer") ||
+            mixinClassName.equals(
+                "top.theillusivec4.polymorph.mixin.integration.AccessorCraftingTermContainer") ||
+            mixinClassName.equals(
+                "top.theillusivec4.polymorph.mixin.integration.MixinPatternTermContainer"))) {
       return loader.isModLoaded("appliedenergistics2");
     }
     return true;

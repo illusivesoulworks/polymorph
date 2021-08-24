@@ -16,10 +16,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import top.theillusivec4.polymorph.mixin.util.MixinHooks;
 
 @Mixin(CraftingTermContainer.class)
-public abstract class MixinAppliedEnergistics extends AEBaseContainer {
+public abstract class MixinCraftingTermContainer extends AEBaseContainer {
 
-  public MixinAppliedEnergistics(ScreenHandlerType<?> containerType, int id,
-                                 PlayerInventory playerInventory, Object host) {
+  public MixinCraftingTermContainer(ScreenHandlerType<?> containerType, int id,
+                                    PlayerInventory playerInventory, Object host) {
     super(containerType, id, playerInventory, host);
   }
 

@@ -52,4 +52,6 @@ public interface RecipeController<I extends Inventory, R extends Recipe<I>> {
   default int getYPos() {
     return getOutputSlot().y - 22;
   }
+
+  default boolean isActive() { return true; }
 }
