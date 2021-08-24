@@ -6,10 +6,7 @@
   "mixins": [
     "AccessorAbstractFurnaceBlockEntity",
     "AccessorAbstractFurnaceScreenHandler",
-    "AccessorCraftingScreenHandler",
     "AccessorIngredient",
-    "AccessorPlayerScreenHandler",
-    "AccessorSlot",
     "MixinCraftingScreenHandler",
     "MixinPolymorphApi",
     "MixinRecipeManager",
@@ -17,7 +14,6 @@
   ],
   "client": [
     "AccessorHandledScreen",
-    "AccessorMinecraftClient",
     "AccessorRecipeBookWidget",
     "AccessorScreen",
     "MixinGameRenderer",

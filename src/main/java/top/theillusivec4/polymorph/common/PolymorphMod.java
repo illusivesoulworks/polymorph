@@ -15,6 +15,7 @@ import top.theillusivec4.polymorph.common.integration.appliedenergistics2.Applie
 import top.theillusivec4.polymorph.common.integration.fabricfurnaces.FabricFurnacesModule;
 import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
 import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
+import top.theillusivec4.polymorph.server.PolymorphCommands;
 
 public class PolymorphMod implements ModInitializer {
 
@@ -35,6 +36,7 @@ public class PolymorphMod implements ModInitializer {
   @Override
   public void onInitialize() {
     PolymorphNetwork.setup();
+    PolymorphCommands.setup();
     PolymorphApi.getInstance().addRecipeController(handledScreen -> {
       if (handledScreen.getScreenHandler() instanceof SmithingScreenHandler) {
         return new SmithingRecipeController(handledScreen);

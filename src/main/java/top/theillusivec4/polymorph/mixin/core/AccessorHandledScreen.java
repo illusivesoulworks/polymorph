@@ -30,7 +30,4 @@ public interface AccessorHandledScreen {
 
   @Accessor
   int getY();
-
-  @Accessor
-  Slot getFocusedSlot();
 }
