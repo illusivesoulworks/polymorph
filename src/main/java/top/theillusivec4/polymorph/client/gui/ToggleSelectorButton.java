@@ -18,17 +18,27 @@
 package top.theillusivec4.polymorph.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import top.theillusivec4.polymorph.mixin.core.AccessorHandledScreen;
 
 public class ToggleSelectorButton extends TexturedButtonWidget {
 
-  public ToggleSelectorButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn,
+  private final HandledScreen<?> handledScreen;
+  private final int xOffset;
+  private final int yOffset;
+
+  public ToggleSelectorButton(HandledScreen<?> handledScreen, int xIn, int yIn, int xOffset,
+                              int yOffset, int widthIn, int heightIn, int xTexStartIn,
                               int yTexStartIn, int yDiffTextIn, Identifier identifier,
                               PressAction onPressIn) {
     super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, identifier, 256, 256,
         onPressIn);
+    this.handledScreen = handledScreen;
+    this.xOffset = xOffset;
+    this.yOffset = yOffset;
   }
 
   @SuppressWarnings("deprecation")
@@ -36,6 +46,8 @@ public class ToggleSelectorButton extends TexturedButtonWidget {
   public void renderButton(MatrixStack matrixStack, int p_renderButton_1_, int p_renderButton_2_,
                            float p_renderButton_3_) {
     RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+    this.x = ((AccessorHandledScreen) this.handledScreen).getX() + this.xOffset;
+    this.y = ((AccessorHandledScreen) this.handledScreen).getY() + this.yOffset;
     super.renderButton(matrixStack, p_renderButton_1_, p_renderButton_2_, p_renderButton_3_);
   }
 }

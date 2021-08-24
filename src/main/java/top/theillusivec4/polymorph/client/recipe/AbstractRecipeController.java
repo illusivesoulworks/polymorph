@@ -64,9 +64,12 @@ public abstract class AbstractRecipeController<I extends Inventory, R extends Re
     int y = ((AccessorHandledScreen) this.parentScreen).getY() + this.getYPos();
     this.recipeSelectorWidget =
         new RecipeSelectorWidget<>(x + SELECTOR_X_OFFSET, y + SELECTOR_Y_OFFSET,
+            this.getXPos() + SELECTOR_X_OFFSET, this.getYPos() + SELECTOR_Y_OFFSET,
             this.getInventory(), this::selectRecipe, this.parentScreen);
-    this.toggleButton = new ToggleSelectorButton(x, y, 16, 16, 0, 0, 17, TOGGLE,
-        clickWidget -> recipeSelectorWidget.setActive(!recipeSelectorWidget.isActive()));
+    this.toggleButton =
+        new ToggleSelectorButton(this.parentScreen, x, y, this.getXPos(), this.getYPos(), 16, 16, 0,
+            0, 17, TOGGLE,
+            clickWidget -> recipeSelectorWidget.setActive(!recipeSelectorWidget.isActive()));
     this.toggleButton.visible = this.recipeSelectorWidget.getOutputWidgets().size() > 1;
   }
 

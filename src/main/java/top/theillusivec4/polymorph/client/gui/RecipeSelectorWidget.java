@@ -26,7 +26,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -40,6 +40,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Language;
 import net.minecraft.util.math.Matrix4f;
 import org.lwjgl.opengl.GL11;
+import top.theillusivec4.polymorph.mixin.core.AccessorHandledScreen;
 import top.theillusivec4.polymorph.mixin.core.AccessorScreen;
 
 public class RecipeSelectorWidget<I extends Inventory, R extends Recipe<I>> extends DrawableHelper
@@ -47,20 +48,27 @@ public class RecipeSelectorWidget<I extends Inventory, R extends Recipe<I>> exte
 
   private final Consumer<R> onSelect;
   private final I inventory;
-  private final Screen screen;
+  private final HandledScreen<?> handledScreen;
   private final List<RecipeOutputWidget<I, R>> outputWidgets = new ArrayList<>();
+  private final int xOffset;
+  private final int yOffset;
 
   private RecipeOutputWidget<I, R> hoveredButton;
   private boolean active = false;
   private int x;
   private int y;
+  private int lastX;
+  private int lastY;
   private List<R> recipes = new ArrayList<>();
 
-  public RecipeSelectorWidget(int x, int y, I inventory, Consumer<R> onSelect, Screen screen) {
+  public RecipeSelectorWidget(int x, int y, int xOffset, int yOffset, I inventory,
+                              Consumer<R> onSelect, HandledScreen<?> screen) {
     this.setPosition(x, y);
     this.onSelect = onSelect;
     this.inventory = inventory;
-    this.screen = screen;
+    this.handledScreen = screen;
+    this.xOffset = xOffset;
+    this.yOffset = yOffset;
   }
 
   public void setPosition(int x, int y) {
@@ -123,8 +131,16 @@ public class RecipeSelectorWidget<I extends Inventory, R extends Recipe<I>> exte
   public void render(MatrixStack matrixStack, int mouseX, int mouseY, float delta) {
 
     if (this.isActive()) {
+      int x = ((AccessorHandledScreen) this.handledScreen).getX() + this.xOffset;
+      int y = ((AccessorHandledScreen) this.handledScreen).getY() + this.yOffset;
+
+      if (this.lastX != x || this.lastY != y) {
+        this.setPosition(x, y);
+        this.lastX = x;
+        this.lastY = y;
+      }
       this.hoveredButton = null;
-      outputWidgets.forEach(button -> {
+      this.outputWidgets.forEach(button -> {
         button.render(matrixStack, mouseX, mouseY, delta);
 
         if (button.visible && button.isHovered()) {
@@ -157,9 +173,10 @@ public class RecipeSelectorWidget<I extends Inventory, R extends Recipe<I>> exte
       (DEFAULT_BORDER_COLOR_START & 0xFEFEFE) >> 1 | DEFAULT_BORDER_COLOR_START & 0xFF000000;
 
   public void renderTooltip(MatrixStack matrices, List<Text> textLines, int mouseX, int mouseY) {
-    drawHoveringText(matrices, textLines, mouseX, mouseY, this.screen.width, this.screen.height, -1,
+    drawHoveringText(matrices, textLines, mouseX, mouseY, this.handledScreen.width,
+        this.handledScreen.height, -1,
         DEFAULT_BACKGROUND_COLOR, DEFAULT_BORDER_COLOR_START, DEFAULT_BORDER_COLOR_END,
-        ((AccessorScreen) this.screen).getTextRenderer());
+        ((AccessorScreen) this.handledScreen).getTextRenderer());
   }
 
   @SuppressWarnings("deprecation")
