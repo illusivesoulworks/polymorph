@@ -14,7 +14,6 @@
   ],
   "client": [
     "AccessorHandledScreen",
-    "AccessorRecipeBookWidget",
     "AccessorScreen",
     "MixinGameRenderer",
     "MixinMouse",
