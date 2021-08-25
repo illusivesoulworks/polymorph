@@ -1,9 +1,10 @@
 package top.theillusivec4.polymorph.common.util;
 
-import java.util.Map;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.WeakHashMap;
+import java.util.concurrent.TimeUnit;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -15,7 +16,8 @@ import top.theillusivec4.polymorph.common.network.PolymorphPackets;
 
 public class CraftingPlayers {
 
-  private static final Map<UUID, Identifier> PLAYER_TO_RECIPE = new WeakHashMap<>();
+  private static final Cache<UUID, Identifier> PLAYER_TO_RECIPE =
+      CacheBuilder.newBuilder().maximumSize(1000).expireAfterAccess(1, TimeUnit.HOURS).build();
 
   public static void add(PlayerEntity playerEntity, Identifier recipe) {
     add(playerEntity.getUuid(), recipe);
@@ -36,7 +38,7 @@ public class CraftingPlayers {
   }
 
   public static Optional<Identifier> getRecipe(PlayerEntity playerEntity) {
-    return Optional.ofNullable(PLAYER_TO_RECIPE.get(playerEntity.getUuid()));
+    return Optional.ofNullable(PLAYER_TO_RECIPE.getIfPresent(playerEntity.getUuid()));
   }
 
   public static void remove(PlayerEntity playerEntity) {
@@ -53,6 +55,6 @@ public class CraftingPlayers {
   }
 
   public static void remove(UUID uuid) {
-    PLAYER_TO_RECIPE.remove(uuid);
+    PLAYER_TO_RECIPE.invalidate(uuid);
   }
 }
