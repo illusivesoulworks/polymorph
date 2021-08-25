@@ -17,28 +17,36 @@
 
 package top.theillusivec4.polymorph.api;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import top.theillusivec4.polymorph.api.type.BlockEntityRecipeSelector;
-import top.theillusivec4.polymorph.api.type.RecipeController;
 
-public abstract class PolymorphApi {
+public final class PolymorphApi {
+
+  private static final List<Function<BlockEntity, BlockEntityRecipeSelector>> SELECTORS =
+      new ArrayList<>();
+  private static final PolymorphApi INSTANCE = new PolymorphApi();
 
   public static PolymorphApi getInstance() {
-    throw new IllegalStateException("No Polymorph API instance defined!");
+    return INSTANCE;
   }
 
-  public abstract Optional<RecipeController<?, ?>> getRecipeController(
-      HandledScreen<?> handledScreen);
+  public Optional<BlockEntityRecipeSelector> getBlockEntityRecipeSelector(BlockEntity be) {
 
-  public abstract Optional<BlockEntityRecipeSelector> getBlockEntityRecipeSelector(BlockEntity be);
+    for (Function<BlockEntity, BlockEntityRecipeSelector> controllerFunction : SELECTORS) {
+      BlockEntityRecipeSelector controller = controllerFunction.apply(be);
 
-  public abstract void addRecipeController(
-      Function<HandledScreen<?>, RecipeController<?, ?>> controllerFunction);
+      if (controller != null) {
+        return Optional.of(controller);
+      }
+    }
+    return Optional.empty();
+  }
 
-  public abstract void addBlockEntity(
-      Function<BlockEntity, BlockEntityRecipeSelector> selectorFunction,
-      Function<HandledScreen<?>, RecipeController<?, ?>> controllerFunction);
+  public void addBlockEntity(Function<BlockEntity, BlockEntityRecipeSelector> selectorFunction) {
+    SELECTORS.add(selectorFunction);
+  }
 }

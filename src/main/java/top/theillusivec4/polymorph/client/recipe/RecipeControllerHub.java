@@ -21,7 +21,7 @@ import java.util.Optional;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.recipe.Recipe;
-import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.api.PolymorphClientApi;
 import top.theillusivec4.polymorph.api.type.RecipeController;
 
 public class RecipeControllerHub {
@@ -33,7 +33,7 @@ public class RecipeControllerHub {
   }
 
   public static boolean startController(HandledScreen<?> screen) {
-    return PolymorphApi.getInstance().getRecipeController(screen).map(result -> {
+    return PolymorphClientApi.getInstance().getRecipeController(screen).map(result -> {
       controller = result;
       return true;
     }).orElse(false);

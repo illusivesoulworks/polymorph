@@ -13,6 +13,6 @@ public class FabricFurnacesModule extends AbstractCompatibilityModule {
         return new FabricFurnacesRecipeSelector((BaseFurnaceEntity) blockEntity);
       }
       return null;
-    }, handledScreen -> null);
+    });
   }
 }

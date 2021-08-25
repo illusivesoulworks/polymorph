@@ -27,12 +27,6 @@ public class PolymorphComponentInitializer implements BlockComponentInitializer 
         return new FurnaceRecipeSelector((AbstractFurnaceBlockEntity) blockEntity);
       }
       return null;
-    }, handledScreen -> {
-      if (handledScreen instanceof AbstractFurnaceScreen &&
-          handledScreen.getScreenHandler() instanceof AbstractFurnaceScreenHandler) {
-        return new FurnaceRecipeController(handledScreen);
-      }
-      return null;
     });
     blockComponentFactoryRegistry
         .registerFor(BlockEntity.class, PolymorphComponents.BLOCK_ENTITY_RECIPE_SELECTOR,

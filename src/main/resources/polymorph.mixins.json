@@ -8,7 +8,6 @@
     "AccessorAbstractFurnaceScreenHandler",
     "AccessorIngredient",
     "MixinCraftingScreenHandler",
-    "MixinPolymorphApi",
     "MixinRecipeManager",
     "MixinSmithingScreenHandler"
   ],

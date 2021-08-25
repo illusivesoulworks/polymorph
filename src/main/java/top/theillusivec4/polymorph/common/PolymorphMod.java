@@ -5,11 +5,8 @@ import java.util.Map;
 import java.util.function.Supplier;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.screen.SmithingScreenHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.client.recipe.SmithingRecipeController;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.common.integration.appliedenergistics2.AppliedEnergisticsModule;
 import top.theillusivec4.polymorph.common.integration.fabricfurnaces.FabricFurnacesModule;
@@ -37,12 +34,6 @@ public class PolymorphMod implements ModInitializer {
   public void onInitialize() {
     PolymorphNetwork.setup();
     PolymorphCommands.setup();
-    PolymorphApi.getInstance().addRecipeController(handledScreen -> {
-      if (handledScreen.getScreenHandler() instanceof SmithingScreenHandler) {
-        return new SmithingRecipeController(handledScreen);
-      }
-      return null;
-    });
 
     FabricLoader loader = FabricLoader.getInstance();
     isFastFurnaceLoaded = loader.isModLoaded("fastfurnace");
