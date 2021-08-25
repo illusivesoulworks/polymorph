@@ -1,9 +1,9 @@
 package top.theillusivec4.polymorph.common.util;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.WeakHashMap;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -15,7 +15,7 @@ import top.theillusivec4.polymorph.common.network.PolymorphPackets;
 
 public class CraftingPlayers {
 
-  private static final Map<UUID, Identifier> PLAYER_TO_RECIPE = new HashMap<>();
+  private static final Map<UUID, Identifier> PLAYER_TO_RECIPE = new WeakHashMap<>();
 
   public static void add(PlayerEntity playerEntity, Identifier recipe) {
     add(playerEntity.getUuid(), recipe);
