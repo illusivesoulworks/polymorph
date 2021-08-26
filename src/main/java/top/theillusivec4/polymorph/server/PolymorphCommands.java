@@ -133,9 +133,8 @@ public class PolymorphCommands {
 
   private static boolean areSameShape(Recipe<?> recipe1, Recipe<?> recipe2) {
 
-    if (recipe1 instanceof ShapedRecipe && recipe2 instanceof ShapedRecipe) {
-      ShapedRecipe shapedRecipe1 = (ShapedRecipe) recipe1;
-      ShapedRecipe shapedRecipe2 = (ShapedRecipe) recipe2;
+    if (recipe1 instanceof ShapedRecipe shapedRecipe1 &&
+        recipe2 instanceof ShapedRecipe shapedRecipe2) {
       return shapedRecipe1.getHeight() == shapedRecipe2.getHeight()
           && shapedRecipe1.getWidth() == shapedRecipe2.getWidth();
     }

@@ -1,10 +1,10 @@
 plugins {
-    id 'fabric-loom' version '0.7-SNAPSHOT'
+    id 'fabric-loom' version '0.9-SNAPSHOT'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -67,22 +67,22 @@ dependencies {
     modImplementation fabricApi.module("fabric-command-api-v1", project.fabric_version)
     modImplementation fabricApi.module("fabric-commands-v0", project.fabric_version)
     modImplementation fabricApi.module("fabric-networking-v0", project.fabric_version)
+    modImplementation fabricApi.module("fabric-screen-handler-api-v1", project.fabric_version)
+    modImplementation fabricApi.module("fabric-networking-blockentity-v0", project.fabric_version)
 
     modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
     modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${project.cca_version}"
 
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
-    modRuntime "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
+    modRuntime "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
     modCompileOnly "curse.maven:fabricfurnaces-315534:${project.file_fabricfurnaces}"
     modRuntime "curse.maven:fabricfurnaces-315534:${project.file_fabricfurnaces}"
-    modRuntime "me.sargunvohra.mcmods:autoconfig1u:3.3.1"
+    modRuntime 'com.github.Draylar.omega-config:omega-config:1.17-SNAPSHOT'
     modCompileOnly "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
     modRuntime "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
     modRuntime "teamreborn:energy:0.1.1"
-    modCompileOnly "curse.maven:improvedstations-355914:3032328"
-    modRuntime "curse.maven:improvedstations-355914:3032328"
-    modCompileOnly "appeng:appliedenergistics2-fabric:8.4.0-alpha.2"
-    modRuntime "appeng:appliedenergistics2-fabric:8.4.0-alpha.2"
+    modCompileOnly "curse.maven:improvedstations-355914:${project.file_improvedstations}"
+    modRuntime "curse.maven:improvedstations-355914:${project.file_improvedstations}"
     modRuntime "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modRuntime "curse.maven:fastfurnace-364540:${project.file_fastfurnace}"
 
@@ -93,23 +93,18 @@ dependencies {
 processResources {
     inputs.property "version", project.version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include "fabric.mod.json"
-        expand 'version': project.version
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "fabric.mod.json"
-    }
+    filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+tasks.withType(JavaCompile).configureEach {
+	it.options.encoding = "UTF-8"
+	it.options.release = 16
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier.set("sources")
-    from sourceSets.main.allSource
+java {
+    withSourcesJar()
 }
 
 sourceSets {
@@ -127,7 +122,7 @@ curseforge {
         releaseType = "${curse_release}"
         changelogType = 'markdown'
         changelog = file('docs/CHANGELOG.md')
-        addGameVersion "Java 8"
+        addGameVersion "Java 16"
         addGameVersion "Fabric"
         "${curse_versions}".split(',').each {
             addGameVersion "${it}"

@@ -34,7 +34,7 @@ public class PolymorphNetwork {
                           world.getRecipeManager().values().stream()
                               .filter((val) -> val.getType() == selector.getRecipeType())
                               .flatMap((val) -> Util.stream(selector.getRecipeType()
-                                  .get((Recipe<Inventory>) val, world,
+                                  .match((Recipe<Inventory>) val, world,
                                       (Inventory) selector.getParent())))
                               .sorted(Comparator
                                   .comparing((recipe) -> recipe.getOutput().getTranslationKey()))

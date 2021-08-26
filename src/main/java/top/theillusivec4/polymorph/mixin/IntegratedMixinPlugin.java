@@ -40,26 +40,15 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
   public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
     FabricLoader loader = FabricLoader.getInstance();
 
-    if (targetClassName.equals("me.shedaniel.rei.impl.InternalWidgets") &&
+    if (targetClassName.equals("me.shedaniel.rei.impl.client.gui.widget.InternalWidgets") &&
         mixinClassName.equals(
             "top.theillusivec4.polymorph.mixin.integration.MixinRoughlyEnoughItems")) {
-      return loader.isModLoaded("roughlyenoughitems-runtime");
+      return loader.isModLoaded("roughlyenoughitems");
     } else if (
-        targetClassName.equals("me.shedaniel.istations.containers.CraftingStationScreenHandler") &&
+        targetClassName.equals("me.shedaniel.istations.containers.CraftingStationMenu") &&
             mixinClassName.equals(
                 "top.theillusivec4.polymorph.mixin.integration.MixinImprovedStations")) {
       return loader.isModLoaded("improved-stations");
-    } else if ((targetClassName.equals("appeng.container.me.items.CraftingTermContainer") ||
-        (targetClassName.equals("appeng.container.me.items.PatternTermContainer"))) &&
-        (mixinClassName.equals(
-            "top.theillusivec4.polymorph.mixin.integration.MixinCraftingTermContainer") ||
-            mixinClassName.equals(
-                "top.theillusivec4.polymorph.mixin.integration.AccessorCraftingTermContainer") ||
-            mixinClassName.equals(
-                "top.theillusivec4.polymorph.mixin.integration.MixinPatternTermContainer") ||
-            mixinClassName.equals(
-                "top.theillusivec4.polymorph.mixin.integration.AccessorPatternTermContainer"))) {
-      return loader.isModLoaded("appliedenergistics2");
     }
     return true;
   }

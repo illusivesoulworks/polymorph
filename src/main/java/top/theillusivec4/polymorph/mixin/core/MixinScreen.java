@@ -28,7 +28,7 @@ import top.theillusivec4.polymorph.mixin.util.ClientMixinHooks;
 public class MixinScreen {
 
   @Inject(at = @At("TAIL"), method = "init(Lnet/minecraft/client/MinecraftClient;II)V")
-  public void init(CallbackInfo cb) {
+  public void polymorph$init(CallbackInfo cb) {
     @SuppressWarnings("ConstantConditions") Screen screen = (Screen) (Object) this;
     ClientMixinHooks.initSelector(screen);
   }

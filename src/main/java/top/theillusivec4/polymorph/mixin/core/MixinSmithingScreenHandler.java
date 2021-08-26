@@ -28,7 +28,7 @@ public abstract class MixinSmithingScreenHandler extends ForgingScreenHandler {
   private List<SmithingRecipe> recipes;
 
   @Shadow
-  private SmithingRecipe field_25386;
+  private SmithingRecipe currentRecipe;
 
   public MixinSmithingScreenHandler(
       @Nullable ScreenHandlerType<?> type, int syncId,
@@ -50,6 +50,6 @@ public abstract class MixinSmithingScreenHandler extends ForgingScreenHandler {
 
   @Inject(at = @At(value = "INVOKE_ASSIGN", target = "java/util/List.get(I)Ljava/lang/Object;", shift = At.Shift.BY, by = 3), method = "updateResult")
   private void polymorph$updateResult(CallbackInfo ci) {
-    this.field_25386 = MixinHooks.getSmithingRecipe(this.player, this.recipes);
+    this.currentRecipe = MixinHooks.getSmithingRecipe(this.player, this.recipes);
   }
 }

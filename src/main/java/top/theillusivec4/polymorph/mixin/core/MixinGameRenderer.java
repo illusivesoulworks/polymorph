@@ -34,7 +34,7 @@ public class MixinGameRenderer {
   MinecraftClient client;
 
   @Inject(at = @At("TAIL"), method = "render")
-  public void render(CallbackInfo cb) {
+  public void polymorph$render(CallbackInfo cb) {
     int i = (int) (this.client.mouse.getX() * (double) this.client.getWindow().getScaledWidth()
         / (double) this.client.getWindow().getWidth());
     int j = (int) (this.client.mouse.getY() * (double) this.client.getWindow().getScaledHeight()

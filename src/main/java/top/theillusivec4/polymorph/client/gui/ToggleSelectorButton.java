@@ -41,11 +41,10 @@ public class ToggleSelectorButton extends TexturedButtonWidget {
     this.yOffset = yOffset;
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public void renderButton(MatrixStack matrixStack, int p_renderButton_1_, int p_renderButton_2_,
                            float p_renderButton_3_) {
-    RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     this.x = ((AccessorHandledScreen) this.handledScreen).getX() + this.xOffset;
     this.y = ((AccessorHandledScreen) this.handledScreen).getY() + this.yOffset;
     super.renderButton(matrixStack, p_renderButton_1_, p_renderButton_2_, p_renderButton_3_);

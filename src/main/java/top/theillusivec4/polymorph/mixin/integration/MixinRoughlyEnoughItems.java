@@ -18,9 +18,9 @@
 package top.theillusivec4.polymorph.mixin.integration;
 
 import java.util.function.Supplier;
-import me.shedaniel.rei.api.RecipeDisplay;
-import me.shedaniel.rei.api.widgets.Button;
-import me.shedaniel.rei.impl.InternalWidgets;
+import me.shedaniel.rei.api.client.gui.widgets.Button;
+import me.shedaniel.rei.api.common.display.Display;
+import me.shedaniel.rei.impl.client.gui.widget.InternalWidgets;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -33,7 +33,7 @@ public class MixinRoughlyEnoughItems {
 
   @Inject(at = @At(value = "HEAD"), method = "lambda$createAutoCraftingButtonWidget$0", remap = false)
   private static void polymorph$hookTransfer(HandledScreen<?> screen,
-                                             Supplier<RecipeDisplay> recipeDisplaySupplier,
+                                             Supplier<Display> recipeDisplaySupplier,
                                              Button button, CallbackInfo cb) {
     RoughlyEnoughItemsMixinHooks.selectRecipe(recipeDisplaySupplier.get());
   }

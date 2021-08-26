@@ -141,7 +141,7 @@ public abstract class AbstractRecipeController<I extends Inventory, R extends Re
     public RecipeOutput(ItemStack stack) {
       this.item = stack.getItem();
       this.count = stack.getCount();
-      this.tag = stack.getTag();
+      this.tag = stack.getNbt();
     }
 
     @Override

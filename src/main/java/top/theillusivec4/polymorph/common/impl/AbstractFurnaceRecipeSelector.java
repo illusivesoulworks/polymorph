@@ -51,7 +51,7 @@ public abstract class AbstractFurnaceRecipeSelector<T extends BlockEntity & Inve
       Optional<Recipe<?>> saved =
           (Optional<Recipe<?>>) world.getRecipeManager().get(new Identifier(savedRecipe));
 
-      if (!saved.isPresent() || !((Recipe<Inventory>) saved.get()).matches(parent, world)) {
+      if (saved.isEmpty() || !((Recipe<Inventory>) saved.get()).matches(parent, world)) {
         savedRecipe = "";
       } else {
         this.setSelectedRecipe(saved.get());
@@ -61,14 +61,14 @@ public abstract class AbstractFurnaceRecipeSelector<T extends BlockEntity & Inve
     }
     Optional<Recipe<?>> maybeRecipe = world.getRecipeManager().values().stream()
         .filter((val) -> val.getType() == this.getRecipeType()).flatMap((val) -> Util
-            .stream(this.getRecipeType().get((Recipe<Inventory>) val, world, parent)))
+            .stream(this.getRecipeType().match((Recipe<Inventory>) val, world, parent)))
         .min(Comparator.comparing((recipe) -> recipe.getOutput().getTranslationKey()))
         .map((val) -> {
           this.setSelectedRecipe(val);
           return val;
         });
 
-    if (!maybeRecipe.isPresent()) {
+    if (maybeRecipe.isEmpty()) {
       lastFailedInput = input;
     }
     return maybeRecipe;

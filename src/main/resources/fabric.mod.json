@@ -40,7 +40,7 @@
     "fabric-networking-api-v1": "*",
     "fabric-command-api-v1": "*",
     "fabric-commands-v0": "*",
-    "cardinal-components-block": ">=2.8.3",
-    "minecraft": "1.16.x"
+    "cardinal-components-block": ">=3.1.1",
+    "minecraft": "1.17.x"
   }
 }

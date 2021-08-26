@@ -17,10 +17,13 @@
 
 package top.theillusivec4.polymorph.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.List;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -54,7 +57,8 @@ public class RecipeOutputWidget<T extends Inventory, R extends Recipe<T>> extend
   @Override
   public void renderButton(MatrixStack matrixStack, int button_1, int button_2, float button_3) {
     MinecraftClient minecraft = MinecraftClient.getInstance();
-    minecraft.getTextureManager().bindTexture(TOGGLE);
+    RenderSystem.setShader(GameRenderer::getPositionTexShader);
+    RenderSystem.setShaderTexture(0, TOGGLE);
     int j = 0;
 
     if (this.x + 25 > button_1 && this.x <= button_1 && this.y + 25 > button_2 &&
@@ -90,5 +94,10 @@ public class RecipeOutputWidget<T extends Inventory, R extends Recipe<T>> extend
   @Override
   protected boolean isValidClickButton(int button) {
     return button == 0 || button == 1;
+  }
+
+  @Override
+  public void appendNarrations(NarrationMessageBuilder builder) {
+    this.appendDefaultNarrations(builder);
   }
 }

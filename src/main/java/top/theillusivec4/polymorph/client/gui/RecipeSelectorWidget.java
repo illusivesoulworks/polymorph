@@ -28,8 +28,10 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.Inventory;
@@ -39,7 +41,6 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Language;
 import net.minecraft.util.math.Matrix4f;
-import org.lwjgl.opengl.GL11;
 import top.theillusivec4.polymorph.mixin.core.AccessorHandledScreen;
 import top.theillusivec4.polymorph.mixin.core.AccessorScreen;
 
@@ -174,19 +175,16 @@ public class RecipeSelectorWidget<I extends Inventory, R extends Recipe<I>> exte
 
   public void renderTooltip(MatrixStack matrices, List<Text> textLines, int mouseX, int mouseY) {
     drawHoveringText(matrices, textLines, mouseX, mouseY, this.handledScreen.width,
-        this.handledScreen.height, -1,
-        DEFAULT_BACKGROUND_COLOR, DEFAULT_BORDER_COLOR_START, DEFAULT_BORDER_COLOR_END,
-        ((AccessorScreen) this.handledScreen).getTextRenderer());
+        this.handledScreen.height, -1, DEFAULT_BACKGROUND_COLOR, DEFAULT_BORDER_COLOR_START,
+        DEFAULT_BORDER_COLOR_END, ((AccessorScreen) this.handledScreen).getTextRenderer());
   }
 
-  @SuppressWarnings("deprecation")
   public static void drawHoveringText(MatrixStack mStack, List<? extends StringVisitable> textLines,
                                       int mouseX, int mouseY, int screenWidth, int screenHeight,
                                       int maxTextWidth, int backgroundColor, int borderColorStart,
                                       int borderColorEnd, TextRenderer font) {
 
     if (!textLines.isEmpty()) {
-      RenderSystem.disableRescaleNormal();
       RenderSystem.disableDepthTest();
       int tooltipTextWidth = 0;
 
@@ -314,11 +312,9 @@ public class RecipeSelectorWidget<I extends Inventory, R extends Recipe<I>> exte
       renderType.draw();
       mStack.pop();
       RenderSystem.enableDepthTest();
-      RenderSystem.enableRescaleNormal();
     }
   }
 
-  @SuppressWarnings("deprecation")
   public static void drawGradientRect(Matrix4f mat, int zLevel, int left, int top, int right,
                                       int bottom, int startColor, int endColor) {
     float startAlpha = (float) (startColor >> 24 & 255) / 255.0F;
@@ -333,10 +329,10 @@ public class RecipeSelectorWidget<I extends Inventory, R extends Recipe<I>> exte
     RenderSystem.disableTexture();
     RenderSystem.enableBlend();
     RenderSystem.defaultBlendFunc();
-    RenderSystem.shadeModel(GL11.GL_SMOOTH);
+    RenderSystem.setShader(GameRenderer::getPositionColorShader);
     Tessellator tessellator = Tessellator.getInstance();
     BufferBuilder buffer = tessellator.getBuffer();
-    buffer.begin(GL11.GL_QUADS, VertexFormats.POSITION_COLOR);
+    buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
     buffer.vertex(mat, right, top, zLevel).color(startRed, startGreen, startBlue, startAlpha)
         .next();
     buffer.vertex(mat, left, top, zLevel).color(startRed, startGreen, startBlue, startAlpha)
@@ -344,7 +340,6 @@ public class RecipeSelectorWidget<I extends Inventory, R extends Recipe<I>> exte
     buffer.vertex(mat, left, bottom, zLevel).color(endRed, endGreen, endBlue, endAlpha).next();
     buffer.vertex(mat, right, bottom, zLevel).color(endRed, endGreen, endBlue, endAlpha).next();
     tessellator.draw();
-    RenderSystem.shadeModel(GL11.GL_FLAT);
     RenderSystem.disableBlend();
     RenderSystem.enableTexture();
   }

@@ -8,7 +8,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
-import top.theillusivec4.polymorph.common.integration.appliedenergistics2.AppliedEnergisticsModule;
 import top.theillusivec4.polymorph.common.integration.fabricfurnaces.FabricFurnacesModule;
 import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
 import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
@@ -27,7 +26,6 @@ public class PolymorphMod implements ModInitializer {
   static {
     INTEGRATIONS.put("ironfurnaces", IronFurnacesModule::new);
     INTEGRATIONS.put("fabric-furnaces", FabricFurnacesModule::new);
-    INTEGRATIONS.put("appliedenergistics2", AppliedEnergisticsModule::new);
   }
 
   @Override
