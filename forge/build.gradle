@@ -1,0 +1,164 @@
+buildscript {
+    repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://plugins.gradle.org/m2/' }
+        maven {
+            url "https://repo.spongepowered.org/repository/maven-public/"
+            content { includeGroup "org.spongepowered" }
+        }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath group: 'gradle.plugin.com.matthewprenger', name: 'CurseGradle', version: '1.4.0'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'com.matthewprenger.cursegradle'
+apply plugin: 'org.spongepowered.mixin'
+
+version = "${mod_version}"
+group = "${mod_group}"
+archivesBaseName = "${mod_id}-forge"
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+
+minecraft {
+    mappings channel: "snapshot", version: "${version_mcp}".toString()
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            arg "-mixin.config=" + "${mod_id}".toString() + ".mixins.json"
+            arg "-mixin.config=" + "${mod_id}_integrations".toString() + ".mixins.json"
+            jvmArg "-Dmixin.env.disableRefMap=true"
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                polymorph {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            arg "-mixin.config=" + "${mod_id}".toString() + ".mixins.json"
+            arg "-mixin.config=" + "${mod_id}_integrations".toString() + ".mixins.json"
+            jvmArg "-Dmixin.env.disableRefMap=true"
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                polymorph {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+}
+
+
+repositories {
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
+    }
+    maven {
+        url "https://www.cursemaven.com"
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${version_forge}"
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.2:processor'
+
+    compile fg.deobf("mezz.jei:jei-1.16.5:${version_jei}")
+
+    compile fg.deobf("curse.maven:craftingcraft-237581:${file_craftingcraft}")
+    compile fg.deobf("curse.maven:refinedstorage-243076:${file_refinedstorage}")
+    compile fg.deobf("curse.maven:refinedstorageaddons-272302:${file_refinedaddons}")
+    compile fg.deobf("curse.maven:prettypipes-376737:${file_prettypipes}")
+//    compile fg.deobf("curse.maven:ironfurnaces-237664:${file_ironfurnaces}")
+
+    runtimeOnly fg.deobf("curse.maven:tomsstorage-378609:${file_tom}")
+    runtimeOnly fg.deobf("curse.maven:craftingstation-318551:${file_craftingstation}")
+    runtimeOnly fg.deobf("curse.maven:vanillatweaks-272637:${file_vanillatweaks}")
+    runtimeOnly fg.deobf("curse.maven:simplestoragenetwork-268495:${file_ssn}")
+//    runtimeOnly fg.deobf("curse.maven:byg-268495:${file_byg}")
+//    compile fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
+    runtimeOnly fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
+    runtimeOnly fg.deobf("curse.maven:placebo-283644:${file_placebo}")
+//    runtimeOnly fg.deobf("curse.maven:create-328085:${file_create}")
+//    runtimeOnly fg.deobf("curse.maven:flywheel-486392:${file_flywheel}")
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs += '../docs'
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes(["Specification-Title": "${mod_name}",
+                    "Specification-Vendor": "${mod_author}",
+                    "Specification-Version": "${getArchiveVersion()}",
+                    "Implementation-Title": "${mod_name}",
+                    "Implementation-Version": "${getArchiveVersion()}",
+                    "Implementation-Vendor" :"${mod_author}",
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    "MixinConfigs": "${mod_id}.mixins.json, ${mod_id}_integrations.mixins.json"],)
+    }
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allJava
+}
+
+tasks.build.dependsOn sourcesJar
+
+processResources {
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'META-INF/mods.toml'
+        expand 'version': project.version, 'mod_id' : mod_id, 'mod_name': mod_name, 'mod_url': mod_url, 'mod_author': mod_author, 'mod_description': mod_description, 'mod_icon': mod_icon
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'META-INF/mods.toml'
+    }
+}
+
+curseforge {
+
+    project {
+        apiKey = findProperty('curseKey') ?: 0
+        id = "${curse_id}"
+        releaseType = "${curse_release}"
+        changelogType = 'markdown'
+        changelog = file('docs/CHANGELOG.md')
+        addArtifact(sourcesJar)
+        "${curse_versions}".split(',').each {
+            addGameVersion "${it}"
+        }
+    }
+}
