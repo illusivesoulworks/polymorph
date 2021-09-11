@@ -75,9 +75,12 @@ public abstract class AbstractRecipeController<I extends Inventory, R extends Re
 
   @Override
   public void selectRecipe(R recipe) {
-    PacketByteBuf buf = PacketByteBufs.create();
-    buf.writeIdentifier(recipe.getId());
-    ClientPlayNetworking.send(PolymorphPackets.SELECT_CRAFT, buf);
+
+    if (!recipe.craft(this.getInventory()).isEmpty()) {
+      PacketByteBuf buf = PacketByteBufs.create();
+      buf.writeIdentifier(recipe.getId());
+      ClientPlayNetworking.send(PolymorphPackets.SELECT_CRAFT, buf);
+    }
   }
 
   @Override

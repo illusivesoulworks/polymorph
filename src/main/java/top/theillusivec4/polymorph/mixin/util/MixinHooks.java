@@ -42,18 +42,17 @@ public class MixinHooks {
     buf.writeIdentifier(new Identifier(""));
 
     for (T recipe : recipes) {
-      Identifier id = recipe.getId();
 
-      if (result == null &&
-          CraftingPlayers.getRecipe(player).map(identifier -> identifier.equals(id))
-              .orElse(false)) {
-        result = recipe;
+      if (!recipe.craft(inventory).isEmpty()) {
+        Identifier id = recipe.getId();
+
+        if (result == null &&
+            CraftingPlayers.getRecipe(player).map(identifier -> identifier.equals(id))
+                .orElse(false)) {
+          result = recipe;
+        }
+        buf.writeString(id.toString());
       }
-      buf.writeString(id.toString());
-    }
-
-    if (result == null) {
-      CraftingPlayers.remove(player);
     }
 
     if (player instanceof ServerPlayerEntity) {
@@ -65,8 +64,7 @@ public class MixinHooks {
   @SuppressWarnings("unchecked")
   public static <T extends Recipe<C>, C extends Inventory> Optional<T> getSelectedRecipe(
       RecipeType<T> recipeTypeIn, C inventoryIn, World worldIn) {
-    if (inventoryIn instanceof BlockEntity) {
-      BlockEntity te = (BlockEntity) inventoryIn;
+    if (inventoryIn instanceof BlockEntity te) {
       Optional<BlockEntityRecipeSelector> component =
           PolymorphComponents.BLOCK_ENTITY_RECIPE_SELECTOR.maybeGet(te);
       List<T> recipe = new ArrayList<>();
@@ -83,7 +81,7 @@ public class MixinHooks {
             }
           });
 
-          if (!maybeSelected.isPresent()) {
+          if (maybeSelected.isEmpty()) {
             selector.getRecipe(worldIn).ifPresent(res1 -> recipe.add((T) res1));
           }
         }
@@ -111,10 +109,6 @@ public class MixinHooks {
           result = recipe;
         }
         buf.writeString(id.toString());
-      }
-
-      if (result == null) {
-        CraftingPlayers.remove(player);
       }
       ServerPlayNetworking.send((ServerPlayerEntity) player, PolymorphPackets.SEND_RECIPES, buf);
       return result != null ? result : defaultRecipe;
