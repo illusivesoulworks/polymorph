@@ -2,9 +2,12 @@ package top.theillusivec4.polymorph.common.network.client;
 
 import java.util.function.Supplier;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
+import top.theillusivec4.polymorph.common.PolymorphMod;
+import top.theillusivec4.polymorph.common.integration.craftingstation.CraftingStationModule;
 import top.theillusivec4.polymorph.common.util.CraftingPlayers;
 
 public class CPacketSelectCraft {
@@ -29,7 +32,12 @@ public class CPacketSelectCraft {
 
       if (sender != null) {
         CraftingPlayers.add(sender.getUniqueID(), msg.recipe);
-        sender.openContainer.onCraftMatrixChanged(sender.inventory);
+        Container container = sender.openContainer;
+
+        if (PolymorphMod.isCraftingStationLoaded) {
+          CraftingStationModule.clearRecipe(container);
+        }
+        container.onCraftMatrixChanged(sender.inventory);
       }
     });
     ctx.get().setPacketHandled(true);

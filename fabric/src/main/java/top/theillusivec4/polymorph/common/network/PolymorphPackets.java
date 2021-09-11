@@ -13,6 +13,4 @@ public class PolymorphPackets {
   public static final Identifier HIGHLIGHT_RECIPE =
       new Identifier(PolymorphMod.MOD_ID, "highlight_recipe");
   public static final Identifier ADD_CRAFTER = new Identifier(PolymorphMod.MOD_ID, "add_crafter");
-  public static final Identifier REMOVE_CRAFTER =
-      new Identifier(PolymorphMod.MOD_ID, "remove_crafter");
 }

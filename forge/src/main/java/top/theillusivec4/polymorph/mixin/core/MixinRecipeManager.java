@@ -22,6 +22,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -36,7 +37,10 @@ public class MixinRecipeManager {
   private <C extends IInventory, T extends IRecipe<C>> void polymorph$getRecipe(
       IRecipeType<T> recipeTypeIn, C inventoryIn, World worldIn,
       CallbackInfoReturnable<Optional<T>> cb) {
-    MixinHooks.getSelectedRecipe(recipeTypeIn, inventoryIn, worldIn)
-        .ifPresent(recipe -> cb.setReturnValue(Optional.of(recipe)));
+
+    if (inventoryIn instanceof TileEntity) {
+      MixinHooks.getSelectedRecipe(recipeTypeIn, inventoryIn, worldIn, (TileEntity) inventoryIn)
+          .ifPresent(recipe -> cb.setReturnValue(Optional.of(recipe)));
+    }
   }
 }

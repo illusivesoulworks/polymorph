@@ -91,13 +91,13 @@ dependencies {
     compile fg.deobf("mezz.jei:jei-1.16.5:${version_jei}")
 
     compile fg.deobf("curse.maven:craftingcraft-237581:${file_craftingcraft}")
+    compile fg.deobf("curse.maven:craftingstation-318551:${file_craftingstation}")
     compile fg.deobf("curse.maven:refinedstorage-243076:${file_refinedstorage}")
     compile fg.deobf("curse.maven:refinedstorageaddons-272302:${file_refinedaddons}")
     compile fg.deobf("curse.maven:prettypipes-376737:${file_prettypipes}")
+    compile fg.deobf("curse.maven:tomsstorage-378609:${file_tom}")
 //    compile fg.deobf("curse.maven:ironfurnaces-237664:${file_ironfurnaces}")
 
-    runtimeOnly fg.deobf("curse.maven:tomsstorage-378609:${file_tom}")
-    runtimeOnly fg.deobf("curse.maven:craftingstation-318551:${file_craftingstation}")
     runtimeOnly fg.deobf("curse.maven:vanillatweaks-272637:${file_vanillatweaks}")
     runtimeOnly fg.deobf("curse.maven:simplestoragenetwork-268495:${file_ssn}")
 //    runtimeOnly fg.deobf("curse.maven:byg-268495:${file_byg}")

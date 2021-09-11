@@ -53,7 +53,7 @@ public class CPacketGetRecipes {
                             (recipe) -> recipe.getRecipeOutput().getTranslationKey()))
                         .collect(Collectors.toList());
                 Set<ResourceLocation> recipeIds = new HashSet<>();
-                ResourceLocation selectedRecipe = null;
+                ResourceLocation selectedRecipe = new ResourceLocation("");
 
                 if (!recipes.isEmpty()) {
                   selectedRecipe = recipeSelector.getSelectedRecipe().map(IRecipe::getId)

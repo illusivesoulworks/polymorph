@@ -33,6 +33,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Style;
@@ -103,10 +104,15 @@ public class RecipeSelectorWidget<I extends Inventory, R extends Recipe<I>> exte
   }
 
   public void setRecipes(List<R> recipes) {
-    this.recipes = recipes;
-    this.outputWidgets.clear();
-    recipes.forEach(recipe -> this.outputWidgets
-        .add(new RecipeOutputWidget<>(recipe, recipe.craft(this.inventory))));
+    this.recipes = new ArrayList<>();
+    recipes.forEach(recipe -> {
+      ItemStack output = recipe.craft(inventory);
+
+      if (!output.isEmpty()) {
+        this.recipes.add(recipe);
+        this.outputWidgets.add(new RecipeOutputWidget<>(recipe, recipe.craft(this.inventory)));
+      }
+    });
     this.updateButtonPositions();
   }
 

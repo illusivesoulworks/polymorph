@@ -4,7 +4,11 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "polymorph.refmap.json",
   "mixins": [
-    "MixinJustEnoughItems"
+    "MixinCraftingCraft",
+    "MixinCraftingStation",
+    "MixinJustEnoughItems",
+    "MixinPrettyPipes",
+    "MixinTomsStorage"
   ],
   "plugin": "top.theillusivec4.polymorph.mixin.IntegratedMixinPlugin",
   "minVersion": "0.8"

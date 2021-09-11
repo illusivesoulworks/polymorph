@@ -17,14 +17,28 @@
 
 package top.theillusivec4.polymorph.mixin;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.fml.loading.LoadingModList;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 public class IntegratedMixinPlugin implements IMixinConfigPlugin {
+
+  private static final Map<String, String> TARGETS = new HashMap<>();
+
+  static {
+    TARGETS.put("mezz.jei.transfer.RecipeTransferUtil", "jei");
+    TARGETS.put("net.blay09.mods.craftingcraft.container.CraftingContainer", "craftingcraft");
+    TARGETS.put("com.tfar.craftingstation.CraftingStationContainer", "craftingstation");
+    TARGETS.put("de.ellpeck.prettypipes.terminal.containers.CraftingTerminalContainer", "prettypipes");
+    TARGETS.put("com.tom.storagemod.tile.TileEntityCraftingTerminal", "toms_storage");
+  }
 
   @Override
   public void onLoad(String mixinPackage) {
@@ -38,13 +52,8 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
 
   @Override
   public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-
-    if (targetClassName.equals("mezz.jei.transfer.RecipeTransferUtil") &&
-        mixinClassName.equals(
-            "top.theillusivec4.polymorph.mixin.integration.MixinJustEnoughItems")) {
-      return FMLLoader.getLoadingModList().getModFileById("jei") != null;
-    }
-    return true;
+    return !TARGETS.containsKey(targetClassName) ||
+        FMLLoader.getLoadingModList().getModFileById(TARGETS.get(targetClassName)) != null;
   }
 
   @Override

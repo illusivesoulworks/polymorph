@@ -44,10 +44,6 @@ public class AppliedEnergisticsMixinHooks {
       ids.add(id);
     }
 
-    if (result == null) {
-      CraftingPlayers.remove(player);
-    }
-
     if (player.getEntityWorld().isClient()) {
       RecipeControllerHub.getController().ifPresent(
           recipeController -> recipeController.setRecipes(ids, player.getEntityWorld(), null));

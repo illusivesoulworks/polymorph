@@ -97,7 +97,7 @@ public abstract class AbstractFurnaceRecipeSelector<T extends TileEntity & IInve
 
       if (this.parent instanceof AbstractFurnaceTileEntity && PolymorphMod.isFastFurnaceLoaded) {
         try {
-          FieldUtils.writeField(this.parent, "cachedRecipe", this.selectedRecipe, true);
+          FieldUtils.writeField(this.parent, "curRecipe", this.selectedRecipe, true);
         } catch (IllegalAccessException e) {
           PolymorphMod.LOGGER.error("Error accessing cachedRecipe from FastFurnace!");
         } catch (IllegalArgumentException e) {

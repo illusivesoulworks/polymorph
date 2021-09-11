@@ -1,5 +1,8 @@
 package top.theillusivec4.polymorph.common;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -16,23 +19,37 @@ import top.theillusivec4.polymorph.client.ClientEventsListener;
 import top.theillusivec4.polymorph.client.PolymorphClientMod;
 import top.theillusivec4.polymorph.common.capability.FurnaceRecipeSelector;
 import top.theillusivec4.polymorph.common.capability.PolymorphCapabilityManager;
+import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
+import top.theillusivec4.polymorph.common.integration.prettypipes.PrettyPipesModule;
+import top.theillusivec4.polymorph.common.integration.tomsstorage.TomsStorageModule;
 import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
 import top.theillusivec4.polymorph.server.PolymorphCommands;
 
 @Mod(PolymorphMod.MOD_ID)
 public class PolymorphMod {
 
+  public static final Map<String, Supplier<AbstractCompatibilityModule>> INTEGRATIONS =
+      new HashMap<>();
+
   public static final String MOD_ID = "polymorph";
   public static final Logger LOGGER = LogManager.getLogger();
 
   public static boolean isFastFurnaceLoaded = false;
+  public static boolean isCraftingStationLoaded = false;
+
+  static {
+    INTEGRATIONS.put("prettypipes", PrettyPipesModule::new);
+    INTEGRATIONS.put("toms_storage", TomsStorageModule::new);
+  }
 
   public PolymorphMod() {
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
     eventBus.addListener(this::setup);
     eventBus.addListener(this::clientSetup);
     MinecraftForge.EVENT_BUS.addListener(this::registerCommand);
-    isFastFurnaceLoaded = ModList.get().isLoaded("fastfurnace");
+    ModList modList = ModList.get();
+    isFastFurnaceLoaded = modList.isLoaded("fastfurnace");
+    isCraftingStationLoaded = modList.isLoaded("craftingstation");
   }
 
   private void setup(final FMLCommonSetupEvent evt) {
@@ -46,11 +63,23 @@ public class PolymorphMod {
       }
       return null;
     });
+    INTEGRATIONS.forEach((modid, supplier) -> {
+
+      if (ModList.get().isLoaded(modid)) {
+        supplier.get().setup();
+      }
+    });
   }
 
   private void clientSetup(final FMLClientSetupEvent evt) {
     PolymorphClientMod.setup();
     MinecraftForge.EVENT_BUS.register(new ClientEventsListener());
+    INTEGRATIONS.forEach((modid, supplier) -> {
+
+      if (ModList.get().isLoaded(modid)) {
+        supplier.get().clientSetup();
+      }
+    });
   }
 
   private void registerCommand(final RegisterCommandsEvent evt) {

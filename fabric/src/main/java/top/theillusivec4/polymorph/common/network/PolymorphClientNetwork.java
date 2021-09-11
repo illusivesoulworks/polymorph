@@ -39,9 +39,5 @@ public class PolymorphClientNetwork {
       Identifier id = buf.readIdentifier();
       client.execute(() -> CraftingPlayers.add(uuid, id));
     });
-    ClientPlayNetworking.registerGlobalReceiver(PolymorphPackets.REMOVE_CRAFTER, (client, handler, buf, responseSender) -> {
-      UUID uuid = buf.readUuid();
-      client.execute(() -> CraftingPlayers.remove(uuid));
-    });
   }
 }

@@ -40,21 +40,4 @@ public class CraftingPlayers {
   public static Optional<Identifier> getRecipe(PlayerEntity playerEntity) {
     return Optional.ofNullable(PLAYER_TO_RECIPE.getIfPresent(playerEntity.getUuid()));
   }
-
-  public static void remove(PlayerEntity playerEntity) {
-    remove(playerEntity.getUuid());
-
-    if (!playerEntity.getEntityWorld().isClient() && playerEntity.getServer() != null) {
-
-      for (ServerPlayerEntity serverPlayerEntity : PlayerLookup.all(playerEntity.getServer())) {
-        PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeUuid(playerEntity.getUuid());
-        ServerPlayNetworking.send(serverPlayerEntity, PolymorphPackets.REMOVE_CRAFTER, buf);
-      }
-    }
-  }
-
-  public static void remove(UUID uuid) {
-    PLAYER_TO_RECIPE.invalidate(uuid);
-  }
 }
