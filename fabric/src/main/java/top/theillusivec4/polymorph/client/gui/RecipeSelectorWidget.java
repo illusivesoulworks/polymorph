@@ -105,6 +105,7 @@ public class RecipeSelectorWidget<I extends Inventory, R extends Recipe<I>> exte
 
   public void setRecipes(List<R> recipes) {
     this.recipes = new ArrayList<>();
+    this.outputWidgets.clear();
     recipes.forEach(recipe -> {
       ItemStack output = recipe.craft(inventory);
 
