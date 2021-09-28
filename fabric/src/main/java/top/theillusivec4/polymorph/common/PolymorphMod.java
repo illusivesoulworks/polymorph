@@ -23,6 +23,7 @@ public class PolymorphMod implements ModInitializer {
   public static final Logger LOGGER = LogManager.getLogger();
 
   public static boolean isFastFurnaceLoaded = false;
+  public static boolean isFastBenchLoaded = false;
 
   static {
     INTEGRATIONS.put("ironfurnaces", IronFurnacesModule::new);
@@ -37,6 +38,7 @@ public class PolymorphMod implements ModInitializer {
 
     FabricLoader loader = FabricLoader.getInstance();
     isFastFurnaceLoaded = loader.isModLoaded("fastfurnace");
+    isFastBenchLoaded = loader.isModLoaded("fastbench");
     INTEGRATIONS.forEach((modid, supplier) -> {
 
       if (loader.isModLoaded(modid)) {

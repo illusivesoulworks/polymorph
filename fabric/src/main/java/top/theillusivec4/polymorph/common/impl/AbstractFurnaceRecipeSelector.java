@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import top.theillusivec4.polymorph.api.type.BlockEntityRecipeSelector;
 import top.theillusivec4.polymorph.common.PolymorphMod;
+import top.theillusivec4.polymorph.common.integration.fastfurnace.FastFurnaceModule;
 import top.theillusivec4.polymorph.common.network.PolymorphPackets;
 import top.theillusivec4.polymorph.mixin.core.AccessorAbstractFurnaceBlockEntity;
 import top.theillusivec4.polymorph.mixin.core.AccessorAbstractFurnaceScreenHandler;
@@ -96,13 +97,7 @@ public abstract class AbstractFurnaceRecipeSelector<T extends BlockEntity & Inve
       World world = this.parent.getWorld();
 
       if (this.parent instanceof AbstractFurnaceBlockEntity && PolymorphMod.isFastFurnaceLoaded) {
-        try {
-          FieldUtils.writeField(this.parent, "cachedRecipe", this.selectedRecipe, true);
-        } catch (IllegalAccessException e) {
-          PolymorphMod.LOGGER.error("Error accessing cachedRecipe from FastFurnace!");
-        } catch (IllegalArgumentException e) {
-          PolymorphMod.LOGGER.debug("Cannot find FastFurnace, skipping field override!");
-        }
+        FastFurnaceModule.setCachedRecipe(this.parent, this.selectedRecipe);
       }
 
       if (world instanceof ServerWorld) {

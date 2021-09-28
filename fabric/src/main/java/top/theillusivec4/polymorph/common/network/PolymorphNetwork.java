@@ -15,6 +15,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.world.World;
 import top.theillusivec4.polymorph.api.PolymorphComponents;
+import top.theillusivec4.polymorph.common.PolymorphMod;
+import top.theillusivec4.polymorph.common.integration.fastbench.FastBenchModule;
 import top.theillusivec4.polymorph.common.util.CraftingPlayers;
 
 public class PolymorphNetwork {
@@ -59,6 +61,11 @@ public class PolymorphNetwork {
           Identifier id = packetByteBuf.readIdentifier();
           minecraftServer.execute(() -> {
             CraftingPlayers.add(serverPlayerEntity, id);
+
+            if (PolymorphMod.isFastBenchLoaded) {
+              minecraftServer.getRecipeManager().get(id)
+                  .ifPresent(recipe -> FastBenchModule.setLastRecipe(serverPlayerEntity, recipe));
+            }
             serverPlayerEntity.currentScreenHandler.onContentChanged(
                 serverPlayerEntity.currentScreenHandler.slots.get(0).inventory);
           });

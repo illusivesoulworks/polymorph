@@ -17,7 +17,9 @@
 
 package top.theillusivec4.polymorph.mixin;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import net.fabricmc.loader.api.FabricLoader;
 import org.objectweb.asm.tree.ClassNode;
@@ -25,6 +27,17 @@ import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 public class IntegratedMixinPlugin implements IMixinConfigPlugin {
+
+  private static final Map<String, String> CLASS_TO_MOD = new HashMap<>();
+
+  static {
+    CLASS_TO_MOD.put("me.shedaniel.rei.impl.InternalWidgets", "roughlyenoughitems-runtime");
+    CLASS_TO_MOD.put("me.shedaniel.istations.containers.CraftingStationScreenHandler",
+        "improved-stations");
+    CLASS_TO_MOD.put("appeng.container.me.items.CraftingTermContainer", "appliedenergistics2");
+    CLASS_TO_MOD.put("appeng.container.me.items.PatternTermContainer", "appliedenergistics2");
+    CLASS_TO_MOD.put("tfar.fastbench.MixinHooks", "fastbench");
+  }
 
   @Override
   public void onLoad(String mixinPackage) {
@@ -38,30 +51,8 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
 
   @Override
   public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-    FabricLoader loader = FabricLoader.getInstance();
-
-    if (targetClassName.equals("me.shedaniel.rei.impl.InternalWidgets") &&
-        mixinClassName.equals(
-            "top.theillusivec4.polymorph.mixin.integration.MixinRoughlyEnoughItems")) {
-      return loader.isModLoaded("roughlyenoughitems-runtime");
-    } else if (
-        targetClassName.equals("me.shedaniel.istations.containers.CraftingStationScreenHandler") &&
-            mixinClassName.equals(
-                "top.theillusivec4.polymorph.mixin.integration.MixinImprovedStations")) {
-      return loader.isModLoaded("improved-stations");
-    } else if ((targetClassName.equals("appeng.container.me.items.CraftingTermContainer") ||
-        (targetClassName.equals("appeng.container.me.items.PatternTermContainer"))) &&
-        (mixinClassName.equals(
-            "top.theillusivec4.polymorph.mixin.integration.MixinCraftingTermContainer") ||
-            mixinClassName.equals(
-                "top.theillusivec4.polymorph.mixin.integration.AccessorCraftingTermContainer") ||
-            mixinClassName.equals(
-                "top.theillusivec4.polymorph.mixin.integration.MixinPatternTermContainer") ||
-            mixinClassName.equals(
-                "top.theillusivec4.polymorph.mixin.integration.AccessorPatternTermContainer"))) {
-      return loader.isModLoaded("appliedenergistics2");
-    }
-    return true;
+    return !CLASS_TO_MOD.containsKey(targetClassName) ||
+        FabricLoader.getInstance().isModLoaded(CLASS_TO_MOD.get(targetClassName));
   }
 
   @Override
