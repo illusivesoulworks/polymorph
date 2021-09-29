@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.13-1.16.5] - 2021.09.28
+### Added
+- Added FastBench support [#92](https://github.com/TheIllusiveC4/Polymorph/issues/92)
+- Added REI display bounds to recipe selection GUI [#93](https://github.com/TheIllusiveC4/Polymorph/issues/93)
+### Fixed
+- Fixed furnace recipe toggles not working when loaded with Better Nether [#87](https://github.com/TheIllusiveC4/Polymorph/issues/87)
+- Fixed recipes being appended endlessly to the recipe selection list [#93](https://github.com/TheIllusiveC4/Polymorph/issues/93)
+
 ## [0.0.12-1.16.5] - 2021.09.10
 ### Fixed
 - Fixed recipe toggles showing empty recipes [#89](https://github.com/TheIllusiveC4/Polymorph/issues/89)

@@ -93,6 +93,7 @@ dependencies {
 }
 
 processResources {
+    from("CHANGELOG.md")
     inputs.property "version", project.version
 
     from(sourceSets.main.resources.srcDirs) {
