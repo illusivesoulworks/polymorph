@@ -24,6 +24,7 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import top.theillusivec4.polymorph.client.gui.RecipeSelectorWidget;
 
 public interface RecipeController<I extends Inventory, R extends Recipe<I>> {
 
@@ -36,6 +37,8 @@ public interface RecipeController<I extends Inventory, R extends Recipe<I>> {
   default void tick() {
     // NO-OP
   }
+
+  RecipeSelectorWidget<I, R> getSelectorWidget();
 
   void render(MatrixStack matrixStack, int mouseX, int mouseY, float renderPartialTicks);
 
@@ -53,5 +56,7 @@ public interface RecipeController<I extends Inventory, R extends Recipe<I>> {
     return getOutputSlot().y - 22;
   }
 
-  default boolean isActive() { return true; }
+  default boolean isActive() {
+    return true;
+  }
 }
