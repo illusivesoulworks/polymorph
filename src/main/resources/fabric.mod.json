@@ -22,6 +22,9 @@
     ],
     "cardinal-components-block": [
       "top.theillusivec4.polymorph.common.PolymorphComponentInitializer"
+    ],
+    "rei": [
+      "top.theillusivec4.polymorph.common.integration.roughlyenoughitems.PolymorphReiPlugin"
     ]
   },
   "custom": {

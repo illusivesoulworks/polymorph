@@ -17,7 +17,9 @@
 
 package top.theillusivec4.polymorph.mixin;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import net.fabricmc.loader.api.FabricLoader;
 import org.objectweb.asm.tree.ClassNode;
@@ -25,6 +27,14 @@ import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 public class IntegratedMixinPlugin implements IMixinConfigPlugin {
+
+  private static final Map<String, String> CLASS_TO_MOD = new HashMap<>();
+
+  static {
+    CLASS_TO_MOD.put("me.shedaniel.rei.impl.client.gui.widget.InternalWidgets",
+        "roughlyenoughitems");
+    CLASS_TO_MOD.put("me.shedaniel.istations.containers.CraftingStationMenu", "improved-stations");
+  }
 
   @Override
   public void onLoad(String mixinPackage) {
@@ -38,19 +48,8 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
 
   @Override
   public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-    FabricLoader loader = FabricLoader.getInstance();
-
-    if (targetClassName.equals("me.shedaniel.rei.impl.client.gui.widget.InternalWidgets") &&
-        mixinClassName.equals(
-            "top.theillusivec4.polymorph.mixin.integration.MixinRoughlyEnoughItems")) {
-      return loader.isModLoaded("roughlyenoughitems");
-    } else if (
-        targetClassName.equals("me.shedaniel.istations.containers.CraftingStationMenu") &&
-            mixinClassName.equals(
-                "top.theillusivec4.polymorph.mixin.integration.MixinImprovedStations")) {
-      return loader.isModLoaded("improved-stations");
-    }
-    return true;
+    return !CLASS_TO_MOD.containsKey(targetClassName) ||
+        FabricLoader.getInstance().isModLoaded(CLASS_TO_MOD.get(targetClassName));
   }
 
   @Override

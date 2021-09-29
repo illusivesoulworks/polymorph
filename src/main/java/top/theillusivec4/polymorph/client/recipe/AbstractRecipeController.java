@@ -48,8 +48,8 @@ public abstract class AbstractRecipeController<I extends Inventory, R extends Re
   public static final Identifier TOGGLE = new Identifier(PolymorphMod.MOD_ID,
       "textures/gui/toggle.png");
 
-  private static final int SELECTOR_X_OFFSET = -4;
-  private static final int SELECTOR_Y_OFFSET = -26;
+  public static final int SELECTOR_X_OFFSET = -4;
+  public static final int SELECTOR_Y_OFFSET = -26;
 
   protected RecipeSelectorWidget<I, R> recipeSelectorWidget;
   protected ButtonWidget toggleButton;
@@ -71,6 +71,11 @@ public abstract class AbstractRecipeController<I extends Inventory, R extends Re
             0, 17, TOGGLE,
             clickWidget -> recipeSelectorWidget.setActive(!recipeSelectorWidget.isActive()));
     this.toggleButton.visible = this.recipeSelectorWidget.getOutputWidgets().size() > 1;
+  }
+
+  @Override
+  public RecipeSelectorWidget<I, R> getSelectorWidget() {
+    return recipeSelectorWidget;
   }
 
   @Override

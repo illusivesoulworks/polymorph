@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.theillusivec4.polymorph.mixin.util.MixinHooks;
 
-@Mixin(value = RecipeManager.class, priority = 1200)
+@Mixin(value = RecipeManager.class, priority = 900)
 public class MixinRecipeManager {
 
   @Inject(at = @At("HEAD"), method = "getFirstMatch(Lnet/minecraft/recipe/RecipeType;Lnet/minecraft/inventory/Inventory;Lnet/minecraft/world/World;)Ljava/util/Optional;", cancellable = true)
