@@ -7,6 +7,7 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import top.theillusivec4.polymorph.client.gui.RecipeSelectorGui;
 
 public interface IRecipeController<I extends IInventory, R extends IRecipe<I>> {
 
@@ -19,6 +20,8 @@ public interface IRecipeController<I extends IInventory, R extends IRecipe<I>> {
   default void tick() {
     // NO-OP
   }
+
+  RecipeSelectorGui<I, R> getSelectorGui();
 
   void render(MatrixStack matrixStack, int mouseX, int mouseY, float renderPartialTicks);
 
