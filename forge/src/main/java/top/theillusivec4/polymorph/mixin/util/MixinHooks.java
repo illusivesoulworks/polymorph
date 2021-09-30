@@ -84,27 +84,6 @@ public class MixinHooks {
     return recipe.isEmpty() ? Optional.empty() : Optional.of(recipe.get(0));
   }
 
-  @SuppressWarnings("unchecked")
-  public static <T extends IRecipe<C>, C extends IInventory> Optional<T> getSelectedRecipe(
-      IRecipeType<T> recipeTypeIn, C inventoryIn, World worldIn, TileEntity te, Runnable runnable) {
-    List<T> recipe = new ArrayList<>();
-    PolymorphCapabilities.getRecipeSelector(te).ifPresent(recipeSelector -> {
-      Optional<T> maybeSelected = (Optional<T>) recipeSelector.getSelectedRecipe();
-      maybeSelected.ifPresent(res -> {
-        if (res.matches(inventoryIn, worldIn)) {
-          recipe.add(res);
-        } else {
-          recipeSelector.getRecipe(worldIn).ifPresent(res1 -> recipe.add((T) res1));
-        }
-      });
-
-      if (!maybeSelected.isPresent()) {
-        recipeSelector.getRecipe(worldIn).ifPresent(res1 -> recipe.add((T) res1));
-      }
-    });
-    return recipe.isEmpty() ? Optional.empty() : Optional.of(recipe.get(0));
-  }
-
   public static SmithingRecipe getSmithingRecipe(PlayerEntity player,
                                                  List<SmithingRecipe> recipes) {
     SmithingRecipe defaultRecipe = recipes.get(0);

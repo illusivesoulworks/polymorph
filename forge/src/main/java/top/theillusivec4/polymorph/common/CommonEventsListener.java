@@ -1,20 +1,56 @@
 package top.theillusivec4.polymorph.common;
 
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.INBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.PolymorphCapabilities;
 import top.theillusivec4.polymorph.api.type.ITileEntityRecipeSelector;
+import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
+import top.theillusivec4.polymorph.common.network.server.SPacketSendRecipes;
 
 public class CommonEventsListener {
+
+  @SubscribeEvent
+  public void openContainer(final PlayerContainerEvent.Open evt) {
+    PlayerEntity player = evt.getPlayer();
+
+    if (!player.world.isRemote() && player instanceof ServerPlayerEntity) {
+      ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
+      Container container = evt.getContainer();
+
+      for (Slot inventorySlot : container.inventorySlots) {
+
+        if (inventorySlot.inventory instanceof CraftingInventory) {
+          Set<ResourceLocation> recipes = player.world.getRecipeManager()
+              .getRecipes(IRecipeType.CRAFTING, (CraftingInventory) inventorySlot.inventory,
+                  player.world).stream().map(IRecipe::getId).collect(Collectors.toSet());
+          PolymorphNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayerEntity),
+              new SPacketSendRecipes(recipes, new ResourceLocation("")));
+          return;
+        }
+      }
+    }
+  }
 
   @SubscribeEvent
   public void attachCapabilities(AttachCapabilitiesEvent<TileEntity> evt) {

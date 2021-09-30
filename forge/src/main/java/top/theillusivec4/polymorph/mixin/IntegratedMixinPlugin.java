@@ -21,23 +21,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.loading.FMLLoader;
-import net.minecraftforge.fml.loading.LoadingModList;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 public class IntegratedMixinPlugin implements IMixinConfigPlugin {
 
-  private static final Map<String, String> TARGETS = new HashMap<>();
+  private static final Map<String, String> CLASS_TO_MOD = new HashMap<>();
 
   static {
-    TARGETS.put("mezz.jei.transfer.RecipeTransferUtil", "jei");
-    TARGETS.put("net.blay09.mods.craftingcraft.container.CraftingContainer", "craftingcraft");
-    TARGETS.put("com.tfar.craftingstation.CraftingStationContainer", "craftingstation");
-    TARGETS.put("de.ellpeck.prettypipes.terminal.containers.CraftingTerminalContainer", "prettypipes");
-    TARGETS.put("com.tom.storagemod.tile.TileEntityCraftingTerminal", "toms_storage");
+    CLASS_TO_MOD.put("mezz.jei.transfer.RecipeTransferUtil", "jei");
+    CLASS_TO_MOD.put("net.blay09.mods.craftingcraft.container.CraftingContainer", "craftingcraft");
+    CLASS_TO_MOD.put("com.tfar.craftingstation.CraftingStationContainer", "craftingstation");
+    CLASS_TO_MOD.put("de.ellpeck.prettypipes.terminal.containers.CraftingTerminalContainer", "prettypipes");
+    CLASS_TO_MOD.put("com.tom.storagemod.tile.TileEntityCraftingTerminal", "toms_storage");
   }
 
   @Override
@@ -52,8 +50,8 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
 
   @Override
   public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-    return !TARGETS.containsKey(targetClassName) ||
-        FMLLoader.getLoadingModList().getModFileById(TARGETS.get(targetClassName)) != null;
+    return !CLASS_TO_MOD.containsKey(targetClassName) ||
+        FMLLoader.getLoadingModList().getModFileById(CLASS_TO_MOD.get(targetClassName)) != null;
   }
 
   @Override
