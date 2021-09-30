@@ -96,10 +96,10 @@ dependencies {
     compile fg.deobf("curse.maven:refinedstorageaddons-272302:${file_refinedaddons}")
     compile fg.deobf("curse.maven:prettypipes-376737:${file_prettypipes}")
     compile fg.deobf("curse.maven:tomsstorage-378609:${file_tom}")
+    compile fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
 
     runtimeOnly fg.deobf("curse.maven:vanillatweaks-272637:${file_vanillatweaks}")
     runtimeOnly fg.deobf("curse.maven:simplestoragenetwork-268495:${file_ssn}")
-    runtimeOnly fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
     runtimeOnly fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
     runtimeOnly fg.deobf("curse.maven:placebo-283644:${file_placebo}")
 }

@@ -11,7 +11,8 @@
     "MixinJustEnoughItems",
     "MixinPrettyPipes",
     "MixinTomsStorage",
-    "MixinTomsStorageContainer"
+    "MixinTomsStorageContainer",
+    "MixinFastBench"
   ],
   "plugin": "top.theillusivec4.polymorph.mixin.IntegratedMixinPlugin",
   "minVersion": "0.8"

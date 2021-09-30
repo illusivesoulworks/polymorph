@@ -8,6 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
 import top.theillusivec4.polymorph.common.PolymorphMod;
 import top.theillusivec4.polymorph.common.integration.craftingstation.CraftingStationModule;
+import top.theillusivec4.polymorph.common.integration.fastbench.FastBenchModule;
 import top.theillusivec4.polymorph.common.util.CraftingPlayers;
 
 public class CPacketSelectCraft {
@@ -36,6 +37,10 @@ public class CPacketSelectCraft {
 
         if (PolymorphMod.isCraftingStationLoaded) {
           CraftingStationModule.clearRecipe(container);
+        }
+
+        if (PolymorphMod.isFastBenchLoaded) {
+          FastBenchModule.setLastRecipe(sender, null);
         }
         container.onCraftMatrixChanged(sender.inventory);
       }

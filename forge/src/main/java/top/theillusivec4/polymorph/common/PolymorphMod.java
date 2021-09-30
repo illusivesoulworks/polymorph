@@ -36,6 +36,7 @@ public class PolymorphMod {
 
   public static boolean isFastFurnaceLoaded = false;
   public static boolean isCraftingStationLoaded = false;
+  public static boolean isFastBenchLoaded = false;
 
   static {
     INTEGRATIONS.put("prettypipes", PrettyPipesModule::new);
@@ -50,6 +51,7 @@ public class PolymorphMod {
     ModList modList = ModList.get();
     isFastFurnaceLoaded = modList.isLoaded("fastfurnace");
     isCraftingStationLoaded = modList.isLoaded("craftingstation");
+    isFastBenchLoaded = modList.isLoaded("fastbench");
   }
 
   private void setup(final FMLCommonSetupEvent evt) {

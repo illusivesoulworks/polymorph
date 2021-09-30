@@ -38,6 +38,7 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
     CLASS_TO_MOD.put("com.tom.storagemod.tile.TileEntityCraftingTerminal", "toms_storage");
     CLASS_TO_MOD.put("com.tom.storagemod.gui.ContainerCraftingTerminal", "toms_storage");
     CLASS_TO_MOD.put("com.tom.storagemod.gui.ContainerStorageTerminal", "toms_storage");
+    CLASS_TO_MOD.put("shadows.fastbench.gui.ContainerFastBench", "fastbench");
   }
 
   @Override
