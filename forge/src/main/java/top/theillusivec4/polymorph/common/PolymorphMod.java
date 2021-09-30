@@ -21,6 +21,7 @@ import top.theillusivec4.polymorph.common.capability.FurnaceRecipeSelector;
 import top.theillusivec4.polymorph.common.capability.PolymorphCapabilityManager;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.common.integration.prettypipes.PrettyPipesModule;
+import top.theillusivec4.polymorph.common.integration.simplestoragenetwork.SimpleStorageNetworkModule;
 import top.theillusivec4.polymorph.common.integration.tomsstorage.TomsStorageModule;
 import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
 import top.theillusivec4.polymorph.server.PolymorphCommands;
@@ -41,6 +42,7 @@ public class PolymorphMod {
   static {
     INTEGRATIONS.put("prettypipes", PrettyPipesModule::new);
     INTEGRATIONS.put("toms_storage", TomsStorageModule::new);
+    INTEGRATIONS.put("storagenetwork", SimpleStorageNetworkModule::new);
   }
 
   public PolymorphMod() {
