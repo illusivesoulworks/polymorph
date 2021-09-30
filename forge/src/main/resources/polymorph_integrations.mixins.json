@@ -4,11 +4,14 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "polymorph.refmap.json",
   "mixins": [
+    "AccessorTomsStorageTerminal",
+    "AccessorTomsStorageCrafting",
     "MixinCraftingCraft",
     "MixinCraftingStation",
     "MixinJustEnoughItems",
     "MixinPrettyPipes",
-    "MixinTomsStorage"
+    "MixinTomsStorage",
+    "MixinTomsStorageContainer"
   ],
   "plugin": "top.theillusivec4.polymorph.mixin.IntegratedMixinPlugin",
   "minVersion": "0.8"

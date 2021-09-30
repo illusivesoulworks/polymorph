@@ -10,6 +10,7 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.SmithingTableContainer;
 import net.minecraft.item.crafting.SmithingRecipe;
 import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.PacketDistributor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,7 +44,7 @@ public abstract class MixinSmithingTableContainer extends AbstractRepairContaine
     if (this.field_234645_f_ instanceof ServerPlayerEntity) {
       PolymorphNetwork.INSTANCE.send(
           PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) this.field_234645_f_),
-          new SPacketSendRecipes(new HashSet<>(), null));
+          new SPacketSendRecipes(new HashSet<>(), new ResourceLocation("")));
     }
     return recipes;
   }

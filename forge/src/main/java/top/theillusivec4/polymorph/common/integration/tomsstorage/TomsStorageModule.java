@@ -9,6 +9,7 @@ import net.minecraft.inventory.container.Slot;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.PolymorphClientApi;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
+import top.theillusivec4.polymorph.common.integration.tomsstorage.network.TomsStoragePolymorphNetwork;
 
 public class TomsStorageModule extends AbstractCompatibilityModule {
 
@@ -20,6 +21,7 @@ public class TomsStorageModule extends AbstractCompatibilityModule {
       }
       return null;
     });
+    TomsStoragePolymorphNetwork.register();
   }
 
   @Override

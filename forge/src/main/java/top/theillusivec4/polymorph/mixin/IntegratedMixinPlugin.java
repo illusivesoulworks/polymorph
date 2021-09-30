@@ -36,6 +36,8 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
     CLASS_TO_MOD.put("com.tfar.craftingstation.CraftingStationContainer", "craftingstation");
     CLASS_TO_MOD.put("de.ellpeck.prettypipes.terminal.containers.CraftingTerminalContainer", "prettypipes");
     CLASS_TO_MOD.put("com.tom.storagemod.tile.TileEntityCraftingTerminal", "toms_storage");
+    CLASS_TO_MOD.put("com.tom.storagemod.gui.ContainerCraftingTerminal", "toms_storage");
+    CLASS_TO_MOD.put("com.tom.storagemod.gui.ContainerStorageTerminal", "toms_storage");
   }
 
   @Override
