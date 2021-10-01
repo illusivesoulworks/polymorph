@@ -40,6 +40,9 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
     CLASS_TO_MOD.put("com.tom.storagemod.gui.ContainerStorageTerminal", "toms_storage");
     CLASS_TO_MOD.put("shadows.fastbench.gui.ContainerFastBench", "fastbench");
     CLASS_TO_MOD.put("com.lothrazar.storagenetwork.gui.ContainerNetwork", "storagenetwork");
+    CLASS_TO_MOD.put("com.refinedmods.refinedstorage.apiimpl.network.node.GridNetworkNode", "refinedstorage");
+    CLASS_TO_MOD.put("com.refinedmods.refinedstorage.container.GridContainer", "refinedstorage");
+    CLASS_TO_MOD.put("com.refinedmods.refinedstorage.apiimpl.autocrafting.CraftingPatternFactory", "refinedstorage");
   }
 
   @Override
