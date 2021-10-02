@@ -43,6 +43,7 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
     CLASS_TO_MOD.put("com.refinedmods.refinedstorage.apiimpl.network.node.GridNetworkNode", "refinedstorage");
     CLASS_TO_MOD.put("com.refinedmods.refinedstorage.container.GridContainer", "refinedstorage");
     CLASS_TO_MOD.put("com.refinedmods.refinedstorage.apiimpl.autocrafting.CraftingPatternFactory", "refinedstorage");
+    CLASS_TO_MOD.put("com.refinedmods.refinedstorageaddons.item.WirelessCraftingGrid", "refinedstorageaddons");
   }
 
   @Override

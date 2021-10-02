@@ -7,9 +7,12 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -66,6 +69,19 @@ public class CPacketGetRecipes {
                 PolymorphNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> sender),
                     new SPacketSendRecipes(recipeIds, selectedRecipe));
               });
+          return;
+        }
+
+        for (Slot inventorySlot : container.inventorySlots) {
+
+          if (inventorySlot.inventory instanceof CraftingInventory) {
+            Set<ResourceLocation> recipes = sender.world.getRecipeManager()
+                .getRecipes(IRecipeType.CRAFTING, (CraftingInventory) inventorySlot.inventory,
+                    sender.world).stream().map(IRecipe::getId).collect(Collectors.toSet());
+            PolymorphNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> sender),
+                new SPacketSendRecipes(recipes, new ResourceLocation("")));
+            return;
+          }
         }
       }
     });

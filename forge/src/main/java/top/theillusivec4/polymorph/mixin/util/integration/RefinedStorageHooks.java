@@ -1,7 +1,9 @@
 package top.theillusivec4.polymorph.mixin.util.integration;
 
+import com.refinedmods.refinedstorage.api.network.grid.ICraftingGridListener;
 import com.refinedmods.refinedstorage.api.network.grid.IGrid;
 import com.refinedmods.refinedstorage.apiimpl.network.node.GridNetworkNode;
+import com.refinedmods.refinedstorage.container.GridContainer;
 import com.refinedmods.refinedstorage.tile.grid.GridTile;
 import java.util.List;
 import java.util.Optional;
@@ -102,6 +104,17 @@ public class RefinedStorageHooks {
       if (opt.isPresent()) {
         return opt;
       }
+    }
+    return world.getRecipeManager().getRecipe(type, inventory, world);
+  }
+
+  public static <T extends IRecipe<C>, C extends IInventory> Optional<T> getWirelessRecipe(
+      RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world,
+      ICraftingGridListener listener) {
+
+    if (listener instanceof GridContainer) {
+      GridContainer container = (GridContainer) listener;
+      return MixinHooks.getRecipe(recipeManager, type, inventory, world, container.getPlayer());
     }
     return world.getRecipeManager().getRecipe(type, inventory, world);
   }

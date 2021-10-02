@@ -14,7 +14,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import top.theillusivec4.polymorph.api.PolymorphCapabilities;
+import top.theillusivec4.polymorph.common.PolymorphMod;
+import top.theillusivec4.polymorph.common.util.CraftingPlayers;
 
 public class CPacketSelectRefined {
 
@@ -54,6 +57,17 @@ public class CPacketSelectRefined {
                   grid.onCraftingMatrixChanged();
                 });
               }
+            } else {
+              CraftingPlayers.add(sender.getUniqueID(), msg.recipe);
+
+              try {
+                FieldUtils.writeField(grid, "currentRecipe", res, true);
+              } catch (IllegalAccessException e) {
+                PolymorphMod.LOGGER.error("Error accessing currentRecipe from Refined Storage Addons!");
+              } catch (IllegalArgumentException e) {
+                PolymorphMod.LOGGER.debug("Cannot find Refined Storage Addons, skipping field override!");
+              }
+              grid.onCraftingMatrixChanged();
             }
           }
         });
