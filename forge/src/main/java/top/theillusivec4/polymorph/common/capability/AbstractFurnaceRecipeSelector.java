@@ -18,7 +18,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.api.type.ITileEntityRecipeSelector;
 import top.theillusivec4.polymorph.common.PolymorphMod;
-import top.theillusivec4.polymorph.common.integration.fastfurnace.FastFurnaceModule;
+import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
 import top.theillusivec4.polymorph.common.network.server.SPacketHighlightRecipe;
 import top.theillusivec4.polymorph.mixin.core.AccessorAbstractFurnaceContainer;
@@ -95,8 +95,11 @@ public abstract class AbstractFurnaceRecipeSelector<T extends TileEntity & IInve
       this.selectedRecipe = (AbstractCookingRecipe) recipe;
       World world = this.parent.getWorld();
 
-      if (this.parent instanceof AbstractFurnaceTileEntity && PolymorphMod.isFastFurnaceLoaded) {
-        FastFurnaceModule.setCurrentRecipe(this.parent, this.selectedRecipe);
+      for (AbstractCompatibilityModule integration : PolymorphMod.getIntegrations()) {
+
+        if (integration.setRecipe(this.parent, this.selectedRecipe)) {
+          return;
+        }
       }
 
       if (world instanceof ServerWorld) {

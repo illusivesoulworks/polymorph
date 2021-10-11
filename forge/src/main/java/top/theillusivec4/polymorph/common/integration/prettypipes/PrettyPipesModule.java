@@ -11,11 +11,6 @@ import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModul
 public class PrettyPipesModule extends AbstractCompatibilityModule {
 
   @Override
-  public void setup() {
-    // NO-OP
-  }
-
-  @Override
   public void clientSetup() {
     PolymorphClientApi.getInstance().addRecipeController(containerScreen -> {
       if (containerScreen.getContainer() instanceof CraftingTerminalContainer) {

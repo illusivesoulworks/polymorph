@@ -7,8 +7,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
 import top.theillusivec4.polymorph.common.PolymorphMod;
-import top.theillusivec4.polymorph.common.integration.craftingstation.CraftingStationModule;
-import top.theillusivec4.polymorph.common.integration.fastbench.FastBenchModule;
+import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.common.util.CraftingPlayers;
 
 public class CPacketSelectCraft {
@@ -32,16 +31,16 @@ public class CPacketSelectCraft {
       ServerPlayerEntity sender = ctx.get().getSender();
 
       if (sender != null) {
-        CraftingPlayers.add(sender.getUniqueID(), msg.recipe);
+        ResourceLocation rl = msg.recipe;
+        CraftingPlayers.add(sender.getUniqueID(), rl);
         Container container = sender.openContainer;
-
-        if (PolymorphMod.isCraftingStationLoaded) {
-          CraftingStationModule.clearRecipe(container);
-        }
-
-        if (PolymorphMod.isFastBenchLoaded) {
-          FastBenchModule.setLastRecipe(sender, null);
-        }
+        sender.world.getRecipeManager().getRecipe(rl).ifPresent(recipe -> {
+          for (AbstractCompatibilityModule integration : PolymorphMod.getIntegrations()) {
+            if (integration.setRecipe(container, recipe)) {
+              return;
+            }
+          }
+        });
         container.onCraftMatrixChanged(sender.inventory);
       }
     });

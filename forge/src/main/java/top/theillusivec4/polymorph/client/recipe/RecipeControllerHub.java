@@ -15,11 +15,9 @@ public class RecipeControllerHub {
     return Optional.ofNullable(controller);
   }
 
-  public static boolean startController(ContainerScreen<?> screen) {
-    return PolymorphClientApi.getInstance().getRecipeController(screen).map(result -> {
-      controller = result;
-      return true;
-    }).orElse(false);
+  public static void startController(ContainerScreen<?> screen) {
+    PolymorphClientApi.getInstance().getRecipeController(screen)
+        .ifPresent(result -> controller = result);
   }
 
   public static void clear() {

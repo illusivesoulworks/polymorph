@@ -16,7 +16,7 @@ public class ClientEventsListener {
     if (evt.phase == TickEvent.Phase.END) {
       Minecraft mc = Minecraft.getInstance();
       RecipeControllerHub.getController().ifPresent(recipeController -> {
-        if (mc.player == null || mc.player.openContainer == null) {
+        if (mc.player == null || mc.player.openContainer == null || mc.currentScreen == null) {
           RecipeControllerHub.clear();
         } else {
           recipeController.tick();
@@ -29,9 +29,8 @@ public class ClientEventsListener {
   public void initGui(GuiScreenEvent.InitGuiEvent.Post evt) {
     Screen screen = evt.getGui();
 
-    if (!(screen instanceof ContainerScreen) ||
-        !RecipeControllerHub.startController((ContainerScreen<?>) screen)) {
-      RecipeControllerHub.clear();
+    if (screen instanceof ContainerScreen) {
+      RecipeControllerHub.startController((ContainerScreen<?>) screen);
     }
   }
 
