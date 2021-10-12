@@ -45,6 +45,10 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
     CLASS_TO_MOD.put("com.refinedmods.refinedstorage.apiimpl.autocrafting.CraftingPatternFactory", "refinedstorage");
     CLASS_TO_MOD.put("com.refinedmods.refinedstorageaddons.item.WirelessCraftingGrid", "refinedstorageaddons");
     CLASS_TO_MOD.put("slimeknights.tconstruct.tables.tileentity.table.CraftingStationTileEntity", "tconstruct");
+    CLASS_TO_MOD.put("com.lothrazar.cyclic.item.craftingsimple.CraftingStickContainer", "cyclic");
+    CLASS_TO_MOD.put("com.lothrazar.cyclic.item.crafting.CraftingBagContainer", "cyclic");
+    CLASS_TO_MOD.put("com.lothrazar.cyclic.block.workbench.ContainerWorkbench", "cyclic");
+    CLASS_TO_MOD.put("com.lothrazar.cyclic.block.crafter.TileCrafter", "cyclic");
   }
 
   @Override

@@ -24,6 +24,7 @@ import top.theillusivec4.polymorph.common.capability.FurnaceRecipeSelector;
 import top.theillusivec4.polymorph.common.capability.PolymorphCapabilityManager;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.common.integration.craftingstation.CraftingStationModule;
+import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
 import top.theillusivec4.polymorph.common.integration.fastbench.FastBenchModule;
 import top.theillusivec4.polymorph.common.integration.fastfurnace.FastFurnaceModule;
 import top.theillusivec4.polymorph.common.integration.prettypipes.PrettyPipesModule;
@@ -53,6 +54,7 @@ public class PolymorphMod {
     INTEGRATIONS.put("fastbench", FastBenchModule::new);
     INTEGRATIONS.put("craftingstation", CraftingStationModule::new);
     INTEGRATIONS.put("fastfurnace", FastFurnaceModule::new);
+    INTEGRATIONS.put("cyclic", CyclicModule::new);
   }
 
   public PolymorphMod() {

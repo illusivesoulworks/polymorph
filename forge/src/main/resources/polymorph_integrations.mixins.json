@@ -18,7 +18,10 @@
     "MixinRefinedStorageContainer",
     "MixinRefinedStoragePattern",
     "MixinRefinedStorageAddons",
-    "MixinTinkersConstruct"
+    "MixinTinkersConstruct",
+    "cyclic.MixinCraftingContainers",
+    "cyclic.MixinContainerWorkbench",
+    "cyclic.MixinTileCrafter"
   ],
   "plugin": "top.theillusivec4.polymorph.mixin.IntegratedMixinPlugin",
   "minVersion": "0.8"
