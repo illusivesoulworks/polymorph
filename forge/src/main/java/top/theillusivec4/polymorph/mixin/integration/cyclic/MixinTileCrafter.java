@@ -9,7 +9,6 @@ import net.minecraft.tileentity.TileEntityType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.theillusivec4.polymorph.mixin.util.integration.CyclicHooks;
 
@@ -20,15 +19,15 @@ public abstract class MixinTileCrafter extends TileEntityBase {
     super(tileEntityTypeIn);
   }
 
-  @Inject(at = @At("HEAD"), method = "tryRecipes", remap = false, cancellable = true)
+  @SuppressWarnings("ConstantConditions")
+  @Inject(
+      at = @At("HEAD"),
+      method = "tryRecipes",
+      remap = false,
+      cancellable = true)
   private void polymorph$tryRecipes(ArrayList<ItemStack> stacks,
                                     CallbackInfoReturnable<IRecipe<?>> cir) {
-    CyclicHooks.getSelectedRecipe(stacks, this.world, (TileCrafter) (Object) this)
+    CyclicHooks.getRecipe(stacks, this.world, (TileCrafter) (Object) this)
         .ifPresent(cir::setReturnValue);
-  }
-
-  @Inject(at = @At(value = "INVOKE", target = "com/lothrazar/cyclic/block/crafter/TileCrafter.setPreviewSlot(Lnet/minecraftforge/items/IItemHandler;Lnet/minecraft/item/ItemStack;)V"), method = "tick")
-  private void polymorph$tick(CallbackInfo cir) {
-    CyclicHooks.sendRecipes((TileCrafter) (Object) this);
   }
 }

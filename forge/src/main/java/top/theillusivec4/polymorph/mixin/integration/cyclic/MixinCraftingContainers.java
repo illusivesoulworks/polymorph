@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import top.theillusivec4.polymorph.mixin.util.MixinHooks;
+import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
 @Mixin(value = {CraftingStickContainer.class, CraftingBagContainer.class})
 public abstract class MixinCraftingContainers extends ContainerBase {
@@ -22,9 +22,14 @@ public abstract class MixinCraftingContainers extends ContainerBase {
     super(type, id);
   }
 
-  @Redirect(at = @At(value = "INVOKE", target = "net/minecraft/item/crafting/RecipeManager.getRecipe(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;"), method = "onCraftMatrixChanged")
+  @Redirect(
+      at = @At(
+          value = "INVOKE",
+          target = "net/minecraft/item/crafting/RecipeManager.getRecipe(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;"),
+      method = "onCraftMatrixChanged")
   private <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipe(
-      RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world, IInventory unused) {
-    return MixinHooks.getRecipe(recipeManager, type, inventory, world, this.playerEntity);
+      RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world,
+      IInventory unused) {
+    return RecipeSelection.getRecipe(type, inventory, world, this.playerEntity);
   }
 }

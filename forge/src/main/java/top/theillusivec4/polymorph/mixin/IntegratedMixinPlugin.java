@@ -31,24 +31,17 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
   private static final Map<String, String> CLASS_TO_MOD = new HashMap<>();
 
   static {
-    CLASS_TO_MOD.put("mezz.jei.transfer.RecipeTransferUtil", "jei");
-    CLASS_TO_MOD.put("net.blay09.mods.craftingcraft.container.CraftingContainer", "craftingcraft");
-    CLASS_TO_MOD.put("com.tfar.craftingstation.CraftingStationContainer", "craftingstation");
-    CLASS_TO_MOD.put("de.ellpeck.prettypipes.terminal.containers.CraftingTerminalContainer", "prettypipes");
-    CLASS_TO_MOD.put("com.tom.storagemod.tile.TileEntityCraftingTerminal", "toms_storage");
-    CLASS_TO_MOD.put("com.tom.storagemod.gui.ContainerCraftingTerminal", "toms_storage");
-    CLASS_TO_MOD.put("com.tom.storagemod.gui.ContainerStorageTerminal", "toms_storage");
-    CLASS_TO_MOD.put("shadows.fastbench.gui.ContainerFastBench", "fastbench");
-    CLASS_TO_MOD.put("com.lothrazar.storagenetwork.gui.ContainerNetwork", "storagenetwork");
-    CLASS_TO_MOD.put("com.refinedmods.refinedstorage.apiimpl.network.node.GridNetworkNode", "refinedstorage");
-    CLASS_TO_MOD.put("com.refinedmods.refinedstorage.container.GridContainer", "refinedstorage");
-    CLASS_TO_MOD.put("com.refinedmods.refinedstorage.apiimpl.autocrafting.CraftingPatternFactory", "refinedstorage");
-    CLASS_TO_MOD.put("com.refinedmods.refinedstorageaddons.item.WirelessCraftingGrid", "refinedstorageaddons");
-    CLASS_TO_MOD.put("slimeknights.tconstruct.tables.tileentity.table.CraftingStationTileEntity", "tconstruct");
-    CLASS_TO_MOD.put("com.lothrazar.cyclic.item.craftingsimple.CraftingStickContainer", "cyclic");
-    CLASS_TO_MOD.put("com.lothrazar.cyclic.item.crafting.CraftingBagContainer", "cyclic");
-    CLASS_TO_MOD.put("com.lothrazar.cyclic.block.workbench.ContainerWorkbench", "cyclic");
-    CLASS_TO_MOD.put("com.lothrazar.cyclic.block.crafter.TileCrafter", "cyclic");
+    CLASS_TO_MOD.put("mezz.jei", "jei");
+    CLASS_TO_MOD.put("net.blay09.mods.craftingcraft", "craftingcraft");
+    CLASS_TO_MOD.put("com.tfar.craftingstation", "craftingstation");
+    CLASS_TO_MOD.put("de.ellpeck.prettypipes", "prettypipes");
+    CLASS_TO_MOD.put("com.tom.storagemod", "toms_storage");
+    CLASS_TO_MOD.put("shadows.fastbench", "fastbench");
+    CLASS_TO_MOD.put("com.lothrazar.storagenetwork", "storagenetwork");
+    CLASS_TO_MOD.put("com.refinedmods.refinedstorage", "refinedstorage");
+    CLASS_TO_MOD.put("com.refinedmods.refinedstorageaddons", "refinedstorageaddons");
+    CLASS_TO_MOD.put("slimeknights.tconstruct", "tconstruct");
+    CLASS_TO_MOD.put("com.lothrazar.cyclic", "cyclic");
   }
 
   @Override
@@ -63,8 +56,14 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
 
   @Override
   public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-    return !CLASS_TO_MOD.containsKey(targetClassName) ||
-        FMLLoader.getLoadingModList().getModFileById(CLASS_TO_MOD.get(targetClassName)) != null;
+
+    for (Map.Entry<String, String> entry : CLASS_TO_MOD.entrySet()) {
+
+      if (targetClassName.startsWith(entry.getKey())) {
+        return FMLLoader.getLoadingModList().getModFileById(entry.getValue()) != null;
+      }
+    }
+    return true;
   }
 
   @Override

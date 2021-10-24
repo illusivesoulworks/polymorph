@@ -6,7 +6,7 @@ import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
-import top.theillusivec4.polymorph.client.recipe.RecipeControllerHub;
+import top.theillusivec4.polymorph.client.recipe.RecipesWidget;
 
 public class SPacketHighlightRecipe {
 
@@ -29,8 +29,7 @@ public class SPacketHighlightRecipe {
       ClientPlayerEntity clientPlayerEntity = Minecraft.getInstance().player;
 
       if (clientPlayerEntity != null) {
-        RecipeControllerHub.getController()
-            .ifPresent(recipeController -> recipeController.highlightRecipe(msg.recipe.toString()));
+        RecipesWidget.get().ifPresent(widget -> widget.highlightRecipe(msg.recipe));
       }
     });
     ctx.get().setPacketHandled(true);

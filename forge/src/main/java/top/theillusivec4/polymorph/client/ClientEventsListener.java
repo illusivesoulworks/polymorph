@@ -6,8 +6,10 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import top.theillusivec4.polymorph.client.recipe.RecipeControllerHub;
+import top.theillusivec4.polymorph.api.client.base.ITickingRecipesWidget;
+import top.theillusivec4.polymorph.client.recipe.RecipesWidget;
 
+@SuppressWarnings("unused")
 public class ClientEventsListener {
 
   @SubscribeEvent
@@ -15,11 +17,11 @@ public class ClientEventsListener {
 
     if (evt.phase == TickEvent.Phase.END) {
       Minecraft mc = Minecraft.getInstance();
-      RecipeControllerHub.getController().ifPresent(recipeController -> {
+      RecipesWidget.get().ifPresent(widget -> {
         if (mc.player == null || mc.player.openContainer == null || mc.currentScreen == null) {
-          RecipeControllerHub.clear();
-        } else {
-          recipeController.tick();
+          RecipesWidget.clear();
+        } else if (widget instanceof ITickingRecipesWidget) {
+          ((ITickingRecipesWidget) widget).tick();
         }
       });
     }
@@ -30,7 +32,7 @@ public class ClientEventsListener {
     Screen screen = evt.getGui();
 
     if (screen instanceof ContainerScreen) {
-      RecipeControllerHub.startController((ContainerScreen<?>) screen);
+      RecipesWidget.create((ContainerScreen<?>) screen);
     }
   }
 
@@ -38,7 +40,7 @@ public class ClientEventsListener {
   public void render(GuiScreenEvent.DrawScreenEvent.Post evt) {
 
     if (evt.getGui() instanceof ContainerScreen) {
-      RecipeControllerHub.getController().ifPresent(
+      RecipesWidget.get().ifPresent(
           recipeController -> recipeController.render(evt.getMatrixStack(), evt.getMouseX(),
               evt.getMouseY(), evt.getRenderPartialTicks()));
     }
@@ -48,8 +50,7 @@ public class ClientEventsListener {
   public void mouseClick(GuiScreenEvent.MouseClickedEvent.Pre evt) {
 
     if (evt.getGui() instanceof ContainerScreen) {
-      RecipeControllerHub.getController().ifPresent(recipeController -> {
-
+      RecipesWidget.get().ifPresent(recipeController -> {
         if (recipeController.mouseClicked(evt.getMouseX(), evt.getMouseY(), evt.getButton())) {
           evt.setCanceled(true);
         }

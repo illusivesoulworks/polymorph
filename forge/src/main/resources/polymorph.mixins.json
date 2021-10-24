@@ -4,9 +4,11 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "polymorph.refmap.json",
   "mixins": [
-    "AccessorContainer",
     "AccessorAbstractFurnaceContainer",
     "AccessorAbstractFurnaceTileEntity",
+    "AccessorContainer",
+    "AccessorWorkbenchContainer",
+    "MixinPolymorphApi",
     "MixinRecipeManager",
     "MixinSmithingTableContainer",
     "MixinWorkbenchContainer"

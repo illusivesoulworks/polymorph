@@ -6,13 +6,11 @@ import java.util.stream.Collectors;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.PacketDistributor;
-import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
-import top.theillusivec4.polymorph.common.network.server.SPacketSendRecipes;
+import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.api.common.base.IRecipeData;
+import top.theillusivec4.polymorph.common.impl.RecipeData;
 
 public class TomsStorageHooks {
 
@@ -20,16 +18,16 @@ public class TomsStorageHooks {
                                  List<IContainerListener> listeners) {
 
     if (!world.isRemote()) {
-      Set<ResourceLocation> recipes =
+      Set<IRecipeData> recipes =
           world.getRecipeManager().getRecipes(IRecipeType.CRAFTING, inv, world).stream()
-              .map(IRecipe::getId).collect(Collectors.toSet());
-      SPacketSendRecipes packet = new SPacketSendRecipes(recipes, new ResourceLocation(""));
+              .map(recipe -> new RecipeData(recipe.getId(), recipe.getCraftingResult(inv)))
+              .collect(Collectors.toSet());
 
       for (IContainerListener listener : listeners) {
 
         if (listener instanceof ServerPlayerEntity) {
-          PolymorphNetwork.INSTANCE.send(
-              PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) listener), packet);
+          PolymorphApi.common().getPacketDistributor()
+              .sendRecipesListS2C((ServerPlayerEntity) listener, recipes);
         }
       }
     }

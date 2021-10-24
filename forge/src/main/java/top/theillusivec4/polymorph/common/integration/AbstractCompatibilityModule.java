@@ -15,11 +15,11 @@ public abstract class AbstractCompatibilityModule {
     // NO-OP
   }
 
-  public boolean setRecipe(Container container, IRecipe<?> recipe) {
+  public boolean selectRecipe(Container container, IRecipe<?> recipe) {
     return false;
   }
 
-  public boolean setRecipe(TileEntity tileEntity, IRecipe<?> recipe) {
+  public boolean selectRecipe(TileEntity tileEntity, IRecipe<?> recipe) {
     return false;
   }
 

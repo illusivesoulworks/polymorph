@@ -8,41 +8,44 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
-import top.theillusivec4.polymorph.common.PolymorphMod;
-import top.theillusivec4.polymorph.common.network.client.CPacketGetRecipes;
-import top.theillusivec4.polymorph.common.network.client.CPacketSelectCraft;
-import top.theillusivec4.polymorph.common.network.client.CPacketSelectPersist;
-import top.theillusivec4.polymorph.common.network.server.SPacketChangeCrafter;
+import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.common.network.client.CPacketCraftingSelection;
+import top.theillusivec4.polymorph.common.network.client.CPacketRecipeSelection;
+import top.theillusivec4.polymorph.common.network.client.CPacketRecipesRequest;
+import top.theillusivec4.polymorph.common.network.server.SPacketCraftingAction;
 import top.theillusivec4.polymorph.common.network.server.SPacketHighlightRecipe;
-import top.theillusivec4.polymorph.common.network.server.SPacketSendRecipes;
+import top.theillusivec4.polymorph.common.network.server.SPacketRecipes;
 
 public class PolymorphNetwork {
 
   private static final String PTC_VERSION = "1";
 
-  public static SimpleChannel INSTANCE;
-
+  private static SimpleChannel instance;
   private static int id = 0;
 
-  public static void register() {
-    INSTANCE =
-        NetworkRegistry.ChannelBuilder.named(new ResourceLocation(PolymorphMod.MOD_ID, "main"))
+  public static SimpleChannel get() {
+    return instance;
+  }
+
+  public static void setup() {
+    instance =
+        NetworkRegistry.ChannelBuilder.named(new ResourceLocation(PolymorphApi.MOD_ID, "main"))
             .networkProtocolVersion(() -> PTC_VERSION).clientAcceptedVersions(PTC_VERSION::equals)
             .serverAcceptedVersions(PTC_VERSION::equals).simpleChannel();
 
     // Client-to-Server
-    register(CPacketSelectCraft.class, CPacketSelectCraft::encode, CPacketSelectCraft::decode,
-        CPacketSelectCraft::handle);
-    register(CPacketSelectPersist.class, CPacketSelectPersist::encode, CPacketSelectPersist::decode,
-        CPacketSelectPersist::handle);
-    register(CPacketGetRecipes.class, CPacketGetRecipes::encode, CPacketGetRecipes::decode,
-        CPacketGetRecipes::handle);
+    register(CPacketCraftingSelection.class, CPacketCraftingSelection::encode,
+        CPacketCraftingSelection::decode, CPacketCraftingSelection::handle);
+    register(CPacketRecipeSelection.class, CPacketRecipeSelection::encode,
+        CPacketRecipeSelection::decode, CPacketRecipeSelection::handle);
+    register(CPacketRecipesRequest.class, CPacketRecipesRequest::encode,
+        CPacketRecipesRequest::decode, CPacketRecipesRequest::handle);
 
     // Server-to-Client
-    register(SPacketChangeCrafter.class, SPacketChangeCrafter::encode, SPacketChangeCrafter::decode,
-        SPacketChangeCrafter::handle);
-    register(SPacketSendRecipes.class, SPacketSendRecipes::encode, SPacketSendRecipes::decode,
-        SPacketSendRecipes::handle);
+    register(SPacketCraftingAction.class, SPacketCraftingAction::encode,
+        SPacketCraftingAction::decode, SPacketCraftingAction::handle);
+    register(SPacketRecipes.class, SPacketRecipes::encode, SPacketRecipes::decode,
+        SPacketRecipes::handle);
     register(SPacketHighlightRecipe.class, SPacketHighlightRecipe::encode,
         SPacketHighlightRecipe::decode, SPacketHighlightRecipe::handle);
   }
@@ -50,6 +53,6 @@ public class PolymorphNetwork {
   private static <M> void register(Class<M> messageType, BiConsumer<M, PacketBuffer> encoder,
                                    Function<PacketBuffer, M> decoder,
                                    BiConsumer<M, Supplier<NetworkEvent.Context>> messageConsumer) {
-    INSTANCE.registerMessage(id++, messageType, encoder, decoder, messageConsumer);
+    instance.registerMessage(id++, messageType, encoder, decoder, messageConsumer);
   }
 }

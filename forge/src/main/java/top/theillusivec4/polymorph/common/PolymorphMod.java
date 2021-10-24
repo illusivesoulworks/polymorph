@@ -6,7 +6,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -18,10 +21,11 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.client.ClientEventsListener;
 import top.theillusivec4.polymorph.client.PolymorphClientMod;
-import top.theillusivec4.polymorph.common.capability.FurnaceRecipeSelector;
-import top.theillusivec4.polymorph.common.capability.PolymorphCapabilityManager;
+import top.theillusivec4.polymorph.common.capability.FurnaceRecipeProcessor;
+import top.theillusivec4.polymorph.common.capability.PolymorphCapabilities;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.common.integration.craftingstation.CraftingStationModule;
 import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
@@ -29,32 +33,29 @@ import top.theillusivec4.polymorph.common.integration.fastbench.FastBenchModule;
 import top.theillusivec4.polymorph.common.integration.fastfurnace.FastFurnaceModule;
 import top.theillusivec4.polymorph.common.integration.prettypipes.PrettyPipesModule;
 import top.theillusivec4.polymorph.common.integration.refinedstorage.RefinedStorageModule;
-import top.theillusivec4.polymorph.common.integration.simplestoragenetwork.SimpleStorageNetworkModule;
-import top.theillusivec4.polymorph.common.integration.tinkersconstruct.TinkersConstructModule;
-import top.theillusivec4.polymorph.common.integration.tomsstorage.TomsStorageModule;
+import top.theillusivec4.polymorph.common.integration.tconstruct.TinkersConstructModule;
+import top.theillusivec4.polymorph.common.integration.toms_storage.TomsStorageModule;
 import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
 import top.theillusivec4.polymorph.server.PolymorphCommands;
 
-@Mod(PolymorphMod.MOD_ID)
+@Mod(PolymorphApi.MOD_ID)
 public class PolymorphMod {
 
   private static final Map<String, Supplier<AbstractCompatibilityModule>> INTEGRATIONS =
       new HashMap<>();
   private static final Set<AbstractCompatibilityModule> ACTIVE_INTEGRATIONS = new HashSet<>();
 
-  public static final String MOD_ID = "polymorph";
   public static final Logger LOGGER = LogManager.getLogger();
 
   static {
     INTEGRATIONS.put("prettypipes", PrettyPipesModule::new);
-    INTEGRATIONS.put("toms_storage", TomsStorageModule::new);
-    INTEGRATIONS.put("storagenetwork", SimpleStorageNetworkModule::new);
     INTEGRATIONS.put("refinedstorage", RefinedStorageModule::new);
     INTEGRATIONS.put("tconstruct", TinkersConstructModule::new);
     INTEGRATIONS.put("fastbench", FastBenchModule::new);
     INTEGRATIONS.put("craftingstation", CraftingStationModule::new);
     INTEGRATIONS.put("fastfurnace", FastFurnaceModule::new);
     INTEGRATIONS.put("cyclic", CyclicModule::new);
+    INTEGRATIONS.put("toms_storage", TomsStorageModule::new);
   }
 
   public PolymorphMod() {
@@ -72,12 +73,23 @@ public class PolymorphMod {
   }
 
   private void setup(final FMLCommonSetupEvent evt) {
-    PolymorphNetwork.register();
-    PolymorphCapabilityManager.register();
+    PolymorphNetwork.setup();
+    PolymorphCapabilities.register();
     MinecraftForge.EVENT_BUS.register(new CommonEventsListener());
-    PolymorphApi.getInstance().addTileEntity(tileEntity -> {
+    IPolymorphCommon commonApi = PolymorphApi.common();
+    commonApi.registerTileEntity2Processor(tileEntity -> {
       if (tileEntity instanceof AbstractFurnaceTileEntity) {
-        return new FurnaceRecipeSelector((AbstractFurnaceTileEntity) tileEntity);
+        return new FurnaceRecipeProcessor((AbstractFurnaceTileEntity) tileEntity);
+      }
+      return null;
+    });
+    commonApi.registerContainer2TileEntity(container -> {
+      for (Slot inventorySlot : container.inventorySlots) {
+        IInventory inventory = inventorySlot.inventory;
+
+        if (inventory instanceof TileEntity) {
+          return (TileEntity) inventory;
+        }
       }
       return null;
     });

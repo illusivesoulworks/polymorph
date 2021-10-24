@@ -28,18 +28,21 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import top.theillusivec4.polymorph.mixin.util.MixinHooks;
+import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
 @Mixin(value = RecipeManager.class, priority = 900)
 public class MixinRecipeManager {
 
-  @Inject(at = @At("HEAD"), method = "getRecipe(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;", cancellable = true)
+  @Inject(
+      at = @At("HEAD"),
+      method = "getRecipe(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;",
+      cancellable = true)
   private <C extends IInventory, T extends IRecipe<C>> void polymorph$getRecipe(
       IRecipeType<T> recipeTypeIn, C inventoryIn, World worldIn,
       CallbackInfoReturnable<Optional<T>> cb) {
 
     if (inventoryIn instanceof TileEntity) {
-      MixinHooks.getSelectedRecipe(recipeTypeIn, inventoryIn, worldIn, (TileEntity) inventoryIn)
+      RecipeSelection.getRecipe(recipeTypeIn, inventoryIn, worldIn, (TileEntity) inventoryIn)
           .ifPresent(recipe -> cb.setReturnValue(Optional.of(recipe)));
     }
   }

@@ -97,6 +97,7 @@ dependencies {
     compile fg.deobf("curse.maven:prettypipes-376737:${file_prettypipes}")
     compile fg.deobf("curse.maven:tomsstorage-378609:${file_tom}")
     compile fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
+    compile fg.deobf("curse.maven:placebo-283644:${file_placebo}")
     compile fg.deobf("curse.maven:simplestoragenetwork-268495:${file_ssn}")
     compile fg.deobf("curse.maven:tinkers-74072:3439200")
     compile fg.deobf("curse.maven:mantle-74924:3439180")
@@ -104,7 +105,6 @@ dependencies {
 
     runtimeOnly fg.deobf("curse.maven:vanillatweaks-272637:${file_vanillatweaks}")
     runtimeOnly fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
-    runtimeOnly fg.deobf("curse.maven:placebo-283644:${file_placebo}")
     runtimeOnly fg.deobf("curse.maven:improvedstations-361348:3113167")
 }
 

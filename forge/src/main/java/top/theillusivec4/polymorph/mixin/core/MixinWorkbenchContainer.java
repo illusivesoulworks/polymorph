@@ -13,16 +13,20 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import top.theillusivec4.polymorph.mixin.util.MixinHooks;
+import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
 @Mixin(WorkbenchContainer.class)
 public class MixinWorkbenchContainer {
 
-  @Redirect(at = @At(value = "INVOKE", target = "net/minecraft/item/crafting/RecipeManager.getRecipe(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;"), method = "updateCraftingResult")
+  @Redirect(
+      at = @At(
+          value = "INVOKE",
+          target = "net/minecraft/item/crafting/RecipeManager.getRecipe(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;"),
+      method = "updateCraftingResult")
   private static <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world, int syncId,
       World unused, PlayerEntity player, CraftingInventory craftingInventory,
       CraftResultInventory resultInventory) {
-    return MixinHooks.getRecipe(recipeManager, type, inventory, world, player);
+    return RecipeSelection.getRecipe(type, inventory, world, player);
   }
 }
