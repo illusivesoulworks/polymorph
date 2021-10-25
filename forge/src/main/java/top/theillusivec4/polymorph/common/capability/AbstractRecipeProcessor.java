@@ -3,8 +3,10 @@ package top.theillusivec4.polymorph.common.capability;
 import com.mojang.datafixers.util.Pair;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.annotation.Nullable;
@@ -15,9 +17,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
+import top.theillusivec4.polymorph.api.common.base.IRecipeData;
 import top.theillusivec4.polymorph.api.common.capability.IRecipeProcessor;
 import top.theillusivec4.polymorph.common.PolymorphMod;
 import top.theillusivec4.polymorph.common.impl.RecipeData;
@@ -30,6 +37,7 @@ public abstract class AbstractRecipeProcessor<T extends TileEntity, I extends II
 
   protected R selectedRecipe;
   protected String savedRecipe = "";
+  protected NonNullList<ItemStack> lastFailedInput;
 
   public AbstractRecipeProcessor(T tileEntity) {
     this.blockEntity = tileEntity;
@@ -38,12 +46,31 @@ public abstract class AbstractRecipeProcessor<T extends TileEntity, I extends II
   @SuppressWarnings("unchecked")
   @Override
   public Optional<R> getRecipe(World world) {
+    I inventory = this.getInventory();
+    NonNullList<ItemStack> input = this.getInput();
+
+    if (this.lastFailedInput == null) {
+      this.lastFailedInput = NonNullList.withSize(input.size(), ItemStack.EMPTY);
+    }
+    boolean changed = false;
+
+    for (int i = 0; i < input.size(); i++) {
+      ItemStack stack = input.get(i);
+
+      if (!ItemStack.areItemStacksEqual(stack, this.lastFailedInput.get(i))) {
+        changed = true;
+      }
+    }
+
+    if (!changed) {
+      return Optional.empty();
+    }
 
     if (!savedRecipe.isEmpty()) {
       List<R> recipe = new ArrayList<>();
       try {
         world.getRecipeManager().getRecipe(new ResourceLocation(savedRecipe)).ifPresent(result -> {
-          if (((R) result).matches(this.getInventory(), world)) {
+          if (((R) result).matches(inventory, world)) {
             this.setSelectedRecipe(result, null);
             recipe.add((R) result);
           }
@@ -55,6 +82,23 @@ public abstract class AbstractRecipeProcessor<T extends TileEntity, I extends II
       savedRecipe = "";
 
       if (!recipe.isEmpty()) {
+        Set<IRecipeData> dataset = this.getRecipeDataset();
+        Set<IRecipeData> valid = new HashSet<>();
+
+        for (IRecipeData data : dataset) {
+          ResourceLocation id = data.getResourceLocation();
+          try {
+            world.getRecipeManager().getRecipe(id).ifPresent(result -> {
+              if (((R) result).matches(inventory, world)) {
+                valid.add(data);
+              }
+            });
+          } catch (ClassCastException e) {
+            PolymorphMod.LOGGER.error("Recipe {} does not match inventory {}", id,
+                this.getInventory());
+          }
+        }
+        this.saveRecipeDataset(valid);
         return Optional.of(recipe.get(0));
       }
     }
@@ -66,9 +110,9 @@ public abstract class AbstractRecipeProcessor<T extends TileEntity, I extends II
 
       try {
         if (recipe.getType() == this.getRecipeType() &&
-            ((IRecipe<IInventory>) recipe).matches(this.getInventory(), world)) {
+            ((IRecipe<IInventory>) recipe).matches(inventory, world)) {
           R cast = (R) recipe;
-          ItemStack output = cast.getCraftingResult(this.getInventory());
+          ItemStack output = cast.getCraftingResult(inventory);
           recipes.add(new Pair<>(cast, output));
           this.getRecipeDataset().add(new RecipeData(recipe.getId(), output));
         }
@@ -79,6 +123,11 @@ public abstract class AbstractRecipeProcessor<T extends TileEntity, I extends II
     }
 
     if (recipes.isEmpty()) {
+      this.lastFailedInput = NonNullList.withSize(input.size(), ItemStack.EMPTY);
+
+      for (int i = 0; i < this.lastFailedInput.size(); i++) {
+        this.lastFailedInput.set(i, input.get(i));
+      }
       return Optional.empty();
     } else {
       R recipe = recipes.first().getFirst();
@@ -86,6 +135,21 @@ public abstract class AbstractRecipeProcessor<T extends TileEntity, I extends II
       return Optional.of(recipe);
     }
   }
+
+  @Override
+  public boolean isInputEmpty() {
+    NonNullList<ItemStack> input = this.getInput();
+
+    for (ItemStack stack : input) {
+
+      if (!stack.isEmpty()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public abstract NonNullList<ItemStack> getInput();
 
   public abstract I getInventory();
 
@@ -128,6 +192,19 @@ public abstract class AbstractRecipeProcessor<T extends TileEntity, I extends II
     if (nbtCompound.contains("SelectedRecipe")) {
       this.savedRecipe = nbtCompound.getString("SelectedRecipe");
     }
+
+    if (nbtCompound.contains("RecipeDataSet")) {
+      Set<IRecipeData> dataset = this.getRecipeDataset();
+      dataset.clear();
+      ListNBT list = nbtCompound.getList("RecipeDataSet", Constants.NBT.TAG_COMPOUND);
+
+      for (INBT inbt : list) {
+        CompoundNBT tag = (CompoundNBT) inbt;
+        ResourceLocation id = ResourceLocation.tryCreate(tag.getString("Id"));
+        ItemStack stack = ItemStack.read(tag.getCompound("ItemStack"));
+        dataset.add(new RecipeData(id, stack));
+      }
+    }
   }
 
   @Override
@@ -136,6 +213,19 @@ public abstract class AbstractRecipeProcessor<T extends TileEntity, I extends II
 
     if (this.selectedRecipe != null) {
       nbt.putString("SelectedRecipe", this.selectedRecipe.getId().toString());
+    }
+    Set<IRecipeData> dataset = this.getRecipeDataset();
+
+    if (!dataset.isEmpty()) {
+      ListNBT list = new ListNBT();
+
+      for (IRecipeData data : dataset) {
+        CompoundNBT tag = new CompoundNBT();
+        tag.put("ItemStack", data.getOutput().write(new CompoundNBT()));
+        tag.putString("Id", data.getResourceLocation().toString());
+        list.add(tag);
+      }
+      nbt.put("RecipeDataSet", list);
     }
     return nbt;
   }

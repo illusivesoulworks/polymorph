@@ -33,6 +33,11 @@ public class CraftingTerminalRecipesWidget extends AbstractProcessorRecipesWidge
   }
 
   @Override
+  public void highlightRecipe(ResourceLocation recipe) {
+    // NO-OP
+  }
+
+  @Override
   public void selectRecipe(ResourceLocation pResourceLocation) {
     PolymorphApi.common().getPacketDistributor().sendRecipeSelectionC2S(pResourceLocation);
   }

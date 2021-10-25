@@ -1,5 +1,6 @@
 package top.theillusivec4.polymorph.common.network.client;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -11,7 +12,6 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.api.common.base.IRecipeData;
-import top.theillusivec4.polymorph.common.impl.PolymorphPacketDistributor;
 
 public class CPacketRecipesRequest {
 
@@ -31,12 +31,16 @@ public class CPacketRecipesRequest {
         Container container = sender.openContainer;
         IPolymorphCommon commonApi = PolymorphApi.common();
         commonApi.getProcessorCapability(container).ifPresent(processor -> {
-          Set<IRecipeData> recipeDataset = processor.getRecipeDataset();
+          Set<IRecipeData> recipeDataset = new HashSet<>();
           ResourceLocation selected = null;
 
-          if (!recipeDataset.isEmpty()) {
-            selected = processor.getSelectedRecipe().map(IRecipe::getId)
-                .orElse(recipeDataset.stream().findFirst().get().getResourceLocation());
+          if (!processor.isInputEmpty()) {
+            recipeDataset.addAll(processor.getRecipeDataset());
+
+            if (!recipeDataset.isEmpty()) {
+              selected = processor.getSelectedRecipe().map(IRecipe::getId)
+                  .orElse(recipeDataset.stream().findFirst().get().getResourceLocation());
+            }
           }
           commonApi.getPacketDistributor().sendRecipesListS2C(sender, recipeDataset, selected);
         });

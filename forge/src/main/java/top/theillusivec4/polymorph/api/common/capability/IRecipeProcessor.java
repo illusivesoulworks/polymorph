@@ -15,6 +15,8 @@ public interface IRecipeProcessor extends IRecipeDataset {
 
   Optional<? extends IRecipe<?>> getRecipe(World world);
 
+  boolean isInputEmpty();
+
   TileEntity getTileEntity();
 
   CompoundNBT writeNBT();

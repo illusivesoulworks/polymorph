@@ -30,7 +30,7 @@ public class PolymorphAccessor {
 
   public static void invokeMethod(Object target, String methodName) {
     try {
-      MethodUtils.invokeMethod(target, methodName);
+      MethodUtils.invokeMethod(target, true, methodName);
     } catch (InvocationTargetException | IllegalAccessException e) {
       PolymorphMod.LOGGER.error("Failed to invoke {} for {}", methodName, target);
     } catch (NoSuchMethodException e) {

@@ -96,6 +96,11 @@ public class PolymorphCapabilities {
       return Optional.empty();
     }
 
+    @Override
+    public boolean isInputEmpty() {
+      return true;
+    }
+
     @Nonnull
     @Override
     public Set<IRecipeData> getRecipeDataset() {

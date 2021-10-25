@@ -5,7 +5,6 @@ import com.tom.storagemod.gui.ContainerStorageTerminal;
 import com.tom.storagemod.tile.TileEntityStorageTerminal;
 import java.util.List;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.IContainerListener;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,9 +20,6 @@ public abstract class MixinContainerCraftingTerminal extends ContainerStorageTer
   @Shadow
   @Final
   private List<IContainerListener> listeners;
-  @Shadow
-  @Final
-  private CraftingInventory craftMatrix;
 
   public MixinContainerCraftingTerminal(int id, PlayerInventory inv, TileEntityStorageTerminal te) {
     super(id, inv, te);
@@ -31,6 +27,6 @@ public abstract class MixinContainerCraftingTerminal extends ContainerStorageTer
 
   @Inject(at = @At("HEAD"), method = "onCraftMatrixChanged", remap = false)
   private void polymorph$onCraftMatrixChanged(CallbackInfo ci) {
-    TomsStorageHooks.sendRecipes(this.pinv.player.world, craftMatrix, listeners);
+    TomsStorageHooks.sendRecipes(this.te, listeners);
   }
 }

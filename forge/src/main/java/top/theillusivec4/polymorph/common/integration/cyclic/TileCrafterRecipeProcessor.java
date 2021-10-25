@@ -2,6 +2,8 @@ package top.theillusivec4.polymorph.common.integration.cyclic;
 
 import com.lothrazar.cyclic.block.crafter.TileCrafter;
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import top.theillusivec4.polymorph.common.capability.AbstractCraftingRecipeProcessor;
@@ -11,6 +13,18 @@ public class TileCrafterRecipeProcessor extends AbstractCraftingRecipeProcessor<
 
   public TileCrafterRecipeProcessor(TileCrafter tileEntity) {
     super(tileEntity);
+  }
+
+  @Override
+  public NonNullList<ItemStack> getInput() {
+    CraftingInventory inventory = this.getInventory();
+    NonNullList<ItemStack> input =
+        NonNullList.withSize(inventory.getSizeInventory(), ItemStack.EMPTY);
+
+    for (int i = 0; i < inventory.getSizeInventory(); i++) {
+      input.set(i, inventory.getStackInSlot(i));
+    }
+    return input;
   }
 
   @SuppressWarnings("unchecked")

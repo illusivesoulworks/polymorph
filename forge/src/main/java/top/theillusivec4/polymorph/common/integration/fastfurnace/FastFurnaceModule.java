@@ -12,7 +12,7 @@ public class FastFurnaceModule extends AbstractCompatibilityModule {
   public boolean selectRecipe(TileEntity tileEntity, IRecipe<?> recipe) {
 
     if (tileEntity instanceof AbstractFurnaceTileEntity) {
-      PolymorphAccessor.writeField(tileEntity, "curEntity", recipe);
+      PolymorphAccessor.writeField(tileEntity, "curRecipe", recipe);
     }
     return false;
   }
