@@ -1,42 +1,32 @@
 package top.theillusivec4.polymorph.api.common.base;
 
 import java.util.Optional;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.LazyOptional;
-import top.theillusivec4.polymorph.api.common.capability.IRecipeDataset;
-import top.theillusivec4.polymorph.api.common.capability.IRecipeProcessor;
+import top.theillusivec4.polymorph.api.common.capability.IPlayerRecipeData;
+import top.theillusivec4.polymorph.api.common.capability.ITileEntityRecipeData;
 
 public interface IPolymorphCommon {
 
-  IPolymorphPacketDistributor getPacketDistributor();
+  Optional<ITileEntityRecipeData> tryCreateRecipeData(TileEntity pTileEntity);
 
-  Optional<IRecipeProcessor> getProcessor(TileEntity tileEntity);
+  LazyOptional<ITileEntityRecipeData> getRecipeData(TileEntity pTileEntity);
 
-  LazyOptional<IRecipeProcessor> getProcessorCapability(TileEntity tileEntity);
+  LazyOptional<ITileEntityRecipeData> getRecipeData(Container pContainer);
 
-  LazyOptional<IRecipeProcessor> getProcessorCapability(Container container);
+  LazyOptional<IPlayerRecipeData> getRecipeData(PlayerEntity pPlayer);
 
-  Optional<IRecipeDataset> getDataset(TileEntity pTileEntity);
-
-  LazyOptional<IRecipeDataset> getDatasetCapability(TileEntity pTileEntity);
-
-  LazyOptional<IRecipeDataset> getDatasetCapability(Container pContainer);
-
-  void registerTileEntity2Processor(ITileEntity2Processor pTileEntity2Processor);
-
-  void registerTileEntity2Dataset(ITileEntity2Dataset pTileEntity2Dataset);
+  void registerTileEntity2RecipeData(ITileEntity2RecipeData pTileEntity2RecipeData);
 
   void registerContainer2TileEntity(IContainer2TileEntity pContainer2TileEntity);
 
-  interface ITileEntity2Processor {
+  IPolymorphPacketDistributor getPacketDistributor();
 
-    IRecipeProcessor createProcessor(TileEntity pTileEntity);
-  }
+  interface ITileEntity2RecipeData {
 
-  interface ITileEntity2Dataset {
-
-    IRecipeDataset createDataset(TileEntity pTileEntity);
+    ITileEntityRecipeData createRecipeData(TileEntity pTileEntity);
   }
 
   interface IContainer2TileEntity {

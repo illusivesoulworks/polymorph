@@ -5,7 +5,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.SmithingTableContainer;
 import top.theillusivec4.polymorph.client.impl.PolymorphClient;
 import top.theillusivec4.polymorph.client.recipe.widget.FurnaceRecipesWidget;
-import top.theillusivec4.polymorph.client.recipe.widget.SmithingRecipesWidget;
+import top.theillusivec4.polymorph.client.recipe.widget.PlayerRecipesWidget;
 
 public class PolymorphClientMod {
 
@@ -14,7 +14,7 @@ public class PolymorphClientMod {
       Container container = containerScreen.getContainer();
 
       if (container instanceof SmithingTableContainer) {
-        return new SmithingRecipesWidget(containerScreen);
+        return new PlayerRecipesWidget(containerScreen, container.inventorySlots.get(2));
       } else if (container instanceof AbstractFurnaceContainer) {
         return new FurnaceRecipesWidget(containerScreen);
       }

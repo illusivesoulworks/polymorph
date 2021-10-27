@@ -29,6 +29,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.theillusivec4.polymorph.mixin.util.integration.JustEnoughItemsMixinHooks;
 
+@SuppressWarnings("unused")
 @Mixin(RecipeTransferUtil.class)
 public class MixinRecipeTransferUtil {
 

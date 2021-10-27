@@ -35,7 +35,7 @@ public class RefinedStorageHooks {
         TileEntity te = world.getTileEntity(pos);
 
         if (te instanceof GridTile) {
-          Optional<ICraftingRecipe> recipe = RecipeSelection.getRecipe(IRecipeType.CRAFTING,
+          Optional<ICraftingRecipe> recipe = RecipeSelection.getTileEntityRecipe(IRecipeType.CRAFTING,
               ((GridTile) te).getNode().getCraftingMatrix(), world, te);
           recipe.ifPresent(
               rec -> stack.getTag().putString("PolymorphRecipe", rec.getId().toString()));
@@ -66,7 +66,7 @@ public class RefinedStorageHooks {
 
     if (listener instanceof GridContainer) {
       GridContainer container = (GridContainer) listener;
-      return RecipeSelection.getRecipe(type, inventory, world, container.getPlayer());
+      return RecipeSelection.getPlayerRecipe(type, inventory, world, container.getPlayer());
     }
     return world.getRecipeManager().getRecipe(type, inventory, world);
   }

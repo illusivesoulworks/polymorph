@@ -9,7 +9,7 @@ public class JustEnoughItemsMixinHooks {
 
     if (recipe instanceof IRecipe<?>) {
       PolymorphApi.common().getPacketDistributor()
-          .sendCraftingSelectionC2S(((IRecipe<?>) recipe).getId());
+          .sendPlayerRecipeSelectionC2S(((IRecipe<?>) recipe).getId());
     }
   }
 }

@@ -13,6 +13,7 @@ import shadows.fastbench.gui.ContainerFastBench;
 import shadows.fastbench.gui.CraftingInventoryExt;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
+@SuppressWarnings("unused")
 @Mixin(ContainerFastBench.class)
 public class MixinContainerFastBench {
 
@@ -26,6 +27,6 @@ public class MixinContainerFastBench {
                                                                  World unused1, PlayerEntity player,
                                                                  CraftingInventoryExt unused2,
                                                                  CraftResultInventory result) {
-    return RecipeSelection.getRecipe(IRecipeType.CRAFTING, inv, world, player).orElse(null);
+    return RecipeSelection.getPlayerRecipe(IRecipeType.CRAFTING, inv, world, player).orElse(null);
   }
 }

@@ -11,6 +11,7 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,13 +20,20 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import slimeknights.tconstruct.tables.tileentity.table.CraftingStationTileEntity;
 import slimeknights.tconstruct.tables.tileentity.table.RetexturedTableTileEntity;
+import slimeknights.tconstruct.tables.tileentity.table.crafting.CraftingInventoryWrapper;
+import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 import top.theillusivec4.polymorph.mixin.util.integration.TinkersConstructMixinHooks;
 
+@SuppressWarnings("unused")
 @Mixin(CraftingStationTileEntity.class)
 public abstract class MixinCraftingStationTileEntity extends RetexturedTableTileEntity {
 
   @Shadow
   private ICraftingRecipe lastRecipe;
+
+  @Shadow
+  @Final
+  private CraftingInventoryWrapper craftingInventory;
 
   public MixinCraftingStationTileEntity(TileEntityType<?> type,
                                         String name, int size) {
@@ -41,7 +49,7 @@ public abstract class MixinCraftingStationTileEntity extends RetexturedTableTile
   private <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world,
       @Nullable PlayerEntity player) {
-    return TinkersConstructMixinHooks.getRecipe(type, inventory, world, player, this);
+    return RecipeSelection.getTileEntityRecipe(type, inventory, world, this);
   }
 
   @Inject(
@@ -50,6 +58,6 @@ public abstract class MixinCraftingStationTileEntity extends RetexturedTableTile
       remap = false)
   private void polymorph$calcResult(@Nullable PlayerEntity player,
                                     CallbackInfoReturnable<ItemStack> cir) {
-    TinkersConstructMixinHooks.calcResult(this, player);
+    TinkersConstructMixinHooks.calcResult(this, player, this.lastRecipe, this.craftingInventory);
   }
 }

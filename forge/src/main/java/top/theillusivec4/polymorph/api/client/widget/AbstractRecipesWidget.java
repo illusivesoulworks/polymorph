@@ -10,7 +10,7 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.base.IRecipesWidget;
-import top.theillusivec4.polymorph.api.common.base.IRecipeData;
+import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 
 public abstract class AbstractRecipesWidget implements IRecipesWidget {
 
@@ -28,14 +28,14 @@ public abstract class AbstractRecipesWidget implements IRecipesWidget {
   protected SelectionWidget selectionWidget;
   protected Button openButton;
 
-  public AbstractRecipesWidget(ContainerScreen<?> containerScreen, int xOffset, int yOffset) {
-    this.containerScreen = containerScreen;
-    this.xOffset = xOffset;
-    this.yOffset = yOffset;
+  public AbstractRecipesWidget(ContainerScreen<?> pContainerScreen, int pXOffset, int pYOffset) {
+    this.containerScreen = pContainerScreen;
+    this.xOffset = pXOffset;
+    this.yOffset = pYOffset;
   }
 
-  public AbstractRecipesWidget(ContainerScreen<?> containerScreen) {
-    this(containerScreen, WIDGET_X_OFFSET, WIDGET_Y_OFFSET);
+  public AbstractRecipesWidget(ContainerScreen<?> pContainerScreen) {
+    this(pContainerScreen, WIDGET_X_OFFSET, WIDGET_Y_OFFSET);
   }
 
   @Override
@@ -52,7 +52,7 @@ public abstract class AbstractRecipesWidget implements IRecipesWidget {
   }
 
   @Override
-  public abstract void selectRecipe(ResourceLocation recipe);
+  public abstract void selectRecipe(ResourceLocation pResourceLocation);
 
   @Override
   public SelectionWidget getSelectionWidget() {
@@ -60,40 +60,40 @@ public abstract class AbstractRecipesWidget implements IRecipesWidget {
   }
 
   @Override
-  public void highlightRecipe(ResourceLocation recipe) {
-    this.selectionWidget.highlightButton(recipe);
+  public void highlightRecipe(ResourceLocation pResourceLocation) {
+    this.selectionWidget.highlightButton(pResourceLocation);
   }
 
   @Override
-  public void setRecipes(Set<IRecipeData> recipes, ResourceLocation selected) {
-    SortedSet<IRecipeData> sorted =
+  public void setRecipesList(Set<IRecipePair> pRecipesList, ResourceLocation pSelected) {
+    SortedSet<IRecipePair> sorted =
         new TreeSet<>(Comparator.comparing(data -> data.getOutput().getTranslationKey()));
-    sorted.addAll(recipes);
+    sorted.addAll(pRecipesList);
     this.selectionWidget.setRecipeList(sorted);
-    this.openButton.visible = recipes.size() > 1;
+    this.openButton.visible = pRecipesList.size() > 1;
 
-    if (selected != null) {
-      this.highlightRecipe(selected);
+    if (pSelected != null) {
+      this.highlightRecipe(pSelected);
     }
   }
 
   @Override
-  public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-    this.selectionWidget.render(matrixStack, mouseX, mouseY, partialTicks);
-    this.openButton.render(matrixStack, mouseX, mouseY, partialTicks);
+  public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pRenderPartialTicks) {
+    this.selectionWidget.render(pMatrixStack, pMouseX, pMouseY, pRenderPartialTicks);
+    this.openButton.render(pMatrixStack, pMouseX, pMouseY, pRenderPartialTicks);
   }
 
   @Override
-  public boolean mouseClicked(double mouseX, double mouseY, int button) {
+  public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
 
-    if (this.openButton.mouseClicked(mouseX, mouseY, button)) {
+    if (this.openButton.mouseClicked(pMouseX, pMouseY, pButton)) {
       return true;
-    } else if (this.selectionWidget.mouseClicked(mouseX, mouseY, button)) {
+    } else if (this.selectionWidget.mouseClicked(pMouseX, pMouseY, pButton)) {
       this.selectionWidget.setActive(false);
       return true;
     } else if (this.selectionWidget.isActive()) {
 
-      if (!this.openButton.mouseClicked(mouseX, mouseY, button)) {
+      if (!this.openButton.mouseClicked(pMouseX, pMouseY, pButton)) {
         this.selectionWidget.setActive(false);
       }
       return true;

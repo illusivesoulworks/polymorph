@@ -1,23 +1,19 @@
 package top.theillusivec4.polymorph.api.client.base;
 
-import com.mojang.datafixers.util.Pair;
 import java.util.Optional;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.inventory.CraftResultInventory;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 
 public interface IPolymorphClient {
 
-  Optional<IRecipesWidget> getWidget(ContainerScreen<?> containerScreen);
+  Optional<IRecipesWidget> getWidget(ContainerScreen<?> pContainerScreen);
 
-  void registerWidget(IRecipesWidgetFactory factory);
+  void registerWidget(IRecipesWidgetFactory pFactory);
 
-  Optional<Pair<Slot, CraftingInventory>> getCraftingPair(ContainerScreen<?> containerScreen);
+  Optional<Slot> findCraftingResultSlot(ContainerScreen<?> pContainerScreen);
 
   interface IRecipesWidgetFactory {
 
-    IRecipesWidget createWidget(ContainerScreen<?> screen);
+    IRecipesWidget createWidget(ContainerScreen<?> pContainerScreen);
   }
 }

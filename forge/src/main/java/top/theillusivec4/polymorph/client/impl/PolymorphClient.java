@@ -1,12 +1,10 @@
 package top.theillusivec4.polymorph.client.impl;
 
-import com.mojang.datafixers.util.Pair;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.inventory.CraftResultInventory;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import top.theillusivec4.polymorph.api.client.base.IPolymorphClient;
@@ -41,25 +39,15 @@ public class PolymorphClient implements IPolymorphClient {
   }
 
   @Override
-  public Optional<Pair<Slot, CraftingInventory>> getCraftingPair(
-      ContainerScreen<?> containerScreen) {
-    Slot resultSlot = null;
-    CraftingInventory craftingInventory = null;
-    Container container = containerScreen.getContainer();
+  public Optional<Slot> findCraftingResultSlot(ContainerScreen<?> pContainerScreen) {
+    Container container = pContainerScreen.getContainer();
 
     for (Slot slot : container.inventorySlots) {
 
-      if (resultSlot == null && slot.inventory instanceof CraftResultInventory) {
-        resultSlot = slot;
-      } else if (craftingInventory == null && slot.inventory instanceof CraftingInventory) {
-        craftingInventory = (CraftingInventory) slot.inventory;
-      }
-
-      if (resultSlot != null && craftingInventory != null) {
-        break;
+      if (slot.inventory instanceof CraftResultInventory) {
+        return Optional.of(slot);
       }
     }
-    return resultSlot != null && craftingInventory != null ?
-        Optional.of(new Pair<>(resultSlot, craftingInventory)) : Optional.empty();
+    return Optional.empty();
   }
 }

@@ -15,10 +15,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import top.theillusivec4.polymorph.mixin.util.integration.RefinedStorageHooks;
 
+@SuppressWarnings("unused")
 @Mixin(WirelessCraftingGrid.class)
 public class MixinWirelessCraftingGrid {
 
   @Shadow(remap = false)
+  @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
   private Set<ICraftingGridListener> listeners;
 
   @Redirect(at = @At(value = "INVOKE", target = "net/minecraft/item/crafting/RecipeManager.getRecipe(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;"), method = "onCraftingMatrixChanged", remap = false)

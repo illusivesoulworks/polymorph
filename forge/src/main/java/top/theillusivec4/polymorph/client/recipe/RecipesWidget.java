@@ -4,7 +4,7 @@ import java.util.Optional;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.base.IRecipesWidget;
-import top.theillusivec4.polymorph.client.recipe.widget.CraftingRecipesWidget;
+import top.theillusivec4.polymorph.client.recipe.widget.PlayerRecipesWidget;
 
 public class RecipesWidget {
 
@@ -14,13 +14,13 @@ public class RecipesWidget {
     return Optional.ofNullable(widget);
   }
 
-  public static void create(ContainerScreen<?> containerScreen) {
-    Optional<IRecipesWidget> maybeWidget = PolymorphApi.client().getWidget(containerScreen);
+  public static void create(ContainerScreen<?> pContainerScreen) {
+    Optional<IRecipesWidget> maybeWidget = PolymorphApi.client().getWidget(pContainerScreen);
     maybeWidget.ifPresent(newWidget -> widget = newWidget);
 
     if (widget == null) {
-      PolymorphApi.client().getCraftingPair(containerScreen).ifPresent(data ->
-          widget = new CraftingRecipesWidget(containerScreen, data.getSecond(), data.getFirst()));
+      PolymorphApi.client().findCraftingResultSlot(pContainerScreen)
+          .ifPresent(slot -> widget = new PlayerRecipesWidget(pContainerScreen, slot));
     }
 
     if (widget != null) {

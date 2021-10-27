@@ -3,7 +3,6 @@ package top.theillusivec4.polymorph.common.integration.cyclic;
 import com.lothrazar.cyclic.block.crafter.ContainerCrafter;
 import com.lothrazar.cyclic.block.crafter.ScreenCrafter;
 import com.lothrazar.cyclic.block.crafter.TileCrafter;
-import net.minecraft.inventory.CraftingInventory;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
@@ -14,9 +13,9 @@ public class CyclicModule extends AbstractCompatibilityModule {
   @Override
   public void setup() {
     IPolymorphCommon commonApi = PolymorphApi.common();
-    commonApi.registerTileEntity2Processor(tileEntity -> {
+    commonApi.registerTileEntity2RecipeData(tileEntity -> {
       if (tileEntity instanceof TileCrafter) {
-        return new TileCrafterRecipeProcessor((TileCrafter) tileEntity);
+        return new TileCrafterRecipeData((TileCrafter) tileEntity);
       }
       return null;
     });
@@ -34,9 +33,7 @@ public class CyclicModule extends AbstractCompatibilityModule {
       if (containerScreen instanceof ScreenCrafter &&
           containerScreen.getContainer() instanceof ContainerCrafter) {
         ContainerCrafter containerCrafter = (ContainerCrafter) containerScreen.getContainer();
-        TileCrafter crafter = (TileCrafter) PolymorphAccessor.readField(containerCrafter, "tile");
-        return new CrafterRecipesWidget(containerScreen, containerCrafter,
-            (CraftingInventory) PolymorphAccessor.readField(crafter, "craftMatrix"));
+        return new CrafterRecipesWidget(containerScreen, containerCrafter);
       }
       return null;
     });

@@ -42,7 +42,7 @@ public class MixinRecipeManager {
       CallbackInfoReturnable<Optional<T>> cb) {
 
     if (inventoryIn instanceof TileEntity) {
-      RecipeSelection.getRecipe(recipeTypeIn, inventoryIn, worldIn, (TileEntity) inventoryIn)
+      RecipeSelection.getTileEntityRecipe(recipeTypeIn, inventoryIn, worldIn, (TileEntity) inventoryIn)
           .ifPresent(recipe -> cb.setReturnValue(Optional.of(recipe)));
     }
   }

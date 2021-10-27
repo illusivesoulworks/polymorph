@@ -13,9 +13,9 @@ import top.theillusivec4.polymorph.client.recipe.RecipesWidget;
 public class ClientEventsListener {
 
   @SubscribeEvent
-  public void tick(TickEvent.ClientTickEvent evt) {
+  public void tick(TickEvent.ClientTickEvent pEvent) {
 
-    if (evt.phase == TickEvent.Phase.END) {
+    if (pEvent.phase == TickEvent.Phase.END) {
       Minecraft mc = Minecraft.getInstance();
       RecipesWidget.get().ifPresent(widget -> {
         if (mc.player == null || mc.player.openContainer == null || mc.currentScreen == null) {
@@ -28,8 +28,8 @@ public class ClientEventsListener {
   }
 
   @SubscribeEvent
-  public void initGui(GuiScreenEvent.InitGuiEvent.Post evt) {
-    Screen screen = evt.getGui();
+  public void initGui(GuiScreenEvent.InitGuiEvent.Post pEvent) {
+    Screen screen = pEvent.getGui();
 
     if (screen instanceof ContainerScreen) {
       RecipesWidget.create((ContainerScreen<?>) screen);
@@ -37,22 +37,23 @@ public class ClientEventsListener {
   }
 
   @SubscribeEvent
-  public void render(GuiScreenEvent.DrawScreenEvent.Post evt) {
+  public void render(GuiScreenEvent.DrawScreenEvent.Post pEvent) {
 
-    if (evt.getGui() instanceof ContainerScreen) {
+    if (pEvent.getGui() instanceof ContainerScreen) {
       RecipesWidget.get().ifPresent(
-          recipeController -> recipeController.render(evt.getMatrixStack(), evt.getMouseX(),
-              evt.getMouseY(), evt.getRenderPartialTicks()));
+          recipeController -> recipeController.render(pEvent.getMatrixStack(), pEvent.getMouseX(),
+              pEvent.getMouseY(), pEvent.getRenderPartialTicks()));
     }
   }
 
   @SubscribeEvent
-  public void mouseClick(GuiScreenEvent.MouseClickedEvent.Pre evt) {
+  public void mouseClick(GuiScreenEvent.MouseClickedEvent.Pre pEvent) {
 
-    if (evt.getGui() instanceof ContainerScreen) {
+    if (pEvent.getGui() instanceof ContainerScreen) {
       RecipesWidget.get().ifPresent(recipeController -> {
-        if (recipeController.mouseClicked(evt.getMouseX(), evt.getMouseY(), evt.getButton())) {
-          evt.setCanceled(true);
+        if (recipeController.mouseClicked(pEvent.getMouseX(), pEvent.getMouseY(),
+            pEvent.getButton())) {
+          pEvent.setCanceled(true);
         }
       });
     }

@@ -7,15 +7,14 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import top.theillusivec4.polymorph.client.recipe.widget.AbstractProcessorRecipesWidget;
+import top.theillusivec4.polymorph.client.recipe.widget.PersistentRecipesWidget;
 
-public class CrafterRecipesWidget extends AbstractProcessorRecipesWidget {
+public class CrafterRecipesWidget extends PersistentRecipesWidget {
 
   private final ContainerCrafter container;
 
-  public CrafterRecipesWidget(ContainerScreen<?> screen, ContainerCrafter containerCrafter,
-                              CraftingInventory inventory) {
-    super(screen, 9);
+  public CrafterRecipesWidget(ContainerScreen<?> screen, ContainerCrafter containerCrafter) {
+    super(screen);
     this.container = containerCrafter;
   }
 

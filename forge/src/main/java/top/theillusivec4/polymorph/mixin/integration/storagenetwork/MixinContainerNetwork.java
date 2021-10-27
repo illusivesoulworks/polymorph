@@ -14,13 +14,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
+@SuppressWarnings("unused")
 @Mixin(ContainerNetwork.class)
 public class MixinContainerNetwork {
 
   @Shadow(remap = false)
   protected PlayerEntity player;
 
-  @SuppressWarnings("ConstantConditions")
   @Redirect(
       at = @At(
           value = "INVOKE",
@@ -29,11 +29,9 @@ public class MixinContainerNetwork {
       remap = false)
   private <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world) {
-    return RecipeSelection.getRecipe(type, inventory, world,
-        ((ContainerNetwork) (Object) this).getTileMain());
+    return RecipeSelection.getPlayerRecipe(type, inventory, world, this.player);
   }
 
-  @SuppressWarnings("ConstantConditions")
   @Redirect(
       at = @At(
           value = "INVOKE",
@@ -42,7 +40,6 @@ public class MixinContainerNetwork {
       remap = false)
   private <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipeClient(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world) {
-    return RecipeSelection.getRecipe(type, inventory, world,
-        ((ContainerNetwork) (Object) this).getTileMain());
+    return RecipeSelection.getPlayerRecipe(type, inventory, world, this.player);
   }
 }

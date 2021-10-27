@@ -7,7 +7,6 @@ import net.minecraft.item.crafting.IRecipe;
 import slimeknights.tconstruct.tables.inventory.table.CraftingStationContainer;
 import slimeknights.tconstruct.tables.tileentity.table.CraftingStationTileEntity;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.common.capability.SimpleRecipeDataset;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.common.util.PolymorphAccessor;
 
@@ -15,9 +14,9 @@ public class TinkersConstructModule extends AbstractCompatibilityModule {
 
   @Override
   public void setup() {
-    PolymorphApi.common().registerTileEntity2Dataset(pTileEntity -> {
+    PolymorphApi.common().registerTileEntity2RecipeData(pTileEntity -> {
       if (pTileEntity instanceof CraftingStationTileEntity) {
-        return new SimpleRecipeDataset();
+        return new CraftingStationRecipeData((CraftingStationTileEntity) pTileEntity);
       }
       return null;
     });
@@ -29,17 +28,11 @@ public class TinkersConstructModule extends AbstractCompatibilityModule {
       if (containerScreen.getContainer() instanceof CraftingStationContainer) {
         CraftingStationContainer craftingStationContainer =
             (CraftingStationContainer) containerScreen.getContainer();
-        CraftingStationTileEntity tileEntity = craftingStationContainer.getTile();
-
-        if (tileEntity != null) {
-          CraftingInventory inv =
-              (CraftingInventory) PolymorphAccessor.readField(tileEntity, "craftingInventory");
-
-          if (inv != null) {
-            return new CraftingStationRecipesWidget(containerScreen, inv,
-                craftingStationContainer.inventorySlots.get(9));
-          }
-        }
+        CraftingInventory inv =
+            (CraftingInventory) PolymorphAccessor.readField(craftingStationContainer.getTile(),
+                "craftingInventory");
+        return new CraftingStationRecipesWidget(containerScreen, inv,
+            craftingStationContainer.inventorySlots.get(9));
       }
       return null;
     });

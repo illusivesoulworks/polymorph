@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.theillusivec4.polymorph.mixin.util.integration.TomsStorageHooks;
 
+@SuppressWarnings("unused")
 @Mixin(ContainerCraftingTerminal.class)
 public abstract class MixinContainerCraftingTerminal extends ContainerStorageTerminal {
 

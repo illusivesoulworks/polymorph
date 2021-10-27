@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 import top.theillusivec4.polymorph.mixin.util.integration.RefinedStorageHooks;
 
+@SuppressWarnings("unused")
 @Mixin(GridNetworkNode.class)
 public abstract class MixinGridNetworkNode extends NetworkNode {
 
@@ -42,7 +43,7 @@ public abstract class MixinGridNetworkNode extends NetworkNode {
       remap = false)
   private <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world) {
-    return RecipeSelection.getRecipe(type, inventory, world, this.world.getTileEntity(this.pos));
+    return RecipeSelection.getTileEntityRecipe(type, inventory, world, this.world.getTileEntity(this.pos));
   }
 
   @Inject(

@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import top.theillusivec4.polymorph.mixin.util.integration.RefinedStorageHooks;
 
+@SuppressWarnings("unused")
 @Mixin(CraftingPatternFactory.class)
 public class MixinCraftingPatternFactory {
 

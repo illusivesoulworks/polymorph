@@ -36,14 +36,14 @@ public class PolymorphJeiPlugin implements IModPlugin {
     @Override
     public List<Rectangle2d> getGuiExtraAreas() {
       List<Rectangle2d> list = new ArrayList<>();
-      RecipesWidget.get().ifPresent(recipeController -> {
+      RecipesWidget.get().ifPresent(widget -> {
         Screen screen = Minecraft.getInstance().currentScreen;
 
-        if (screen instanceof ContainerScreen<?> &&
-            recipeController.getSelectionWidget().isActive()) {
-          int x = ((ContainerScreen<?>) screen).getGuiLeft() + recipeController.getXPos();
-          int y = ((ContainerScreen<?>) screen).getGuiTop() + recipeController.getYPos();
-          int size = recipeController.getSelectionWidget().getOutputWidgets().size();
+        if (screen instanceof ContainerScreen<?> && widget.getSelectionWidget().isActive()) {
+          ContainerScreen<?> containerScreen = (ContainerScreen<?>) screen;
+          int x = containerScreen.getGuiLeft() + widget.getXPos();
+          int y = containerScreen.getGuiTop() + widget.getYPos();
+          int size = widget.getSelectionWidget().getOutputWidgets().size();
           int xOffset = (int) (-25 * Math.floor((size / 2.0F)));
 
           if (size % 2 == 0) {

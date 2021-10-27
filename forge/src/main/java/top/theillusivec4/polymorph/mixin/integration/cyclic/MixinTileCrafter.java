@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.theillusivec4.polymorph.mixin.util.integration.CyclicHooks;
 
+@SuppressWarnings("unused")
 @Mixin(TileCrafter.class)
 public abstract class MixinTileCrafter extends TileEntityBase {
 

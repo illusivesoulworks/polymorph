@@ -7,7 +7,7 @@ import java.util.Set;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.IContainerListener;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.api.common.base.IRecipeData;
+import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 
 public class TomsStorageHooks {
 
@@ -16,8 +16,8 @@ public class TomsStorageHooks {
 
     if (tileEntity instanceof TileEntityCraftingTerminal && tileEntity.getWorld() != null &&
         !tileEntity.getWorld().isRemote()) {
-      PolymorphApi.common().getProcessorCapability(tileEntity).ifPresent(processor -> {
-        Set<IRecipeData> dataset = processor.getRecipeDataset();
+      PolymorphApi.common().getRecipeData(tileEntity).ifPresent(processor -> {
+        Set<IRecipePair> dataset = processor.getRecipesList();
 
         for (IContainerListener listener : listeners) {
 

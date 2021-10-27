@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
+@SuppressWarnings("unused")
 @Mixin(ContainerWorkbench.class)
 public class MixinContainerWorkbench {
 
@@ -28,6 +29,6 @@ public class MixinContainerWorkbench {
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world, int id,
       World unused1, PlayerEntity player, CraftingInventory unused2,
       CraftResultInventory inventoryResult) {
-    return RecipeSelection.getRecipe(type, inventory, world, player);
+    return RecipeSelection.getPlayerRecipe(type, inventory, world, player);
   }
 }

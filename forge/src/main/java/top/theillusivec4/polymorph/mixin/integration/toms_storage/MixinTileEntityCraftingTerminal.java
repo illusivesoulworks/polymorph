@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
+@SuppressWarnings("unused")
 @Mixin(TileEntityCraftingTerminal.class)
 public class MixinTileEntityCraftingTerminal {
 
@@ -24,6 +25,7 @@ public class MixinTileEntityCraftingTerminal {
       remap = false)
   private <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world) {
-    return RecipeSelection.getRecipe(type, inventory, world, (TileEntityCraftingTerminal) (Object) this);
+    return RecipeSelection.getTileEntityRecipe(type, inventory, world,
+        (TileEntityCraftingTerminal) (Object) this);
   }
 }

@@ -27,6 +27,6 @@ public class MixinWorkbenchContainer {
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world, int syncId,
       World unused, PlayerEntity player, CraftingInventory craftingInventory,
       CraftResultInventory resultInventory) {
-    return RecipeSelection.getRecipe(type, inventory, world, player);
+    return RecipeSelection.getPlayerRecipe(type, inventory, world, player);
   }
 }

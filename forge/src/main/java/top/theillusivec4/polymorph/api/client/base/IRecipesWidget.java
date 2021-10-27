@@ -5,21 +5,21 @@ import java.util.Set;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.ResourceLocation;
 import top.theillusivec4.polymorph.api.client.widget.SelectionWidget;
-import top.theillusivec4.polymorph.api.common.base.IRecipeData;
+import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 
 public interface IRecipesWidget {
 
   void initChildWidgets();
 
-  void selectRecipe(ResourceLocation recipe);
+  void selectRecipe(ResourceLocation pResourceLocation);
 
-  void highlightRecipe(ResourceLocation recipe);
+  void highlightRecipe(ResourceLocation pResourceLocation);
 
-  void setRecipes(Set<IRecipeData> recipes, ResourceLocation selected);
+  void setRecipesList(Set<IRecipePair> pRecipesList, ResourceLocation pSelected);
 
-  void render(MatrixStack matrixStack, int mouseX, int mouseY, float renderPartialTicks);
+  void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pRenderPartialTicks);
 
-  boolean mouseClicked(double mouseX, double mouseY, int button);
+  boolean mouseClicked(double pMouseX, double pMouseY, int pButton);
 
   Slot getOutputSlot();
 

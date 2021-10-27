@@ -7,34 +7,34 @@ import top.theillusivec4.polymorph.common.PolymorphMod;
 
 public class PolymorphAccessor {
 
-  public static Object readField(Object target, String fieldName) {
+  public static Object readField(Object pTarget, String pFieldName) {
     try {
-      return FieldUtils.readField(target, fieldName, true);
+      return FieldUtils.readField(pTarget, pFieldName, true);
     } catch (IllegalAccessException e) {
-      PolymorphMod.LOGGER.error("Failed to read {} from {}", fieldName, target);
+      PolymorphMod.LOGGER.error("Failed to read {} from {}", pFieldName, pTarget);
     } catch (IllegalArgumentException e) {
-      PolymorphMod.LOGGER.debug("Failed to find {} from {}", fieldName, target);
+      PolymorphMod.LOGGER.debug("Failed to find {} from {}", pFieldName, pTarget);
     }
     return null;
   }
 
-  public static void writeField(Object target, String fieldName, Object value) {
+  public static void writeField(Object pTarget, String pFieldName, Object pValue) {
     try {
-      FieldUtils.writeField(target, fieldName, value, true);
+      FieldUtils.writeField(pTarget, pFieldName, pValue, true);
     } catch (IllegalAccessException e) {
-      PolymorphMod.LOGGER.error("Failed to write {} to {} for {}", value, fieldName, target);
+      PolymorphMod.LOGGER.error("Failed to write {} to {} for {}", pValue, pFieldName, pTarget);
     } catch (IllegalArgumentException e) {
-      PolymorphMod.LOGGER.debug("Failed to find {} from {}", fieldName, target);
+      PolymorphMod.LOGGER.debug("Failed to find {} from {}", pFieldName, pTarget);
     }
   }
 
-  public static void invokeMethod(Object target, String methodName) {
+  public static void invokeMethod(Object pTarget, String pMethodName) {
     try {
-      MethodUtils.invokeMethod(target, true, methodName);
+      MethodUtils.invokeMethod(pTarget, true, pMethodName);
     } catch (InvocationTargetException | IllegalAccessException e) {
-      PolymorphMod.LOGGER.error("Failed to invoke {} for {}", methodName, target);
+      PolymorphMod.LOGGER.error("Failed to invoke {} for {}", pMethodName, pTarget);
     } catch (NoSuchMethodException e) {
-      PolymorphMod.LOGGER.error("Failed to find {} from {}", methodName, target);
+      PolymorphMod.LOGGER.debug("Failed to find {} from {}", pMethodName, pTarget);
     }
   }
 }

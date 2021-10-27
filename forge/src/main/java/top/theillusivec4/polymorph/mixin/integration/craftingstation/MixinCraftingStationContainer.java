@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
+@SuppressWarnings("unused")
 @Mixin(CraftingStationContainer.class)
 public class MixinCraftingStationContainer {
 
@@ -22,6 +23,6 @@ public class MixinCraftingStationContainer {
       remap = false)
   private IRecipe<CraftingInventory> polymorph$findRecipe(CraftingInventory pInv, World pWorld,
                                                           PlayerEntity pPlayer) {
-    return RecipeSelection.getRecipe(IRecipeType.CRAFTING, pInv, pWorld, pPlayer).orElse(null);
+    return RecipeSelection.getPlayerRecipe(IRecipeType.CRAFTING, pInv, pWorld, pPlayer).orElse(null);
   }
 }

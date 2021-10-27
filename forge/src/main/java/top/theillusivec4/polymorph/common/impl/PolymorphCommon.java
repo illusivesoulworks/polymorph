@@ -3,13 +3,14 @@ package top.theillusivec4.polymorph.common.impl;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.LazyOptional;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphPacketDistributor;
-import top.theillusivec4.polymorph.api.common.capability.IRecipeDataset;
-import top.theillusivec4.polymorph.api.common.capability.IRecipeProcessor;
+import top.theillusivec4.polymorph.api.common.capability.IPlayerRecipeData;
+import top.theillusivec4.polymorph.api.common.capability.ITileEntityRecipeData;
 import top.theillusivec4.polymorph.common.capability.PolymorphCapabilities;
 
 public class PolymorphCommon implements IPolymorphCommon {
@@ -20,8 +21,7 @@ public class PolymorphCommon implements IPolymorphCommon {
     return INSTANCE;
   }
 
-  private final List<ITileEntity2Processor> tileEntity2Processors = new LinkedList<>();
-  private final List<ITileEntity2Dataset> tileEntity2Datasets = new LinkedList<>();
+  private final List<ITileEntity2RecipeData> tileEntity2RecipeData = new LinkedList<>();
   private final List<IContainer2TileEntity> container2TileEntities = new LinkedList<>();
   private final IPolymorphPacketDistributor distributor = new PolymorphPacketDistributor();
 
@@ -31,75 +31,45 @@ public class PolymorphCommon implements IPolymorphCommon {
   }
 
   @Override
-  public Optional<IRecipeProcessor> getProcessor(TileEntity pTileEntity) {
+  public Optional<ITileEntityRecipeData> tryCreateRecipeData(TileEntity pTileEntity) {
 
-    for (ITileEntity2Processor function : this.tileEntity2Processors) {
-      IRecipeProcessor controller = function.createProcessor(pTileEntity);
+    for (ITileEntity2RecipeData function : this.tileEntity2RecipeData) {
+      ITileEntityRecipeData recipeData = function.createRecipeData(pTileEntity);
 
-      if (controller != null) {
-        return Optional.of(controller);
+      if (recipeData != null) {
+        return Optional.of(recipeData);
       }
     }
     return Optional.empty();
   }
 
   @Override
-  public LazyOptional<IRecipeProcessor> getProcessorCapability(TileEntity pTileEntity) {
-    return PolymorphCapabilities.getController(pTileEntity);
+  public LazyOptional<ITileEntityRecipeData> getRecipeData(TileEntity pTileEntity) {
+    return PolymorphCapabilities.getRecipeData(pTileEntity);
   }
 
   @Override
-  public LazyOptional<IRecipeProcessor> getProcessorCapability(Container pContainer) {
+  public LazyOptional<ITileEntityRecipeData> getRecipeData(Container pContainer) {
 
     for (IContainer2TileEntity function : this.container2TileEntities) {
       TileEntity tileEntity = function.getTileEntity(pContainer);
 
       if (tileEntity != null) {
-        return this.getProcessorCapability(tileEntity);
+        return this.getRecipeData(tileEntity);
       }
     }
     return LazyOptional.empty();
   }
 
   @Override
-  public Optional<IRecipeDataset> getDataset(TileEntity pTileEntity) {
-
-    for (ITileEntity2Dataset function : this.tileEntity2Datasets) {
-      IRecipeDataset dataset = function.createDataset(pTileEntity);
-
-      if (dataset != null) {
-        return Optional.of(dataset);
-      }
-    }
-    return Optional.empty();
+  public LazyOptional<IPlayerRecipeData> getRecipeData(PlayerEntity pPlayer) {
+    return PolymorphCapabilities.getRecipeData(pPlayer);
   }
 
   @Override
-  public LazyOptional<IRecipeDataset> getDatasetCapability(TileEntity pTileEntity) {
-    return PolymorphCapabilities.getRecipeDataCache(pTileEntity);
-  }
-
-  @Override
-  public LazyOptional<IRecipeDataset> getDatasetCapability(Container pContainer) {
-
-    for (IContainer2TileEntity function : this.container2TileEntities) {
-      TileEntity tileEntity = function.getTileEntity(pContainer);
-
-      if (tileEntity != null) {
-        return this.getDatasetCapability(tileEntity);
-      }
-    }
-    return LazyOptional.empty();
-  }
-
-  @Override
-  public void registerTileEntity2Processor(ITileEntity2Processor pTileEntity2Processor) {
-    this.tileEntity2Processors.add(pTileEntity2Processor);
-  }
-
-  @Override
-  public void registerTileEntity2Dataset(ITileEntity2Dataset pTileEntity2Dataset) {
-    this.tileEntity2Datasets.add(pTileEntity2Dataset);
+  public void registerTileEntity2RecipeData(
+      ITileEntity2RecipeData pTileEntity2PersistentDataset) {
+    this.tileEntity2RecipeData.add(pTileEntity2PersistentDataset);
   }
 
   @Override

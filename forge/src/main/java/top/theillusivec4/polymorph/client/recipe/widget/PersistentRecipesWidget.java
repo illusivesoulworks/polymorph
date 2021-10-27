@@ -8,29 +8,32 @@ import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.base.ITickingRecipesWidget;
 import top.theillusivec4.polymorph.api.client.widget.AbstractRecipesWidget;
 
-public abstract class AbstractProcessorRecipesWidget extends AbstractRecipesWidget
+public abstract class PersistentRecipesWidget extends AbstractRecipesWidget
     implements ITickingRecipesWidget {
 
-  private final NonNullList<ItemStack> lastInput;
+  private NonNullList<ItemStack> lastInput;
 
-  public AbstractProcessorRecipesWidget(ContainerScreen<?> containerScreen, int inputSize) {
-    super(containerScreen);
-    this.lastInput = NonNullList.withSize(inputSize, ItemStack.EMPTY);
+  public PersistentRecipesWidget(ContainerScreen<?> pContainerScreen) {
+    super(pContainerScreen);
+    this.lastInput = NonNullList.create();
   }
+
+  protected abstract NonNullList<ItemStack> getInput();
 
   @Override
   public void tick() {
     boolean changed = false;
     NonNullList<ItemStack> currentInput = this.getInput();
+    this.lastInput = validateList(this.lastInput, currentInput.size());
 
     for (int i = 0; i < currentInput.size(); i++) {
       ItemStack lastStack = this.lastInput.get(i);
       ItemStack currentStack = currentInput.get(i);
 
-      if (!ItemStack.areItemsEqual(lastStack, currentStack)) {
+      if (!ItemStack.areItemStacksEqual(lastStack, currentStack)) {
         changed = true;
       }
-      this.lastInput.set(i, currentStack);
+      this.lastInput.set(i, currentStack.copy());
     }
 
     if (changed) {
@@ -38,7 +41,19 @@ public abstract class AbstractProcessorRecipesWidget extends AbstractRecipesWidg
     }
   }
 
-  protected abstract NonNullList<ItemStack> getInput();
+  private NonNullList<ItemStack> validateList(NonNullList<ItemStack> pList, int pSize) {
+
+    if (pList.size() == pSize) {
+      return pList;
+    } else {
+      NonNullList<ItemStack> resized = NonNullList.withSize(pSize, ItemStack.EMPTY);
+
+      for (int i = 0; i < Math.min(resized.size(), pList.size()); i++) {
+        resized.set(i, pList.get(i));
+      }
+      return resized;
+    }
+  }
 
   @Override
   public void selectRecipe(ResourceLocation pResourceLocation) {

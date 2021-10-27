@@ -3,13 +3,12 @@ package top.theillusivec4.polymorph.common.integration.prettypipes;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Slot;
-import top.theillusivec4.polymorph.client.recipe.widget.CraftingRecipesWidget;
+import top.theillusivec4.polymorph.client.recipe.widget.PlayerRecipesWidget;
 
-public class CraftingTerminalRecipesWidget extends CraftingRecipesWidget {
+public class CraftingTerminalRecipesWidget extends PlayerRecipesWidget {
 
-  public CraftingTerminalRecipesWidget(ContainerScreen<?> containerScreen,
-                                       CraftingInventory craftingInventory, Slot outputSlot) {
-    super(containerScreen, craftingInventory, outputSlot);
+  public CraftingTerminalRecipesWidget(ContainerScreen<?> containerScreen, Slot outputSlot) {
+    super(containerScreen, outputSlot);
   }
 
   @Override

@@ -1,26 +1,23 @@
 package top.theillusivec4.polymorph.client.recipe.widget;
 
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.ResourceLocation;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.widget.AbstractRecipesWidget;
 
-public class SmithingRecipesWidget extends AbstractRecipesWidget {
+public class PlayerRecipesWidget extends AbstractRecipesWidget {
 
-  final IInventory inventory;
   final Slot outputSlot;
 
-  public SmithingRecipesWidget(ContainerScreen<?> screen) {
-    super(screen);
-    this.outputSlot = screen.getContainer().inventorySlots.get(2);
-    this.inventory = screen.getContainer().inventorySlots.get(0).inventory;
+  public PlayerRecipesWidget(ContainerScreen<?> containerScreen, Slot outputSlot) {
+    super(containerScreen);
+    this.outputSlot = outputSlot;
   }
 
   @Override
   public void selectRecipe(ResourceLocation pResourceLocation) {
-    PolymorphApi.common().getPacketDistributor().sendCraftingSelectionC2S(pResourceLocation);
+    PolymorphApi.common().getPacketDistributor().sendPlayerRecipeSelectionC2S(pResourceLocation);
   }
 
   @Override

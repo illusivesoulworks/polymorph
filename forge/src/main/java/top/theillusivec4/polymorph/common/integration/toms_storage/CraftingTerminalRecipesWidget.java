@@ -7,16 +7,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.client.recipe.widget.AbstractProcessorRecipesWidget;
+import top.theillusivec4.polymorph.client.recipe.widget.PersistentRecipesWidget;
 
-public class CraftingTerminalRecipesWidget extends AbstractProcessorRecipesWidget {
+public class CraftingTerminalRecipesWidget extends PersistentRecipesWidget {
 
   private final Slot outputSlot;
   private final CraftingInventory craftingInventory;
 
   public CraftingTerminalRecipesWidget(ContainerScreen<?> containerScreen,
                                        CraftingInventory craftingInventory, Slot outputSlot) {
-    super(containerScreen, 9);
+    super(containerScreen);
     this.outputSlot = outputSlot;
     this.craftingInventory = craftingInventory;
   }
@@ -33,7 +33,7 @@ public class CraftingTerminalRecipesWidget extends AbstractProcessorRecipesWidge
   }
 
   @Override
-  public void highlightRecipe(ResourceLocation recipe) {
+  public void highlightRecipe(ResourceLocation pResourceLocation) {
     // NO-OP
   }
 

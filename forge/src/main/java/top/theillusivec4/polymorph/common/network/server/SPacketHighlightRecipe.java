@@ -12,27 +12,28 @@ public class SPacketHighlightRecipe {
 
   private final ResourceLocation recipe;
 
-  public SPacketHighlightRecipe(ResourceLocation recipe) {
-    this.recipe = recipe;
+  public SPacketHighlightRecipe(ResourceLocation pResourceLocation) {
+    this.recipe = pResourceLocation;
   }
 
-  public static void encode(SPacketHighlightRecipe msg, PacketBuffer buf) {
-    buf.writeResourceLocation(msg.recipe);
+  public static void encode(SPacketHighlightRecipe pPacket, PacketBuffer pBuffer) {
+    pBuffer.writeResourceLocation(pPacket.recipe);
   }
 
-  public static SPacketHighlightRecipe decode(PacketBuffer buf) {
-    return new SPacketHighlightRecipe(buf.readResourceLocation());
+  public static SPacketHighlightRecipe decode(PacketBuffer pBuffer) {
+    return new SPacketHighlightRecipe(pBuffer.readResourceLocation());
   }
 
-  public static void handle(SPacketHighlightRecipe msg, Supplier<NetworkEvent.Context> ctx) {
-    ctx.get().enqueueWork(() -> {
+  public static void handle(SPacketHighlightRecipe pPacket,
+                            Supplier<NetworkEvent.Context> pContext) {
+    pContext.get().enqueueWork(() -> {
       ClientPlayerEntity clientPlayerEntity = Minecraft.getInstance().player;
 
       if (clientPlayerEntity != null) {
-        RecipesWidget.get().ifPresent(widget -> widget.highlightRecipe(msg.recipe));
+        RecipesWidget.get().ifPresent(widget -> widget.highlightRecipe(pPacket.recipe));
       }
     });
-    ctx.get().setPacketHandled(true);
+    pContext.get().setPacketHandled(true);
   }
 
 }

@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
+@SuppressWarnings("unused")
 @Mixin(CraftingTerminalContainer.class)
 public class MixinCraftingTerminalContainer extends ItemTerminalContainer {
 
@@ -39,6 +40,6 @@ public class MixinCraftingTerminalContainer extends ItemTerminalContainer {
   private <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world,
       IInventory unused) {
-    return RecipeSelection.getRecipe(type, inventory, world, this.player);
+    return RecipeSelection.getPlayerRecipe(type, inventory, world, this.player);
   }
 }

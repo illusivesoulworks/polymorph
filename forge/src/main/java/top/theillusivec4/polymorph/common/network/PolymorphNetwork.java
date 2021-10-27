@@ -9,12 +9,11 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.common.network.client.CPacketCraftingSelection;
-import top.theillusivec4.polymorph.common.network.client.CPacketRecipeSelection;
+import top.theillusivec4.polymorph.common.network.client.CPacketPersistentRecipeSelection;
+import top.theillusivec4.polymorph.common.network.client.CPacketPlayerRecipeSelection;
 import top.theillusivec4.polymorph.common.network.client.CPacketRecipesRequest;
-import top.theillusivec4.polymorph.common.network.server.SPacketCraftingAction;
 import top.theillusivec4.polymorph.common.network.server.SPacketHighlightRecipe;
-import top.theillusivec4.polymorph.common.network.server.SPacketRecipes;
+import top.theillusivec4.polymorph.common.network.server.SPacketRecipesList;
 
 public class PolymorphNetwork {
 
@@ -34,25 +33,23 @@ public class PolymorphNetwork {
             .serverAcceptedVersions(PTC_VERSION::equals).simpleChannel();
 
     // Client-to-Server
-    register(CPacketCraftingSelection.class, CPacketCraftingSelection::encode,
-        CPacketCraftingSelection::decode, CPacketCraftingSelection::handle);
-    register(CPacketRecipeSelection.class, CPacketRecipeSelection::encode,
-        CPacketRecipeSelection::decode, CPacketRecipeSelection::handle);
+    register(CPacketPlayerRecipeSelection.class, CPacketPlayerRecipeSelection::encode,
+        CPacketPlayerRecipeSelection::decode, CPacketPlayerRecipeSelection::handle);
+    register(CPacketPersistentRecipeSelection.class, CPacketPersistentRecipeSelection::encode,
+        CPacketPersistentRecipeSelection::decode, CPacketPersistentRecipeSelection::handle);
     register(CPacketRecipesRequest.class, CPacketRecipesRequest::encode,
         CPacketRecipesRequest::decode, CPacketRecipesRequest::handle);
 
     // Server-to-Client
-    register(SPacketCraftingAction.class, SPacketCraftingAction::encode,
-        SPacketCraftingAction::decode, SPacketCraftingAction::handle);
-    register(SPacketRecipes.class, SPacketRecipes::encode, SPacketRecipes::decode,
-        SPacketRecipes::handle);
+    register(SPacketRecipesList.class, SPacketRecipesList::encode, SPacketRecipesList::decode,
+        SPacketRecipesList::handle);
     register(SPacketHighlightRecipe.class, SPacketHighlightRecipe::encode,
         SPacketHighlightRecipe::decode, SPacketHighlightRecipe::handle);
   }
 
-  private static <M> void register(Class<M> messageType, BiConsumer<M, PacketBuffer> encoder,
-                                   Function<PacketBuffer, M> decoder,
-                                   BiConsumer<M, Supplier<NetworkEvent.Context>> messageConsumer) {
-    instance.registerMessage(id++, messageType, encoder, decoder, messageConsumer);
+  private static <M> void register(Class<M> pClass, BiConsumer<M, PacketBuffer> pEncoder,
+                                   Function<PacketBuffer, M> pDecoder,
+                                   BiConsumer<M, Supplier<NetworkEvent.Context>> pMessage) {
+    instance.registerMessage(id++, pClass, pEncoder, pDecoder, pMessage);
   }
 }

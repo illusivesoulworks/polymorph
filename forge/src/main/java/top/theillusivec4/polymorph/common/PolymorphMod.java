@@ -24,8 +24,9 @@ import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.client.ClientEventsListener;
 import top.theillusivec4.polymorph.client.PolymorphClientMod;
-import top.theillusivec4.polymorph.common.capability.FurnaceRecipeProcessor;
+import top.theillusivec4.polymorph.common.capability.FurnaceRecipeData;
 import top.theillusivec4.polymorph.common.capability.PolymorphCapabilities;
+import top.theillusivec4.polymorph.common.capability.AbstractTileEntityRecipeData;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.common.integration.craftingstation.CraftingStationModule;
 import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
@@ -72,14 +73,14 @@ public class PolymorphMod {
     });
   }
 
-  private void setup(final FMLCommonSetupEvent evt) {
+  private void setup(final FMLCommonSetupEvent pEvent) {
     PolymorphNetwork.setup();
     PolymorphCapabilities.register();
     MinecraftForge.EVENT_BUS.register(new CommonEventsListener());
     IPolymorphCommon commonApi = PolymorphApi.common();
-    commonApi.registerTileEntity2Processor(tileEntity -> {
+    commonApi.registerTileEntity2RecipeData(tileEntity -> {
       if (tileEntity instanceof AbstractFurnaceTileEntity) {
-        return new FurnaceRecipeProcessor((AbstractFurnaceTileEntity) tileEntity);
+        return new FurnaceRecipeData((AbstractFurnaceTileEntity) tileEntity);
       }
       return null;
     });
@@ -99,7 +100,7 @@ public class PolymorphMod {
     }
   }
 
-  private void clientSetup(final FMLClientSetupEvent evt) {
+  private void clientSetup(final FMLClientSetupEvent pEvent) {
     PolymorphClientMod.setup();
     MinecraftForge.EVENT_BUS.register(new ClientEventsListener());
 
@@ -108,8 +109,8 @@ public class PolymorphMod {
     }
   }
 
-  private void registerCommand(final RegisterCommandsEvent evt) {
-    PolymorphCommands.register(evt.getDispatcher());
+  private void registerCommand(final RegisterCommandsEvent pEvent) {
+    PolymorphCommands.register(pEvent.getDispatcher());
   }
 
   public static Set<AbstractCompatibilityModule> getIntegrations() {
