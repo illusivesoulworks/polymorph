@@ -1,7 +1,6 @@
 package top.theillusivec4.polymorph.common.capability;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -26,7 +25,10 @@ import top.theillusivec4.polymorph.common.impl.RecipePair;
 
 public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
 
-  private final Set<IRecipePair> recipesList;
+  private static final Comparator<IRecipePair> COMPARATOR =
+      Comparator.comparing(pair -> pair.getOutput().getTranslationKey());
+
+  private final SortedSet<IRecipePair> recipesList;
   private final E owner;
 
   private IRecipe<?> lastRecipe;
@@ -34,7 +36,7 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
   private ResourceLocation loadedRecipe;
 
   public AbstractRecipeData(E pOwner) {
-    this.recipesList = new HashSet<>();
+    this.recipesList = new TreeSet<>(COMPARATOR);
     this.owner = pOwner;
   }
 
@@ -51,7 +53,6 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
         });
 
     if (this.isEmpty(pInventory)) {
-      this.syncRecipesList(new HashSet<>());
       return Optional.empty();
     }
     AtomicReference<T> ref = new AtomicReference<>(null);
@@ -77,17 +78,14 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
     T result = ref.get();
 
     if (result != null) {
-      this.syncRecipesList(this.getRecipesList());
       return Optional.of(result);
     }
-    SortedSet<IRecipePair> newDataset =
-        new TreeSet<>(Comparator.comparing(pair -> pair.getOutput().getTranslationKey()));
+    SortedSet<IRecipePair> newDataset = new TreeSet<>(COMPARATOR);
     List<T> recipes =
         pRecipes.isEmpty() ? pWorld.getRecipeManager().getRecipes(pType, pInventory, pWorld) :
             pRecipes;
 
     if (recipes.isEmpty()) {
-      this.syncRecipesList(new HashSet<>());
       return Optional.empty();
     }
 
@@ -101,15 +99,12 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
       newDataset.add(new RecipePair(id, entry.getCraftingResult(pInventory)));
     }
     this.setRecipeDataset(newDataset);
-    this.syncRecipesList(newDataset);
     result = ref.get();
     result = result != null ? result : recipes.get(0);
     this.lastRecipe = result;
     this.setSelectedRecipe(result);
     return Optional.of(result);
   }
-
-  public abstract void syncRecipesList(Set<IRecipePair> pRecipesList);
 
   @Override
   public Optional<? extends IRecipe<?>> getSelectedRecipe() {
@@ -131,12 +126,12 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
 
   @Nonnull
   @Override
-  public Set<IRecipePair> getRecipesList() {
+  public SortedSet<IRecipePair> getRecipesList() {
     return this.recipesList;
   }
 
   @Override
-  public void setRecipeDataset(@Nonnull Set<IRecipePair> pData) {
+  public void setRecipeDataset(@Nonnull SortedSet<IRecipePair> pData) {
     this.recipesList.clear();
     this.recipesList.addAll(pData);
   }

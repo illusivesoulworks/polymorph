@@ -1,4 +1,4 @@
-package top.theillusivec4.polymorph.mixin.integration.refinedstorage;
+package top.theillusivec4.polymorph.mixin.integration.refinedstorageaddons;
 
 import com.refinedmods.refinedstorage.api.network.grid.ICraftingGridListener;
 import com.refinedmods.refinedstorageaddons.item.WirelessCraftingGrid;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import top.theillusivec4.polymorph.mixin.util.integration.RefinedStorageHooks;
+import top.theillusivec4.polymorph.mixin.util.integration.RefinedStorageMixinHooks;
 
 @SuppressWarnings("unused")
 @Mixin(WirelessCraftingGrid.class)
@@ -26,7 +26,7 @@ public class MixinWirelessCraftingGrid {
   @Redirect(at = @At(value = "INVOKE", target = "net/minecraft/item/crafting/RecipeManager.getRecipe(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;"), method = "onCraftingMatrixChanged", remap = false)
   private <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world) {
-    return RefinedStorageHooks.getWirelessRecipe(recipeManager, type, inventory, world,
+    return RefinedStorageMixinHooks.getWirelessRecipe(recipeManager, type, inventory, world,
         listeners.stream().findFirst().orElse(null));
   }
 }

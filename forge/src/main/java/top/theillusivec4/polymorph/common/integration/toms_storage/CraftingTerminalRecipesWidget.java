@@ -12,34 +12,10 @@ import top.theillusivec4.polymorph.client.recipe.widget.PersistentRecipesWidget;
 public class CraftingTerminalRecipesWidget extends PersistentRecipesWidget {
 
   private final Slot outputSlot;
-  private final CraftingInventory craftingInventory;
 
-  public CraftingTerminalRecipesWidget(ContainerScreen<?> containerScreen,
-                                       CraftingInventory craftingInventory, Slot outputSlot) {
+  public CraftingTerminalRecipesWidget(ContainerScreen<?> containerScreen, Slot outputSlot) {
     super(containerScreen);
     this.outputSlot = outputSlot;
-    this.craftingInventory = craftingInventory;
-  }
-
-  @Override
-  protected NonNullList<ItemStack> getInput() {
-    NonNullList<ItemStack> stacks =
-        NonNullList.withSize(this.craftingInventory.getSizeInventory(), ItemStack.EMPTY);
-
-    for (int i = 0; i < this.craftingInventory.getSizeInventory(); i++) {
-      stacks.set(i, this.craftingInventory.getStackInSlot(i));
-    }
-    return stacks;
-  }
-
-  @Override
-  public void highlightRecipe(ResourceLocation pResourceLocation) {
-    // NO-OP
-  }
-
-  @Override
-  public void selectRecipe(ResourceLocation pResourceLocation) {
-    PolymorphApi.common().getPacketDistributor().sendRecipeSelectionC2S(pResourceLocation);
   }
 
   @Override

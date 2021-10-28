@@ -3,6 +3,13 @@ package top.theillusivec4.polymorph.common.integration.cyclic;
 import com.lothrazar.cyclic.block.crafter.ContainerCrafter;
 import com.lothrazar.cyclic.block.crafter.ScreenCrafter;
 import com.lothrazar.cyclic.block.crafter.TileCrafter;
+import com.lothrazar.cyclic.item.crafting.CraftingBagContainer;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
@@ -37,5 +44,35 @@ public class CyclicModule extends AbstractCompatibilityModule {
       }
       return null;
     });
+  }
+
+  @Override
+  public boolean openContainer(Container container, ServerPlayerEntity serverPlayerEntity) {
+
+    if (container instanceof CraftingBagContainer) {
+      PolymorphApi.common().getRecipeData(serverPlayerEntity)
+          .ifPresent(recipeData -> container.onCraftMatrixChanged(null));
+      return true;
+    }
+    return false;
+  }
+
+  @SuppressWarnings({"unchecked", "ConstantConditions"})
+  @Override
+  public boolean selectRecipe(TileEntity tileEntity, IRecipe<?> recipe) {
+
+    if (tileEntity instanceof TileCrafter) {
+      PolymorphAccessor.writeField(tileEntity, "lastValidRecipe", recipe);
+      PolymorphAccessor.writeField(tileEntity, "recipeOutput", recipe.getRecipeOutput());
+      LazyOptional<IItemHandler> preview =
+          (LazyOptional<IItemHandler>) PolymorphAccessor.readField(tileEntity, "preview");
+
+      if (preview != null) {
+        PolymorphAccessor.invokeMethod(tileEntity, "setPreviewSlot", preview.orElse(null),
+            recipe.getRecipeOutput());
+      }
+      return true;
+    }
+    return false;
   }
 }

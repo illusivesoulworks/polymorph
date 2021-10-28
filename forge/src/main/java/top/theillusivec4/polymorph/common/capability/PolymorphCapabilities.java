@@ -1,13 +1,14 @@
 package top.theillusivec4.polymorph.common.capability;
 
-import java.util.HashSet;
+import com.mojang.datafixers.util.Pair;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
@@ -96,7 +97,7 @@ public class PolymorphCapabilities {
       implements ITileEntityRecipeData {
 
     @Override
-    public void syncRecipesList(ServerPlayerEntity pPlayer) {
+    public void tick() {
 
     }
 
@@ -108,6 +109,11 @@ public class PolymorphCapabilities {
     @Override
     public void setFailing(boolean pFailing) {
 
+    }
+
+    @Override
+    public Pair<SortedSet<IRecipePair>, ResourceLocation> getPacketData() {
+      return null;
     }
   }
 
@@ -133,12 +139,12 @@ public class PolymorphCapabilities {
 
     @Nonnull
     @Override
-    public Set<IRecipePair> getRecipesList() {
-      return new HashSet<>();
+    public SortedSet<IRecipePair> getRecipesList() {
+      return new TreeSet<>(Comparator.comparing(pair -> pair.getOutput().getTranslationKey()));
     }
 
     @Override
-    public void setRecipeDataset(@Nonnull Set<IRecipePair> pData) {
+    public void setRecipeDataset(@Nonnull SortedSet<IRecipePair> pData) {
 
     }
 

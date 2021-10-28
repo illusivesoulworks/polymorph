@@ -1,6 +1,5 @@
 package top.theillusivec4.polymorph.common.integration.tconstruct;
 
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
@@ -8,7 +7,6 @@ import slimeknights.tconstruct.tables.inventory.table.CraftingStationContainer;
 import slimeknights.tconstruct.tables.tileentity.table.CraftingStationTileEntity;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
-import top.theillusivec4.polymorph.common.util.PolymorphAccessor;
 
 public class TinkersConstructModule extends AbstractCompatibilityModule {
 
@@ -28,10 +26,7 @@ public class TinkersConstructModule extends AbstractCompatibilityModule {
       if (containerScreen.getContainer() instanceof CraftingStationContainer) {
         CraftingStationContainer craftingStationContainer =
             (CraftingStationContainer) containerScreen.getContainer();
-        CraftingInventory inv =
-            (CraftingInventory) PolymorphAccessor.readField(craftingStationContainer.getTile(),
-                "craftingInventory");
-        return new CraftingStationRecipesWidget(containerScreen, inv,
+        return new CraftingStationRecipesWidget(containerScreen,
             craftingStationContainer.inventorySlots.get(9));
       }
       return null;

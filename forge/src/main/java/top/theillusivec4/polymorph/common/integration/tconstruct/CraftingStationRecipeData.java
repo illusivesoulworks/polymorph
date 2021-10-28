@@ -1,39 +1,39 @@
 package top.theillusivec4.polymorph.common.integration.tconstruct;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import slimeknights.tconstruct.tables.tileentity.table.CraftingStationTileEntity;
-import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 import top.theillusivec4.polymorph.common.capability.AbstractTileEntityRecipeData;
+import top.theillusivec4.polymorph.common.util.PolymorphAccessor;
 
 public class CraftingStationRecipeData
     extends AbstractTileEntityRecipeData<CraftingStationTileEntity> {
+
+  private CraftingInventory craftingInventory;
 
   public CraftingStationRecipeData(CraftingStationTileEntity pOwner) {
     super(pOwner);
   }
 
   @Override
-  public boolean isEmpty() {
-    return this.getOwner().isEmpty();
-  }
+  protected NonNullList<ItemStack> getInput() {
 
-  @Override
-  public List<ServerPlayerEntity> getListeningPlayers() {
-    return new ArrayList<>();
-  }
-
-  @Override
-  public void syncRecipesList(ServerPlayerEntity pPlayer) {
-    Set<IRecipePair> recipesList = new HashSet<>();
-
-    if (!this.isFailing()) {
-      recipesList.addAll(this.getRecipesList());
+    if (this.craftingInventory == null) {
+      this.craftingInventory =
+          (CraftingInventory) PolymorphAccessor.readField(this.getOwner(), "craftingInventory");
     }
-    PolymorphApi.common().getPacketDistributor().sendRecipesListS2C(pPlayer, recipesList);
+
+    if (this.craftingInventory != null) {
+
+      NonNullList<ItemStack> input =
+          NonNullList.withSize(this.craftingInventory.getSizeInventory(), ItemStack.EMPTY);
+
+      for (int i = 0; i < this.craftingInventory.getSizeInventory(); i++) {
+        input.set(i, this.craftingInventory.getStackInSlot(i));
+      }
+      return input;
+    }
+    return NonNullList.create();
   }
 }

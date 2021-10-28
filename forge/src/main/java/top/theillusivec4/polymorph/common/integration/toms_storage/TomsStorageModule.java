@@ -2,7 +2,8 @@ package top.theillusivec4.polymorph.common.integration.toms_storage;
 
 import com.tom.storagemod.gui.ContainerCraftingTerminal;
 import com.tom.storagemod.tile.TileEntityCraftingTerminal;
-import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.tileentity.TileEntity;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.base.IPolymorphClient;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
@@ -33,17 +34,23 @@ public class TomsStorageModule extends AbstractCompatibilityModule {
     IPolymorphClient clientApi = PolymorphApi.client();
     clientApi.registerWidget(containerScreen -> {
       if (containerScreen.getContainer() instanceof ContainerCraftingTerminal) {
-        CraftingInventory inv =
-            (CraftingInventory) PolymorphAccessor.readField(containerScreen.getContainer(),
-                "craftMatrix");
-
-        if (inv != null) {
-          return clientApi.findCraftingResultSlot(containerScreen)
-              .map(slot -> new CraftingTerminalRecipesWidget(containerScreen, inv, slot))
-              .orElse(null);
-        }
+        return clientApi.findCraftingResultSlot(containerScreen)
+            .map(slot -> new CraftingTerminalRecipesWidget(containerScreen, slot))
+            .orElse(null);
       }
       return null;
     });
+  }
+
+  @Override
+  public boolean selectRecipe(TileEntity tileEntity, IRecipe<?> recipe) {
+
+    if (tileEntity instanceof TileEntityCraftingTerminal) {
+      TileEntityCraftingTerminal te = (TileEntityCraftingTerminal) tileEntity;
+      PolymorphAccessor.writeField(te, "currentRecipe", recipe);
+      PolymorphAccessor.invokeMethod(te, "onCraftingMatrixChanged");
+      return true;
+    }
+    return false;
   }
 }

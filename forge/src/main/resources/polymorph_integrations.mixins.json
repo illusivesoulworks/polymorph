@@ -14,10 +14,9 @@
     "prettypipes.MixinCraftingTerminalContainer",
     "refinedstorage.MixinCraftingPatternFactory",
     "refinedstorage.MixinGridNetworkNode",
-    "refinedstorage.MixinWirelessCraftingGrid",
+    "refinedstorageaddons.MixinWirelessCraftingGrid",
     "storagenetwork.MixinContainerNetwork",
     "tconstruct.MixinCraftingStationTileEntity",
-    "toms_storage.MixinContainerCraftingTerminal",
     "toms_storage.MixinTileEntityCraftingTerminal"
   ],
   "plugin": "top.theillusivec4.polymorph.mixin.IntegratedMixinPlugin",

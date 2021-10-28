@@ -28,10 +28,10 @@ import top.theillusivec4.polymorph.mixin.util.integration.TinkersConstructMixinH
 @Mixin(CraftingStationTileEntity.class)
 public abstract class MixinCraftingStationTileEntity extends RetexturedTableTileEntity {
 
-  @Shadow
+  @Shadow(remap = false)
   private ICraftingRecipe lastRecipe;
 
-  @Shadow
+  @Shadow(remap = false)
   @Final
   private CraftingInventoryWrapper craftingInventory;
 

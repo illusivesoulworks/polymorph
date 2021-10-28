@@ -17,9 +17,22 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
-public class RefinedStorageHooks {
+public class RefinedStorageMixinHooks {
 
   public static boolean loaded = false;
+
+  public static <C extends IInventory, T extends IRecipe<C>> Optional<T> getRecipe(
+      IRecipeType<T> type, C inventory, World world, BlockPos pos) {
+
+    if (!world.isRemote() && loaded) {
+      TileEntity te = world.getTileEntity(pos);
+
+      if (te != null) {
+        return RecipeSelection.getTileEntityRecipe(type, inventory, world, te);
+      }
+    }
+    return world.getRecipeManager().getRecipes(type, inventory, world).stream().findFirst();
+  }
 
   public static void appendPattern(boolean exactPattern, ItemStack stack, BlockPos pos,
                                    World world) {
@@ -35,8 +48,9 @@ public class RefinedStorageHooks {
         TileEntity te = world.getTileEntity(pos);
 
         if (te instanceof GridTile) {
-          Optional<ICraftingRecipe> recipe = RecipeSelection.getTileEntityRecipe(IRecipeType.CRAFTING,
-              ((GridTile) te).getNode().getCraftingMatrix(), world, te);
+          Optional<ICraftingRecipe> recipe =
+              RecipeSelection.getTileEntityRecipe(IRecipeType.CRAFTING,
+                  ((GridTile) te).getNode().getCraftingMatrix(), world, te);
           recipe.ifPresent(
               rec -> stack.getTag().putString("PolymorphRecipe", rec.getId().toString()));
         }

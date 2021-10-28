@@ -28,9 +28,9 @@ public class PolymorphAccessor {
     }
   }
 
-  public static void invokeMethod(Object pTarget, String pMethodName) {
+  public static void invokeMethod(Object pTarget, String pMethodName, Object... args) {
     try {
-      MethodUtils.invokeMethod(pTarget, true, pMethodName);
+      MethodUtils.invokeMethod(pTarget, true, pMethodName, args);
     } catch (InvocationTargetException | IllegalAccessException e) {
       PolymorphMod.LOGGER.error("Failed to invoke {} for {}", pMethodName, pTarget);
     } catch (NoSuchMethodException e) {

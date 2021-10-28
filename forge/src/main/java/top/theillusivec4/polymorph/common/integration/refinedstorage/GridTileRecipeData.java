@@ -1,21 +1,20 @@
-package top.theillusivec4.polymorph.common.integration.toms_storage;
+package top.theillusivec4.polymorph.common.integration.refinedstorage;
 
-import com.tom.storagemod.tile.TileEntityCraftingTerminal;
+import com.refinedmods.refinedstorage.tile.grid.GridTile;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import top.theillusivec4.polymorph.common.capability.AbstractTileEntityRecipeData;
 
-public class CraftingTerminalRecipeData
-    extends AbstractTileEntityRecipeData<TileEntityCraftingTerminal> {
+public class GridTileRecipeData extends AbstractTileEntityRecipeData<GridTile> {
 
-  public CraftingTerminalRecipeData(TileEntityCraftingTerminal pOwner) {
+  public GridTileRecipeData(GridTile pOwner) {
     super(pOwner);
   }
 
   @Override
   protected NonNullList<ItemStack> getInput() {
-    CraftingInventory craftingInventory = this.getOwner().getCraftingInv();
+    CraftingInventory craftingInventory = this.getOwner().getNode().getCraftingMatrix();
 
     if (craftingInventory != null) {
       NonNullList<ItemStack> stacks =

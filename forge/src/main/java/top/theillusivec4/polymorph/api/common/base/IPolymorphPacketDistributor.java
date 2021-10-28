@@ -10,8 +10,6 @@ public interface IPolymorphPacketDistributor {
 
   void sendRecipeSelectionC2S(ResourceLocation pResourceLocation);
 
-  void sendRecipesRequestC2S();
-
   void sendRecipesListS2C(ServerPlayerEntity pPlayer);
 
   void sendRecipesListS2C(ServerPlayerEntity pPlayer, Set<IRecipePair> pRecipesList);

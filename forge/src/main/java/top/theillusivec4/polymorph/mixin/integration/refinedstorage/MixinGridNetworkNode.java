@@ -17,8 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
-import top.theillusivec4.polymorph.mixin.util.integration.RefinedStorageHooks;
+import top.theillusivec4.polymorph.mixin.util.integration.RefinedStorageMixinHooks;
 
 @SuppressWarnings("unused")
 @Mixin(GridNetworkNode.class)
@@ -43,7 +42,7 @@ public abstract class MixinGridNetworkNode extends NetworkNode {
       remap = false)
   private <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world) {
-    return RecipeSelection.getTileEntityRecipe(type, inventory, world, this.world.getTileEntity(this.pos));
+    return RefinedStorageMixinHooks.getRecipe(type, inventory, world, this.pos);
   }
 
   @Inject(
@@ -51,7 +50,7 @@ public abstract class MixinGridNetworkNode extends NetworkNode {
       method = "onCreatePattern",
       remap = false)
   private void polymorph$onCreatePattern(CallbackInfo ci) {
-    RefinedStorageHooks.appendPattern(this.exactPattern, this.patterns.getStackInSlot(1), this.pos,
+    RefinedStorageMixinHooks.appendPattern(this.exactPattern, this.patterns.getStackInSlot(1), this.pos,
         this.world);
   }
 }

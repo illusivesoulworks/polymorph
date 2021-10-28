@@ -1,5 +1,7 @@
 package top.theillusivec4.polymorph.common;
 
+import com.mojang.datafixers.util.Pair;
+import java.util.SortedSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
@@ -9,13 +11,19 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.INBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
+import top.theillusivec4.polymorph.api.common.base.IPolymorphPacketDistributor;
+import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 import top.theillusivec4.polymorph.api.common.capability.IPlayerRecipeData;
 import top.theillusivec4.polymorph.api.common.capability.ITileEntityRecipeData;
 import top.theillusivec4.polymorph.common.capability.PlayerRecipeData;
@@ -32,6 +40,19 @@ public class CommonEventsListener {
     if (!player.world.isRemote() && player instanceof ServerPlayerEntity) {
       ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
       Container container = pEvent.getContainer();
+      IPolymorphCommon commonApi = PolymorphApi.common();
+      commonApi.getRecipeData(container).ifPresent(
+          recipeData -> {
+            IPolymorphPacketDistributor packetDistributor = commonApi.getPacketDistributor();
+
+            if (recipeData.isFailing()) {
+              packetDistributor.sendRecipesListS2C(serverPlayerEntity);
+            } else {
+              Pair<SortedSet<IRecipePair>, ResourceLocation> data = recipeData.getPacketData();
+              packetDistributor.sendRecipesListS2C(serverPlayerEntity, data.getFirst(),
+                  data.getSecond());
+            }
+          });
 
       for (AbstractCompatibilityModule integration : PolymorphMod.getIntegrations()) {
 
@@ -43,7 +64,20 @@ public class CommonEventsListener {
   }
 
   @SubscribeEvent
-  public void attachCapabilities(AttachCapabilitiesEvent<TileEntity> pEvent) {
+  public void worldTick(final TickEvent.WorldTickEvent evt) {
+    World world = evt.world;
+
+    if (!world.isRemote() && evt.phase == TickEvent.Phase.END) {
+
+      for (TileEntity tileEntity : world.loadedTileEntityList) {
+        PolymorphApi.common().getRecipeData(tileEntity)
+            .ifPresent(ITileEntityRecipeData::tick);
+      }
+    }
+  }
+
+  @SubscribeEvent
+  public void attachCapabilities(final AttachCapabilitiesEvent<TileEntity> pEvent) {
     TileEntity te = pEvent.getObject();
     PolymorphApi.common().tryCreateRecipeData(te).ifPresent(
         recipeData -> pEvent.addCapability(PolymorphCapabilities.TILE_ENTITY_RECIPE_DATA_ID,
@@ -51,7 +85,7 @@ public class CommonEventsListener {
   }
 
   @SubscribeEvent
-  public void attachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> pEvent) {
+  public void attachCapabilitiesPlayer(final AttachCapabilitiesEvent<Entity> pEvent) {
     Entity entity = pEvent.getObject();
 
     if (entity instanceof PlayerEntity) {

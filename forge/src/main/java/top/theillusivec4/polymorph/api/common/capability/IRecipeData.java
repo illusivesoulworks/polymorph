@@ -2,7 +2,7 @@ package top.theillusivec4.polymorph.api.common.capability;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.SortedSet;
 import javax.annotation.Nonnull;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
@@ -23,9 +23,9 @@ public interface IRecipeData<E> {
   void setSelectedRecipe(@Nonnull IRecipe<?> pRecipe);
 
   @Nonnull
-  Set<IRecipePair> getRecipesList();
+  SortedSet<IRecipePair> getRecipesList();
 
-  void setRecipeDataset(@Nonnull Set<IRecipePair> pData);
+  void setRecipeDataset(@Nonnull SortedSet<IRecipePair> pData);
 
   boolean isEmpty(IInventory pInventory);
 

@@ -23,7 +23,7 @@ import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 @Mixin(CraftingTerminalContainer.class)
 public class MixinCraftingTerminalContainer extends ItemTerminalContainer {
 
-  @Shadow
+  @Shadow(remap = false)
   @Final
   private PlayerEntity player;
 

@@ -3,10 +3,7 @@ package top.theillusivec4.polymorph.common.integration.cyclic;
 import com.lothrazar.cyclic.block.crafter.ContainerCrafter;
 import com.lothrazar.cyclic.block.crafter.TileCrafter;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import top.theillusivec4.polymorph.client.recipe.widget.PersistentRecipesWidget;
 
 public class CrafterRecipesWidget extends PersistentRecipesWidget {
@@ -26,7 +23,7 @@ public class CrafterRecipesWidget extends PersistentRecipesWidget {
   }
 
   @Override
-  protected NonNullList<ItemStack> getInput() {
-    return null;
+  public int getYPos() {
+    return super.getYPos() + 3;
   }
 }
