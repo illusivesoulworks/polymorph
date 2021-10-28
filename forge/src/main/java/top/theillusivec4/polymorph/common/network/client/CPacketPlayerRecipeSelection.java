@@ -2,6 +2,7 @@ package top.theillusivec4.polymorph.common.network.client;
 
 import java.util.function.Supplier;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.AbstractRepairContainer;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
@@ -44,6 +45,10 @@ public class CPacketPlayerRecipeSelection {
             }
           }
           container.onCraftMatrixChanged(sender.inventory);
+
+          if (container instanceof AbstractRepairContainer) {
+            ((AbstractRepairContainer) container).updateRepairOutput();
+          }
         });
       }
     });
