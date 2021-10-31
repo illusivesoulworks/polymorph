@@ -15,6 +15,8 @@
     "refinedstorage.MixinCraftingPatternFactory",
     "refinedstorage.MixinGridNetworkNode",
     "refinedstorageaddons.MixinWirelessCraftingGrid",
+    "sophisticatedbackpacks.MixinBackpackContainer",
+    "sophisticatedbackpacks.MixinCraftingUpgradeContainer",
     "storagenetwork.MixinContainerNetwork",
     "tconstruct.MixinCraftingStationTileEntity",
     "toms_storage.MixinTileEntityCraftingTerminal"

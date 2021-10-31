@@ -10,15 +10,19 @@ import net.minecraft.client.gui.widget.button.ImageButton;
 public class OpenSelectionButton extends ImageButton {
 
   private final ContainerScreen<?> containerScreen;
-  private final int xOffset;
-  private final int yOffset;
+  private int xOffset;
+  private int yOffset;
 
-  public OpenSelectionButton(ContainerScreen<?> pContainerScreen, int pX, int pY, int pXOffset,
-                             int pYOffset, Button.IPressable pOnPress) {
-    super(pX, pY, 16, 16, 0, 0, 17, AbstractRecipesWidget.WIDGETS, 256, 256, pOnPress);
+  public OpenSelectionButton(ContainerScreen<?> pContainerScreen, int pX, int pY, Button.IPressable pOnPress) {
+    super(0,0, 16, 16, 0, 0, 17, AbstractRecipesWidget.WIDGETS, 256, 256, pOnPress);
     this.containerScreen = pContainerScreen;
-    this.xOffset = pXOffset;
-    this.yOffset = pYOffset;
+    this.xOffset = pX;
+    this.yOffset = pY;
+  }
+
+  public void setOffsets(int pX, int pY) {
+    this.xOffset = pX;
+    this.yOffset = pY;
   }
 
   @SuppressWarnings("deprecation")

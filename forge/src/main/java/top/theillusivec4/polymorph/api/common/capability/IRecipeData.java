@@ -1,13 +1,17 @@
 package top.theillusivec4.polymorph.api.common.capability;
 
+import com.mojang.datafixers.util.Pair;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.SortedSet;
 import javax.annotation.Nonnull;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 
@@ -18,6 +22,8 @@ public interface IRecipeData<E> {
                                                                      World pWorld,
                                                                      List<T> pRecipes);
 
+  void selectRecipe(@Nonnull IRecipe<?> pRecipe);
+
   Optional<? extends IRecipe<?>> getSelectedRecipe();
 
   void setSelectedRecipe(@Nonnull IRecipe<?> pRecipe);
@@ -25,11 +31,21 @@ public interface IRecipeData<E> {
   @Nonnull
   SortedSet<IRecipePair> getRecipesList();
 
-  void setRecipeDataset(@Nonnull SortedSet<IRecipePair> pData);
+  void setRecipesList(@Nonnull SortedSet<IRecipePair> pData);
 
   boolean isEmpty(IInventory pInventory);
 
+  Set<ServerPlayerEntity> getListeners();
+
+  void sendRecipesListToListeners(boolean pEmpty);
+
+  Pair<SortedSet<IRecipePair>, ResourceLocation> getPacketData();
+
   E getOwner();
+
+  boolean isFailing();
+
+  void setFailing(boolean pFailing);
 
   CompoundNBT writeNBT();
 

@@ -33,8 +33,8 @@ public class SelectionWidget extends AbstractGui
   private final Consumer<ResourceLocation> onSelect;
   private final ContainerScreen<?> containerScreen;
   private final List<OutputWidget> outputWidgets = new ArrayList<>();
-  private final int xOffset;
-  private final int yOffset;
+  private int xOffset;
+  private int yOffset;
 
   private OutputWidget hoveredButton;
   private boolean active = false;
@@ -57,6 +57,11 @@ public class SelectionWidget extends AbstractGui
     this.x = pX;
     this.y = pY;
     this.updateButtonPositions();
+  }
+
+  public void setOffsets(int pX, int pY) {
+    this.xOffset = pX;
+    this.yOffset = pY;
   }
 
   public void highlightButton(ResourceLocation pResourceLocation) {

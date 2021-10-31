@@ -39,7 +39,7 @@ public class OutputWidget extends Widget {
         256, 256);
     int k = 4;
     float zLevel = minecraft.getItemRenderer().zLevel;
-    minecraft.getItemRenderer().zLevel = 600.0F;
+    minecraft.getItemRenderer().zLevel = 700.0F;
     minecraft.getItemRenderer()
         .renderItemAndEffectIntoGUI(this.getOutput(), this.x + k, this.y + k);
     minecraft.getItemRenderer().zLevel = zLevel;

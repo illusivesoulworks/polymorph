@@ -1,7 +1,6 @@
 package top.theillusivec4.polymorph.common.capability;
 
 import com.mojang.datafixers.util.Pair;
-import java.util.Set;
 import java.util.SortedSet;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -19,10 +18,10 @@ public abstract class AbstractHighlightedRecipeData<E extends TileEntity>
   }
 
   @Override
-  public void setSelectedRecipe(@Nonnull IRecipe<?> pRecipe) {
-    super.setSelectedRecipe(pRecipe);
+  public void selectRecipe(@Nonnull IRecipe<?> pRecipe) {
+    super.selectRecipe(pRecipe);
 
-    for (ServerPlayerEntity listeningPlayer : this.getListeningPlayers()) {
+    for (ServerPlayerEntity listeningPlayer : this.getListeners()) {
       PolymorphApi.common().getPacketDistributor()
           .sendHighlightRecipeS2C(listeningPlayer, pRecipe.getId());
     }

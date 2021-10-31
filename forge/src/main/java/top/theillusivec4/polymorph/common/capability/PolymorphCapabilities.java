@@ -4,12 +4,15 @@ import com.mojang.datafixers.util.Pair;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
@@ -26,6 +29,7 @@ import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 import top.theillusivec4.polymorph.api.common.capability.IPlayerRecipeData;
 import top.theillusivec4.polymorph.api.common.capability.IRecipeData;
+import top.theillusivec4.polymorph.api.common.capability.IStackRecipeData;
 import top.theillusivec4.polymorph.api.common.capability.ITileEntityRecipeData;
 
 public class PolymorphCapabilities {
@@ -36,15 +40,21 @@ public class PolymorphCapabilities {
   @CapabilityInject(ITileEntityRecipeData.class)
   public static final Capability<ITileEntityRecipeData> TILE_ENTITY_RECIPE_DATA;
 
+  @CapabilityInject(IStackRecipeData.class)
+  public static final Capability<IStackRecipeData> STACK_RECIPE_DATA;
+
   static {
     PLAYER_RECIPE_DATA = null;
     TILE_ENTITY_RECIPE_DATA = null;
+    STACK_RECIPE_DATA = null;
   }
 
   public static final ResourceLocation PLAYER_RECIPE_DATA_ID =
       new ResourceLocation(PolymorphApi.MOD_ID, "player_recipe_data");
   public static final ResourceLocation TILE_ENTITY_RECIPE_DATA_ID =
       new ResourceLocation(PolymorphApi.MOD_ID, "tile_entity_recipe_data");
+  public static final ResourceLocation STACK_RECIPE_DATA_ID =
+      new ResourceLocation(PolymorphApi.MOD_ID, "stack_recipe_data");
 
   public static LazyOptional<IPlayerRecipeData> getRecipeData(PlayerEntity pPlayer) {
     return pPlayer.getCapability(PLAYER_RECIPE_DATA);
@@ -52,6 +62,10 @@ public class PolymorphCapabilities {
 
   public static LazyOptional<ITileEntityRecipeData> getRecipeData(TileEntity pTileEntity) {
     return pTileEntity.getCapability(TILE_ENTITY_RECIPE_DATA);
+  }
+
+  public static LazyOptional<IStackRecipeData> getRecipeData(ItemStack pStack) {
+    return pStack.getCapability(STACK_RECIPE_DATA);
   }
 
   public static void register() {
@@ -72,6 +86,21 @@ public class PolymorphCapabilities {
           }
         }, EmptyPlayerRecipeData::new);
     manager.register(
+        IStackRecipeData.class, new Capability.IStorage<IStackRecipeData>() {
+          @Nullable
+          @Override
+          public INBT writeNBT(Capability<IStackRecipeData> capability,
+                               IStackRecipeData instance, Direction side) {
+            return instance.writeNBT();
+          }
+
+          @Override
+          public void readNBT(Capability<IStackRecipeData> capability,
+                              IStackRecipeData instance, Direction side, INBT nbt) {
+            instance.readNBT((CompoundNBT) nbt);
+          }
+        }, EmptyStackRecipeData::new);
+    manager.register(
         ITileEntityRecipeData.class, new Capability.IStorage<ITileEntityRecipeData>() {
           @Nullable
           @Override
@@ -90,6 +119,11 @@ public class PolymorphCapabilities {
 
   private static final class EmptyPlayerRecipeData extends EmptyRecipeData<PlayerEntity>
       implements IPlayerRecipeData {
+
+  }
+
+  private static final class EmptyStackRecipeData extends EmptyRecipeData<ItemStack>
+      implements IStackRecipeData {
 
   }
 
@@ -137,6 +171,11 @@ public class PolymorphCapabilities {
 
     }
 
+    @Override
+    public void selectRecipe(@Nonnull IRecipe<?> pRecipe) {
+
+    }
+
     @Nonnull
     @Override
     public SortedSet<IRecipePair> getRecipesList() {
@@ -144,7 +183,7 @@ public class PolymorphCapabilities {
     }
 
     @Override
-    public void setRecipeDataset(@Nonnull SortedSet<IRecipePair> pData) {
+    public void setRecipesList(@Nonnull SortedSet<IRecipePair> pData) {
 
     }
 
@@ -154,8 +193,33 @@ public class PolymorphCapabilities {
     }
 
     @Override
+    public Set<ServerPlayerEntity> getListeners() {
+      return null;
+    }
+
+    @Override
+    public void sendRecipesListToListeners(boolean pEmpty) {
+
+    }
+
+    @Override
+    public Pair<SortedSet<IRecipePair>, ResourceLocation> getPacketData() {
+      return null;
+    }
+
+    @Override
     public E getOwner() {
       return null;
+    }
+
+    @Override
+    public boolean isFailing() {
+      return false;
+    }
+
+    @Override
+    public void setFailing(boolean pFailing) {
+
     }
 
     @Override

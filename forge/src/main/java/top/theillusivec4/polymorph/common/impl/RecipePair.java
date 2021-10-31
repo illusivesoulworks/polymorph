@@ -1,6 +1,7 @@
 package top.theillusivec4.polymorph.common.impl;
 
 import java.util.Objects;
+import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import top.theillusivec4.polymorph.api.common.base.IRecipePair;
@@ -40,5 +41,10 @@ public class RecipePair implements IRecipePair {
   @Override
   public int hashCode() {
     return Objects.hash(output);
+  }
+
+  @Override
+  public int compareTo(@Nonnull IRecipePair pOther) {
+    return this.getOutput().getTranslationKey().compareTo(pOther.getOutput().getTranslationKey());
   }
 }

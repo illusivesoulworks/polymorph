@@ -1,6 +1,6 @@
 package top.theillusivec4.polymorph.common.capability;
 
-import java.util.Comparator;
+import com.mojang.datafixers.util.Pair;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -8,6 +8,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -18,6 +19,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 import top.theillusivec4.polymorph.api.common.capability.IRecipeData;
 import top.theillusivec4.polymorph.common.PolymorphMod;
@@ -25,18 +27,16 @@ import top.theillusivec4.polymorph.common.impl.RecipePair;
 
 public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
 
-  private static final Comparator<IRecipePair> COMPARATOR =
-      Comparator.comparing(pair -> pair.getOutput().getTranslationKey());
-
   private final SortedSet<IRecipePair> recipesList;
   private final E owner;
 
   private IRecipe<?> lastRecipe;
   private IRecipe<?> selectedRecipe;
   private ResourceLocation loadedRecipe;
+  private boolean isFailing;
 
   public AbstractRecipeData(E pOwner) {
-    this.recipesList = new TreeSet<>(COMPARATOR);
+    this.recipesList = new TreeSet<>();
     this.owner = pOwner;
   }
 
@@ -48,11 +48,20 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
                                                                             List<T> pRecipes) {
     this.getLoadedRecipe().flatMap(id -> pWorld.getRecipeManager().getRecipe(id))
         .ifPresent(selected -> {
-          this.setSelectedRecipe(selected);
+          try {
+            if (selected.getType() == pType && ((T) selected).matches(pInventory, pWorld)) {
+              this.setSelectedRecipe(selected);
+            }
+          } catch (ClassCastException e) {
+            PolymorphMod.LOGGER.error("Recipe {} does not match inventory {}",
+                selected.getId(), pInventory);
+          }
           this.loadedRecipe = null;
         });
 
     if (this.isEmpty(pInventory)) {
+      this.setFailing(true);
+      this.sendRecipesListToListeners(true);
       return Optional.empty();
     }
     AtomicReference<T> ref = new AtomicReference<>(null);
@@ -78,14 +87,18 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
     T result = ref.get();
 
     if (result != null) {
+      this.setFailing(false);
+      this.sendRecipesListToListeners(false);
       return Optional.of(result);
     }
-    SortedSet<IRecipePair> newDataset = new TreeSet<>(COMPARATOR);
+    SortedSet<IRecipePair> newDataset = new TreeSet<>();
     List<T> recipes =
         pRecipes.isEmpty() ? pWorld.getRecipeManager().getRecipes(pType, pInventory, pWorld) :
             pRecipes;
 
     if (recipes.isEmpty()) {
+      this.setFailing(true);
+      this.sendRecipesListToListeners(true);
       return Optional.empty();
     }
 
@@ -98,11 +111,13 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
       }
       newDataset.add(new RecipePair(id, entry.getCraftingResult(pInventory)));
     }
-    this.setRecipeDataset(newDataset);
+    this.setRecipesList(newDataset);
     result = ref.get();
     result = result != null ? result : recipes.get(0);
     this.lastRecipe = result;
     this.setSelectedRecipe(result);
+    this.setFailing(false);
+    this.sendRecipesListToListeners(false);
     return Optional.of(result);
   }
 
@@ -131,17 +146,63 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
   }
 
   @Override
-  public void setRecipeDataset(@Nonnull SortedSet<IRecipePair> pData) {
+  public void setRecipesList(@Nonnull SortedSet<IRecipePair> pData) {
     this.recipesList.clear();
     this.recipesList.addAll(pData);
   }
 
   @Override
-  public abstract boolean isEmpty(IInventory pInventory);
+  public boolean isEmpty(IInventory pInventory) {
+
+    if (pInventory != null) {
+
+      for (int i = 0; i < pInventory.getSizeInventory(); i++) {
+
+        if (!pInventory.getStackInSlot(i).isEmpty()) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 
   @Override
   public E getOwner() {
     return this.owner;
+  }
+
+  @Override
+  public void selectRecipe(@Nonnull IRecipe<?> pRecipe) {
+    this.setSelectedRecipe(pRecipe);
+  }
+
+  @Override
+  public abstract Set<ServerPlayerEntity> getListeners();
+
+  @Override
+  public void sendRecipesListToListeners(boolean pEmpty) {
+    Pair<SortedSet<IRecipePair>, ResourceLocation> packetData =
+        pEmpty ? new Pair<>(new TreeSet<>(), null) : this.getPacketData();
+
+    for (ServerPlayerEntity listener : this.getListeners()) {
+      PolymorphApi.common().getPacketDistributor()
+          .sendRecipesListS2C(listener, packetData.getFirst(), packetData.getSecond());
+    }
+  }
+
+  @Override
+  public Pair<SortedSet<IRecipePair>, ResourceLocation> getPacketData() {
+    return new Pair<>(this.getRecipesList(), null);
+  }
+
+  @Override
+  public boolean isFailing() {
+    return this.isFailing;
+  }
+
+  @Override
+  public void setFailing(boolean pFailing) {
+    this.isFailing = pFailing;
   }
 
   @Override

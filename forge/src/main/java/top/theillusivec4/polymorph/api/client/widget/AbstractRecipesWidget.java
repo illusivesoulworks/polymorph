@@ -26,7 +26,7 @@ public abstract class AbstractRecipesWidget implements IRecipesWidget {
   protected final int yOffset;
 
   protected SelectionWidget selectionWidget;
-  protected Button openButton;
+  protected OpenSelectionButton openButton;
 
   public AbstractRecipesWidget(ContainerScreen<?> pContainerScreen, int pXOffset, int pYOffset) {
     this.containerScreen = pContainerScreen;
@@ -45,10 +45,16 @@ public abstract class AbstractRecipesWidget implements IRecipesWidget {
     this.selectionWidget =
         new SelectionWidget(x + this.xOffset, y + this.yOffset, this.getXPos() + this.xOffset,
             this.getYPos() + this.yOffset, this::selectRecipe, this.containerScreen);
-    this.openButton =
-        new OpenSelectionButton(this.containerScreen, x, y, this.getXPos(), this.getYPos(),
-            clickWidget -> this.selectionWidget.setActive(!this.selectionWidget.isActive()));
+    this.openButton = new OpenSelectionButton(this.containerScreen, this.getXPos(), this.getYPos(),
+        clickWidget -> this.selectionWidget.setActive(!this.selectionWidget.isActive()));
     this.openButton.visible = this.selectionWidget.getOutputWidgets().size() > 1;
+  }
+
+  protected void resetWidgetOffsets() {
+    int x = this.getXPos();
+    int y = this.getYPos();
+    this.selectionWidget.setOffsets(x + this.xOffset, y + this.yOffset);
+    this.openButton.setOffsets(x, y);
   }
 
   @Override
@@ -78,7 +84,8 @@ public abstract class AbstractRecipesWidget implements IRecipesWidget {
   }
 
   @Override
-  public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pRenderPartialTicks) {
+  public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY,
+                     float pRenderPartialTicks) {
     this.selectionWidget.render(pMatrixStack, pMouseX, pMouseY, pRenderPartialTicks);
     this.openButton.render(pMatrixStack, pMouseX, pMouseY, pRenderPartialTicks);
   }

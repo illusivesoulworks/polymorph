@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.INBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -25,6 +26,7 @@ import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphPacketDistributor;
 import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 import top.theillusivec4.polymorph.api.common.capability.IPlayerRecipeData;
+import top.theillusivec4.polymorph.api.common.capability.IStackRecipeData;
 import top.theillusivec4.polymorph.api.common.capability.ITileEntityRecipeData;
 import top.theillusivec4.polymorph.common.capability.PlayerRecipeData;
 import top.theillusivec4.polymorph.common.capability.PolymorphCapabilities;
@@ -41,11 +43,11 @@ public class CommonEventsListener {
       ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
       Container container = pEvent.getContainer();
       IPolymorphCommon commonApi = PolymorphApi.common();
-      commonApi.getRecipeData(container).ifPresent(
+      commonApi.getRecipeDataFromTileEntity(container).ifPresent(
           recipeData -> {
             IPolymorphPacketDistributor packetDistributor = commonApi.getPacketDistributor();
 
-            if (recipeData.isFailing()) {
+            if (recipeData.isFailing() || recipeData.isEmpty(null)) {
               packetDistributor.sendRecipesListS2C(serverPlayerEntity);
             } else {
               Pair<SortedSet<IRecipePair>, ResourceLocation> data = recipeData.getPacketData();
@@ -92,6 +94,42 @@ public class CommonEventsListener {
       PlayerRecipeData data = new PlayerRecipeData((PlayerEntity) entity);
       pEvent.addCapability(PolymorphCapabilities.PLAYER_RECIPE_DATA_ID,
           new PlayerRecipeDataProvider(data));
+    }
+  }
+
+  @SubscribeEvent
+  public void attachCapabilitiesStack(final AttachCapabilitiesEvent<ItemStack> pEvent) {
+    ItemStack stack = pEvent.getObject();
+    PolymorphApi.common().tryCreateRecipeData(stack).ifPresent(
+        recipeData -> pEvent.addCapability(PolymorphCapabilities.STACK_RECIPE_DATA_ID,
+            new StackRecipeDataProvider(recipeData)));
+  }
+
+  private static class StackRecipeDataProvider implements ICapabilitySerializable<INBT> {
+
+    final IStackRecipeData recipeData;
+    final LazyOptional<IStackRecipeData> capability;
+
+    public StackRecipeDataProvider(IStackRecipeData pRecipeData) {
+      this.recipeData = pRecipeData;
+      this.capability = LazyOptional.of(() -> this.recipeData);
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> pCapability,
+                                             @Nullable Direction pDirection) {
+      return PolymorphCapabilities.STACK_RECIPE_DATA.orEmpty(pCapability, this.capability);
+    }
+
+    @Override
+    public INBT serializeNBT() {
+      return PolymorphCapabilities.STACK_RECIPE_DATA.writeNBT(this.recipeData, null);
+    }
+
+    @Override
+    public void deserializeNBT(INBT pNbt) {
+      PolymorphCapabilities.STACK_RECIPE_DATA.readNBT(this.recipeData, null, pNbt);
     }
   }
 

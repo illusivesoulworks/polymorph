@@ -8,7 +8,9 @@ public interface IPolymorphPacketDistributor {
 
   void sendPlayerRecipeSelectionC2S(ResourceLocation pResourceLocation);
 
-  void sendRecipeSelectionC2S(ResourceLocation pResourceLocation);
+  void sendPersistentRecipeSelectionC2S(ResourceLocation pResourceLocation);
+
+  void sendStackRecipeSelectionC2S(ResourceLocation pResourceLocation);
 
   void sendRecipesListS2C(ServerPlayerEntity pPlayer);
 

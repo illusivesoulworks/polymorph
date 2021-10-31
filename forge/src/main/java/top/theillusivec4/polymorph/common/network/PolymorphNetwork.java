@@ -11,6 +11,7 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.common.network.client.CPacketPersistentRecipeSelection;
 import top.theillusivec4.polymorph.common.network.client.CPacketPlayerRecipeSelection;
+import top.theillusivec4.polymorph.common.network.client.CPacketStackRecipeSelection;
 import top.theillusivec4.polymorph.common.network.server.SPacketHighlightRecipe;
 import top.theillusivec4.polymorph.common.network.server.SPacketRecipesList;
 
@@ -36,6 +37,8 @@ public class PolymorphNetwork {
         CPacketPlayerRecipeSelection::decode, CPacketPlayerRecipeSelection::handle);
     register(CPacketPersistentRecipeSelection.class, CPacketPersistentRecipeSelection::encode,
         CPacketPersistentRecipeSelection::decode, CPacketPersistentRecipeSelection::handle);
+    register(CPacketStackRecipeSelection.class, CPacketStackRecipeSelection::encode,
+        CPacketStackRecipeSelection::decode, CPacketStackRecipeSelection::handle);
 
     // Server-to-Client
     register(SPacketRecipesList.class, SPacketRecipesList::encode, SPacketRecipesList::decode,

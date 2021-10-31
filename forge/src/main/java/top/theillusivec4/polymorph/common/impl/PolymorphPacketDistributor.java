@@ -9,6 +9,7 @@ import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
 import top.theillusivec4.polymorph.common.network.client.CPacketPlayerRecipeSelection;
 import top.theillusivec4.polymorph.common.network.client.CPacketPersistentRecipeSelection;
+import top.theillusivec4.polymorph.common.network.client.CPacketStackRecipeSelection;
 import top.theillusivec4.polymorph.common.network.server.SPacketHighlightRecipe;
 import top.theillusivec4.polymorph.common.network.server.SPacketRecipesList;
 
@@ -21,9 +22,15 @@ public class PolymorphPacketDistributor implements IPolymorphPacketDistributor {
   }
 
   @Override
-  public void sendRecipeSelectionC2S(ResourceLocation pResourceLocation) {
+  public void sendPersistentRecipeSelectionC2S(ResourceLocation pResourceLocation) {
     PolymorphNetwork.get().send(PacketDistributor.SERVER.noArg(),
         new CPacketPersistentRecipeSelection(pResourceLocation));
+  }
+
+  @Override
+  public void sendStackRecipeSelectionC2S(ResourceLocation pResourceLocation) {
+    PolymorphNetwork.get().send(PacketDistributor.SERVER.noArg(),
+        new CPacketStackRecipeSelection(pResourceLocation));
   }
 
   @Override

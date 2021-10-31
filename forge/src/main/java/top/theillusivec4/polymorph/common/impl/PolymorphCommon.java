@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Optional;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.LazyOptional;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphPacketDistributor;
 import top.theillusivec4.polymorph.api.common.capability.IPlayerRecipeData;
+import top.theillusivec4.polymorph.api.common.capability.IStackRecipeData;
 import top.theillusivec4.polymorph.api.common.capability.ITileEntityRecipeData;
 import top.theillusivec4.polymorph.common.capability.PolymorphCapabilities;
 
@@ -23,6 +25,8 @@ public class PolymorphCommon implements IPolymorphCommon {
 
   private final List<ITileEntity2RecipeData> tileEntity2RecipeData = new LinkedList<>();
   private final List<IContainer2TileEntity> container2TileEntities = new LinkedList<>();
+  private final List<IContainer2ItemStack> container2ItemStacks = new LinkedList<>();
+  private final List<IItemStack2RecipeData> itemStack2RecipeData = new LinkedList<>();
   private final IPolymorphPacketDistributor distributor = new PolymorphPacketDistributor();
 
   @Override
@@ -49,13 +53,44 @@ public class PolymorphCommon implements IPolymorphCommon {
   }
 
   @Override
-  public LazyOptional<ITileEntityRecipeData> getRecipeData(Container pContainer) {
+  public LazyOptional<ITileEntityRecipeData> getRecipeDataFromTileEntity(Container pContainer) {
 
     for (IContainer2TileEntity function : this.container2TileEntities) {
       TileEntity tileEntity = function.getTileEntity(pContainer);
 
       if (tileEntity != null) {
         return this.getRecipeData(tileEntity);
+      }
+    }
+    return LazyOptional.empty();
+  }
+
+  @Override
+  public Optional<IStackRecipeData> tryCreateRecipeData(ItemStack pStack) {
+
+    for (IItemStack2RecipeData function : this.itemStack2RecipeData) {
+      IStackRecipeData recipeData = function.createRecipeData(pStack);
+
+      if (recipeData != null) {
+        return Optional.of(recipeData);
+      }
+    }
+    return Optional.empty();
+  }
+
+  @Override
+  public LazyOptional<IStackRecipeData> getRecipeData(ItemStack pStack) {
+    return PolymorphCapabilities.getRecipeData(pStack);
+  }
+
+  @Override
+  public LazyOptional<IStackRecipeData> getRecipeDataFromItemStack(Container pContainer) {
+
+    for (IContainer2ItemStack function : this.container2ItemStacks) {
+      ItemStack itemstack = function.getItemStack(pContainer);
+
+      if (!itemstack.isEmpty()) {
+        return this.getRecipeData(itemstack);
       }
     }
     return LazyOptional.empty();
@@ -75,5 +110,15 @@ public class PolymorphCommon implements IPolymorphCommon {
   @Override
   public void registerContainer2TileEntity(IContainer2TileEntity pContainer2TileEntity) {
     this.container2TileEntities.add(pContainer2TileEntity);
+  }
+
+  @Override
+  public void registerItemStack2RecipeData(IItemStack2RecipeData pItemStack2RecipeData) {
+    this.itemStack2RecipeData.add(pItemStack2RecipeData);
+  }
+
+  @Override
+  public void registerContainer2ItemStack(IContainer2ItemStack pContainer2ItemStack) {
+    this.container2ItemStacks.add(pContainer2ItemStack);
   }
 }
