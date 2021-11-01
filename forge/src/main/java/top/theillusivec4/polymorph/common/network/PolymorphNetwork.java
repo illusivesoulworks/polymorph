@@ -13,6 +13,7 @@ import top.theillusivec4.polymorph.common.network.client.CPacketPersistentRecipe
 import top.theillusivec4.polymorph.common.network.client.CPacketPlayerRecipeSelection;
 import top.theillusivec4.polymorph.common.network.client.CPacketStackRecipeSelection;
 import top.theillusivec4.polymorph.common.network.server.SPacketHighlightRecipe;
+import top.theillusivec4.polymorph.common.network.server.SPacketPlayerRecipeSync;
 import top.theillusivec4.polymorph.common.network.server.SPacketRecipesList;
 
 public class PolymorphNetwork {
@@ -45,11 +46,13 @@ public class PolymorphNetwork {
         SPacketRecipesList::handle);
     register(SPacketHighlightRecipe.class, SPacketHighlightRecipe::encode,
         SPacketHighlightRecipe::decode, SPacketHighlightRecipe::handle);
+    register(SPacketPlayerRecipeSync.class, SPacketPlayerRecipeSync::encode,
+        SPacketPlayerRecipeSync::decode, SPacketPlayerRecipeSync::handle);
   }
 
-  private static <M> void register(Class<M> pClass, BiConsumer<M, PacketBuffer> pEncoder,
-                                   Function<PacketBuffer, M> pDecoder,
-                                   BiConsumer<M, Supplier<NetworkEvent.Context>> pMessage) {
+  public static <M> void register(Class<M> pClass, BiConsumer<M, PacketBuffer> pEncoder,
+                                  Function<PacketBuffer, M> pDecoder,
+                                  BiConsumer<M, Supplier<NetworkEvent.Context>> pMessage) {
     instance.registerMessage(id++, pClass, pEncoder, pDecoder, pMessage);
   }
 }

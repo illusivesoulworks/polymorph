@@ -26,7 +26,6 @@ import top.theillusivec4.polymorph.client.ClientEventsListener;
 import top.theillusivec4.polymorph.client.PolymorphClientMod;
 import top.theillusivec4.polymorph.common.capability.FurnaceRecipeData;
 import top.theillusivec4.polymorph.common.capability.PolymorphCapabilities;
-import top.theillusivec4.polymorph.common.capability.AbstractTileEntityRecipeData;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.common.integration.craftingstation.CraftingStationModule;
 import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
@@ -39,6 +38,7 @@ import top.theillusivec4.polymorph.common.integration.sophisticatedbackpacks.Sop
 import top.theillusivec4.polymorph.common.integration.tconstruct.TinkersConstructModule;
 import top.theillusivec4.polymorph.common.integration.toms_storage.TomsStorageModule;
 import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
+import top.theillusivec4.polymorph.common.integration.appliedenergistics2.AppliedEnergisticsModule;
 import top.theillusivec4.polymorph.server.PolymorphCommands;
 
 @Mod(PolymorphApi.MOD_ID)
@@ -61,6 +61,7 @@ public class PolymorphMod {
     INTEGRATIONS.put("cyclic", CyclicModule::new);
     INTEGRATIONS.put("toms_storage", TomsStorageModule::new);
     INTEGRATIONS.put("sophisticatedbackpacks", SophisticatedBackpacksModule::new);
+    INTEGRATIONS.put("appliedenergistics2", AppliedEnergisticsModule::new);
   }
 
   public PolymorphMod() {

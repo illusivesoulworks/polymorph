@@ -43,6 +43,7 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
     CLASS_TO_MOD.put("slimeknights.tconstruct", "tconstruct");
     CLASS_TO_MOD.put("com.lothrazar.cyclic", "cyclic");
     CLASS_TO_MOD.put("net.p3pp3rf1y.sophisticatedbackpacks", "sophisticatedbackpacks");
+    CLASS_TO_MOD.put("appeng.", "appliedenergistics2");
   }
 
   @Override

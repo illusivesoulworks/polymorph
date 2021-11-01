@@ -103,6 +103,7 @@ dependencies {
     compile fg.deobf("curse.maven:mantle-74924:3439180")
     compile fg.deobf("curse.maven:cyclic-239286:3484473")
     compile fg.deobf("curse.maven:sophisticatedbackpacks-422301:3504750")
+    compile fg.deobf("curse.maven:ae2-223794:3502523")
 
     runtimeOnly fg.deobf("curse.maven:vanillatweaks-272637:${file_vanillatweaks}")
     runtimeOnly fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")

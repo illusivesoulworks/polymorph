@@ -21,4 +21,7 @@ public interface IPolymorphPacketDistributor {
                           ResourceLocation pSelected);
 
   void sendHighlightRecipeS2C(ServerPlayerEntity pPlayer, ResourceLocation pResourceLocation);
+
+  void sendPlayerSyncS2C(ServerPlayerEntity pPlayer, SortedSet<IRecipePair> pRecipesList,
+                         ResourceLocation pSelected);
 }
