@@ -24,27 +24,21 @@ public class RecipeSelection {
   public static <T extends IRecipe<C>, C extends IInventory> Optional<T> getPlayerRecipe(
       IRecipeType<T> pType, C pInventory, World pWorld, PlayerEntity pPlayer, List<T> pRecipes) {
     return PolymorphApi.common().getRecipeData(pPlayer)
-        .map(recipeData -> recipeData.getRecipe(pType, pInventory, pWorld, pRecipes)).orElse(null);
+        .map(recipeData -> recipeData.getRecipe(pType, pInventory, pWorld, pRecipes))
+        .orElse(Optional.empty());
   }
 
   public static <T extends IRecipe<C>, C extends IInventory> Optional<T> getStackRecipe(
-      IRecipeType<T> pType, C pInventory, World pWorld, PlayerEntity pPlayer, ItemStack pStack) {
+      IRecipeType<T> pType, C pInventory, World pWorld, ItemStack pStack) {
     return PolymorphApi.common().getRecipeData(pStack)
-        .map(recipeData -> {
-          if (pPlayer instanceof ServerPlayerEntity) {
-            Set<ServerPlayerEntity> listeners = recipeData.getListeners();
-            listeners.clear();
-            listeners.add((ServerPlayerEntity) pPlayer);
-          }
-          return recipeData.getRecipe(pType, pInventory, pWorld, new ArrayList<>());
-        })
-        .orElse(null);
+        .map(recipeData -> recipeData.getRecipe(pType, pInventory, pWorld, new ArrayList<>()))
+        .orElse(Optional.empty());
   }
 
   public static <T extends IRecipe<C>, C extends IInventory> Optional<T> getTileEntityRecipe(
       IRecipeType<T> pType, C pInventory, World pWorld, TileEntity pTileEntity) {
     return PolymorphApi.common().getRecipeData(pTileEntity)
         .map(recipeData -> recipeData.getRecipe(pType, pInventory, pWorld, new ArrayList<>()))
-        .orElse(null);
+        .orElse(Optional.empty());
   }
 }

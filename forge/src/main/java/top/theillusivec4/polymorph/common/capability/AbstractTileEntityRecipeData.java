@@ -19,7 +19,6 @@ import top.theillusivec4.polymorph.api.common.capability.ITileEntityRecipeData;
 public abstract class AbstractTileEntityRecipeData<E extends TileEntity>
     extends AbstractRecipeData<TileEntity> implements ITileEntityRecipeData {
 
-  private boolean isFailing;
   private NonNullList<ItemStack> lastInput;
 
   public AbstractTileEntityRecipeData(E pOwner) {

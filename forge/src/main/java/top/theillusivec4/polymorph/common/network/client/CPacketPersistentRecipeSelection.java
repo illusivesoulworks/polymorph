@@ -42,7 +42,7 @@ public class CPacketPersistentRecipeSelection {
           Container container = sender.openContainer;
           PolymorphApi.common().getRecipeDataFromTileEntity(container)
               .ifPresent(recipeData -> {
-                recipeData.setSelectedRecipe(recipe);
+                recipeData.selectRecipe(recipe);
 
                 for (AbstractCompatibilityModule integration : PolymorphMod.getIntegrations()) {
 

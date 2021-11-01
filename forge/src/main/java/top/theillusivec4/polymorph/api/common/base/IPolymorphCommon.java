@@ -4,6 +4,7 @@ import java.util.Optional;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.LazyOptional;
 import top.theillusivec4.polymorph.api.common.capability.IPlayerRecipeData;
@@ -35,6 +36,10 @@ public interface IPolymorphCommon {
   void registerContainer2ItemStack(IContainer2ItemStack pContainer2ItemStack);
 
   IPolymorphPacketDistributor getPacketDistributor();
+
+  void setServer(MinecraftServer pServer);
+
+  Optional<MinecraftServer> getServer();
 
   interface IItemStack2RecipeData {
 

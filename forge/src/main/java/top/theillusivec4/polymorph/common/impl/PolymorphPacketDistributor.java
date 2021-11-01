@@ -1,6 +1,7 @@
 package top.theillusivec4.polymorph.common.impl;
 
 import java.util.Set;
+import java.util.SortedSet;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -39,13 +40,13 @@ public class PolymorphPacketDistributor implements IPolymorphPacketDistributor {
   }
 
   @Override
-  public void sendRecipesListS2C(ServerPlayerEntity pPlayer, Set<IRecipePair> pRecipesList) {
+  public void sendRecipesListS2C(ServerPlayerEntity pPlayer, SortedSet<IRecipePair> pRecipesList) {
     PolymorphNetwork.get().send(PacketDistributor.PLAYER.with(() -> pPlayer),
         new SPacketRecipesList(pRecipesList, null));
   }
 
   @Override
-  public void sendRecipesListS2C(ServerPlayerEntity pPlayer, Set<IRecipePair> pRecipesList,
+  public void sendRecipesListS2C(ServerPlayerEntity pPlayer, SortedSet<IRecipePair> pRecipesList,
                                  ResourceLocation pSelected) {
     PolymorphNetwork.get().send(PacketDistributor.PLAYER.with(() -> pPlayer),
         new SPacketRecipesList(pRecipesList, pSelected));

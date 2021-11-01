@@ -60,7 +60,7 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
         });
 
     if (this.isEmpty(pInventory)) {
-      this.setFailing(true);
+      this.setFailing(false);
       this.sendRecipesListToListeners(true);
       return Optional.empty();
     }

@@ -6,6 +6,7 @@ import java.util.Optional;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.LazyOptional;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
@@ -29,9 +30,21 @@ public class PolymorphCommon implements IPolymorphCommon {
   private final List<IItemStack2RecipeData> itemStack2RecipeData = new LinkedList<>();
   private final IPolymorphPacketDistributor distributor = new PolymorphPacketDistributor();
 
+  private MinecraftServer server = null;
+
   @Override
   public IPolymorphPacketDistributor getPacketDistributor() {
     return distributor;
+  }
+
+  @Override
+  public void setServer(MinecraftServer pServer) {
+    this.server = pServer;
+  }
+
+  @Override
+  public Optional<MinecraftServer> getServer() {
+    return Optional.ofNullable(this.server);
   }
 
   @Override

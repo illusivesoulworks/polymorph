@@ -21,6 +21,8 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphPacketDistributor;
@@ -34,6 +36,16 @@ import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModul
 
 @SuppressWarnings("unused")
 public class CommonEventsListener {
+
+  @SubscribeEvent
+  public void serverAboutToStart(final FMLServerAboutToStartEvent evt) {
+    PolymorphApi.common().setServer(evt.getServer());
+  }
+
+  @SubscribeEvent
+  public void serverStopped(final FMLServerStoppedEvent evt) {
+    PolymorphApi.common().setServer(null);
+  }
 
   @SubscribeEvent
   public void openContainer(final PlayerContainerEvent.Open pEvent) {

@@ -42,7 +42,7 @@ public class CPacketStackRecipeSelection {
           Container container = sender.openContainer;
           PolymorphApi.common().getRecipeDataFromItemStack(container)
               .ifPresent(recipeData -> {
-                recipeData.setSelectedRecipe(recipe);
+                recipeData.selectRecipe(recipe);
 
                 for (AbstractCompatibilityModule integration : PolymorphMod.getIntegrations()) {
 

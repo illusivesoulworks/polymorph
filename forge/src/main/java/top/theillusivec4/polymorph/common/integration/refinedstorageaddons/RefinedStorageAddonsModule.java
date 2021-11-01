@@ -25,8 +25,8 @@ public class RefinedStorageAddonsModule extends AbstractCompatibilityModule {
       if (grid instanceof WirelessCraftingGrid) {
         PolymorphAccessor.writeField(grid, "currentRecipe", recipe);
         grid.onCraftingMatrixChanged();
+        return true;
       }
-      return true;
     }
     return false;
   }

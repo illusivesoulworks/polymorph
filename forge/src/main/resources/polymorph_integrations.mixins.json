@@ -15,8 +15,12 @@
     "refinedstorage.MixinCraftingPatternFactory",
     "refinedstorage.MixinGridNetworkNode",
     "refinedstorageaddons.MixinWirelessCraftingGrid",
+    "sophisticatedbackpacks.AccessorRecipeHelper",
+    "sophisticatedbackpacks.AccessorSmeltingLogic",
+    "sophisticatedbackpacks.AccessorSmeltingLogicContainer",
     "sophisticatedbackpacks.MixinBackpackContainer",
     "sophisticatedbackpacks.MixinCraftingUpgradeContainer",
+    "sophisticatedbackpacks.MixinSmeltingLogic",
     "storagenetwork.MixinContainerNetwork",
     "tconstruct.MixinCraftingStationTileEntity",
     "toms_storage.MixinTileEntityCraftingTerminal"

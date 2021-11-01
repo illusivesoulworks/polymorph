@@ -36,7 +36,7 @@ public class CPacketPlayerRecipeSelection {
         Container container = sender.openContainer;
         sender.world.getRecipeManager().getRecipe(pPacket.recipe).ifPresent(recipe -> {
           PolymorphApi.common().getRecipeData(sender)
-              .ifPresent(dataset -> dataset.setSelectedRecipe(recipe));
+              .ifPresent(recipeData -> recipeData.selectRecipe(recipe));
 
           for (AbstractCompatibilityModule integration : PolymorphMod.getIntegrations()) {
 

@@ -75,8 +75,8 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
       if (grid instanceof GridNetworkNode) {
         PolymorphAccessor.writeField(grid, "currentRecipe", recipe);
         grid.onCraftingMatrixChanged();
+        return true;
       }
-      return true;
     }
     return false;
   }

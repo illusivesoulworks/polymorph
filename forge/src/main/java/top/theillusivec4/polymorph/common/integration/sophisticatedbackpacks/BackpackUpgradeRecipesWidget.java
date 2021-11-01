@@ -12,7 +12,7 @@ import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.base.ITickingRecipesWidget;
 import top.theillusivec4.polymorph.api.client.widget.AbstractRecipesWidget;
 
-public class CraftingUpgradeRecipesWidget extends AbstractRecipesWidget implements
+public class BackpackUpgradeRecipesWidget extends AbstractRecipesWidget implements
     ITickingRecipesWidget {
 
   private final BackpackContainer backpackContainer;
@@ -21,7 +21,7 @@ public class CraftingUpgradeRecipesWidget extends AbstractRecipesWidget implemen
   private boolean isCrafting = false;
   private boolean isSmelting = false;
 
-  public CraftingUpgradeRecipesWidget(BackpackScreen pBackpackScreen,
+  public BackpackUpgradeRecipesWidget(BackpackScreen pBackpackScreen,
                                       BackpackContainer pBackpackContainer) {
     super(pBackpackScreen);
     this.backpackContainer = pBackpackContainer;
@@ -42,8 +42,8 @@ public class CraftingUpgradeRecipesWidget extends AbstractRecipesWidget implemen
     int upgradeId = this.backpackContainer.getOpenContainer().map(
         UpgradeContainerBase::getUpgradeContainerId).orElse(-1);
 
-    if (lastUpgradeId != upgradeId) {
-      lastUpgradeId = upgradeId;
+    if (this.lastUpgradeId != upgradeId) {
+      this.lastUpgradeId = upgradeId;
 
       if (upgradeId != -1) {
         UpgradeContainerBase<?, ?> upgradeContainerBase =
@@ -59,6 +59,7 @@ public class CraftingUpgradeRecipesWidget extends AbstractRecipesWidget implemen
           } else if (upgradeContainerBase instanceof SmeltingUpgradeContainer) {
             this.isSmelting = true;
             this.isCrafting = false;
+            this.outputSlot = upgradeContainerBase.getSlots().get(2);
             this.resetWidgetOffsets();
           } else {
             this.isSmelting = false;
@@ -89,7 +90,7 @@ public class CraftingUpgradeRecipesWidget extends AbstractRecipesWidget implemen
   public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY,
                      float pRenderPartialTicks) {
 
-    if (isCrafting || isSmelting) {
+    if (this.isCrafting || this.isSmelting) {
       super.render(pMatrixStack, pMouseX, pMouseY, pRenderPartialTicks);
     }
   }
@@ -97,7 +98,7 @@ public class CraftingUpgradeRecipesWidget extends AbstractRecipesWidget implemen
   @Override
   public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
 
-    if (isCrafting || isSmelting) {
+    if (this.isCrafting || this.isSmelting) {
       return super.mouseClicked(pMouseX, pMouseY, pButton);
     }
     return false;
@@ -105,11 +106,13 @@ public class CraftingUpgradeRecipesWidget extends AbstractRecipesWidget implemen
 
   @Override
   public int getXPos() {
-    return getOutputSlot().xPos - 21;
+    int xOffset = this.isCrafting ? -21 : 0;
+    return getOutputSlot().xPos - xOffset;
   }
 
   @Override
   public int getYPos() {
-    return getOutputSlot().yPos;
+    int yOffset = this.isCrafting ? 0 : -23;
+    return getOutputSlot().yPos + yOffset;
   }
 }

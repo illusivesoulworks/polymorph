@@ -60,6 +60,6 @@ public abstract class MixinCraftingUpgradeContainer extends
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world,
       World unused, PlayerEntity player, CraftingInventory unused2,
       CraftResultInventory inventoryResult, CraftingResultSlot craftingResultSlot) {
-    return RecipeSelection.getStackRecipe(type, inventory, world, player, this.getUpgradeStack());
+    return RecipeSelection.getStackRecipe(type, inventory, world, this.getUpgradeStack());
   }
 }

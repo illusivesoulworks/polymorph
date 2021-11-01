@@ -1,24 +1,28 @@
 package top.theillusivec4.polymorph.common.network.server;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
+import top.theillusivec4.polymorph.api.client.base.IRecipesWidget;
 import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 import top.theillusivec4.polymorph.client.recipe.RecipesWidget;
 import top.theillusivec4.polymorph.common.impl.RecipePair;
 
 public class SPacketRecipesList {
 
-  private final Set<IRecipePair> recipeList;
+  private final SortedSet<IRecipePair> recipeList;
   private final ResourceLocation selected;
 
-  public SPacketRecipesList(Set<IRecipePair> pRecipeList, ResourceLocation pSelected) {
-    this.recipeList = new HashSet<>();
+  public SPacketRecipesList(SortedSet<IRecipePair> pRecipeList, ResourceLocation pSelected) {
+    this.recipeList = new TreeSet<>();
 
     if (pRecipeList != null) {
       this.recipeList.addAll(pRecipeList);
@@ -43,7 +47,7 @@ public class SPacketRecipesList {
   }
 
   public static SPacketRecipesList decode(PacketBuffer pBuffer) {
-    Set<IRecipePair> recipeDataset = new HashSet<>();
+    SortedSet<IRecipePair> recipeDataset = new TreeSet<>();
     ResourceLocation selected = null;
 
     if (pBuffer.isReadable()) {
@@ -65,8 +69,12 @@ public class SPacketRecipesList {
       ClientPlayerEntity clientPlayerEntity = Minecraft.getInstance().player;
 
       if (clientPlayerEntity != null) {
-        RecipesWidget.get()
-            .ifPresent(widget -> widget.setRecipesList(pPacket.recipeList, pPacket.selected));
+        Optional<IRecipesWidget> maybeWidget = RecipesWidget.get();
+        maybeWidget.ifPresent(widget -> widget.setRecipesList(pPacket.recipeList, pPacket.selected));
+
+        if (!maybeWidget.isPresent()) {
+          RecipesWidget.enqueueRecipesList(pPacket.recipeList, pPacket.selected);
+        }
       }
     });
     pContext.get().setPacketHandled(true);
