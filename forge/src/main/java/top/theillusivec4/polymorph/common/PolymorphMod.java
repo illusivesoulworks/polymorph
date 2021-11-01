@@ -31,6 +31,7 @@ import top.theillusivec4.polymorph.common.integration.craftingstation.CraftingSt
 import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
 import top.theillusivec4.polymorph.common.integration.fastbench.FastBenchModule;
 import top.theillusivec4.polymorph.common.integration.fastfurnace.FastFurnaceModule;
+import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
 import top.theillusivec4.polymorph.common.integration.prettypipes.PrettyPipesModule;
 import top.theillusivec4.polymorph.common.integration.refinedstorage.RefinedStorageModule;
 import top.theillusivec4.polymorph.common.integration.refinedstorageaddons.RefinedStorageAddonsModule;
@@ -62,6 +63,7 @@ public class PolymorphMod {
     INTEGRATIONS.put("toms_storage", TomsStorageModule::new);
     INTEGRATIONS.put("sophisticatedbackpacks", SophisticatedBackpacksModule::new);
     INTEGRATIONS.put("appliedenergistics2", AppliedEnergisticsModule::new);
+    INTEGRATIONS.put("ironfurnaces", IronFurnacesModule::new);
   }
 
   public PolymorphMod() {
