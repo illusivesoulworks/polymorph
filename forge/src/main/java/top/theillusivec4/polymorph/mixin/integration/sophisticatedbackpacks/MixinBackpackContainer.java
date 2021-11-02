@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.theillusivec4.polymorph.mixin.util.integration.SophisticatedBackpacksMixinHooks;
+import top.theillusivec4.polymorph.common.integration.sophisticatedbackpacks.SophisticatedBackpacksModule;
 
 @Mixin(BackpackContainer.class)
 public class MixinBackpackContainer {
@@ -29,6 +29,6 @@ public class MixinBackpackContainer {
       remap = false
   )
   private void polymorph$setOpenTabId(int id, CallbackInfo ci) {
-    SophisticatedBackpacksMixinHooks.onOpenTab(id, this.player, this.upgradeContainers);
+    SophisticatedBackpacksModule.onOpenTab(id, this.player, this.upgradeContainers);
   }
 }

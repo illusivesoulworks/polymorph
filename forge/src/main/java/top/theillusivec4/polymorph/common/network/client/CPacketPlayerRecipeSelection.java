@@ -8,8 +8,8 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.common.PolymorphMod;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
+import top.theillusivec4.polymorph.common.integration.PolymorphIntegrations;
 
 public class CPacketPlayerRecipeSelection {
 
@@ -38,7 +38,7 @@ public class CPacketPlayerRecipeSelection {
           PolymorphApi.common().getRecipeData(sender)
               .ifPresent(recipeData -> recipeData.selectRecipe(recipe));
 
-          for (AbstractCompatibilityModule integration : PolymorphMod.getIntegrations()) {
+          for (AbstractCompatibilityModule integration : PolymorphIntegrations.get()) {
 
             if (integration.selectRecipe(container, recipe)) {
               return;

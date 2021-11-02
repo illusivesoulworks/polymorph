@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import top.theillusivec4.polymorph.mixin.util.integration.CyclicMixinHooks;
+import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
 
 @SuppressWarnings("unused")
 @Mixin(TileCrafter.class)
@@ -28,7 +28,7 @@ public abstract class MixinTileCrafter extends TileEntityBase {
       cancellable = true)
   private void polymorph$tryRecipes(ArrayList<ItemStack> stacks,
                                     CallbackInfoReturnable<IRecipe<?>> cir) {
-    CyclicMixinHooks.getRecipe(stacks, this.world, (TileCrafter) (Object) this)
+    CyclicModule.getRecipe(stacks, this.world, (TileCrafter) (Object) this)
         .ifPresent(cir::setReturnValue);
   }
 }

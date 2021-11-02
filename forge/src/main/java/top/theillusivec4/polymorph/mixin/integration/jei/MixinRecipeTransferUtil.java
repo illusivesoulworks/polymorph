@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import top.theillusivec4.polymorph.mixin.util.integration.JustEnoughItemsMixinHooks;
+import top.theillusivec4.polymorph.common.integration.jei.JeiModule;
 
 @SuppressWarnings("unused")
 @Mixin(RecipeTransferUtil.class)
@@ -41,6 +41,6 @@ public class MixinRecipeTransferUtil {
                                                Container container, RecipeLayout<?> recipeLayout,
                                                PlayerEntity player, boolean maxTransfer,
                                                CallbackInfoReturnable<IRecipeTransferError> cb) {
-    JustEnoughItemsMixinHooks.selectRecipe(recipeLayout.getRecipe());
+    JeiModule.selectRecipe(recipeLayout.getRecipe());
   }
 }

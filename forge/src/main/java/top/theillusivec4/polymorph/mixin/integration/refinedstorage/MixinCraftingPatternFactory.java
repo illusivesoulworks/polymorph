@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import top.theillusivec4.polymorph.mixin.util.integration.RefinedStorageMixinHooks;
+import top.theillusivec4.polymorph.common.integration.refinedstorage.RefinedStorageModule;
 
 @SuppressWarnings("unused")
 @Mixin(CraftingPatternFactory.class)
@@ -22,6 +22,6 @@ public class MixinCraftingPatternFactory {
   private <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getPatternRecipe(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world, World unused,
       ICraftingPatternContainer container, ItemStack stack) {
-    return RefinedStorageMixinHooks.getPatternRecipe(stack, type, inventory, world);
+    return RefinedStorageModule.getPatternRecipe(stack, type, inventory, world);
   }
 }

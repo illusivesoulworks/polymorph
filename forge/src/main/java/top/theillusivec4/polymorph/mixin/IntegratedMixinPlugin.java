@@ -25,25 +25,29 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
+import top.theillusivec4.polymorph.common.integration.PolymorphIntegrations;
 
 public class IntegratedMixinPlugin implements IMixinConfigPlugin {
 
   private static final Map<String, String> CLASS_TO_MOD = new HashMap<>();
 
   static {
-    CLASS_TO_MOD.put("mezz.jei", "jei");
-    CLASS_TO_MOD.put("net.blay09.mods.craftingcraft", "craftingcraft");
-    CLASS_TO_MOD.put("com.tfar.craftingstation", "craftingstation");
-    CLASS_TO_MOD.put("de.ellpeck.prettypipes", "prettypipes");
-    CLASS_TO_MOD.put("com.tom.storagemod", "toms_storage");
-    CLASS_TO_MOD.put("shadows.fastbench", "fastbench");
-    CLASS_TO_MOD.put("com.lothrazar.storagenetwork", "storagenetwork");
-    CLASS_TO_MOD.put("com.refinedmods.refinedstorage", "refinedstorage");
-    CLASS_TO_MOD.put("com.refinedmods.refinedstorageaddons", "refinedstorageaddons");
-    CLASS_TO_MOD.put("slimeknights.tconstruct", "tconstruct");
-    CLASS_TO_MOD.put("com.lothrazar.cyclic", "cyclic");
-    CLASS_TO_MOD.put("net.p3pp3rf1y.sophisticatedbackpacks", "sophisticatedbackpacks");
-    CLASS_TO_MOD.put("appeng.", "appliedenergistics2");
+    CLASS_TO_MOD.put("mezz.jei", PolymorphIntegrations.Ids.JEI);
+    CLASS_TO_MOD.put("net.blay09.mods.craftingcraft", PolymorphIntegrations.Ids.CRAFTINGCRAFT);
+    CLASS_TO_MOD.put("com.tfar.craftingstation", PolymorphIntegrations.Ids.CRAFTING_STATION);
+    CLASS_TO_MOD.put("de.ellpeck.prettypipes", PolymorphIntegrations.Ids.PRETTY_PIPES);
+    CLASS_TO_MOD.put("com.tom.storagemod", PolymorphIntegrations.Ids.TOMS_STORAGE);
+    CLASS_TO_MOD.put("shadows.fastbench", PolymorphIntegrations.Ids.FASTWORKBENCH);
+    CLASS_TO_MOD.put("com.lothrazar.storagenetwork",
+        PolymorphIntegrations.Ids.SIMPLE_STORAGE_NETWORK);
+    CLASS_TO_MOD.put("com.refinedmods.refinedstorage", PolymorphIntegrations.Ids.REFINED_STORAGE);
+    CLASS_TO_MOD.put("com.refinedmods.refinedstorageaddons",
+        PolymorphIntegrations.Ids.REFINED_STORAGE_ADDONS);
+    CLASS_TO_MOD.put("slimeknights.tconstruct", PolymorphIntegrations.Ids.TINKERS_CONSTRUCT);
+    CLASS_TO_MOD.put("com.lothrazar.cyclic", PolymorphIntegrations.Ids.CYCLIC);
+    CLASS_TO_MOD.put("net.p3pp3rf1y.sophisticatedbackpacks",
+        PolymorphIntegrations.Ids.SOPHISTICATED_BACKPACKS);
+    CLASS_TO_MOD.put("appeng.", PolymorphIntegrations.Ids.APPLIED_ENERGISTICS_2);
   }
 
   @Override

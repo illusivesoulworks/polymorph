@@ -33,6 +33,7 @@ import top.theillusivec4.polymorph.api.common.capability.ITileEntityRecipeData;
 import top.theillusivec4.polymorph.common.capability.PlayerRecipeData;
 import top.theillusivec4.polymorph.common.capability.PolymorphCapabilities;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
+import top.theillusivec4.polymorph.common.integration.PolymorphIntegrations;
 
 @SuppressWarnings("unused")
 public class CommonEventsListener {
@@ -68,7 +69,7 @@ public class CommonEventsListener {
             }
           });
 
-      for (AbstractCompatibilityModule integration : PolymorphMod.getIntegrations()) {
+      for (AbstractCompatibilityModule integration : PolymorphIntegrations.get()) {
 
         if (integration.openContainer(container, serverPlayerEntity)) {
           return;

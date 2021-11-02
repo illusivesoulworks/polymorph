@@ -22,7 +22,7 @@ import slimeknights.tconstruct.tables.tileentity.table.CraftingStationTileEntity
 import slimeknights.tconstruct.tables.tileentity.table.RetexturedTableTileEntity;
 import slimeknights.tconstruct.tables.tileentity.table.crafting.CraftingInventoryWrapper;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
-import top.theillusivec4.polymorph.mixin.util.integration.TinkersConstructMixinHooks;
+import top.theillusivec4.polymorph.common.integration.tconstruct.TinkersConstructModule;
 
 @SuppressWarnings("unused")
 @Mixin(CraftingStationTileEntity.class)
@@ -58,6 +58,6 @@ public abstract class MixinCraftingStationTileEntity extends RetexturedTableTile
       remap = false)
   private void polymorph$calcResult(@Nullable PlayerEntity player,
                                     CallbackInfoReturnable<ItemStack> cir) {
-    TinkersConstructMixinHooks.calcResult(this, player, this.lastRecipe, this.craftingInventory);
+    TinkersConstructModule.calcResult(this, player, this.lastRecipe, this.craftingInventory);
   }
 }

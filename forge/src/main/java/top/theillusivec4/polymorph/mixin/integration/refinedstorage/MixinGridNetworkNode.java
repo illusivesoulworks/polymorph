@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.theillusivec4.polymorph.mixin.util.integration.RefinedStorageMixinHooks;
+import top.theillusivec4.polymorph.common.integration.refinedstorage.RefinedStorageModule;
 
 @SuppressWarnings("unused")
 @Mixin(GridNetworkNode.class)
@@ -42,7 +42,7 @@ public abstract class MixinGridNetworkNode extends NetworkNode {
       remap = false)
   private <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world) {
-    return RefinedStorageMixinHooks.getRecipe(type, inventory, world, this.pos);
+    return RefinedStorageModule.getRecipe(type, inventory, world, this.pos);
   }
 
   @Inject(
@@ -50,7 +50,7 @@ public abstract class MixinGridNetworkNode extends NetworkNode {
       method = "onCreatePattern",
       remap = false)
   private void polymorph$onCreatePattern(CallbackInfo ci) {
-    RefinedStorageMixinHooks.appendPattern(this.exactPattern, this.patterns.getStackInSlot(1), this.pos,
+    RefinedStorageModule.appendPattern(this.exactPattern, this.patterns.getStackInSlot(1), this.pos,
         this.world);
   }
 }

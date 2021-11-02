@@ -8,10 +8,8 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import top.theillusivec4.polymorph.mixin.util.integration.SophisticatedBackpacksMixinHooks;
+import top.theillusivec4.polymorph.common.integration.sophisticatedbackpacks.SophisticatedBackpacksModule;
 
 @Mixin(SmeltingLogic.class)
 public abstract class MixinSmeltingLogic {
@@ -35,6 +33,6 @@ public abstract class MixinSmeltingLogic {
       method = "getSmeltingRecipe",
       remap = false)
   private Optional<FurnaceRecipe> polymorph$getSmeltingRecipe(ItemStack pStack) {
-    return SophisticatedBackpacksMixinHooks.getSmeltingRecipe(pStack, this.upgrade);
+    return SophisticatedBackpacksModule.getSmeltingRecipe(pStack, this.upgrade);
   }
 }

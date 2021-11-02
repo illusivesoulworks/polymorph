@@ -1,8 +1,13 @@
 package top.theillusivec4.polymorph.common.integration.tconstruct;
 
+import javax.annotation.Nullable;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
+import slimeknights.mantle.tileentity.InventoryTileEntity;
 import slimeknights.tconstruct.tables.inventory.table.CraftingStationContainer;
 import slimeknights.tconstruct.tables.tileentity.table.CraftingStationTileEntity;
 import top.theillusivec4.polymorph.api.PolymorphApi;
@@ -47,5 +52,18 @@ public class TinkersConstructModule extends AbstractCompatibilityModule {
       return true;
     }
     return false;
+  }
+
+  public static void calcResult(InventoryTileEntity pTileEntity, @Nullable PlayerEntity pPlayer,
+                                @Nullable ICraftingRecipe pRecipe,
+                                CraftingInventory pCraftingInventory) {
+
+    if (pPlayer instanceof ServerPlayerEntity) {
+      PolymorphApi.common().getRecipeData(pTileEntity).ifPresent(recipeData -> {
+        if (pRecipe != null && pRecipe.matches(pCraftingInventory, pTileEntity.getWorld())) {
+          recipeData.setFailing(false);
+        }
+      });
+    }
   }
 }

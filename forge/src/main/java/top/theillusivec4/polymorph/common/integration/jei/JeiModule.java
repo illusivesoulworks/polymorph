@@ -11,13 +11,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.Rectangle2d;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.widget.AbstractRecipesWidget;
 import top.theillusivec4.polymorph.client.recipe.RecipesWidget;
 
 @JeiPlugin
-public class PolymorphJeiPlugin implements IModPlugin {
+public class JeiModule implements IModPlugin {
 
   @Override
   public void registerGuiHandlers(IGuiHandlerRegistration registration) {
@@ -28,6 +29,14 @@ public class PolymorphJeiPlugin implements IModPlugin {
   @Override
   public ResourceLocation getPluginUid() {
     return new ResourceLocation(PolymorphApi.MOD_ID, "jei");
+  }
+
+  public static void selectRecipe(Object recipe) {
+
+    if (recipe instanceof IRecipe<?>) {
+      PolymorphApi.common().getPacketDistributor()
+          .sendPlayerRecipeSelectionC2S(((IRecipe<?>) recipe).getId());
+    }
   }
 
   private static class PolymorphContainer implements IGlobalGuiHandler {

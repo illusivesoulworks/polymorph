@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
-import top.theillusivec4.polymorph.mixin.util.integration.SophisticatedBackpacksMixinHooks;
+import top.theillusivec4.polymorph.common.integration.sophisticatedbackpacks.SophisticatedBackpacksModule;
 
 @Mixin(CraftingUpgradeContainer.class)
 public abstract class MixinCraftingUpgradeContainer extends
@@ -46,7 +46,7 @@ public abstract class MixinCraftingUpgradeContainer extends
                                               CraftResultInventory inventoryResult,
                                               CraftingResultSlot craftingResultSlot,
                                               CallbackInfo ci) {
-    SophisticatedBackpacksMixinHooks.updateCraftingResult(world, this.lastRecipe, inventory,
+    SophisticatedBackpacksModule.updateCraftingResult(world, this.lastRecipe, inventory,
         player, this.getUpgradeStack());
   }
 

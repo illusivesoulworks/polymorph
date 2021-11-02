@@ -10,8 +10,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.common.PolymorphMod;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
+import top.theillusivec4.polymorph.common.integration.PolymorphIntegrations;
 
 public class CPacketPersistentRecipeSelection {
 
@@ -44,7 +44,7 @@ public class CPacketPersistentRecipeSelection {
               .ifPresent(recipeData -> {
                 recipeData.selectRecipe(recipe);
 
-                for (AbstractCompatibilityModule integration : PolymorphMod.getIntegrations()) {
+                for (AbstractCompatibilityModule integration : PolymorphIntegrations.get()) {
 
                   if (integration.selectRecipe(recipeData.getOwner(), recipe) ||
                       integration.selectRecipe(container, recipe)) {
