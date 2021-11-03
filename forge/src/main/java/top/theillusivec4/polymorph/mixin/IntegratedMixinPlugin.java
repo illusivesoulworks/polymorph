@@ -31,6 +31,7 @@ import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import top.theillusivec4.polymorph.common.integration.PolymorphIntegrations;
 
+@SuppressWarnings("unused")
 public class IntegratedMixinPlugin implements IMixinConfigPlugin {
 
   private static final Map<String, String> CLASS_TO_MOD = new HashMap<>();

@@ -43,23 +43,23 @@ import top.theillusivec4.polymorph.common.integration.toms_storage.TomsStorageMo
 
 public class PolymorphIntegrations {
 
-  private static final Map<String, Supplier<AbstractCompatibilityModule>> INTEGRATIONS =
+  private static final Map<String, Supplier<Supplier<AbstractCompatibilityModule>>> INTEGRATIONS =
       new HashMap<>();
   private static final Set<AbstractCompatibilityModule> ACTIVE_INTEGRATIONS = new HashSet<>();
 
   static {
-    INTEGRATIONS.put(Ids.PRETTY_PIPES, PrettyPipesModule::new);
-    INTEGRATIONS.put(Ids.REFINED_STORAGE, RefinedStorageModule::new);
-    INTEGRATIONS.put(Ids.REFINED_STORAGE_ADDONS, RefinedStorageAddonsModule::new);
-    INTEGRATIONS.put(Ids.TINKERS_CONSTRUCT, TinkersConstructModule::new);
-    INTEGRATIONS.put(Ids.FASTWORKBENCH, FastBenchModule::new);
-    INTEGRATIONS.put(Ids.CRAFTING_STATION, CraftingStationModule::new);
-    INTEGRATIONS.put(Ids.FASTFURNACE, FastFurnaceModule::new);
-    INTEGRATIONS.put(Ids.CYCLIC, CyclicModule::new);
-    INTEGRATIONS.put(Ids.TOMS_STORAGE, TomsStorageModule::new);
-    INTEGRATIONS.put(Ids.SOPHISTICATED_BACKPACKS, SophisticatedBackpacksModule::new);
-    INTEGRATIONS.put(Ids.APPLIED_ENERGISTICS_2, AppliedEnergisticsModule::new);
-    INTEGRATIONS.put(Ids.IRON_FURNACES, IronFurnacesModule::new);
+    INTEGRATIONS.put(Ids.PRETTY_PIPES, () -> PrettyPipesModule::new);
+    INTEGRATIONS.put(Ids.REFINED_STORAGE, () -> RefinedStorageModule::new);
+    INTEGRATIONS.put(Ids.REFINED_STORAGE_ADDONS, () -> RefinedStorageAddonsModule::new);
+    INTEGRATIONS.put(Ids.TINKERS_CONSTRUCT, () -> TinkersConstructModule::new);
+    INTEGRATIONS.put(Ids.FASTWORKBENCH, () -> FastBenchModule::new);
+    INTEGRATIONS.put(Ids.CRAFTING_STATION, () -> CraftingStationModule::new);
+    INTEGRATIONS.put(Ids.FASTFURNACE, () -> FastFurnaceModule::new);
+    INTEGRATIONS.put(Ids.CYCLIC, () -> CyclicModule::new);
+    INTEGRATIONS.put(Ids.TOMS_STORAGE, () -> TomsStorageModule::new);
+    INTEGRATIONS.put(Ids.SOPHISTICATED_BACKPACKS, () -> SophisticatedBackpacksModule::new);
+    INTEGRATIONS.put(Ids.APPLIED_ENERGISTICS_2, () -> AppliedEnergisticsModule::new);
+    INTEGRATIONS.put(Ids.IRON_FURNACES, () -> IronFurnacesModule::new);
   }
 
   public static void init() {
@@ -67,7 +67,7 @@ public class PolymorphIntegrations {
     INTEGRATIONS.forEach((modid, supplier) -> {
 
       if (modList.isLoaded(modid)) {
-        ACTIVE_INTEGRATIONS.add(supplier.get());
+        ACTIVE_INTEGRATIONS.add(supplier.get().get());
       }
     });
   }
