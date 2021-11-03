@@ -21,18 +21,15 @@
 
 package top.theillusivec4.polymorph.common.network.server;
 
-import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Supplier;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
-import top.theillusivec4.polymorph.api.client.base.IRecipesWidget;
 import top.theillusivec4.polymorph.api.common.base.IRecipePair;
-import top.theillusivec4.polymorph.client.recipe.RecipesWidget;
 import top.theillusivec4.polymorph.common.impl.RecipePair;
 
 public class SPacketRecipesList {
@@ -47,6 +44,14 @@ public class SPacketRecipesList {
       this.recipeList.addAll(pRecipeList);
     }
     this.selected = pSelected;
+  }
+
+  public SortedSet<IRecipePair> getRecipeList() {
+    return this.recipeList;
+  }
+
+  public ResourceLocation getSelected() {
+    return this.selected;
   }
 
   public static void encode(SPacketRecipesList pPacket, PacketBuffer pBuffer) {
@@ -84,18 +89,8 @@ public class SPacketRecipesList {
   }
 
   public static void handle(SPacketRecipesList pPacket, Supplier<NetworkEvent.Context> pContext) {
-    pContext.get().enqueueWork(() -> {
-      ClientPlayerEntity clientPlayerEntity = Minecraft.getInstance().player;
-
-      if (clientPlayerEntity != null) {
-        Optional<IRecipesWidget> maybeWidget = RecipesWidget.get();
-        maybeWidget.ifPresent(widget -> widget.setRecipesList(pPacket.recipeList, pPacket.selected));
-
-        if (!maybeWidget.isPresent()) {
-          RecipesWidget.enqueueRecipesList(pPacket.recipeList, pPacket.selected);
-        }
-      }
-    });
+    pContext.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+        () -> () -> ClientPacketHandler.handle(pPacket)));
     pContext.get().setPacketHandled(true);
   }
 }

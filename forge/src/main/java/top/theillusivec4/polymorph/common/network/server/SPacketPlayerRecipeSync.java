@@ -24,12 +24,11 @@ package top.theillusivec4.polymorph.common.network.server;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Supplier;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
-import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 import top.theillusivec4.polymorph.common.impl.RecipePair;
 
@@ -45,6 +44,14 @@ public class SPacketPlayerRecipeSync {
       this.recipeList.addAll(pRecipeList);
     }
     this.selected = pSelected;
+  }
+
+  public SortedSet<IRecipePair> getRecipeList() {
+    return this.recipeList;
+  }
+
+  public ResourceLocation getSelected() {
+    return this.selected;
   }
 
   public static void encode(SPacketPlayerRecipeSync pPacket, PacketBuffer pBuffer) {
@@ -83,17 +90,8 @@ public class SPacketPlayerRecipeSync {
 
   public static void handle(SPacketPlayerRecipeSync pPacket,
                             Supplier<NetworkEvent.Context> pContext) {
-    pContext.get().enqueueWork(() -> {
-      ClientPlayerEntity clientPlayerEntity = Minecraft.getInstance().player;
-
-      if (clientPlayerEntity != null) {
-        PolymorphApi.common().getRecipeData(clientPlayerEntity).ifPresent(recipeData -> {
-          recipeData.setRecipesList(pPacket.recipeList);
-          clientPlayerEntity.world.getRecipeManager().getRecipe(pPacket.selected).ifPresent(
-              recipeData::setSelectedRecipe);
-        });
-      }
-    });
+    pContext.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+        () -> () -> ClientPacketHandler.handle(pPacket)));
     pContext.get().setPacketHandled(true);
   }
 }

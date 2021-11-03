@@ -26,6 +26,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 import top.theillusivec4.polymorph.client.recipe.RecipesWidget;
 
@@ -35,6 +37,10 @@ public class SPacketHighlightRecipe {
 
   public SPacketHighlightRecipe(ResourceLocation pResourceLocation) {
     this.recipe = pResourceLocation;
+  }
+
+  public ResourceLocation getRecipe() {
+    return this.recipe;
   }
 
   public static void encode(SPacketHighlightRecipe pPacket, PacketBuffer pBuffer) {
@@ -47,13 +53,8 @@ public class SPacketHighlightRecipe {
 
   public static void handle(SPacketHighlightRecipe pPacket,
                             Supplier<NetworkEvent.Context> pContext) {
-    pContext.get().enqueueWork(() -> {
-      ClientPlayerEntity clientPlayerEntity = Minecraft.getInstance().player;
-
-      if (clientPlayerEntity != null) {
-        RecipesWidget.get().ifPresent(widget -> widget.highlightRecipe(pPacket.recipe));
-      }
-    });
+    pContext.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+        () -> () -> ClientPacketHandler.handle(pPacket)));
     pContext.get().setPacketHandled(true);
   }
 
