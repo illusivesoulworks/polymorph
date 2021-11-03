@@ -33,11 +33,11 @@ public class CraftingTerminalRecipesWidget extends PlayerRecipesWidget {
 
   @Override
   public int getXPos() {
-    return getOutputSlot().x - 22;
+    return getOutputSlot().xPos - 22;
   }
 
   @Override
   public int getYPos() {
-    return getOutputSlot().y;
+    return getOutputSlot().yPos;
   }
 }

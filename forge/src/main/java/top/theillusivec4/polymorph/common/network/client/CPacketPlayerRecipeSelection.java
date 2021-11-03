@@ -54,8 +54,8 @@ public class CPacketPlayerRecipeSelection {
       ServerPlayerEntity sender = pContext.get().getSender();
 
       if (sender != null) {
-        Container container = sender.containerMenu;
-        sender.level.getRecipeManager().byKey(pPacket.recipe).ifPresent(recipe -> {
+        Container container = sender.openContainer;
+        sender.world.getRecipeManager().getRecipe(pPacket.recipe).ifPresent(recipe -> {
           PolymorphApi.common().getRecipeData(sender)
               .ifPresent(recipeData -> recipeData.selectRecipe(recipe));
 
@@ -65,10 +65,10 @@ public class CPacketPlayerRecipeSelection {
               return;
             }
           }
-          container.slotsChanged(sender.inventory);
+          container.onCraftMatrixChanged(sender.inventory);
 
           if (container instanceof AbstractRepairContainer) {
-            ((AbstractRepairContainer) container).createResult();
+            ((AbstractRepairContainer) container).updateRepairOutput();
           }
         });
       }

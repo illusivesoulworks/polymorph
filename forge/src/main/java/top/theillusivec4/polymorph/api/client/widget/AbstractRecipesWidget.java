@@ -93,7 +93,7 @@ public abstract class AbstractRecipesWidget implements IRecipesWidget {
   @Override
   public void setRecipesList(Set<IRecipePair> pRecipesList, ResourceLocation pSelected) {
     SortedSet<IRecipePair> sorted =
-        new TreeSet<>(Comparator.comparing(data -> data.getOutput().getDescriptionId()));
+        new TreeSet<>(Comparator.comparing(data -> data.getOutput().getTranslationKey()));
     sorted.addAll(pRecipesList);
     this.selectionWidget.setRecipeList(sorted);
     this.openButton.visible = pRecipesList.size() > 1;
@@ -130,11 +130,11 @@ public abstract class AbstractRecipesWidget implements IRecipesWidget {
 
   @Override
   public int getXPos() {
-    return this.getOutputSlot().x + BUTTON_X_OFFSET;
+    return this.getOutputSlot().xPos + BUTTON_X_OFFSET;
   }
 
   @Override
   public int getYPos() {
-    return this.getOutputSlot().y + BUTTON_Y_OFFSET;
+    return this.getOutputSlot().yPos + BUTTON_Y_OFFSET;
   }
 }

@@ -39,7 +39,7 @@ public class ClientEventsListener {
     if (pEvent.phase == TickEvent.Phase.END) {
       Minecraft mc = Minecraft.getInstance();
       RecipesWidget.get().ifPresent(widget -> {
-        if (mc.player == null || mc.player.containerMenu == null || mc.screen == null) {
+        if (mc.player == null || mc.player.openContainer == null || mc.currentScreen == null) {
           RecipesWidget.clear();
         } else if (widget instanceof ITickingRecipesWidget) {
           ((ITickingRecipesWidget) widget).tick();

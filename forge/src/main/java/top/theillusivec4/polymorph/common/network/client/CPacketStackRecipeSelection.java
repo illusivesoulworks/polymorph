@@ -56,11 +56,11 @@ public class CPacketStackRecipeSelection {
       ServerPlayerEntity sender = pContext.get().getSender();
 
       if (sender != null) {
-        World world = sender.getCommandSenderWorld();
+        World world = sender.getEntityWorld();
         Optional<? extends IRecipe<?>> maybeRecipe =
-            world.getRecipeManager().byKey(pPacket.recipe);
+            world.getRecipeManager().getRecipe(pPacket.recipe);
         maybeRecipe.ifPresent(recipe -> {
-          Container container = sender.containerMenu;
+          Container container = sender.openContainer;
           PolymorphApi.common().getRecipeDataFromItemStack(container)
               .ifPresent(recipeData -> {
                 recipeData.selectRecipe(recipe);

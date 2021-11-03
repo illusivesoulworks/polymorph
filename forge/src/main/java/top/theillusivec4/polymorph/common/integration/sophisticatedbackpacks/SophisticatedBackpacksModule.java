@@ -82,9 +82,9 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
   public void clientSetup() {
     PolymorphApi.client().registerWidget(pContainerScreen -> {
       if (pContainerScreen instanceof BackpackScreen &&
-          pContainerScreen.getMenu() instanceof BackpackContainer) {
+          pContainerScreen.getContainer() instanceof BackpackContainer) {
         return new BackpackUpgradeRecipesWidget((BackpackScreen) pContainerScreen,
-            (BackpackContainer) pContainerScreen.getMenu());
+            (BackpackContainer) pContainerScreen.getContainer());
       }
       return null;
     });
@@ -141,7 +141,7 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
                 } else if (upgradeContainerBase instanceof SmeltingUpgradeContainer) {
                   boolean hasInput =
                       ((SmeltingUpgradeContainer) upgradeContainerBase).getSmeltingLogicContainer()
-                          .getSmeltingSlots().get(0).hasItem();
+                          .getSmeltingSlots().get(0).getHasStack();
 
                   if (hasInput) {
                     ResourceLocation rl =
@@ -162,7 +162,7 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
                                           CraftingInventory pCraftingInventory,
                                           PlayerEntity pPlayer, ItemStack pUpgradeStack) {
 
-    if (!pWorld.isClientSide() && pPlayer instanceof ServerPlayerEntity) {
+    if (!pWorld.isRemote() && pPlayer instanceof ServerPlayerEntity) {
       IPolymorphCommon commonApi = PolymorphApi.common();
       commonApi.getRecipeData(pUpgradeStack).ifPresent(recipeData -> {
         if (pLastRecipe != null && pLastRecipe.matches(pCraftingInventory, pWorld)) {
@@ -191,7 +191,7 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
   public static void onOpenTab(int pId, PlayerEntity pPlayer,
                                Map<Integer, UpgradeContainerBase<?, ?>> pUpgradeContainers) {
 
-    if (!pPlayer.level.isClientSide() && pPlayer instanceof ServerPlayerEntity) {
+    if (!pPlayer.world.isRemote() && pPlayer instanceof ServerPlayerEntity) {
       ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) pPlayer;
       UpgradeContainerBase<?, ?> upgrade = pUpgradeContainers.get(pId);
       IPolymorphCommon commonApi = PolymorphApi.common();
@@ -205,7 +205,7 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
           inventory = ((CraftingUpgradeContainer) upgrade).getCraftMatrix();
         } else if (upgrade instanceof SmeltingUpgradeContainer) {
           sendSelected = true;
-          inventory = PolymorphUtils.wrapItems(upgrade.getSlots().get(0).getItem());
+          inventory = PolymorphUtils.wrapItems(upgrade.getSlots().get(0).getStack());
         }
         IInventory finalInventory = inventory;
         boolean finalSendSelected = sendSelected;

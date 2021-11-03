@@ -31,6 +31,8 @@ import net.minecraft.inventory.container.Slot;
 import top.theillusivec4.polymorph.api.client.base.IPolymorphClient;
 import top.theillusivec4.polymorph.api.client.base.IRecipesWidget;
 
+import top.theillusivec4.polymorph.api.client.base.IPolymorphClient.IRecipesWidgetFactory;
+
 public class PolymorphClient implements IPolymorphClient {
 
   private static final IPolymorphClient INSTANCE = new PolymorphClient();
@@ -61,11 +63,11 @@ public class PolymorphClient implements IPolymorphClient {
 
   @Override
   public Optional<Slot> findCraftingResultSlot(ContainerScreen<?> pContainerScreen) {
-    Container container = pContainerScreen.getMenu();
+    Container container = pContainerScreen.getContainer();
 
-    for (Slot slot : container.slots) {
+    for (Slot slot : container.inventorySlots) {
 
-      if (slot.container instanceof CraftResultInventory) {
+      if (slot.inventory instanceof CraftResultInventory) {
         return Optional.of(slot);
       }
     }

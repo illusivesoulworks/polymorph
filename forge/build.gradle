@@ -25,7 +25,7 @@ archivesBaseName = "${mod_id}-forge"
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: "official", version: "1.16.5"
+    mappings channel: "snapshot", version: "20210309-1.16.5"
 
     runs {
         client {
@@ -103,9 +103,10 @@ dependencies {
     compile fg.deobf("curse.maven:mantle-74924:${file_mantle}")
     compile fg.deobf("curse.maven:cyclic-239286:${file_cyclic}")
     compile fg.deobf("curse.maven:sophisticatedbackpacks-422301:${file_sophisticated}")
-    compileOnly fg.deobf("curse.maven:ae2-223794:${file_ae2}")
-    compile fg.deobf("curse.maven:ironfurnaces-237664:${file_ironfurnaces}")
+    compile fg.deobf("curse.maven:ae2-223794:${file_ae2}")
     compile fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
+
+    compileOnly fg.deobf("curse.maven:ironfurnaces-237664:${file_ironfurnaces}")
 
     runtimeOnly fg.deobf("curse.maven:vanillatweaks-272637:${file_vanillatweaks}")
     runtimeOnly fg.deobf("curse.maven:improvedstations-361348:${file_improvedstations}")

@@ -41,7 +41,7 @@ public class StackRecipeData extends AbstractRecipeData<ItemStack> implements IS
     IPolymorphCommon commonApi = PolymorphApi.common();
     commonApi.getServer().ifPresent(server -> {
       for (ServerPlayerEntity player : server.getPlayerList().getPlayers()) {
-        commonApi.getRecipeDataFromItemStack(player.containerMenu)
+        commonApi.getRecipeDataFromItemStack(player.openContainer)
             .ifPresent(recipeData -> {
               if (recipeData == this) {
                 players.add(player);

@@ -56,8 +56,8 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
   public void clientSetup() {
     IPolymorphClient clientApi = PolymorphApi.client();
     clientApi.registerWidget(pContainerScreen -> {
-      if (pContainerScreen.getMenu() instanceof GridContainer) {
-        GridContainer container = (GridContainer) pContainerScreen.getMenu();
+      if (pContainerScreen.getContainer() instanceof GridContainer) {
+        GridContainer container = (GridContainer) pContainerScreen.getContainer();
 
         if (container.getTile() instanceof GridTile) {
           return clientApi.findCraftingResultSlot(pContainerScreen).map(
@@ -83,7 +83,7 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
 
         if (grid instanceof GridNetworkNode) {
           GridNetworkNode gridNetworkNode = (GridNetworkNode) grid;
-          return gridNetworkNode.getWorld().getBlockEntity(gridNetworkNode.getPos());
+          return gridNetworkNode.getWorld().getTileEntity(gridNetworkNode.getPos());
         }
       }
       return null;
@@ -118,14 +118,14 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
   public static <C extends IInventory, T extends IRecipe<C>> Optional<T> getRecipe(
       IRecipeType<T> type, C inventory, World world, BlockPos pos) {
 
-    if (!world.isClientSide() && loaded) {
-      TileEntity te = world.getBlockEntity(pos);
+    if (!world.isRemote() && loaded) {
+      TileEntity te = world.getTileEntity(pos);
 
       if (te != null) {
         return RecipeSelection.getTileEntityRecipe(type, inventory, world, te);
       }
     }
-    return world.getRecipeManager().getRecipesFor(type, inventory, world).stream().findFirst();
+    return world.getRecipeManager().getRecipes(type, inventory, world).stream().findFirst();
   }
 
   public static void appendPattern(boolean exactPattern, ItemStack stack, BlockPos pos,
@@ -138,8 +138,8 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
         stack.setTag(new CompoundNBT());
       }
 
-      if (!world.isClientSide() && loaded) {
-        TileEntity te = world.getBlockEntity(pos);
+      if (!world.isRemote() && loaded) {
+        TileEntity te = world.getTileEntity(pos);
 
         if (te instanceof GridTile) {
           Optional<ICraftingRecipe> recipe =
@@ -159,13 +159,13 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
 
     if (tag != null) {
       String id = tag.getString("PolymorphRecipe");
-      Optional<T> opt = (Optional<T>) world.getRecipeManager().byKey(new ResourceLocation(id));
+      Optional<T> opt = (Optional<T>) world.getRecipeManager().getRecipe(new ResourceLocation(id));
 
       if (opt.isPresent()) {
         return opt;
       }
     }
-    return world.getRecipeManager().getRecipeFor(type, inventory, world);
+    return world.getRecipeManager().getRecipe(type, inventory, world);
   }
 
   public static <T extends IRecipe<C>, C extends IInventory> Optional<T> getWirelessRecipe(
@@ -176,6 +176,6 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
       GridContainer container = (GridContainer) listener;
       return RecipeSelection.getPlayerRecipe(type, inventory, world, container.getPlayer());
     }
-    return world.getRecipeManager().getRecipeFor(type, inventory, world);
+    return world.getRecipeManager().getRecipe(type, inventory, world);
   }
 }

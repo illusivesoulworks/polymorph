@@ -30,6 +30,6 @@ import net.minecraftforge.items.wrapper.RecipeWrapper;
 public class PolymorphUtils {
 
   public static IInventory wrapItems(ItemStack... stacks) {
-    return new RecipeWrapper(new ItemStackHandler(NonNullList.of(ItemStack.EMPTY, stacks)));
+    return new RecipeWrapper(new ItemStackHandler(NonNullList.from(ItemStack.EMPTY, stacks)));
   }
 }

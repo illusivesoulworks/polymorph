@@ -32,11 +32,11 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface AccessorPlayerContainer {
 
   @Accessor
-  CraftingInventory getCraftSlots();
+  CraftingInventory getCraftMatrix();
 
   @Accessor
-  CraftResultInventory getResultSlots();
+  CraftResultInventory getCraftResult();
 
   @Accessor
-  PlayerEntity getOwner();
+  PlayerEntity getPlayer();
 }

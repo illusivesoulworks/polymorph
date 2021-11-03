@@ -46,10 +46,10 @@ public class OutputWidget extends Widget {
   }
 
   @Override
-  public void renderButton(@Nonnull MatrixStack pMatrixStack, int pMouseX, int pMouseY,
+  public void renderWidget(@Nonnull MatrixStack pMatrixStack, int pMouseX, int pMouseY,
                            float pPartialTicks) {
     Minecraft minecraft = Minecraft.getInstance();
-    minecraft.getTextureManager().bind(AbstractRecipesWidget.WIDGETS);
+    minecraft.getTextureManager().bindTexture(AbstractRecipesWidget.WIDGETS);
     int j = 0;
 
     if (this.x + 25 > pMouseX && this.x <= pMouseX &&
@@ -59,11 +59,11 @@ public class OutputWidget extends Widget {
     blit(pMatrixStack, this.x, this.y, 600, this.highlighted ? 41 : 16, j, this.width, this.height,
         256, 256);
     int k = 4;
-    float zLevel = minecraft.getItemRenderer().blitOffset;
-    minecraft.getItemRenderer().blitOffset = 700.0F;
+    float zLevel = minecraft.getItemRenderer().zLevel;
+    minecraft.getItemRenderer().zLevel = 700.0F;
     minecraft.getItemRenderer()
-        .renderAndDecorateItem(this.getOutput(), this.x + k, this.y + k);
-    minecraft.getItemRenderer().blitOffset = zLevel;
+        .renderItemAndEffectIntoGUI(this.getOutput(), this.x + k, this.y + k);
+    minecraft.getItemRenderer().zLevel = zLevel;
   }
 
   public ItemStack getOutput() {

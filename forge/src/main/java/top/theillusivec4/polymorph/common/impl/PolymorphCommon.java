@@ -37,6 +37,11 @@ import top.theillusivec4.polymorph.api.common.capability.IStackRecipeData;
 import top.theillusivec4.polymorph.api.common.capability.ITileEntityRecipeData;
 import top.theillusivec4.polymorph.common.capability.PolymorphCapabilities;
 
+import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon.IContainer2ItemStack;
+import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon.IContainer2TileEntity;
+import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon.IItemStack2RecipeData;
+import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon.ITileEntity2RecipeData;
+
 public class PolymorphCommon implements IPolymorphCommon {
 
   private static final IPolymorphCommon INSTANCE = new PolymorphCommon();

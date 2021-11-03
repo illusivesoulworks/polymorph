@@ -49,7 +49,7 @@ public abstract class MixinTileCrafter extends TileEntityBase {
       cancellable = true)
   private void polymorph$tryRecipes(ArrayList<ItemStack> stacks,
                                     CallbackInfoReturnable<IRecipe<?>> cir) {
-    CyclicModule.getRecipe(stacks, this.level, (TileCrafter) (Object) this)
+    CyclicModule.getRecipe(stacks, this.world, (TileCrafter) (Object) this)
         .ifPresent(cir::setReturnValue);
   }
 }

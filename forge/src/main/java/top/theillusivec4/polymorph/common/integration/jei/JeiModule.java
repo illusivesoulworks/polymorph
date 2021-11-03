@@ -67,7 +67,7 @@ public class JeiModule implements IModPlugin {
     public List<Rectangle2d> getGuiExtraAreas() {
       List<Rectangle2d> list = new ArrayList<>();
       RecipesWidget.get().ifPresent(widget -> {
-        Screen screen = Minecraft.getInstance().screen;
+        Screen screen = Minecraft.getInstance().currentScreen;
 
         if (screen instanceof ContainerScreen<?> && widget.getSelectionWidget().isActive()) {
           ContainerScreen<?> containerScreen = (ContainerScreen<?>) screen;

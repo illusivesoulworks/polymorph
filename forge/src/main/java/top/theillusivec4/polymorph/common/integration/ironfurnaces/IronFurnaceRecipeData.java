@@ -50,7 +50,7 @@ public class IronFurnaceRecipeData extends AbstractHighlightedRecipeData<BlockIr
 
   @Override
   protected NonNullList<ItemStack> getInput() {
-    return NonNullList.of(ItemStack.EMPTY, this.getOwner().getItem(0));
+    return NonNullList.from(ItemStack.EMPTY, this.getOwner().getStackInSlot(0));
   }
 
   @Override

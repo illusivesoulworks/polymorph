@@ -32,10 +32,10 @@ public class PolymorphClientMod {
 
   public static void setup() {
     PolymorphClient.get().registerWidget(containerScreen -> {
-      Container container = containerScreen.getMenu();
+      Container container = containerScreen.getContainer();
 
       if (container instanceof SmithingTableContainer) {
-        return new PlayerRecipesWidget(containerScreen, container.slots.get(2));
+        return new PlayerRecipesWidget(containerScreen, container.inventorySlots.get(2));
       } else if (container instanceof AbstractFurnaceContainer) {
         return new FurnaceRecipesWidget(containerScreen);
       }

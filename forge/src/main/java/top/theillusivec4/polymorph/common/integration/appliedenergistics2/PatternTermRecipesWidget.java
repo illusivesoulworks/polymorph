@@ -42,8 +42,8 @@ public class PatternTermRecipesWidget extends PlayerRecipesWidget {
   @Override
   public void selectRecipe(ResourceLocation pResourceLocation) {
     super.selectRecipe(pResourceLocation);
-    this.container.getPlayerInventory().player.getCommandSenderWorld().getRecipeManager()
-        .byKey(pResourceLocation).ifPresent(recipe -> {
+    this.container.getPlayerInventory().player.getEntityWorld().getRecipeManager()
+        .getRecipe(pResourceLocation).ifPresent(recipe -> {
           ((AccessorPatternTermContainer) this.container).setCurrentRecipe((ICraftingRecipe) recipe);
           ((AccessorPatternTermContainer) this.container).callGetAndUpdateOutput();
         });

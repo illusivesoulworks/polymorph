@@ -2,6 +2,7 @@ modLoader="javafml"
 loaderVersion="[34,)"
 issueTrackerURL="https://github.com/TheIllusiveC4/Polymorph/issues"
 logoFile="${mod_icon}"
+logoBlur=false
 license="LGPL-3.0-or-later"
 [[mods]]
 modId="${mod_id}"

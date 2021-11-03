@@ -128,12 +128,12 @@ public class BackpackUpgradeRecipesWidget extends AbstractRecipesWidget implemen
   @Override
   public int getXPos() {
     int xOffset = this.isCrafting ? -21 : 0;
-    return getOutputSlot().x - xOffset;
+    return getOutputSlot().xPos - xOffset;
   }
 
   @Override
   public int getYPos() {
     int yOffset = this.isCrafting ? 0 : -23;
-    return getOutputSlot().y + yOffset;
+    return getOutputSlot().yPos + yOffset;
   }
 }

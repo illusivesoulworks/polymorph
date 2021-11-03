@@ -48,11 +48,11 @@ public class OpenSelectionButton extends ImageButton {
 
   @SuppressWarnings("deprecation")
   @Override
-  public void renderButton(@Nonnull MatrixStack pMatrixStack, int pMouseX, int pMouseY,
+  public void renderWidget(@Nonnull MatrixStack pMatrixStack, int pMouseX, int pMouseY,
                            float pPartialTicks) {
     RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
     this.x = containerScreen.getGuiLeft() + this.xOffset;
     this.y = containerScreen.getGuiTop() + this.yOffset;
-    super.renderButton(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
+    super.renderWidget(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
   }
 }

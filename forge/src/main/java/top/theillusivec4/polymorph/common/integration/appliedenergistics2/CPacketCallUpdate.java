@@ -44,7 +44,7 @@ public class CPacketCallUpdate {
       ServerPlayerEntity sender = pContext.get().getSender();
 
       if (sender != null) {
-        Container container = sender.containerMenu;
+        Container container = sender.openContainer;
 
         if (container instanceof PatternTermContainer) {
           ((AccessorPatternTermContainer) container).callGetAndUpdateOutput();

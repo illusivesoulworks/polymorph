@@ -61,7 +61,7 @@ public class PolymorphCommands {
   public static void register(CommandDispatcher<CommandSource> dispatcher) {
     final int opPermissionLevel = 2;
     LiteralArgumentBuilder<CommandSource> command = Commands.literal("polymorph")
-        .requires(player -> player.hasPermission(opPermissionLevel));
+        .requires(player -> player.hasPermissionLevel(opPermissionLevel));
     command.then(
         Commands.literal("conflicts").executes(context -> findConflicts(context.getSource())));
     dispatcher.register(command);
@@ -69,9 +69,9 @@ public class PolymorphCommands {
 
   private static int findConflicts(CommandSource source) {
     CompletableFuture.runAsync(() -> {
-      source.sendSuccess(new TranslationTextComponent("commands.polymorph.conflicts.starting"),
+      source.sendFeedback(new TranslationTextComponent("commands.polymorph.conflicts.starting"),
           true);
-      ServerWorld world = source.getLevel();
+      ServerWorld world = source.getWorld();
       RecipeManager recipeManager = world.getRecipeManager();
       List<String> output = new ArrayList<>();
       int count = 0;
@@ -90,7 +90,7 @@ public class PolymorphCommands {
           e.printStackTrace();
         }
       }
-      source.sendSuccess(
+      source.sendFeedback(
           new TranslationTextComponent("commands.polymorph.conflicts.success", count),
           true);
     });
@@ -102,7 +102,7 @@ public class PolymorphCommands {
                                                                               RecipeManager pRecipeManager,
                                                                               Function<IRecipe<?>, RecipeWrapper> pFactory) {
     Collection<RecipeWrapper> recipes =
-        pRecipeManager.getAllRecipesFor(pType).stream().map(pFactory).collect(Collectors.toList());
+        pRecipeManager.getRecipesForType(pType).stream().map(pFactory).collect(Collectors.toList());
     List<Set<ResourceLocation>> conflicts = new ArrayList<>();
     Set<ResourceLocation> skipped = new TreeSet<>();
     Set<ResourceLocation> processed = new HashSet<>();
@@ -188,13 +188,13 @@ public class PolymorphCommands {
       } else if (otherIngredient == Ingredient.EMPTY) {
         return this.ingredient == Ingredient.EMPTY;
       } else {
-        ItemStack[] stacks = this.ingredient.getItems();
+        ItemStack[] stacks = this.ingredient.getMatchingStacks();
 
-        for (ItemStack otherStack : pIngredient.getIngredient().getItems()) {
+        for (ItemStack otherStack : pIngredient.getIngredient().getMatchingStacks()) {
 
           for (ItemStack stack : stacks) {
 
-            if (ItemStack.matches(stack, otherStack)) {
+            if (ItemStack.areItemStacksEqual(stack, otherStack)) {
               return true;
             }
           }

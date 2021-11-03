@@ -56,7 +56,7 @@ public class RecipePair implements IRecipePair {
       return false;
     }
     RecipePair that = (RecipePair) o;
-    return ItemStack.matches(this.getOutput(), that.getOutput());
+    return ItemStack.areItemStacksEqual(this.getOutput(), that.getOutput());
   }
 
   @Override
@@ -66,6 +66,6 @@ public class RecipePair implements IRecipePair {
 
   @Override
   public int compareTo(@Nonnull IRecipePair pOther) {
-    return this.getOutput().getDescriptionId().compareTo(pOther.getOutput().getDescriptionId());
+    return this.getOutput().getTranslationKey().compareTo(pOther.getOutput().getTranslationKey());
   }
 }
