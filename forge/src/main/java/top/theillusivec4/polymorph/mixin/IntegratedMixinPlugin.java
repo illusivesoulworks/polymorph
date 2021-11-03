@@ -48,6 +48,7 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
     CLASS_TO_MOD.put("net.p3pp3rf1y.sophisticatedbackpacks",
         PolymorphIntegrations.Ids.SOPHISTICATED_BACKPACKS);
     CLASS_TO_MOD.put("appeng.", PolymorphIntegrations.Ids.APPLIED_ENERGISTICS_2);
+    CLASS_TO_MOD.put("shadows.fastfurnace", PolymorphIntegrations.Ids.FASTFURNACE);
   }
 
   @Override

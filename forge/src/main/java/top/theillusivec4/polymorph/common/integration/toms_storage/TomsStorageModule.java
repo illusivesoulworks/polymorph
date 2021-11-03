@@ -2,13 +2,15 @@ package top.theillusivec4.polymorph.common.integration.toms_storage;
 
 import com.tom.storagemod.gui.ContainerCraftingTerminal;
 import com.tom.storagemod.tile.TileEntityCraftingTerminal;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.base.IPolymorphClient;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
-import top.theillusivec4.polymorph.common.util.PolymorphAccessor;
+import top.theillusivec4.polymorph.mixin.integration.toms_storage.AccessorContainerStorageTerminal;
+import top.theillusivec4.polymorph.mixin.integration.toms_storage.AccessorTileEntityCraftingTerminal;
 
 public class TomsStorageModule extends AbstractCompatibilityModule {
 
@@ -23,7 +25,7 @@ public class TomsStorageModule extends AbstractCompatibilityModule {
     });
     commonApi.registerContainer2TileEntity(pContainer -> {
       if (pContainer instanceof ContainerCraftingTerminal) {
-        return (TileEntityCraftingTerminal) PolymorphAccessor.readField(pContainer, "te");
+        return ((AccessorContainerStorageTerminal) pContainer).getTe();
       }
       return null;
     });
@@ -45,10 +47,10 @@ public class TomsStorageModule extends AbstractCompatibilityModule {
   @Override
   public boolean selectRecipe(TileEntity tileEntity, IRecipe<?> recipe) {
 
-    if (tileEntity instanceof TileEntityCraftingTerminal) {
-      TileEntityCraftingTerminal te = (TileEntityCraftingTerminal) tileEntity;
-      PolymorphAccessor.writeField(te, "currentRecipe", recipe);
-      PolymorphAccessor.invokeMethod(te, "onCraftingMatrixChanged");
+    if (recipe instanceof ICraftingRecipe && tileEntity instanceof TileEntityCraftingTerminal) {
+      AccessorTileEntityCraftingTerminal te = (AccessorTileEntityCraftingTerminal) tileEntity;
+      te.setCurrentRecipe((ICraftingRecipe) recipe);
+      te.callOnCraftingMatrixChanged();
       return true;
     }
     return false;

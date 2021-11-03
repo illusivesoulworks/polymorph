@@ -105,9 +105,9 @@ dependencies {
     compile fg.deobf("curse.maven:sophisticatedbackpacks-422301:3504750")
     compile fg.deobf("curse.maven:ae2-223794:3502523")
     compile fg.deobf("curse.maven:ironfurnaces-237664:3387531")
+    compile fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
 
     runtimeOnly fg.deobf("curse.maven:vanillatweaks-272637:${file_vanillatweaks}")
-    runtimeOnly fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
     runtimeOnly fg.deobf("curse.maven:improvedstations-361348:3113167")
 }
 

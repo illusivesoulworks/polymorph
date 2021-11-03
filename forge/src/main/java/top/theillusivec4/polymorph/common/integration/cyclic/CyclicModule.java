@@ -24,7 +24,8 @@ import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
-import top.theillusivec4.polymorph.common.util.PolymorphAccessor;
+import top.theillusivec4.polymorph.mixin.integration.cyclic.AccessorContainerCrafter;
+import top.theillusivec4.polymorph.mixin.integration.cyclic.AccessorTileCrafter;
 
 public class CyclicModule extends AbstractCompatibilityModule {
 
@@ -39,7 +40,7 @@ public class CyclicModule extends AbstractCompatibilityModule {
     });
     commonApi.registerContainer2TileEntity(container -> {
       if (container instanceof ContainerCrafter) {
-        return (TileCrafter) PolymorphAccessor.readField(container, "tile");
+        return ((AccessorContainerCrafter) container).getTile();
       }
       return null;
     });
@@ -68,19 +69,18 @@ public class CyclicModule extends AbstractCompatibilityModule {
     return false;
   }
 
-  @SuppressWarnings({"unchecked", "ConstantConditions"})
+  @SuppressWarnings("ConstantConditions")
   @Override
   public boolean selectRecipe(TileEntity tileEntity, IRecipe<?> recipe) {
 
     if (tileEntity instanceof TileCrafter) {
-      PolymorphAccessor.writeField(tileEntity, "lastValidRecipe", recipe);
-      PolymorphAccessor.writeField(tileEntity, "recipeOutput", recipe.getRecipeOutput());
-      LazyOptional<IItemHandler> preview =
-          (LazyOptional<IItemHandler>) PolymorphAccessor.readField(tileEntity, "preview");
+      AccessorTileCrafter tileCrafter = (AccessorTileCrafter) tileEntity;
+      tileCrafter.setLastValidRecipe(recipe);
+      tileCrafter.setRecipeOutput(recipe.getRecipeOutput());
+      LazyOptional<IItemHandler> preview = tileCrafter.getPreview();
 
       if (preview != null) {
-        PolymorphAccessor.invokeMethod(tileEntity, "setPreviewSlot", preview.orElse(null),
-            recipe.getRecipeOutput());
+        tileCrafter.callSetPreviewSlot(preview.orElse(null), recipe.getRecipeOutput());
       }
       return true;
     }

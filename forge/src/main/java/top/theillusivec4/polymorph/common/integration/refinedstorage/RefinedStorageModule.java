@@ -25,7 +25,7 @@ import top.theillusivec4.polymorph.api.client.base.IPolymorphClient;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
-import top.theillusivec4.polymorph.common.util.PolymorphAccessor;
+import top.theillusivec4.polymorph.mixin.integration.refinedstorage.AccessorGrid;
 
 public class RefinedStorageModule extends AbstractCompatibilityModule {
 
@@ -82,11 +82,11 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
   @Override
   public boolean selectRecipe(TileEntity tileEntity, IRecipe<?> recipe) {
 
-    if (tileEntity instanceof GridTile) {
+    if (recipe instanceof ICraftingRecipe && tileEntity instanceof GridTile) {
       IGrid grid = ((GridTile) tileEntity).getNode();
 
       if (grid instanceof GridNetworkNode) {
-        PolymorphAccessor.writeField(grid, "currentRecipe", recipe);
+        ((AccessorGrid) grid).setCurrentRecipe((ICraftingRecipe) recipe);
         grid.onCraftingMatrixChanged();
         return true;
       }

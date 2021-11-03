@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import slimeknights.tconstruct.tables.tileentity.table.CraftingStationTileEntity;
 import top.theillusivec4.polymorph.common.capability.AbstractTileEntityRecipeData;
-import top.theillusivec4.polymorph.common.util.PolymorphAccessor;
+import top.theillusivec4.polymorph.mixin.integration.tconstruct.AccessorCraftingStationTileEntity;
 
 public class CraftingStationRecipeData
     extends AbstractTileEntityRecipeData<CraftingStationTileEntity> {
@@ -21,7 +21,7 @@ public class CraftingStationRecipeData
 
     if (this.craftingInventory == null) {
       this.craftingInventory =
-          (CraftingInventory) PolymorphAccessor.readField(this.getOwner(), "craftingInventory");
+          ((AccessorCraftingStationTileEntity) this.getOwner()).getCraftingInventory();
     }
 
     if (this.craftingInventory != null) {

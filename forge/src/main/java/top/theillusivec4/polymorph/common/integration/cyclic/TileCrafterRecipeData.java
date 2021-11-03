@@ -6,7 +6,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import top.theillusivec4.polymorph.common.capability.AbstractTileEntityRecipeData;
-import top.theillusivec4.polymorph.common.util.PolymorphAccessor;
+import top.theillusivec4.polymorph.mixin.integration.cyclic.AccessorTileCrafter;
 
 public class TileCrafterRecipeData extends AbstractTileEntityRecipeData<TileCrafter> {
 
@@ -16,12 +16,10 @@ public class TileCrafterRecipeData extends AbstractTileEntityRecipeData<TileCraf
     super(pOwner);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   protected NonNullList<ItemStack> getInput() {
     if (this.maybeGrid == null) {
-      this.maybeGrid =
-          (LazyOptional<IItemHandler>) PolymorphAccessor.readField(this.getOwner(), "gridCap");
+      this.maybeGrid = ((AccessorTileCrafter) this.getOwner()).getGridCap();
 
       if (this.maybeGrid == null) {
         return NonNullList.create();

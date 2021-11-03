@@ -30,8 +30,8 @@ import top.theillusivec4.polymorph.api.common.base.IPolymorphPacketDistributor;
 import top.theillusivec4.polymorph.common.capability.StackRecipeData;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
-import top.theillusivec4.polymorph.common.util.PolymorphAccessor;
 import top.theillusivec4.polymorph.common.util.PolymorphUtils;
+import top.theillusivec4.polymorph.mixin.integration.sophisticatedbackpacks.AccessorCraftingUpgradeContainer;
 import top.theillusivec4.polymorph.mixin.integration.sophisticatedbackpacks.AccessorRecipeHelper;
 import top.theillusivec4.polymorph.mixin.integration.sophisticatedbackpacks.AccessorSmeltingLogic;
 import top.theillusivec4.polymorph.mixin.integration.sophisticatedbackpacks.AccessorSmeltingLogicContainer;
@@ -75,11 +75,15 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
     if (container instanceof BackpackContainer) {
       return ((BackpackContainer) container).getOpenContainer().map(upgradeContainerBase -> {
         if (upgradeContainerBase instanceof CraftingUpgradeContainer) {
-          PolymorphAccessor.writeField(upgradeContainerBase, "lastRecipe", recipe);
-          PolymorphAccessor.invokeMethod(upgradeContainerBase, "onCraftMatrixChanged",
-              (Object) null);
-          ((BackpackContainer) container).sendSlotUpdates();
-          return true;
+
+          if (recipe instanceof ICraftingRecipe) {
+            AccessorCraftingUpgradeContainer craftingUpgradeContainer =
+                (AccessorCraftingUpgradeContainer) upgradeContainerBase;
+            craftingUpgradeContainer.setLastRecipe((ICraftingRecipe) recipe);
+            craftingUpgradeContainer.callOnCraftMatrixChanged(null);
+            ((BackpackContainer) container).sendSlotUpdates();
+            return true;
+          }
         } else if (upgradeContainerBase instanceof SmeltingUpgradeContainer) {
           SmeltingLogicContainer smeltingLogicContainer =
               ((SmeltingUpgradeContainer) upgradeContainerBase).getSmeltingLogicContainer();
