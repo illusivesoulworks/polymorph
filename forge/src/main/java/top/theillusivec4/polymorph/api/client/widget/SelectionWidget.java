@@ -110,7 +110,11 @@ public class SelectionWidget extends AbstractGui
 
   public void setRecipeList(Set<IRecipePair> pRecipeList) {
     this.outputWidgets.clear();
-    pRecipeList.forEach(data -> this.outputWidgets.add(new OutputWidget(data)));
+    pRecipeList.forEach(data -> {
+      if (!data.getOutput().isEmpty()) {
+        this.outputWidgets.add(new OutputWidget(data));
+      }
+    });
     this.updateButtonPositions();
   }
 
