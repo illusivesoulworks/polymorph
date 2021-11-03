@@ -72,8 +72,9 @@ public class PolymorphCapabilities {
 
   public static final ResourceLocation PLAYER_RECIPE_DATA_ID =
       new ResourceLocation(PolymorphApi.MOD_ID, "player_recipe_data");
+  // todo: change this id in 1.17 when backwards compatibility isn't an issue
   public static final ResourceLocation TILE_ENTITY_RECIPE_DATA_ID =
-      new ResourceLocation(PolymorphApi.MOD_ID, "tile_entity_recipe_data");
+      new ResourceLocation(PolymorphApi.MOD_ID, "persistent_selector");
   public static final ResourceLocation STACK_RECIPE_DATA_ID =
       new ResourceLocation(PolymorphApi.MOD_ID, "stack_recipe_data");
 
