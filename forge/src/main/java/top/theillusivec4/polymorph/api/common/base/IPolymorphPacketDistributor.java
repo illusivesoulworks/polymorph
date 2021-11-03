@@ -1,6 +1,5 @@
 package top.theillusivec4.polymorph.api.common.base;
 
-import java.util.Set;
 import java.util.SortedSet;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;

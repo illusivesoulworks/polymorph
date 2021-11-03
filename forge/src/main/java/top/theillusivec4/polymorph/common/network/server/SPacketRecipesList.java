@@ -1,8 +1,6 @@
 package top.theillusivec4.polymorph.common.network.server;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Supplier;

@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.base.IRecipesWidget;

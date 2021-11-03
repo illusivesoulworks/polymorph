@@ -17,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 import top.theillusivec4.polymorph.common.integration.appliedenergistics2.CPacketCallUpdate;
 import top.theillusivec4.polymorph.common.network.PolymorphNetwork;

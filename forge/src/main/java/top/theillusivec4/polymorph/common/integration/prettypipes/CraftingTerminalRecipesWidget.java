@@ -1,7 +1,6 @@
 package top.theillusivec4.polymorph.common.integration.prettypipes;
 
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Slot;
 import top.theillusivec4.polymorph.client.recipe.widget.PlayerRecipesWidget;
 
