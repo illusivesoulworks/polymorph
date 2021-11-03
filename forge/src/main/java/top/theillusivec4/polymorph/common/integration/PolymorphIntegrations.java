@@ -21,6 +21,8 @@
 
 package top.theillusivec4.polymorph.common.integration;
 
+import com.electronwill.nightconfig.core.ConfigSpec;
+import com.electronwill.nightconfig.core.file.FileConfig;
 import com.google.common.collect.ImmutableSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.FMLPaths;
 import top.theillusivec4.polymorph.common.integration.appliedenergistics2.AppliedEnergisticsModule;
 import top.theillusivec4.polymorph.common.integration.craftingstation.CraftingStationModule;
 import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
@@ -43,30 +46,55 @@ import top.theillusivec4.polymorph.common.integration.toms_storage.TomsStorageMo
 
 public class PolymorphIntegrations {
 
+  private static final Set<String> CONFIG_ACTIVATED = new HashSet<>();
   private static final Map<String, Supplier<Supplier<AbstractCompatibilityModule>>> INTEGRATIONS =
       new HashMap<>();
   private static final Set<AbstractCompatibilityModule> ACTIVE_INTEGRATIONS = new HashSet<>();
 
   static {
-    INTEGRATIONS.put(Ids.PRETTY_PIPES, () -> PrettyPipesModule::new);
-    INTEGRATIONS.put(Ids.REFINED_STORAGE, () -> RefinedStorageModule::new);
-    INTEGRATIONS.put(Ids.REFINED_STORAGE_ADDONS, () -> RefinedStorageAddonsModule::new);
-    INTEGRATIONS.put(Ids.TINKERS_CONSTRUCT, () -> TinkersConstructModule::new);
-    INTEGRATIONS.put(Ids.FASTWORKBENCH, () -> FastBenchModule::new);
-    INTEGRATIONS.put(Ids.CRAFTING_STATION, () -> CraftingStationModule::new);
-    INTEGRATIONS.put(Ids.FASTFURNACE, () -> FastFurnaceModule::new);
-    INTEGRATIONS.put(Ids.CYCLIC, () -> CyclicModule::new);
-    INTEGRATIONS.put(Ids.TOMS_STORAGE, () -> TomsStorageModule::new);
-    INTEGRATIONS.put(Ids.SOPHISTICATED_BACKPACKS, () -> SophisticatedBackpacksModule::new);
-    INTEGRATIONS.put(Ids.APPLIED_ENERGISTICS_2, () -> AppliedEnergisticsModule::new);
-    INTEGRATIONS.put(Ids.IRON_FURNACES, () -> IronFurnacesModule::new);
+    INTEGRATIONS.put(Mod.PRETTY_PIPES.getId(), () -> PrettyPipesModule::new);
+    INTEGRATIONS.put(Mod.REFINED_STORAGE.getId(), () -> RefinedStorageModule::new);
+    INTEGRATIONS.put(Mod.REFINED_STORAGE_ADDONS.getId(), () -> RefinedStorageAddonsModule::new);
+    INTEGRATIONS.put(Mod.TINKERS_CONSTRUCT.getId(), () -> TinkersConstructModule::new);
+    INTEGRATIONS.put(Mod.FASTWORKBENCH.getId(), () -> FastBenchModule::new);
+    INTEGRATIONS.put(Mod.CRAFTING_STATION.getId(), () -> CraftingStationModule::new);
+    INTEGRATIONS.put(Mod.FASTFURNACE.getId(), () -> FastFurnaceModule::new);
+    INTEGRATIONS.put(Mod.CYCLIC.getId(), () -> CyclicModule::new);
+    INTEGRATIONS.put(Mod.TOMS_STORAGE.getId(), () -> TomsStorageModule::new);
+    INTEGRATIONS.put(Mod.SOPHISTICATED_BACKPACKS.getId(), () -> SophisticatedBackpacksModule::new);
+    INTEGRATIONS.put(Mod.APPLIED_ENERGISTICS_2.getId(), () -> AppliedEnergisticsModule::new);
+    INTEGRATIONS.put(Mod.IRON_FURNACES.getId(), () -> IronFurnacesModule::new);
+  }
+
+  public static void loadConfig() {
+    ConfigSpec spec = new ConfigSpec();
+
+    for (PolymorphIntegrations.Mod mod : PolymorphIntegrations.Mod.values()) {
+      spec.define(mod.getId(), true);
+    }
+    FileConfig config =
+        FileConfig.of(FMLPaths.CONFIGDIR.get().resolve("polymorph-integrations.toml"));
+    config.load();
+
+    if (!spec.isCorrect(config)) {
+      spec.correct(config);
+    }
+
+    for (PolymorphIntegrations.Mod mod : PolymorphIntegrations.Mod.values()) {
+
+      if (config.get(mod.getId())) {
+        CONFIG_ACTIVATED.add(mod.getId());
+      }
+    }
+    config.save();
+    config.close();
   }
 
   public static void init() {
     ModList modList = ModList.get();
     INTEGRATIONS.forEach((modid, supplier) -> {
 
-      if (modList.isLoaded(modid)) {
+      if (CONFIG_ACTIVATED.contains(modid) && modList.isLoaded(modid)) {
         ACTIVE_INTEGRATIONS.add(supplier.get().get());
       }
     });
@@ -90,22 +118,35 @@ public class PolymorphIntegrations {
     return ImmutableSet.copyOf(ACTIVE_INTEGRATIONS);
   }
 
-  public static class Ids {
+  public static Set<String> getConfigActivated() {
+    return ImmutableSet.copyOf(CONFIG_ACTIVATED);
+  }
 
-    public static final String JEI = "jei";
-    public static final String CRAFTINGCRAFT = "craftingcraft";
-    public static final String CRAFTING_STATION = "craftingstation";
-    public static final String PRETTY_PIPES = "prettypipes";
-    public static final String TOMS_STORAGE = "toms_storage";
-    public static final String FASTWORKBENCH = "fastbench";
-    public static final String SIMPLE_STORAGE_NETWORK = "storagenetwork";
-    public static final String REFINED_STORAGE = "refinedstorage";
-    public static final String REFINED_STORAGE_ADDONS = "refinedstorageaddons";
-    public static final String TINKERS_CONSTRUCT = "tconstruct";
-    public static final String CYCLIC = "cyclic";
-    public static final String SOPHISTICATED_BACKPACKS = "sophisticatedbackpacks";
-    public static final String APPLIED_ENERGISTICS_2 = "appliedenergistics2";
-    public static final String IRON_FURNACES = "ironfurnaces";
-    public static final String FASTFURNACE = "fastfurnace";
+  public enum Mod {
+    JEI("jei"),
+    CRAFTINGCRAFT("craftingcraft"),
+    CRAFTING_STATION("craftingstation"),
+    PRETTY_PIPES("prettypipes"),
+    TOMS_STORAGE("toms_storage"),
+    FASTWORKBENCH("fastbench"),
+    SIMPLE_STORAGE_NETWORK("storagenetwork"),
+    REFINED_STORAGE("refinedstorage"),
+    REFINED_STORAGE_ADDONS("refinedstorageaddons"),
+    TINKERS_CONSTRUCT("tconstruct"),
+    CYCLIC("cyclic"),
+    SOPHISTICATED_BACKPACKS("sophisticatedbackpacks"),
+    APPLIED_ENERGISTICS_2("appliedenergistics2"),
+    IRON_FURNACES("ironfurnaces"),
+    FASTFURNACE("fastfurnace");
+
+    private final String id;
+
+    Mod(String pId) {
+      this.id = pId;
+    }
+
+    public String getId() {
+      return this.id;
+    }
   }
 }

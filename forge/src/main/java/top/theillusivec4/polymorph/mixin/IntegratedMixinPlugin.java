@@ -22,6 +22,7 @@
 package top.theillusivec4.polymorph.mixin;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,30 +36,36 @@ import top.theillusivec4.polymorph.common.integration.PolymorphIntegrations;
 public class IntegratedMixinPlugin implements IMixinConfigPlugin {
 
   private static final Map<String, String> CLASS_TO_MOD = new HashMap<>();
+  private static final Set<String> CONFIG_ACTIVATED = new HashSet<>();
 
   static {
-    CLASS_TO_MOD.put("mezz.jei.", PolymorphIntegrations.Ids.JEI);
-    CLASS_TO_MOD.put("net.blay09.mods.craftingcraft.", PolymorphIntegrations.Ids.CRAFTINGCRAFT);
-    CLASS_TO_MOD.put("com.tfar.craftingstation.", PolymorphIntegrations.Ids.CRAFTING_STATION);
-    CLASS_TO_MOD.put("de.ellpeck.prettypipes.", PolymorphIntegrations.Ids.PRETTY_PIPES);
-    CLASS_TO_MOD.put("com.tom.storagemod.", PolymorphIntegrations.Ids.TOMS_STORAGE);
-    CLASS_TO_MOD.put("shadows.fastbench.", PolymorphIntegrations.Ids.FASTWORKBENCH);
+    CLASS_TO_MOD.put("mezz.jei.", PolymorphIntegrations.Mod.JEI.getId());
+    CLASS_TO_MOD.put("net.blay09.mods.craftingcraft.",
+        PolymorphIntegrations.Mod.CRAFTINGCRAFT.getId());
+    CLASS_TO_MOD.put("com.tfar.craftingstation.",
+        PolymorphIntegrations.Mod.CRAFTING_STATION.getId());
+    CLASS_TO_MOD.put("de.ellpeck.prettypipes.", PolymorphIntegrations.Mod.PRETTY_PIPES.getId());
+    CLASS_TO_MOD.put("com.tom.storagemod.", PolymorphIntegrations.Mod.TOMS_STORAGE.getId());
+    CLASS_TO_MOD.put("shadows.fastbench.", PolymorphIntegrations.Mod.FASTWORKBENCH.getId());
     CLASS_TO_MOD.put("com.lothrazar.storagenetwork.",
-        PolymorphIntegrations.Ids.SIMPLE_STORAGE_NETWORK);
-    CLASS_TO_MOD.put("com.refinedmods.refinedstorage.", PolymorphIntegrations.Ids.REFINED_STORAGE);
+        PolymorphIntegrations.Mod.SIMPLE_STORAGE_NETWORK.getId());
+    CLASS_TO_MOD.put("com.refinedmods.refinedstorage.",
+        PolymorphIntegrations.Mod.REFINED_STORAGE.getId());
     CLASS_TO_MOD.put("com.refinedmods.refinedstorageaddons.",
-        PolymorphIntegrations.Ids.REFINED_STORAGE_ADDONS);
-    CLASS_TO_MOD.put("slimeknights.tconstruct.", PolymorphIntegrations.Ids.TINKERS_CONSTRUCT);
-    CLASS_TO_MOD.put("com.lothrazar.cyclic.", PolymorphIntegrations.Ids.CYCLIC);
+        PolymorphIntegrations.Mod.REFINED_STORAGE_ADDONS.getId());
+    CLASS_TO_MOD.put("slimeknights.tconstruct.",
+        PolymorphIntegrations.Mod.TINKERS_CONSTRUCT.getId());
+    CLASS_TO_MOD.put("com.lothrazar.cyclic.", PolymorphIntegrations.Mod.CYCLIC.getId());
     CLASS_TO_MOD.put("net.p3pp3rf1y.sophisticatedbackpacks.",
-        PolymorphIntegrations.Ids.SOPHISTICATED_BACKPACKS);
-    CLASS_TO_MOD.put("appeng.", PolymorphIntegrations.Ids.APPLIED_ENERGISTICS_2);
-    CLASS_TO_MOD.put("shadows.fastfurnace.", PolymorphIntegrations.Ids.FASTFURNACE);
+        PolymorphIntegrations.Mod.SOPHISTICATED_BACKPACKS.getId());
+    CLASS_TO_MOD.put("appeng.", PolymorphIntegrations.Mod.APPLIED_ENERGISTICS_2.getId());
+    CLASS_TO_MOD.put("shadows.fastfurnace.", PolymorphIntegrations.Mod.FASTFURNACE.getId());
   }
 
   @Override
   public void onLoad(String mixinPackage) {
-
+    PolymorphIntegrations.loadConfig();
+    CONFIG_ACTIVATED.addAll(PolymorphIntegrations.getConfigActivated());
   }
 
   @Override
@@ -72,7 +79,8 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
     for (Map.Entry<String, String> entry : CLASS_TO_MOD.entrySet()) {
 
       if (targetClassName.startsWith(entry.getKey())) {
-        return FMLLoader.getLoadingModList().getModFileById(entry.getValue()) != null;
+        return CONFIG_ACTIVATED.contains(entry.getValue()) &&
+            FMLLoader.getLoadingModList().getModFileById(entry.getValue()) != null;
       }
     }
     return true;
