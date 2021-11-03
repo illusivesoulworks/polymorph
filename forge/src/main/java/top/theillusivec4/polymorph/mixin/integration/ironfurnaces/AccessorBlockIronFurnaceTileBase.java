@@ -19,24 +19,19 @@
  *
  */
 
-package top.theillusivec4.polymorph.mixin.core;
+package top.theillusivec4.polymorph.mixin.integration.ironfurnaces;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.CraftResultInventory;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.container.PlayerContainer;
+import ironfurnaces.tileentity.BlockIronFurnaceTileBase;
+import ironfurnaces.tileentity.LRUCache;
+import java.util.Optional;
+import net.minecraft.item.Item;
+import net.minecraft.item.crafting.AbstractCookingRecipe;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(PlayerContainer.class)
-public interface AccessorPlayerContainer {
+@Mixin(BlockIronFurnaceTileBase.class)
+public interface AccessorBlockIronFurnaceTileBase {
 
-  @Accessor
-  CraftingInventory getCraftSlots();
-
-  @Accessor
-  CraftResultInventory getResultSlots();
-
-  @Accessor
-  PlayerEntity getOwner();
+  @Invoker(remap = false)
+  LRUCache<Item, Optional<AbstractCookingRecipe>> callGetCache();
 }

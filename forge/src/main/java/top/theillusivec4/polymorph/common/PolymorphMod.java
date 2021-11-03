@@ -69,8 +69,8 @@ public class PolymorphMod {
       return null;
     });
     commonApi.registerContainer2TileEntity(container -> {
-      for (Slot inventorySlot : container.inventorySlots) {
-        IInventory inventory = inventorySlot.inventory;
+      for (Slot inventorySlot : container.slots) {
+        IInventory inventory = inventorySlot.container;
 
         if (inventory instanceof TileEntity) {
           return (TileEntity) inventory;

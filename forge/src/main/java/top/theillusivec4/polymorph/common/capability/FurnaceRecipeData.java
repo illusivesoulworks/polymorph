@@ -33,7 +33,7 @@ public class FurnaceRecipeData extends AbstractHighlightedRecipeData<AbstractFur
 
   @Override
   protected NonNullList<ItemStack> getInput() {
-    return NonNullList.from(ItemStack.EMPTY, this.getOwner().getStackInSlot(0));
+    return NonNullList.of(ItemStack.EMPTY, this.getOwner().getItem(0));
   }
 
   @Override

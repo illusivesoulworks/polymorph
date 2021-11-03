@@ -25,7 +25,7 @@ archivesBaseName = "${mod_id}-forge"
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: "snapshot", version: "${version_mcp}".toString()
+    mappings channel: "official", version: "1.16.5"
 
     runs {
         client {
@@ -99,16 +99,16 @@ dependencies {
     compile fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
     compile fg.deobf("curse.maven:placebo-283644:${file_placebo}")
     compile fg.deobf("curse.maven:simplestoragenetwork-268495:${file_ssn}")
-    compile fg.deobf("curse.maven:tinkers-74072:3439200")
-    compile fg.deobf("curse.maven:mantle-74924:3439180")
-    compile fg.deobf("curse.maven:cyclic-239286:3484473")
-    compile fg.deobf("curse.maven:sophisticatedbackpacks-422301:3504750")
-    compile fg.deobf("curse.maven:ae2-223794:3502523")
-    compile fg.deobf("curse.maven:ironfurnaces-237664:3387531")
+    compile fg.deobf("curse.maven:tinkers-74072:${file_tinkers}")
+    compile fg.deobf("curse.maven:mantle-74924:${file_mantle}")
+    compile fg.deobf("curse.maven:cyclic-239286:${file_cyclic}")
+    compile fg.deobf("curse.maven:sophisticatedbackpacks-422301:${file_sophisticated}")
+    compileOnly fg.deobf("curse.maven:ae2-223794:${file_ae2}")
+    compile fg.deobf("curse.maven:ironfurnaces-237664:${file_ironfurnaces}")
     compile fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
 
     runtimeOnly fg.deobf("curse.maven:vanillatweaks-272637:${file_vanillatweaks}")
-    runtimeOnly fg.deobf("curse.maven:improvedstations-361348:3113167")
+    runtimeOnly fg.deobf("curse.maven:improvedstations-361348:${file_improvedstations}")
 }
 
 sourceSets {

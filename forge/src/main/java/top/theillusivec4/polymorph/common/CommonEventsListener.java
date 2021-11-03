@@ -73,7 +73,7 @@ public class CommonEventsListener {
   public void openContainer(final PlayerContainerEvent.Open pEvent) {
     PlayerEntity player = pEvent.getPlayer();
 
-    if (!player.world.isRemote() && player instanceof ServerPlayerEntity) {
+    if (!player.level.isClientSide() && player instanceof ServerPlayerEntity) {
       ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
       Container container = pEvent.getContainer();
       IPolymorphCommon commonApi = PolymorphApi.common();
@@ -103,9 +103,9 @@ public class CommonEventsListener {
   public void worldTick(final TickEvent.WorldTickEvent evt) {
     World world = evt.world;
 
-    if (!world.isRemote() && evt.phase == TickEvent.Phase.END) {
+    if (!world.isClientSide() && evt.phase == TickEvent.Phase.END) {
 
-      for (TileEntity tileEntity : world.loadedTileEntityList) {
+      for (TileEntity tileEntity : world.blockEntityList) {
         PolymorphApi.common().getRecipeData(tileEntity)
             .ifPresent(ITileEntityRecipeData::tick);
       }

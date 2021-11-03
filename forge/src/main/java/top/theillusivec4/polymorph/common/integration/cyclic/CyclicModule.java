@@ -71,8 +71,8 @@ public class CyclicModule extends AbstractCompatibilityModule {
   public void clientSetup() {
     PolymorphApi.client().registerWidget(containerScreen -> {
       if (containerScreen instanceof ScreenCrafter &&
-          containerScreen.getContainer() instanceof ContainerCrafter) {
-        ContainerCrafter containerCrafter = (ContainerCrafter) containerScreen.getContainer();
+          containerScreen.getMenu() instanceof ContainerCrafter) {
+        ContainerCrafter containerCrafter = (ContainerCrafter) containerScreen.getMenu();
         return new CrafterRecipesWidget(containerScreen, containerCrafter);
       }
       return null;
@@ -84,7 +84,7 @@ public class CyclicModule extends AbstractCompatibilityModule {
 
     if (container instanceof CraftingBagContainer) {
       PolymorphApi.common().getRecipeData(serverPlayerEntity)
-          .ifPresent(recipeData -> container.onCraftMatrixChanged(null));
+          .ifPresent(recipeData -> container.slotsChanged(null));
       return true;
     }
     return false;
@@ -97,11 +97,11 @@ public class CyclicModule extends AbstractCompatibilityModule {
     if (tileEntity instanceof TileCrafter) {
       AccessorTileCrafter tileCrafter = (AccessorTileCrafter) tileEntity;
       tileCrafter.setLastValidRecipe(recipe);
-      tileCrafter.setRecipeOutput(recipe.getRecipeOutput());
+      tileCrafter.setRecipeOutput(recipe.getResultItem());
       LazyOptional<IItemHandler> preview = tileCrafter.getPreview();
 
       if (preview != null) {
-        tileCrafter.callSetPreviewSlot(preview.orElse(null), recipe.getRecipeOutput());
+        tileCrafter.callSetPreviewSlot(preview.orElse(null), recipe.getResultItem());
       }
       return true;
     }
@@ -121,7 +121,7 @@ public class CyclicModule extends AbstractCompatibilityModule {
         for (int j = 0; j < 3; j++) {
           int indexInArray = i + j * 3;
           ItemStack stack = stacks.get(indexInArray);
-          craftingInventory.setInventorySlotContents(indexInArray, stack.copy());
+          craftingInventory.setItem(indexInArray, stack.copy());
         }
       }
       return (Optional<T>) RecipeSelection.getTileEntityRecipe(IRecipeType.CRAFTING,
@@ -137,7 +137,7 @@ public class CyclicModule extends AbstractCompatibilityModule {
       super(type, id);
     }
 
-    public boolean canInteractWith(@Nonnull PlayerEntity playerIn) {
+    public boolean stillValid(@Nonnull PlayerEntity playerIn) {
       return true;
     }
   }

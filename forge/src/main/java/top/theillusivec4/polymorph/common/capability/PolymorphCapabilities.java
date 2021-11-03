@@ -201,7 +201,7 @@ public class PolymorphCapabilities {
     @Nonnull
     @Override
     public SortedSet<IRecipePair> getRecipesList() {
-      return new TreeSet<>(Comparator.comparing(pair -> pair.getOutput().getTranslationKey()));
+      return new TreeSet<>(Comparator.comparing(pair -> pair.getOutput().getDescriptionId()));
     }
 
     @Override

@@ -43,8 +43,8 @@ public class MixinWorkbenchContainer {
   @Redirect(
       at = @At(
           value = "INVOKE",
-          target = "net/minecraft/item/crafting/RecipeManager.getRecipe(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;"),
-      method = "updateCraftingResult")
+          target = "net/minecraft/item/crafting/RecipeManager.getRecipeFor(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;"),
+      method = "slotChangedCraftingGrid")
   private static <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world, int syncId,
       World unused, PlayerEntity player, CraftingInventory craftingInventory,

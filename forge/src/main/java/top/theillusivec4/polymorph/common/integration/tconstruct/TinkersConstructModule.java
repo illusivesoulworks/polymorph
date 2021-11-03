@@ -49,11 +49,11 @@ public class TinkersConstructModule extends AbstractCompatibilityModule {
   @Override
   public void clientSetup() {
     PolymorphApi.client().registerWidget(containerScreen -> {
-      if (containerScreen.getContainer() instanceof CraftingStationContainer) {
+      if (containerScreen.getMenu() instanceof CraftingStationContainer) {
         CraftingStationContainer craftingStationContainer =
-            (CraftingStationContainer) containerScreen.getContainer();
+            (CraftingStationContainer) containerScreen.getMenu();
         return new CraftingStationRecipesWidget(containerScreen,
-            craftingStationContainer.inventorySlots.get(9));
+            craftingStationContainer.slots.get(9));
       }
       return null;
     });
@@ -81,7 +81,7 @@ public class TinkersConstructModule extends AbstractCompatibilityModule {
 
     if (pPlayer instanceof ServerPlayerEntity) {
       PolymorphApi.common().getRecipeData(pTileEntity).ifPresent(recipeData -> {
-        if (pRecipe != null && pRecipe.matches(pCraftingInventory, pTileEntity.getWorld())) {
+        if (pRecipe != null && pRecipe.matches(pCraftingInventory, pTileEntity.getLevel())) {
           recipeData.setFailing(false);
         }
       });

@@ -50,22 +50,22 @@ public class FastBenchModule extends AbstractCompatibilityModule {
 
       if (container instanceof ContainerFastBench) {
         AccessorWorkbenchContainer accessor = (AccessorWorkbenchContainer) container;
-        inv = accessor.getCraftMatrix();
-        result = accessor.getCraftResult();
+        inv = accessor.getCraftSlots();
+        result = accessor.getResultSlots();
         player = accessor.getPlayer();
       } else if (container instanceof PlayerContainer) {
         AccessorPlayerContainer accessor = (AccessorPlayerContainer) container;
-        inv = accessor.getCraftMatrix();
-        result = accessor.getCraftResult();
-        player = accessor.getPlayer();
+        inv = accessor.getCraftSlots();
+        result = accessor.getResultSlots();
+        player = accessor.getOwner();
       }
 
       if (inv != null && result != null && player != null) {
-        ItemStack stack = craftingRecipe.getCraftingResult(inv);
+        ItemStack stack = craftingRecipe.assemble(inv);
 
-        if (!ItemStack.areItemStacksEqual(stack, result.getStackInSlot(0))) {
+        if (!ItemStack.matches(stack, result.getItem(0))) {
           NetworkUtils.sendTo(FastBench.CHANNEL, new RecipeMessage(craftingRecipe, stack), player);
-          result.setInventorySlotContents(0, stack);
+          result.setItem(0, stack);
           result.setRecipeUsed(recipe);
         }
       }

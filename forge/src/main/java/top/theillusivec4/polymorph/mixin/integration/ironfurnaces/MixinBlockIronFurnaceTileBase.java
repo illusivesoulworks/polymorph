@@ -19,37 +19,37 @@
  *
  */
 
-package top.theillusivec4.polymorph.mixin.integration.cyclic;
+package top.theillusivec4.polymorph.mixin.integration.ironfurnaces;
 
-import com.lothrazar.cyclic.base.TileEntityBase;
-import com.lothrazar.cyclic.block.crafter.TileCrafter;
-import java.util.ArrayList;
+import ironfurnaces.tileentity.BlockIronFurnaceTileBase;
+import ironfurnaces.tileentity.LRUCache;
+import java.util.Optional;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.item.crafting.AbstractCookingRecipe;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
 
 @SuppressWarnings("unused")
-@Mixin(TileCrafter.class)
-public abstract class MixinTileCrafter extends TileEntityBase {
+@Mixin(BlockIronFurnaceTileBase.class)
+public abstract class MixinBlockIronFurnaceTileBase {
 
-  public MixinTileCrafter(TileEntityType<?> tileEntityTypeIn) {
-    super(tileEntityTypeIn);
-  }
-
-  @SuppressWarnings("ConstantConditions")
   @Inject(
-      at = @At("HEAD"),
-      method = "tryRecipes",
-      remap = false,
-      cancellable = true)
-  private void polymorph$tryRecipes(ArrayList<ItemStack> stacks,
-                                    CallbackInfoReturnable<IRecipe<?>> cir) {
-    CyclicModule.getRecipe(stacks, this.level, (TileCrafter) (Object) this)
-        .ifPresent(cir::setReturnValue);
+      at = @At("RETURN"),
+      method = "grabRecipe(Lnet/minecraft/item/ItemStack;)Ljava/util/Optional;",
+      remap = false
+  )
+  private void polymorph$grabRecipe(ItemStack pStack,
+                                    CallbackInfoReturnable<Optional<AbstractCookingRecipe>> pCir) {
+
+    if (!pStack.isEmpty()) {
+      this.getCache().remove(pStack.getItem());
+    }
   }
+
+  @Shadow(remap = false)
+  abstract LRUCache<Item, Optional<AbstractCookingRecipe>> getCache();
 }

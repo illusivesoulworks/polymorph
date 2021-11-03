@@ -61,7 +61,7 @@ public class SPacketRecipesList {
 
       for (IRecipePair data : pPacket.recipeList) {
         pBuffer.writeResourceLocation(data.getResourceLocation());
-        pBuffer.writeItemStack(data.getOutput());
+        pBuffer.writeItem(data.getOutput());
       }
 
       if (pPacket.selected != null) {
@@ -78,7 +78,7 @@ public class SPacketRecipesList {
       int size = pBuffer.readInt();
 
       for (int i = 0; i < size; i++) {
-        recipeDataset.add(new RecipePair(pBuffer.readResourceLocation(), pBuffer.readItemStack()));
+        recipeDataset.add(new RecipePair(pBuffer.readResourceLocation(), pBuffer.readItem()));
       }
 
       if (pBuffer.isReadable()) {

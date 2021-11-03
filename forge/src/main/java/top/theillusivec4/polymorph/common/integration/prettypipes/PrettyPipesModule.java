@@ -30,7 +30,7 @@ public class PrettyPipesModule extends AbstractCompatibilityModule {
   @Override
   public void clientSetup() {
     PolymorphApi.client().registerWidget(containerScreen -> {
-      if (containerScreen.getContainer() instanceof CraftingTerminalContainer) {
+      if (containerScreen.getMenu() instanceof CraftingTerminalContainer) {
         return PolymorphApi.client().findCraftingResultSlot(containerScreen)
             .map(slot -> new CraftingTerminalRecipesWidget(containerScreen, slot)).orElse(null);
       }

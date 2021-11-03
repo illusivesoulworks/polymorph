@@ -47,21 +47,21 @@ public class AppliedEnergisticsModule extends AbstractCompatibilityModule {
   @Override
   public void clientSetup() {
     PolymorphApi.client().registerWidget(pContainerScreen -> {
-      if (pContainerScreen.getContainer() instanceof CraftingTermContainer) {
+      if (pContainerScreen.getMenu() instanceof CraftingTermContainer) {
 
-        for (Slot inventorySlot : pContainerScreen.getContainer().inventorySlots) {
+        for (Slot inventorySlot : pContainerScreen.getMenu().slots) {
 
           if (inventorySlot instanceof CraftingTermSlot) {
             return new PlayerRecipesWidget(pContainerScreen, inventorySlot);
           }
         }
-      } else if (pContainerScreen.getContainer() instanceof PatternTermContainer) {
+      } else if (pContainerScreen.getMenu() instanceof PatternTermContainer) {
 
-        for (Slot inventorySlot : pContainerScreen.getContainer().inventorySlots) {
+        for (Slot inventorySlot : pContainerScreen.getMenu().slots) {
 
           if (inventorySlot instanceof PatternTermSlot) {
             return new PatternTermRecipesWidget(pContainerScreen,
-                (PatternTermContainer) pContainerScreen.getContainer(), inventorySlot);
+                (PatternTermContainer) pContainerScreen.getMenu(), inventorySlot);
           }
         }
       }
@@ -76,7 +76,7 @@ public class AppliedEnergisticsModule extends AbstractCompatibilityModule {
 
       if (container instanceof CraftingTermContainer) {
         ((AccessorCraftingTermContainer) container).setCurrentRecipe((ICraftingRecipe) recipe);
-        container.onCraftMatrixChanged(((CraftingTermContainer) container).getPlayerInventory());
+        container.slotsChanged(((CraftingTermContainer) container).getPlayerInventory());
         return true;
       } else if (container instanceof PatternTermContainer) {
         ((AccessorPatternTermContainer) container).setCurrentRecipe((ICraftingRecipe) recipe);

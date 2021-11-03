@@ -22,9 +22,14 @@
 package top.theillusivec4.polymorph.common.integration.ironfurnaces;
 
 import ironfurnaces.tileentity.BlockIronFurnaceTileBase;
+import java.util.Optional;
+import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.AbstractCookingRecipe;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import top.theillusivec4.polymorph.common.capability.AbstractHighlightedRecipeData;
+import top.theillusivec4.polymorph.mixin.integration.ironfurnaces.AccessorBlockIronFurnaceTileBase;
 
 public class IronFurnaceRecipeData extends AbstractHighlightedRecipeData<BlockIronFurnaceTileBase> {
 
@@ -33,8 +38,19 @@ public class IronFurnaceRecipeData extends AbstractHighlightedRecipeData<BlockIr
   }
 
   @Override
+  public void selectRecipe(@Nonnull IRecipe<?> pRecipe) {
+    super.selectRecipe(pRecipe);
+    ItemStack input = this.getInput().get(0);
+
+    if (!input.isEmpty() && pRecipe instanceof AbstractCookingRecipe) {
+      ((AccessorBlockIronFurnaceTileBase) this.getOwner()).callGetCache()
+          .put(input.getItem(), Optional.of((AbstractCookingRecipe) pRecipe));
+    }
+  }
+
+  @Override
   protected NonNullList<ItemStack> getInput() {
-    return NonNullList.from(ItemStack.EMPTY, this.getOwner().getStackInSlot(0));
+    return NonNullList.of(ItemStack.EMPTY, this.getOwner().getItem(0));
   }
 
   @Override

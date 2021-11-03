@@ -45,7 +45,7 @@ public class MixinContainerNetwork {
   @Redirect(
       at = @At(
           value = "INVOKE",
-          target = "net/minecraft/item/crafting/RecipeManager.getRecipe(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;"),
+          target = "net/minecraft/item/crafting/RecipeManager.getRecipeFor(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;"),
       method = "findMatchingRecipe")
   private <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world) {
@@ -55,7 +55,7 @@ public class MixinContainerNetwork {
   @Redirect(
       at = @At(
           value = "INVOKE",
-          target = "net/minecraft/item/crafting/RecipeManager.getRecipe(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;"),
+          target = "net/minecraft/item/crafting/RecipeManager.getRecipeFor(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;"),
       method = "findMatchingRecipeClient")
   private <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipeClient(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world) {

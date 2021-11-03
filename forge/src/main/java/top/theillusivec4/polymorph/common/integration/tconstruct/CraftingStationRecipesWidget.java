@@ -41,6 +41,6 @@ public class CraftingStationRecipesWidget extends PersistentRecipesWidget {
 
   @Override
   public int getYPos() {
-    return getOutputSlot().yPos + 8;
+    return getOutputSlot().y + 8;
   }
 }

@@ -67,7 +67,7 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
                                                                             C pInventory,
                                                                             World pWorld,
                                                                             List<T> pRecipes) {
-    this.getLoadedRecipe().flatMap(id -> pWorld.getRecipeManager().getRecipe(id))
+    this.getLoadedRecipe().flatMap(id -> pWorld.getRecipeManager().byKey(id))
         .ifPresent(selected -> {
           try {
             if (selected.getType() == pType && ((T) selected).matches(pInventory, pWorld)) {
@@ -114,7 +114,7 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
     }
     SortedSet<IRecipePair> newDataset = new TreeSet<>();
     List<T> recipes =
-        pRecipes.isEmpty() ? pWorld.getRecipeManager().getRecipes(pType, pInventory, pWorld) :
+        pRecipes.isEmpty() ? pWorld.getRecipeManager().getRecipesFor(pType, pInventory, pWorld) :
             pRecipes;
 
     if (recipes.isEmpty()) {
@@ -130,7 +130,7 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
           this.getSelectedRecipe().map(recipe -> recipe.getId().equals(id)).orElse(false)) {
         ref.set(entry);
       }
-      newDataset.add(new RecipePair(id, entry.getCraftingResult(pInventory)));
+      newDataset.add(new RecipePair(id, entry.assemble(pInventory)));
     }
     this.setRecipesList(newDataset);
     result = ref.get();
@@ -177,9 +177,9 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
 
     if (pInventory != null) {
 
-      for (int i = 0; i < pInventory.getSizeInventory(); i++) {
+      for (int i = 0; i < pInventory.getContainerSize(); i++) {
 
-        if (!pInventory.getStackInSlot(i).isEmpty()) {
+        if (!pInventory.getItem(i).isEmpty()) {
           return false;
         }
       }
@@ -240,8 +240,8 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
 
       for (INBT inbt : list) {
         CompoundNBT tag = (CompoundNBT) inbt;
-        ResourceLocation id = ResourceLocation.tryCreate(tag.getString("Id"));
-        ItemStack stack = ItemStack.read(tag.getCompound("ItemStack"));
+        ResourceLocation id = ResourceLocation.tryParse(tag.getString("Id"));
+        ItemStack stack = ItemStack.of(tag.getCompound("ItemStack"));
         dataset.add(new RecipePair(id, stack));
       }
     }
@@ -259,7 +259,7 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
 
       for (IRecipePair data : dataset) {
         CompoundNBT tag = new CompoundNBT();
-        tag.put("ItemStack", data.getOutput().write(new CompoundNBT()));
+        tag.put("ItemStack", data.getOutput().save(new CompoundNBT()));
         tag.putString("Id", data.getResourceLocation().toString());
         list.add(tag);
       }

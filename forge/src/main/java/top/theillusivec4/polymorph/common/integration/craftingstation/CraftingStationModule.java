@@ -36,8 +36,8 @@ public class CraftingStationModule extends AbstractCompatibilityModule {
   public void clientSetup() {
     PolymorphApi.client().registerWidget(containerScreen -> {
       if (containerScreen instanceof CraftingStationScreen &&
-          containerScreen.getContainer() instanceof CraftingStationContainer) {
-        return new PlayerRecipesWidget(containerScreen, containerScreen.getContainer().getSlot(0));
+          containerScreen.getMenu() instanceof CraftingStationContainer) {
+        return new PlayerRecipesWidget(containerScreen, containerScreen.getMenu().getSlot(0));
       }
       return null;
     });

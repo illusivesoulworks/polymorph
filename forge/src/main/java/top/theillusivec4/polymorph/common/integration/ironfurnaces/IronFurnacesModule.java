@@ -44,7 +44,7 @@ public class IronFurnacesModule extends AbstractCompatibilityModule {
   @Override
   public void clientSetup() {
     PolymorphApi.client().registerWidget(pContainerScreen -> {
-      if (pContainerScreen.getContainer() instanceof BlockIronFurnaceContainerBase) {
+      if (pContainerScreen.getMenu() instanceof BlockIronFurnaceContainerBase) {
         return new FurnaceRecipesWidget(pContainerScreen);
       }
       return null;

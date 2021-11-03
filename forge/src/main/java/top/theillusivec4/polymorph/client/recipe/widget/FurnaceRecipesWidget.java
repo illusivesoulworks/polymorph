@@ -31,7 +31,7 @@ public class FurnaceRecipesWidget extends PersistentRecipesWidget {
 
   public FurnaceRecipesWidget(ContainerScreen<?> pContainerScreen) {
     super(pContainerScreen);
-    List<Slot> slots = pContainerScreen.getContainer().inventorySlots;
+    List<Slot> slots = pContainerScreen.getMenu().slots;
     this.outputSlot = slots.get(2);
   }
 

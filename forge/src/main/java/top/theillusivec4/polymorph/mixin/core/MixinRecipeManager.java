@@ -40,7 +40,7 @@ public class MixinRecipeManager {
 
   @Inject(
       at = @At("HEAD"),
-      method = "getRecipe(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;",
+      method = "getRecipeFor(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;",
       cancellable = true)
   private <C extends IInventory, T extends IRecipe<C>> void polymorph$getRecipe(
       IRecipeType<T> recipeTypeIn, C inventoryIn, World worldIn,

@@ -59,7 +59,7 @@ public abstract class AbstractTileEntityRecipeData<E extends TileEntity>
       ItemStack lastStack = this.lastInput.get(i);
       ItemStack currentStack = currentInput.get(i);
 
-      if (!ItemStack.areItemStacksEqual(lastStack, currentStack)) {
+      if (!ItemStack.matches(lastStack, currentStack)) {
         changed = true;
       }
       this.lastInput.set(i, currentStack.copy());
@@ -86,13 +86,13 @@ public abstract class AbstractTileEntityRecipeData<E extends TileEntity>
 
   @Override
   public Set<ServerPlayerEntity> getListeners() {
-    World world = this.getOwner().getWorld();
+    World world = this.getOwner().getLevel();
     Set<ServerPlayerEntity> players = new HashSet<>();
 
     if (world instanceof ServerWorld) {
 
-      for (ServerPlayerEntity player : ((ServerWorld) world).getWorldServer().getPlayers()) {
-        PolymorphApi.common().getRecipeDataFromTileEntity(player.openContainer)
+      for (ServerPlayerEntity player : ((ServerWorld) world).getWorldServer().players()) {
+        PolymorphApi.common().getRecipeDataFromTileEntity(player.containerMenu)
             .ifPresent(recipeData -> {
               if (recipeData == this) {
                 players.add(player);

@@ -129,9 +129,9 @@ public class SelectionWidget extends AbstractGui
   public void renderTooltip(MatrixStack pMatrixStack, int pMouseX, int pMouseY) {
     Minecraft mc = Minecraft.getInstance();
 
-    if (mc.currentScreen != null && this.hoveredButton != null) {
+    if (mc.screen != null && this.hoveredButton != null) {
       this.renderTooltip(this.hoveredButton.getOutput(), pMatrixStack,
-          this.hoveredButton.getTooltipText(mc.currentScreen), pMouseX, pMouseY);
+          this.hoveredButton.getTooltipText(mc.screen), pMouseX, pMouseY);
     }
   }
 
@@ -181,7 +181,7 @@ public class SelectionWidget extends AbstractGui
     drawHoveringText(pStack, pMatrixStack, pText, pMouseX, pMouseY, this.containerScreen.width,
         this.containerScreen.height, -1, GuiUtils.DEFAULT_BACKGROUND_COLOR,
         GuiUtils.DEFAULT_BORDER_COLOR_START, GuiUtils.DEFAULT_BORDER_COLOR_END,
-        this.containerScreen.getMinecraft().fontRenderer);
+        this.containerScreen.getMinecraft().font);
   }
 
   @SuppressWarnings("deprecation")
@@ -211,7 +211,7 @@ public class SelectionWidget extends AbstractGui
       int tooltipTextWidth = 0;
 
       for (ITextProperties textLine : pText) {
-        int textLineWidth = pFontRenderer.getStringPropertyWidth(textLine);
+        int textLineWidth = pFontRenderer.width(textLine);
 
         if (textLineWidth > tooltipTextWidth) {
           tooltipTextWidth = textLineWidth;
@@ -247,15 +247,14 @@ public class SelectionWidget extends AbstractGui
         for (int i = 0; i < pText.size(); i++) {
           ITextProperties textLine = pText.get(i);
           List<ITextProperties> wrappedLine =
-              pFontRenderer.getCharacterManager()
-                  .func_238362_b_(textLine, tooltipTextWidth, Style.EMPTY);
+              pFontRenderer.getSplitter().splitLines(textLine, tooltipTextWidth, Style.EMPTY);
 
           if (i == 0) {
             titleLinesCount = wrappedLine.size();
           }
 
           for (ITextProperties line : wrappedLine) {
-            int lineWidth = pFontRenderer.getStringPropertyWidth(line);
+            int lineWidth = pFontRenderer.width(line);
 
             if (lineWidth > wrappedTooltipWidth) {
               wrappedTooltipWidth = lineWidth;
@@ -298,8 +297,8 @@ public class SelectionWidget extends AbstractGui
       pBorderColorStart = colorEvent.getBorderStart();
       pBorderColorEnd = colorEvent.getBorderEnd();
 
-      pMatrixStack.push();
-      Matrix4f mat = pMatrixStack.getLast().getMatrix();
+      pMatrixStack.pushPose();
+      Matrix4f mat = pMatrixStack.last().pose();
       GuiUtils.drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY - 4,
           tooltipX + tooltipTextWidth + 3,
           tooltipY - 3, pBackgroundColor, pBackgroundColor);
@@ -331,7 +330,7 @@ public class SelectionWidget extends AbstractGui
               pFontRenderer,
               tooltipTextWidth, tooltipHeight));
       IRenderTypeBuffer.Impl renderType =
-          IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
+          IRenderTypeBuffer.immediate(Tessellator.getInstance().getBuilder());
       pMatrixStack.translate(0.0D, 0.0D, zLevel);
       int tooltipTop = tooltipY;
 
@@ -339,9 +338,8 @@ public class SelectionWidget extends AbstractGui
         ITextProperties line = pText.get(lineNumber);
 
         if (line != null) {
-          pFontRenderer.drawEntityText(LanguageMap.getInstance().func_241870_a(line),
-              (float) tooltipX,
-              (float) tooltipY, -1, true, mat, renderType, false, 0, 15728880);
+          pFontRenderer.drawInBatch(LanguageMap.getInstance().getVisualOrder(line),
+              (float) tooltipX, (float) tooltipY, -1, true, mat, renderType, false, 0, 15728880);
         }
 
         if (lineNumber + 1 == titleLinesCount) {
@@ -349,12 +347,11 @@ public class SelectionWidget extends AbstractGui
         }
         tooltipY += 10;
       }
-      renderType.finish();
-      pMatrixStack.pop();
+      renderType.endBatch();
+      pMatrixStack.popPose();
       MinecraftForge.EVENT_BUS.post(
           new RenderTooltipEvent.PostText(pStack, pText, pMatrixStack, tooltipX, tooltipTop,
-              pFontRenderer,
-              tooltipTextWidth, tooltipHeight));
+              pFontRenderer, tooltipTextWidth, tooltipHeight));
       RenderSystem.enableDepthTest();
       RenderSystem.enableRescaleNormal();
     }

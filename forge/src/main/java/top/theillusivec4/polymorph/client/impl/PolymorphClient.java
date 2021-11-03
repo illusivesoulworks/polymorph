@@ -61,11 +61,11 @@ public class PolymorphClient implements IPolymorphClient {
 
   @Override
   public Optional<Slot> findCraftingResultSlot(ContainerScreen<?> pContainerScreen) {
-    Container container = pContainerScreen.getContainer();
+    Container container = pContainerScreen.getMenu();
 
-    for (Slot slot : container.inventorySlots) {
+    for (Slot slot : container.slots) {
 
-      if (slot.inventory instanceof CraftResultInventory) {
+      if (slot.container instanceof CraftResultInventory) {
         return Optional.of(slot);
       }
     }

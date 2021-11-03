@@ -48,10 +48,10 @@ public class CraftingStationRecipeData
     if (this.craftingInventory != null) {
 
       NonNullList<ItemStack> input =
-          NonNullList.withSize(this.craftingInventory.getSizeInventory(), ItemStack.EMPTY);
+          NonNullList.withSize(this.craftingInventory.getContainerSize(), ItemStack.EMPTY);
 
-      for (int i = 0; i < this.craftingInventory.getSizeInventory(); i++) {
-        input.set(i, this.craftingInventory.getStackInSlot(i));
+      for (int i = 0; i < this.craftingInventory.getContainerSize(); i++) {
+        input.set(i, this.craftingInventory.getItem(i));
       }
       return input;
     }

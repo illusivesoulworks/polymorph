@@ -56,11 +56,11 @@ public class CPacketPersistentRecipeSelection {
       ServerPlayerEntity sender = pContext.get().getSender();
 
       if (sender != null) {
-        World world = sender.getEntityWorld();
+        World world = sender.getCommandSenderWorld();
         Optional<? extends IRecipe<?>> maybeRecipe =
-            world.getRecipeManager().getRecipe(pPacket.recipe);
+            world.getRecipeManager().byKey(pPacket.recipe);
         maybeRecipe.ifPresent(recipe -> {
-          Container container = sender.openContainer;
+          Container container = sender.containerMenu;
           PolymorphApi.common().getRecipeDataFromTileEntity(container)
               .ifPresent(recipeData -> {
                 recipeData.selectRecipe(recipe);

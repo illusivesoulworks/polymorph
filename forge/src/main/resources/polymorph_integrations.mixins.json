@@ -17,6 +17,8 @@
     "cyclic.MixinTileCrafter",
     "fastbench.MixinContainerFastBench",
     "fastfurnace.AccessorTileFastFurnace",
+    "ironfurnaces.AccessorBlockIronFurnaceTileBase",
+    "ironfurnaces.MixinBlockIronFurnaceTileBase",
     "jei.MixinRecipeTransferUtil",
     "prettypipes.MixinCraftingTerminalContainer",
     "refinedstorage.AccessorGrid",

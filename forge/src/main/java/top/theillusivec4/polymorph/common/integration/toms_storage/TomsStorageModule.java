@@ -56,7 +56,7 @@ public class TomsStorageModule extends AbstractCompatibilityModule {
   public void clientSetup() {
     IPolymorphClient clientApi = PolymorphApi.client();
     clientApi.registerWidget(containerScreen -> {
-      if (containerScreen.getContainer() instanceof ContainerCraftingTerminal) {
+      if (containerScreen.getMenu() instanceof ContainerCraftingTerminal) {
         return clientApi.findCraftingResultSlot(containerScreen)
             .map(slot -> new CraftingTerminalRecipesWidget(containerScreen, slot))
             .orElse(null);

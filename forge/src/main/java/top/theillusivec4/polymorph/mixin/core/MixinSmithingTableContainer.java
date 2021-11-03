@@ -49,7 +49,7 @@ public abstract class MixinSmithingTableContainer extends AbstractRepairContaine
   private List<SmithingRecipe> recipes;
 
   @Shadow
-  private SmithingRecipe field_234652_h_;
+  private SmithingRecipe selectedRecipe;
 
   public MixinSmithingTableContainer(@Nullable ContainerType<?> p_i231587_1_, int p_i231587_2_,
                                      PlayerInventory p_i231587_3_, IWorldPosCallable p_i231587_4_) {
@@ -59,14 +59,14 @@ public abstract class MixinSmithingTableContainer extends AbstractRepairContaine
   @ModifyVariable(
       at = @At(
           value = "INVOKE_ASSIGN",
-          target = "net/minecraft/item/crafting/RecipeManager.getRecipes(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/List;"),
-      method = "updateRepairOutput")
+          target = "net/minecraft/item/crafting/RecipeManager.getRecipesFor(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/List;"),
+      method = "createResult")
   private List<SmithingRecipe> polymorph$getRecipes(List<SmithingRecipe> recipes) {
     this.recipes = recipes;
 
-    if (this.field_234645_f_ instanceof ServerPlayerEntity && recipes.isEmpty()) {
+    if (this.player instanceof ServerPlayerEntity && recipes.isEmpty()) {
       PolymorphApi.common().getPacketDistributor()
-          .sendRecipesListS2C((ServerPlayerEntity) this.field_234645_f_);
+          .sendRecipesListS2C((ServerPlayerEntity) this.player);
     }
     return recipes;
   }
@@ -77,10 +77,10 @@ public abstract class MixinSmithingTableContainer extends AbstractRepairContaine
           target = "java/util/List.get(I)Ljava/lang/Object;",
           shift = At.Shift.BY,
           by = 3),
-      method = "updateRepairOutput")
+      method = "createResult")
   private void polymorph$updateRepairOutput(CallbackInfo ci) {
-    this.field_234652_h_ =
-        RecipeSelection.getPlayerRecipe(IRecipeType.SMITHING, this.field_234643_d_,
-            this.field_234645_f_.world, this.field_234645_f_, this.recipes).orElse(null);
+    this.selectedRecipe =
+        RecipeSelection.getPlayerRecipe(IRecipeType.SMITHING, this.inputSlots,
+            this.player.level, this.player, this.recipes).orElse(null);
   }
 }
