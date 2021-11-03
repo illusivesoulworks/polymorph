@@ -24,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 import top.theillusivec4.polymorph.common.integration.sophisticatedbackpacks.SophisticatedBackpacksModule;
 
+@SuppressWarnings("unused")
 @Mixin(CraftingUpgradeContainer.class)
 public abstract class MixinCraftingUpgradeContainer extends
     UpgradeContainerBase<CraftingUpgradeWrapper, CraftingUpgradeContainer> {

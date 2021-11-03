@@ -11,20 +11,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import top.theillusivec4.polymorph.common.integration.sophisticatedbackpacks.SophisticatedBackpacksModule;
 
+@SuppressWarnings("unused")
 @Mixin(SmeltingLogic.class)
 public abstract class MixinSmeltingLogic {
 
   @Shadow(remap = false)
   @Final
   private ItemStack upgrade;
-
-//  @Inject(
-//      at = @At(value = "HEAD"),
-//      method = "getSmeltingRecipe",
-//      remap = false)
-//  private void polymorph$getSmeltingRecipe(CallbackInfoReturnable<Optional<FurnaceRecipe>> cir) {
-//    SophisticatedBackpacksMixinHooks.sendSmeltingRecipes(this.upgrade);
-//  }
 
   @Redirect(
       at = @At(

@@ -22,6 +22,7 @@ import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 import top.theillusivec4.polymorph.common.integration.appliedenergistics2.CPacketCallUpdate;
 import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
 
+@SuppressWarnings("unused")
 @Mixin(PatternTermContainer.class)
 public abstract class MixinPatternTermContainer extends ItemTerminalContainer {
 

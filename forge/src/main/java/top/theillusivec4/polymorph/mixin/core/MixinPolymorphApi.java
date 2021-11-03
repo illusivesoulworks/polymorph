@@ -10,6 +10,7 @@ import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.client.impl.PolymorphClient;
 import top.theillusivec4.polymorph.common.impl.PolymorphCommon;
 
+@SuppressWarnings("unused")
 @Mixin(PolymorphApi.class)
 public class MixinPolymorphApi {
 
