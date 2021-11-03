@@ -42,6 +42,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import slimeknights.tconstruct.tables.tileentity.table.CraftingStationTileEntity;
 import slimeknights.tconstruct.tables.tileentity.table.RetexturedTableTileEntity;
 import slimeknights.tconstruct.tables.tileentity.table.crafting.CraftingInventoryWrapper;
+import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.common.PolymorphMod;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 import top.theillusivec4.polymorph.common.integration.tconstruct.TinkersConstructModule;
 
@@ -65,8 +67,7 @@ public abstract class MixinCraftingStationTileEntity extends RetexturedTableTile
       at = @At(
           value = "INVOKE",
           target = "net/minecraft/item/crafting/RecipeManager.getRecipe(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;"),
-      method = "calcResult",
-      remap = false)
+      method = "calcResult")
   private <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world,
       @Nullable PlayerEntity player) {

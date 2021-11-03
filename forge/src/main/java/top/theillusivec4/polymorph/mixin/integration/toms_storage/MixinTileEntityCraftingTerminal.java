@@ -42,8 +42,7 @@ public class MixinTileEntityCraftingTerminal {
       at = @At(
           value = "INVOKE",
           target = "net/minecraft/item/crafting/RecipeManager.getRecipe(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;"),
-      method = "onCraftingMatrixChanged",
-      remap = false)
+      method = "onCraftingMatrixChanged")
   private <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world) {
     return RecipeSelection.getTileEntityRecipe(type, inventory, world,

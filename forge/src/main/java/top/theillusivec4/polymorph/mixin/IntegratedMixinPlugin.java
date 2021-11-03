@@ -37,23 +37,23 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
   private static final Map<String, String> CLASS_TO_MOD = new HashMap<>();
 
   static {
-    CLASS_TO_MOD.put("mezz.jei", PolymorphIntegrations.Ids.JEI);
-    CLASS_TO_MOD.put("net.blay09.mods.craftingcraft", PolymorphIntegrations.Ids.CRAFTINGCRAFT);
-    CLASS_TO_MOD.put("com.tfar.craftingstation", PolymorphIntegrations.Ids.CRAFTING_STATION);
-    CLASS_TO_MOD.put("de.ellpeck.prettypipes", PolymorphIntegrations.Ids.PRETTY_PIPES);
-    CLASS_TO_MOD.put("com.tom.storagemod", PolymorphIntegrations.Ids.TOMS_STORAGE);
-    CLASS_TO_MOD.put("shadows.fastbench", PolymorphIntegrations.Ids.FASTWORKBENCH);
-    CLASS_TO_MOD.put("com.lothrazar.storagenetwork",
+    CLASS_TO_MOD.put("mezz.jei.", PolymorphIntegrations.Ids.JEI);
+    CLASS_TO_MOD.put("net.blay09.mods.craftingcraft.", PolymorphIntegrations.Ids.CRAFTINGCRAFT);
+    CLASS_TO_MOD.put("com.tfar.craftingstation.", PolymorphIntegrations.Ids.CRAFTING_STATION);
+    CLASS_TO_MOD.put("de.ellpeck.prettypipes.", PolymorphIntegrations.Ids.PRETTY_PIPES);
+    CLASS_TO_MOD.put("com.tom.storagemod.", PolymorphIntegrations.Ids.TOMS_STORAGE);
+    CLASS_TO_MOD.put("shadows.fastbench.", PolymorphIntegrations.Ids.FASTWORKBENCH);
+    CLASS_TO_MOD.put("com.lothrazar.storagenetwork.",
         PolymorphIntegrations.Ids.SIMPLE_STORAGE_NETWORK);
-    CLASS_TO_MOD.put("com.refinedmods.refinedstorage", PolymorphIntegrations.Ids.REFINED_STORAGE);
-    CLASS_TO_MOD.put("com.refinedmods.refinedstorageaddons",
+    CLASS_TO_MOD.put("com.refinedmods.refinedstorage.", PolymorphIntegrations.Ids.REFINED_STORAGE);
+    CLASS_TO_MOD.put("com.refinedmods.refinedstorageaddons.",
         PolymorphIntegrations.Ids.REFINED_STORAGE_ADDONS);
-    CLASS_TO_MOD.put("slimeknights.tconstruct", PolymorphIntegrations.Ids.TINKERS_CONSTRUCT);
-    CLASS_TO_MOD.put("com.lothrazar.cyclic", PolymorphIntegrations.Ids.CYCLIC);
-    CLASS_TO_MOD.put("net.p3pp3rf1y.sophisticatedbackpacks",
+    CLASS_TO_MOD.put("slimeknights.tconstruct.", PolymorphIntegrations.Ids.TINKERS_CONSTRUCT);
+    CLASS_TO_MOD.put("com.lothrazar.cyclic.", PolymorphIntegrations.Ids.CYCLIC);
+    CLASS_TO_MOD.put("net.p3pp3rf1y.sophisticatedbackpacks.",
         PolymorphIntegrations.Ids.SOPHISTICATED_BACKPACKS);
     CLASS_TO_MOD.put("appeng.", PolymorphIntegrations.Ids.APPLIED_ENERGISTICS_2);
-    CLASS_TO_MOD.put("shadows.fastfurnace", PolymorphIntegrations.Ids.FASTFURNACE);
+    CLASS_TO_MOD.put("shadows.fastfurnace.", PolymorphIntegrations.Ids.FASTFURNACE);
   }
 
   @Override

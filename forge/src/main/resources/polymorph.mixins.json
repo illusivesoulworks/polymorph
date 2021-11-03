@@ -5,6 +5,7 @@
   "refmap": "polymorph.refmap.json",
   "mixins": [
     "AccessorSmithingRecipe",
+    "AccessorPlayerContainer",
     "AccessorWorkbenchContainer",
     "MixinPolymorphApi",
     "MixinRecipeManager",

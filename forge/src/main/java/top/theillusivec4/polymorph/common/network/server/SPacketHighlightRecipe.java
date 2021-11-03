@@ -57,5 +57,4 @@ public class SPacketHighlightRecipe {
         () -> () -> ClientPacketHandler.handle(pPacket)));
     pContext.get().setPacketHandled(true);
   }
-
 }
