@@ -141,6 +141,7 @@ task sourcesJar(type: Jar) {
 tasks.build.dependsOn sourcesJar
 
 processResources {
+    from("CHANGELOG.md")
 
     from(sourceSets.main.resources.srcDirs) {
         include 'META-INF/mods.toml'
@@ -159,7 +160,7 @@ curseforge {
         id = "${curse_id}"
         releaseType = "${curse_release}"
         changelogType = 'markdown'
-        changelog = file('docs/CHANGELOG.md')
+        changelog = file('CHANGELOG.md')
         addArtifact(sourcesJar)
         "${curse_versions}".split(',').each {
             addGameVersion "${it}"
