@@ -1,0 +1,30 @@
+{
+  "required": true,
+  "package": "top.theillusivec4.polymorph.mixin.integration",
+  "compatibilityLevel": "JAVA_16",
+  "refmap": "polymorph.refmap.json",
+  "mixins": [
+    "craftingcraft.MixinCraftingContainer",
+    "cyclic.AccessorContainerCrafter",
+    "cyclic.AccessorTileCrafter",
+    "cyclic.MixinCraftingContainers",
+    "cyclic.MixinContainerWorkbench",
+    "cyclic.MixinTileCrafter",
+    "ironfurnaces.AccessorBlockIronFurnaceTileBase",
+    "ironfurnaces.MixinBlockIronFurnaceTileBase",
+    "jei.MixinRecipeTransferUtil",
+    "sophisticatedbackpacks.AccessorCraftingUpgradeContainer",
+    "sophisticatedbackpacks.AccessorRecipeHelper",
+    "sophisticatedbackpacks.AccessorSmeltingLogic",
+    "sophisticatedbackpacks.AccessorSmeltingLogicContainer",
+    "sophisticatedbackpacks.MixinBackpackContainer",
+    "sophisticatedbackpacks.MixinCraftingUpgradeContainer",
+    "sophisticatedbackpacks.MixinSmeltingLogic",
+    "storagenetwork.MixinContainerNetwork",
+    "toms_storage.AccessorContainerStorageTerminal",
+    "toms_storage.AccessorTileEntityCraftingTerminal",
+    "toms_storage.MixinTileEntityCraftingTerminal"
+  ],
+  "plugin": "top.theillusivec4.polymorph.mixin.IntegratedMixinPlugin",
+  "minVersion": "0.8"
+}

@@ -1,0 +1,27 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "top.theillusivec4.polymorph.mixin.core",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "AccessorCraftingInventory",
+    "AccessorAbstractFurnaceBlockEntity",
+    "AccessorAbstractFurnaceScreenHandler",
+    "AccessorIngredient",
+    "MixinCraftingScreenHandler",
+    "MixinRecipeManager",
+    "MixinSmithingScreenHandler"
+  ],
+  "client": [
+    "AccessorHandledScreen",
+    "AccessorScreen",
+    "MixinGameRenderer",
+    "MixinMouse",
+    "MixinScreen"
+  ],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1,
+    "maxShiftBy": 5
+  }
+}

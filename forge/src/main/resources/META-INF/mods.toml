@@ -1,0 +1,27 @@
+modLoader="javafml"
+loaderVersion="${loader_version}"
+license="LGPL-3.0-or-later"
+issueTrackerURL="https://github.com/TheIllusiveC4/Polymorph/issues"
+logoFile="polymorph_icon.png"
+logoBlur=false
+[[mods]]
+modId="polymorph"
+version="${version}"
+displayName="Polymorph"
+displayURL="https://github.com/TheIllusiveC4/Polymorph"
+authors="C4"
+description='''
+No more recipe conflicts! Adds an option to choose the crafting result if more than one is available.
+'''
+[[dependencies.polymorph]]
+    modId="forge"
+    mandatory=true
+    versionRange="${forge_version_range}"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.polymorph]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="${mc_version_range}"
+    ordering="NONE"
+    side="BOTH"

@@ -1,0 +1,171 @@
+buildscript {
+    repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
+		maven { url = 'https://maven.parchmentmc.org' }
+        maven { url = 'https://plugins.gradle.org/m2/' }
+        maven {
+            url "https://repo.spongepowered.org/repository/maven-public/"
+            content { includeGroup "org.spongepowered" }
+        }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'gradle.plugin.com.matthewprenger', name: 'CurseGradle', version: '1.4.0'
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath group: 'org.parchmentmc', name: 'librarian', version: '1.+'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'com.matthewprenger.cursegradle'
+apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
+
+version = "${mod_version}"
+group = "top.theillusivec4.polymorph"
+archivesBaseName = "polymorph-forge"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+
+minecraft {
+    mappings channel: 'parchment', version: '2021.10.31-1.17.1'
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            
+			arg "-mixin.config=polymorph.mixins.json"
+            arg "-mixin.config=polymorph_integrations.mixins.json"
+			property 'mixin.env.disableRefMap', 'true'
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                polymorph {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            arg "-mixin.config=polymorph.mixins.json"
+            arg "-mixin.config=polymorph_integrations.mixins.json"
+			property 'mixin.env.disableRefMap', 'true'
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                polymorph {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+mixin {
+    add sourceSets.main, "polymorph.refmap.json"
+}
+
+
+repositories {
+    maven {
+        // Maven for JEI
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // Maven for JEI fallback
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
+    }
+    maven {
+		// Maven for CurseForge files
+		name = "CurseMaven"
+        url = "https://www.cursemaven.com"
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${forge_version}"
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
+
+    implementation fg.deobf("mezz.jei:jei-1.17.1:${version_jei}")
+
+    implementation fg.deobf("curse.maven:craftingcraft-237581:${file_craftingcraft}")
+    implementation fg.deobf("curse.maven:tomsstorage-378609:${file_tom}")
+    implementation fg.deobf("curse.maven:simplestoragenetwork-268495:${file_ssn}")
+    implementation fg.deobf("curse.maven:cyclic-239286:${file_cyclic}")
+    implementation fg.deobf("curse.maven:sophisticatedbackpacks-422301:${file_sophisticated}")
+    implementation fg.deobf("curse.maven:ironfurnaces-237664:${file_ironfurnaces}")
+
+    runtimeOnly fg.deobf("curse.maven:vanillatweaks-272637:${file_vanillatweaks}")
+	runtimeOnly fg.deobf("curse.maven:balm-531761:${file_balm}")
+}
+
+def replaceResources = tasks.register("replaceResources", Copy) {
+    it.outputs.upToDateWhen { false }
+
+    it.from(sourceSets.main.resources) {
+        include "META-INF/mods.toml"
+        expand 'version': version, 'mc_version_range': mc_version_range, 'forge_version_range': forge_version_range, "loader_version": loader_version
+    }
+    it.into "$buildDir/resources/main/"
+}
+
+processResources {
+    from("CHANGELOG.md")
+    duplicatesStrategy(DuplicatesStrategy.FAIL)
+    exclude('META-INF/mods.toml')
+    configure { finalizedBy(replaceResources) }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs += '../docs'
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes(["Specification-Title"		: "Polymorph",
+                    "Specification-Vendor"		: "C4",
+                    "Specification-Version"		: "1",
+                    "Implementation-Title"		: "Polymorph",
+                    "Implementation-Version"	: "${getArchiveVersion()}",
+                    "Implementation-Vendor" 	: "C4",
+                    "Implementation-Timestamp"	: new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    "MixinConfigs"				: "polymorph.mixins.json,polymorph_integrations.mixins.json"],)
+    }
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allJava
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+jar.finalizedBy('reobfJar')
+
+curseforge {
+
+    project {
+        apiKey = findProperty('curseKey') ?: 0
+        id = '388800'
+        releaseType = "${curse_release}"
+        changelogType = 'markdown'
+        changelog = file('CHANGELOG.md')
+        addArtifact(sourcesJar)
+        "${curse_versions}".split(',').each {
+            addGameVersion "${it}"
+        }
+    }
+}

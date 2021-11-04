@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "package": "top.theillusivec4.polymorph.mixin.core",
+  "compatibilityLevel": "JAVA_16",
+  "refmap": "polymorph.refmap.json",
+  "mixins": [
+    "AccessorUpgradeRecipe",
+    "AccessorCraftingMenu",
+    "AccessorInventoryMenu",
+    "MixinPolymorphApi",
+    "MixinRecipeManager",
+    "MixinSmithingMenu",
+    "MixinCraftingMenu"
+  ],
+  "minVersion": "0.8",
+  "injectors": {
+    "defaultRequire": 1,
+    "maxShiftBy": 5
+  }
+}

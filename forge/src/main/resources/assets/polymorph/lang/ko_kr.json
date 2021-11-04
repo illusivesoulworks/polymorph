@@ -1,0 +1,4 @@
+{
+  "commands.polymorph.conflicts.starting": "충돌 가능한 제작법을 검색 중입니다...",
+  "commands.polymorph.conflicts.success": "잠재적인 충돌 가능성이 있는 제작법 %d 개를 찾았습니다. 자세한 정보를 보려면 logs/conflicts.log 를 확인하세요."
+}
