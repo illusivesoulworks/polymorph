@@ -70,7 +70,8 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
     this.getLoadedRecipe().flatMap(id -> pWorld.getRecipeManager().getRecipe(id))
         .ifPresent(selected -> {
           try {
-            if (selected.getType() == pType && ((T) selected).matches(pInventory, pWorld)) {
+            if (selected.getType() == pType &&
+                (((T) selected).matches(pInventory, pWorld) || isEmpty(pInventory))) {
               this.setSelectedRecipe(selected);
             }
           } catch (ClassCastException e) {
