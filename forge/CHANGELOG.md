@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.27] - 2021.22.06
+### Fixed
+- Attempted fix for CME crash [#101](https://github.com/TheIllusiveC4/Polymorph/issues/101)
+- Fixed AE2 Pattern Terminal toggle recipe button rendering over processing slots if switched over from crafting
+
 ## [1.16.5-0.26] - 2021.11.03
 ### Added
 - Added Italian localization (thanks simcrafter!)
