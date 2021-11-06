@@ -22,6 +22,8 @@
 package top.theillusivec4.polymorph.common;
 
 import com.mojang.datafixers.util.Pair;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -104,10 +106,10 @@ public class CommonEventsListener {
     World world = evt.world;
 
     if (!world.isRemote() && evt.phase == TickEvent.Phase.END) {
+      List<TileEntity> tileEntities = new ArrayList<>(world.loadedTileEntityList);
 
-      for (TileEntity tileEntity : world.loadedTileEntityList) {
-        PolymorphApi.common().getRecipeData(tileEntity)
-            .ifPresent(ITileEntityRecipeData::tick);
+      for (TileEntity tileEntity : tileEntities) {
+        PolymorphApi.common().getRecipeData(tileEntity).ifPresent(ITileEntityRecipeData::tick);
       }
     }
   }
