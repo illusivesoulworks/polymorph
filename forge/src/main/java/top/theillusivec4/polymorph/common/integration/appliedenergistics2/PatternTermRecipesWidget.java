@@ -22,6 +22,7 @@
 package top.theillusivec4.polymorph.common.integration.appliedenergistics2;
 
 import appeng.container.me.items.PatternTermContainer;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.crafting.ICraftingRecipe;
@@ -47,5 +48,23 @@ public class PatternTermRecipesWidget extends PlayerRecipesWidget {
           ((AccessorPatternTermContainer) this.container).setCurrentRecipe((ICraftingRecipe) recipe);
           ((AccessorPatternTermContainer) this.container).callGetAndUpdateOutput();
         });
+  }
+
+  @Override
+  public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY,
+                     float pRenderPartialTicks) {
+
+    if (container.isCraftingMode()) {
+      super.render(pMatrixStack, pMouseX, pMouseY, pRenderPartialTicks);
+    }
+  }
+
+  @Override
+  public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+
+    if (!container.isCraftingMode()) {
+      return false;
+    }
+    return super.mouseClicked(pMouseX, pMouseY, pButton);
   }
 }
