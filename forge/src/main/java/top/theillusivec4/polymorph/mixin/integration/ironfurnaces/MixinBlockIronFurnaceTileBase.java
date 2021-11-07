@@ -23,30 +23,37 @@ package top.theillusivec4.polymorph.mixin.integration.ironfurnaces;
 
 import ironfurnaces.tileentity.BlockIronFurnaceTileBase;
 import ironfurnaces.tileentity.LRUCache;
+import ironfurnaces.tileentity.TileEntityInventory;
 import java.util.Optional;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
 
 @SuppressWarnings("unused")
 @Mixin(BlockIronFurnaceTileBase.class)
-public abstract class MixinBlockIronFurnaceTileBase {
+public abstract class MixinBlockIronFurnaceTileBase extends TileEntityInventory {
+
+  public MixinBlockIronFurnaceTileBase(BlockEntityType<?> tileEntityTypeIn, BlockPos pos,
+                                       BlockState state, int sizeInventory) {
+    super(tileEntityTypeIn, pos, state, sizeInventory);
+  }
 
   @Inject(
       at = @At("RETURN"),
-      method = "grabRecipe{2}",
+      method = "grabRecipe()Ljava/util/Optional;",
       remap = false
   )
   private void polymorph$grabRecipe(CallbackInfoReturnable<Optional<AbstractCookingRecipe>> pCir) {
-//
-//    if (!pStack.isEmpty()) {
-//      this.getCache().remove(pStack.getItem());
-//    }
+    IronFurnacesModule.grabRecipe(this.getItem(0), this.getCache());
   }
 
   @Shadow(remap = false)

@@ -23,7 +23,6 @@ package top.theillusivec4.polymorph.common;
 
 import com.mojang.datafixers.util.Pair;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 import javax.annotation.Nonnull;
@@ -33,6 +32,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -40,6 +41,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.ChunkSource;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -62,11 +66,12 @@ import top.theillusivec4.polymorph.common.capability.PlayerRecipeData;
 import top.theillusivec4.polymorph.common.capability.PolymorphCapabilities;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.common.integration.PolymorphIntegrations;
+import top.theillusivec4.polymorph.mixin.core.AccessorChunkMap;
 
 @SuppressWarnings("unused")
 public class CommonEventsListener {
 
-  private static final Set<BlockPos> BLOCK_ENTITIES = new HashSet<>();
+  private static final Set<IBlockEntityRecipeData> BLOCK_ENTITY_RECIPE_DATA = new HashSet<>();
 
   @SubscribeEvent
   public void registerCapabilities(final RegisterCapabilitiesEvent evt) {
@@ -83,6 +88,7 @@ public class CommonEventsListener {
   @SubscribeEvent
   public void serverStopped(final FMLServerStoppedEvent evt) {
     PolymorphApi.common().setServer(null);
+    BLOCK_ENTITY_RECIPE_DATA.clear();
   }
 
   @SubscribeEvent
@@ -119,16 +125,28 @@ public class CommonEventsListener {
     Level world = evt.world;
 
     if (!world.isClientSide() && evt.phase == TickEvent.Phase.END) {
-      Iterator<BlockPos> iter = BLOCK_ENTITIES.iterator();
+      ChunkSource source = world.getChunkSource();
 
-      while (iter.hasNext()) {
-        BlockPos pos = iter.next();
-        BlockEntity blockEntity = world.getBlockEntity(pos);
+      if (source instanceof ServerChunkCache cache) {
 
-        if (blockEntity != null) {
-          PolymorphApi.common().getRecipeData(blockEntity).ifPresent(IBlockEntityRecipeData::tick);
-        } else {
-          BLOCK_ENTITIES.remove(pos);
+        for (ChunkHolder chunk : ((AccessorChunkMap) cache.chunkMap).callGetChunks()) {
+          LevelChunk levelChunk = chunk.getTickingChunk();
+
+          if (levelChunk != null) {
+            ChunkAccess access = chunk.getLastAvailable();
+
+            if (access != null) {
+              Set<BlockPos> blockEntities = new HashSet<>(access.getBlockEntitiesPos());
+
+              for (BlockPos pos : blockEntities) {
+                BlockEntity be = world.getBlockEntity(pos);
+
+                if (be != null) {
+                  PolymorphApi.common().getRecipeData(be).ifPresent(IBlockEntityRecipeData::tick);
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -142,12 +160,7 @@ public class CommonEventsListener {
           LazyOptional<IBlockEntityRecipeData> cap = LazyOptional.of(() -> recipeData);
           pEvent.addCapability(PolymorphCapabilities.BLOCK_ENTITY_RECIPE_DATA_ID,
               new BlockEntityRecipeDataProvider(cap));
-          BlockPos pos = te.getBlockPos();
-          BLOCK_ENTITIES.add(pos);
-          pEvent.addListener(() -> {
-              cap.invalidate();
-              BLOCK_ENTITIES.remove(pos);
-          });
+          pEvent.addListener(cap::invalidate);
         });
   }
 

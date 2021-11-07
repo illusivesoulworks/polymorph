@@ -101,6 +101,7 @@ dependencies {
     implementation fg.deobf("curse.maven:cyclic-239286:${file_cyclic}")
     implementation fg.deobf("curse.maven:sophisticatedbackpacks-422301:${file_sophisticated}")
     implementation fg.deobf("curse.maven:ironfurnaces-237664:${file_ironfurnaces}")
+    implementation fg.deobf("curse.maven:ae2-223794:${file_ae2}")
 
     runtimeOnly fg.deobf("curse.maven:vanillatweaks-272637:${file_vanillatweaks}")
 	runtimeOnly fg.deobf("curse.maven:balm-531761:${file_balm}")

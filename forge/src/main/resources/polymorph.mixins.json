@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_16",
   "refmap": "polymorph.refmap.json",
   "mixins": [
+    "AccessorChunkMap",
     "AccessorUpgradeRecipe",
     "AccessorCraftingMenu",
     "AccessorInventoryMenu",

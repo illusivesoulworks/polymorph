@@ -23,6 +23,9 @@ package top.theillusivec4.polymorph.common.integration.ironfurnaces;
 
 import ironfurnaces.container.BlockIronFurnaceContainerBase;
 import ironfurnaces.tileentity.BlockIronFurnaceTileBase;
+import ironfurnaces.tileentity.LRUCache;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.client.recipe.widget.FurnaceRecipesWidget;
@@ -49,5 +52,12 @@ public class IronFurnacesModule extends AbstractCompatibilityModule {
       }
       return null;
     });
+  }
+
+  public static void grabRecipe(ItemStack pStack, LRUCache<Item, ?> pCache) {
+
+    if (!pStack.isEmpty()) {
+      pCache.remove(pStack.getItem());
+    }
   }
 }

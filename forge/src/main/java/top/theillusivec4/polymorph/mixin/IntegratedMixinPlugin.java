@@ -49,6 +49,7 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
     CLASS_TO_MOD.put("net.p3pp3rf1y.sophisticatedbackpacks.",
         PolymorphIntegrations.Mod.SOPHISTICATED_BACKPACKS.getId());
     CLASS_TO_MOD.put("ironfurnaces.", PolymorphIntegrations.Mod.IRON_FURNACES.getId());
+    CLASS_TO_MOD.put("appeng.", PolymorphIntegrations.Mod.APPLIED_ENERGISTICS_2.getId());
   }
 
   @Override

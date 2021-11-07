@@ -4,6 +4,10 @@
   "compatibilityLevel": "JAVA_16",
   "refmap": "polymorph.refmap.json",
   "mixins": [
+    "appliedenergistics2.AccessorCraftingTermMenu",
+    "appliedenergistics2.AccessorPatternTermMenu",
+    "appliedenergistics2.MixinCraftingTermMenu",
+    "appliedenergistics2.MixinPatternTermMenu",
     "craftingcraft.MixinCraftingContainer",
     "cyclic.AccessorContainerCrafter",
     "cyclic.AccessorTileCrafter",

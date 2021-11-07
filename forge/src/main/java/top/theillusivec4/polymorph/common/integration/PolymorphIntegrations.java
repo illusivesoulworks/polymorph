@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
+import top.theillusivec4.polymorph.common.integration.appliedenergistics2.AppliedEnergisticsModule;
 import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
 import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
 import top.theillusivec4.polymorph.common.integration.sophisticatedbackpacks.SophisticatedBackpacksModule;
@@ -48,6 +49,7 @@ public class PolymorphIntegrations {
     INTEGRATIONS.put(Mod.TOMS_STORAGE.getId(), () -> TomsStorageModule::new);
     INTEGRATIONS.put(Mod.SOPHISTICATED_BACKPACKS.getId(), () -> SophisticatedBackpacksModule::new);
     INTEGRATIONS.put(Mod.IRON_FURNACES.getId(), () -> IronFurnacesModule::new);
+    INTEGRATIONS.put(Mod.APPLIED_ENERGISTICS_2.getId(), () -> AppliedEnergisticsModule::new);
   }
 
   public static void loadConfig() {
@@ -113,7 +115,8 @@ public class PolymorphIntegrations {
     SIMPLE_STORAGE_NETWORK("storagenetwork"),
     CYCLIC("cyclic"),
     SOPHISTICATED_BACKPACKS("sophisticatedbackpacks"),
-    IRON_FURNACES("ironfurnaces");
+    IRON_FURNACES("ironfurnaces"),
+    APPLIED_ENERGISTICS_2("appliedenergistics2");
 
     private final String id;
 
