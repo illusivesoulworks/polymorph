@@ -39,12 +39,12 @@ public class MixinRecipeTransferUtil {
 
   @Inject(
       at = @At("HEAD"),
-      method = "transferRecipe(Lmezz/jei/recipes/RecipeTransferManager;Lnet/minecraft/inventory/container/Container;Lmezz/jei/gui/recipes/RecipeLayout;Lnet/minecraft/entity/player/PlayerEntity;Z)Z",
+      method = "transferRecipe(Lmezz/jei/recipes/RecipeTransferManager;Lnet/minecraft/world/inventory/AbstractContainerMenu;Lmezz/jei/gui/recipes/RecipeLayout;Lnet/minecraft/world/entity/player/Player;ZZ)Lmezz/jei/api/recipe/transfer/IRecipeTransferError;",
       remap = false)
-  private static void polymorph$transferRecipe(RecipeTransferManager recipeTransferManager,
-                                               AbstractContainerMenu container, RecipeLayout<?> recipeLayout,
-                                               Player player, boolean maxTransfer,
-                                               CallbackInfoReturnable<IRecipeTransferError> cb) {
+  private static <C extends AbstractContainerMenu, R> void polymorph$transferRecipe(
+      RecipeTransferManager recipeTransferManager, C container, RecipeLayout<R> recipeLayout,
+      Player player, boolean maxTransfer, boolean doTransfer,
+      CallbackInfoReturnable<IRecipeTransferError> cb) {
     JeiModule.selectRecipe(recipeLayout.getRecipe());
   }
 }
