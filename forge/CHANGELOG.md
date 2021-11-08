@@ -3,7 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
-## [1.16.5-0.27] - 2021.22.06
+## [1.16.5-0.28] - 2021.11.07
+### Fixed
+- Fixed potential server hang with Refined Storage [#102](https://github.com/TheIllusiveC4/Polymorph/issues/102)
+
+## [1.16.5-0.27] - 2021.11.06
 ### Fixed
 - Attempted fix for CME crash [#101](https://github.com/TheIllusiveC4/Polymorph/issues/101)
 - Fixed AE2 Pattern Terminal toggle recipe button rendering over processing slots if switched over from crafting
