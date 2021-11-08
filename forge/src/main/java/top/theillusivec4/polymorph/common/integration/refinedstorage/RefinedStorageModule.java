@@ -39,8 +39,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
+import net.minecraftforge.event.TickEvent;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.base.IPolymorphClient;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
@@ -88,16 +87,14 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
       }
       return null;
     });
-    MinecraftForge.EVENT_BUS.addListener(this::serverStarted);
-    MinecraftForge.EVENT_BUS.addListener(this::serverStopped);
+    MinecraftForge.EVENT_BUS.addListener(this::worldTick);
   }
 
-  private void serverStarted(final FMLServerStartedEvent evt) {
-    loaded = true;
-  }
+  private void worldTick(final TickEvent.WorldTickEvent evt) {
 
-  private void serverStopped(final FMLServerStoppedEvent evt) {
-    loaded = false;
+    if (!loaded && evt.phase == TickEvent.Phase.END) {
+      loaded = true;
+    }
   }
 
   @Override
@@ -125,7 +122,7 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
         return RecipeSelection.getTileEntityRecipe(type, inventory, world, te);
       }
     }
-    return world.getRecipeManager().getRecipes(type, inventory, world).stream().findFirst();
+    return world.getRecipeManager().getRecipe(type, inventory, world);
   }
 
   public static void appendPattern(boolean exactPattern, ItemStack stack, BlockPos pos,
