@@ -96,15 +96,19 @@ dependencies {
     compile fg.deobf("curse.maven:refinedstorageaddons-272302:${file_refinedaddons}")
     compile fg.deobf("curse.maven:prettypipes-376737:${file_prettypipes}")
     compile fg.deobf("curse.maven:tomsstorage-378609:${file_tom}")
-    compile fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
-    compile fg.deobf("curse.maven:placebo-283644:${file_placebo}")
     compile fg.deobf("curse.maven:simplestoragenetwork-268495:${file_ssn}")
     compile fg.deobf("curse.maven:tinkers-74072:${file_tinkers}")
     compile fg.deobf("curse.maven:mantle-74924:${file_mantle}")
     compile fg.deobf("curse.maven:cyclic-239286:${file_cyclic}")
     compile fg.deobf("curse.maven:sophisticatedbackpacks-422301:${file_sophisticated}")
     compile fg.deobf("curse.maven:ae2-223794:${file_ae2}")
-    compile fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
+
+    compile fg.deobf("curse.maven:fastworkbenchminus-394185:${file_fastworkbenchminus}")
+    compile fg.deobf("curse.maven:fastfurnaceminus-389989:${file_fastfurnaceminus}")
+
+    compileOnly fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
+    compileOnly fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
+    compileOnly fg.deobf("curse.maven:placebo-283644:${file_placebo}")
 
     compileOnly fg.deobf("curse.maven:ironfurnaces-237664:${file_ironfurnaces}")
 

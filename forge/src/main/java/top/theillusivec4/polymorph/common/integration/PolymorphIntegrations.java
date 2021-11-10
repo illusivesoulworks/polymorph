@@ -35,7 +35,9 @@ import top.theillusivec4.polymorph.common.integration.appliedenergistics2.Applie
 import top.theillusivec4.polymorph.common.integration.craftingstation.CraftingStationModule;
 import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
 import top.theillusivec4.polymorph.common.integration.fastbench.FastBenchModule;
+import top.theillusivec4.polymorph.common.integration.fastbenchminusreplacement.FastBenchMinusModule;
 import top.theillusivec4.polymorph.common.integration.fastfurnace.FastFurnaceModule;
+import top.theillusivec4.polymorph.common.integration.fastfurnaceminusreplacement.FastFurnaceMinusModule;
 import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
 import top.theillusivec4.polymorph.common.integration.prettypipes.PrettyPipesModule;
 import top.theillusivec4.polymorph.common.integration.refinedstorage.RefinedStorageModule;
@@ -64,6 +66,8 @@ public class PolymorphIntegrations {
     INTEGRATIONS.put(Mod.SOPHISTICATED_BACKPACKS.getId(), () -> SophisticatedBackpacksModule::new);
     INTEGRATIONS.put(Mod.APPLIED_ENERGISTICS_2.getId(), () -> AppliedEnergisticsModule::new);
     INTEGRATIONS.put(Mod.IRON_FURNACES.getId(), () -> IronFurnacesModule::new);
+    INTEGRATIONS.put(Mod.FASTFURNACE_MINUS_REPLACEMENT.getId(), () -> FastFurnaceMinusModule::new);
+    INTEGRATIONS.put(Mod.FASTWORKBENCH_MINUS_REPLACEMENT.getId(), () -> FastBenchMinusModule::new);
   }
 
   public static void loadConfig() {
@@ -137,7 +141,9 @@ public class PolymorphIntegrations {
     SOPHISTICATED_BACKPACKS("sophisticatedbackpacks"),
     APPLIED_ENERGISTICS_2("appliedenergistics2"),
     IRON_FURNACES("ironfurnaces"),
-    FASTFURNACE("fastfurnace");
+    FASTFURNACE("fastfurnace"),
+    FASTWORKBENCH_MINUS_REPLACEMENT("fastbenchminusreplacement"),
+    FASTFURNACE_MINUS_REPLACEMENT("fastfurnaceminusreplacement");
 
     private final String id;
 

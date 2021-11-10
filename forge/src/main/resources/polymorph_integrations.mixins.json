@@ -16,6 +16,7 @@
     "cyclic.MixinContainerWorkbench",
     "cyclic.MixinTileCrafter",
     "fastbench.MixinContainerFastBench",
+    "fastbenchminusreplacement.MixinMixinHooks",
     "fastfurnace.AccessorTileFastFurnace",
     "ironfurnaces.AccessorBlockIronFurnaceTileBase",
     "ironfurnaces.MixinBlockIronFurnaceTileBase",
