@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.29] - 2021.11.10
+### Added
+- Added Fast Workbench Minus Replacement compatibility [#104](https://github.com/TheIllusiveC4/Polymorph/issues/104)
+- Added Fast Furnace Minus Replacement compatibility
+
 ## [1.16.5-0.28] - 2021.11.07
 ### Fixed
 - Fixed potential server hang with Refined Storage [#102](https://github.com/TheIllusiveC4/Polymorph/issues/102)
