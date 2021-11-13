@@ -29,6 +29,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -61,11 +62,12 @@ public class OutputWidget extends AbstractWidget {
     blit(pMatrixStack, this.x, this.y, 600, this.highlighted ? 41 : 16, j, this.width, this.height,
         256, 256);
     int k = 4;
-    float zLevel = minecraft.getItemRenderer().blitOffset;
-    minecraft.getItemRenderer().blitOffset = 700.0F;
-    minecraft.getItemRenderer()
-        .renderAndDecorateItem(this.getOutput(), this.x + k, this.y + k);
-    minecraft.getItemRenderer().blitOffset = zLevel;
+    ItemRenderer itemRenderer = minecraft.getItemRenderer();
+    float zLevel = itemRenderer.blitOffset;
+    itemRenderer.blitOffset = 700.0F;
+    itemRenderer.renderAndDecorateItem(this.getOutput(), this.x + k, this.y + k);
+    itemRenderer.renderGuiItemDecorations(minecraft.font, this.getOutput(), this.x + k, this.y + k);
+    itemRenderer.blitOffset = zLevel;
   }
 
   public ItemStack getOutput() {

@@ -48,24 +48,20 @@ public class RecipePair implements IRecipePair {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    RecipePair that = (RecipePair) o;
-    return ItemStack.matches(this.getOutput(), that.getOutput());
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(output);
-  }
-
-  @Override
   public int compareTo(@Nonnull IRecipePair pOther) {
-    return this.getOutput().getDescriptionId().compareTo(pOther.getOutput().getDescriptionId());
+    ItemStack output1 = this.getOutput();
+    ItemStack output2 = pOther.getOutput();
+
+    if (ItemStack.matches(output1, output2)) {
+      return 0;
+    } else {
+      int compare = output1.getDescriptionId().compareTo(output2.getDescriptionId());
+
+      if (compare == 0) {
+        return output1.getCount() - output2.getCount();
+      } else {
+        return compare;
+      }
+    }
   }
 }

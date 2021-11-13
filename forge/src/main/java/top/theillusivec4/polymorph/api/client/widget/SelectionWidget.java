@@ -226,7 +226,7 @@ public class SelectionWidget extends GuiComponent
       pPoseStack.pushPose();
       ItemRenderer itemRenderer = pScreen.getMinecraft().getItemRenderer();
       float f = itemRenderer.blitOffset;
-      int blitOffset = 900;
+      int blitOffset = 901;
       itemRenderer.blitOffset = blitOffset;
       Tesselator tesselator = Tesselator.getInstance();
       BufferBuilder bufferbuilder = tesselator.getBuilder();
