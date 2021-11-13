@@ -287,7 +287,7 @@ public class SelectionWidget extends AbstractGui
       } else if (tooltipY + tooltipHeight + 4 > pScreenHeight) {
         tooltipY = pScreenHeight - tooltipHeight - 4;
       }
-      final int zLevel = 900;
+      final int zLevel = 901;
       RenderTooltipEvent.Color colorEvent =
           new RenderTooltipEvent.Color(pStack, pText, pMatrixStack, tooltipX, tooltipY,
               pFontRenderer,

@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -59,11 +60,13 @@ public class OutputWidget extends Widget {
     blit(pMatrixStack, this.x, this.y, 600, this.highlighted ? 41 : 16, j, this.width, this.height,
         256, 256);
     int k = 4;
-    float zLevel = minecraft.getItemRenderer().zLevel;
-    minecraft.getItemRenderer().zLevel = 700.0F;
-    minecraft.getItemRenderer()
-        .renderItemAndEffectIntoGUI(this.getOutput(), this.x + k, this.y + k);
-    minecraft.getItemRenderer().zLevel = zLevel;
+    ItemRenderer itemRenderer = minecraft.getItemRenderer();
+    float zLevel = itemRenderer.zLevel;
+    itemRenderer.zLevel = 700.0F;
+    itemRenderer.renderItemAndEffectIntoGUI(this.getOutput(), this.x + k, this.y + k);
+    itemRenderer.renderItemOverlays(minecraft.fontRenderer, this.getOutput(), this.x + k,
+        this.y + k);
+    itemRenderer.zLevel = zLevel;
   }
 
   public ItemStack getOutput() {

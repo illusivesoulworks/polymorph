@@ -92,9 +92,7 @@ public abstract class AbstractRecipesWidget implements IRecipesWidget {
 
   @Override
   public void setRecipesList(Set<IRecipePair> pRecipesList, ResourceLocation pSelected) {
-    SortedSet<IRecipePair> sorted =
-        new TreeSet<>(Comparator.comparing(data -> data.getOutput().getTranslationKey()));
-    sorted.addAll(pRecipesList);
+    SortedSet<IRecipePair> sorted = new TreeSet<>(pRecipesList);
     this.selectionWidget.setRecipeList(sorted);
     this.openButton.visible = pRecipesList.size() > 1;
 
