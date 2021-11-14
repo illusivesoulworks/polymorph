@@ -31,7 +31,12 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.LazyOptional;
 import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.api.common.capability.IPlayerRecipeData;
+import top.theillusivec4.polymorph.api.common.capability.IRecipeData;
+import top.theillusivec4.polymorph.api.common.capability.IStackRecipeData;
+import top.theillusivec4.polymorph.api.common.capability.ITileEntityRecipeData;
 
 public class RecipeSelection {
 
@@ -42,22 +47,32 @@ public class RecipeSelection {
 
   public static <T extends IRecipe<C>, C extends IInventory> Optional<T> getPlayerRecipe(
       IRecipeType<T> pType, C pInventory, World pWorld, PlayerEntity pPlayer, List<T> pRecipes) {
-    return PolymorphApi.common().getRecipeData(pPlayer)
-        .map(recipeData -> recipeData.getRecipe(pType, pInventory, pWorld, pRecipes))
-        .orElse(Optional.empty());
+    LazyOptional<IPlayerRecipeData> maybeData = PolymorphApi.common().getRecipeData(pPlayer);
+    return getRecipe(pType, pInventory, pWorld, maybeData, pRecipes);
   }
 
   public static <T extends IRecipe<C>, C extends IInventory> Optional<T> getStackRecipe(
       IRecipeType<T> pType, C pInventory, World pWorld, ItemStack pStack) {
-    return PolymorphApi.common().getRecipeData(pStack)
-        .map(recipeData -> recipeData.getRecipe(pType, pInventory, pWorld, new ArrayList<>()))
-        .orElse(Optional.empty());
+    LazyOptional<IStackRecipeData> maybeData = PolymorphApi.common().getRecipeData(pStack);
+    return getRecipe(pType, pInventory, pWorld, maybeData, new ArrayList<>());
   }
 
   public static <T extends IRecipe<C>, C extends IInventory> Optional<T> getTileEntityRecipe(
       IRecipeType<T> pType, C pInventory, World pWorld, TileEntity pTileEntity) {
-    return PolymorphApi.common().getRecipeData(pTileEntity)
-        .map(recipeData -> recipeData.getRecipe(pType, pInventory, pWorld, new ArrayList<>()))
-        .orElse(Optional.empty());
+    LazyOptional<ITileEntityRecipeData> maybeData =
+        PolymorphApi.common().getRecipeData(pTileEntity);
+    return getRecipe(pType, pInventory, pWorld, maybeData, new ArrayList<>());
+  }
+
+  private static <T extends IRecipe<C>, C extends IInventory> Optional<T> getRecipe(
+      IRecipeType<T> pType, C pInventory, World pWorld, LazyOptional<? extends IRecipeData<?>> pOpt,
+      List<T> pRecipes) {
+
+    if (pOpt.isPresent()) {
+      return pOpt.map(recipeData -> recipeData.getRecipe(pType, pInventory, pWorld, pRecipes))
+          .orElse(Optional.empty());
+    } else {
+      return pWorld.getRecipeManager().getRecipe(pType, pInventory, pWorld);
+    }
   }
 }
