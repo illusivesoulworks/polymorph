@@ -160,7 +160,6 @@ public class CommonEventsListener {
           LazyOptional<IBlockEntityRecipeData> cap = LazyOptional.of(() -> recipeData);
           pEvent.addCapability(PolymorphCapabilities.BLOCK_ENTITY_RECIPE_DATA_ID,
               new BlockEntityRecipeDataProvider(cap));
-          pEvent.addListener(cap::invalidate);
         });
   }
 
@@ -173,7 +172,6 @@ public class CommonEventsListener {
       LazyOptional<IPlayerRecipeData> cap = LazyOptional.of(() -> data);
       pEvent.addCapability(PolymorphCapabilities.PLAYER_RECIPE_DATA_ID,
           new PlayerRecipeDataProvider(cap));
-      pEvent.addListener(cap::invalidate);
     }
   }
 
@@ -185,7 +183,6 @@ public class CommonEventsListener {
           LazyOptional<IStackRecipeData> cap = LazyOptional.of(() -> recipeData);
           pEvent.addCapability(PolymorphCapabilities.STACK_RECIPE_DATA_ID,
               new StackRecipeDataProvider(cap));
-          pEvent.addListener(cap::invalidate);
         });
   }
 

@@ -87,7 +87,8 @@ public class PolymorphCommon implements IPolymorphCommon {
   }
 
   @Override
-  public LazyOptional<IBlockEntityRecipeData> getRecipeDataFromTileEntity(AbstractContainerMenu pContainer) {
+  public LazyOptional<IBlockEntityRecipeData> getRecipeDataFromTileEntity(
+      AbstractContainerMenu pContainer) {
 
     for (IContainer2TileEntity function : this.container2TileEntities) {
       BlockEntity tileEntity = function.getTileEntity(pContainer);
@@ -118,7 +119,8 @@ public class PolymorphCommon implements IPolymorphCommon {
   }
 
   @Override
-  public LazyOptional<IStackRecipeData> getRecipeDataFromItemStack(AbstractContainerMenu pContainer) {
+  public LazyOptional<IStackRecipeData> getRecipeDataFromItemStack(
+      AbstractContainerMenu pContainer) {
 
     for (IContainer2ItemStack function : this.container2ItemStacks) {
       ItemStack itemstack = function.getItemStack(pContainer);
