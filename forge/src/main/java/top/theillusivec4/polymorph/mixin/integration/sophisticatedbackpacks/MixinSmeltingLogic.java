@@ -43,7 +43,7 @@ public abstract class MixinSmeltingLogic {
   @Redirect(
       at = @At(
           value = "INVOKE",
-          target = "net/p3pp3rf1y/sophisticatedbackpacks/util/RecipeHelper.getSmeltingRecipe(Lnet/minecraft/item/ItemStack;)Ljava/util/Optional;"),
+          target = "net/p3pp3rf1y/sophisticatedbackpacks/util/RecipeHelper.getSmeltingRecipe(Lnet/minecraft/world/item/ItemStack;)Ljava/util/Optional;"),
       method = "getSmeltingRecipe",
       remap = false)
   private Optional<SmeltingRecipe> polymorph$getSmeltingRecipe(ItemStack pStack) {

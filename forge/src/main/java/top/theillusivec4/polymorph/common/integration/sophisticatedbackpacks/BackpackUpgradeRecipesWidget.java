@@ -28,6 +28,7 @@ import net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackScreen;
 import net.p3pp3rf1y.sophisticatedbackpacks.common.gui.BackpackContainer;
 import net.p3pp3rf1y.sophisticatedbackpacks.common.gui.UpgradeContainerBase;
 import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.crafting.CraftingUpgradeContainer;
+import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.AutoSmeltingUpgradeContainer;
 import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.SmeltingUpgradeContainer;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.base.ITickingRecipesWidget;
@@ -39,8 +40,7 @@ public class BackpackUpgradeRecipesWidget extends AbstractRecipesWidget implemen
   private final BackpackContainer backpackContainer;
   private int lastUpgradeId = -1;
   private Slot outputSlot;
-  private boolean isCrafting = false;
-  private boolean isSmelting = false;
+  private Mode mode = Mode.NONE;
 
   public BackpackUpgradeRecipesWidget(BackpackScreen pBackpackScreen,
                                       BackpackContainer pBackpackContainer) {
@@ -53,8 +53,16 @@ public class BackpackUpgradeRecipesWidget extends AbstractRecipesWidget implemen
         this.backpackContainer.getUpgradeContainers().get(upgradeId);
 
     if (upgradeContainerBase != null) {
-      this.isCrafting = upgradeContainerBase instanceof CraftingUpgradeContainer;
-      this.isSmelting = upgradeContainerBase instanceof SmeltingUpgradeContainer;
+
+      if (upgradeContainerBase instanceof CraftingUpgradeContainer) {
+        mode = Mode.CRAFTING;
+      } else if (upgradeContainerBase instanceof SmeltingUpgradeContainer) {
+        mode = Mode.SMELTING;
+      } else if (upgradeContainerBase instanceof AutoSmeltingUpgradeContainer) {
+        mode = Mode.AUTOSMELTING;
+      } else {
+        mode = Mode.NONE;
+      }
     }
   }
 
@@ -73,26 +81,25 @@ public class BackpackUpgradeRecipesWidget extends AbstractRecipesWidget implemen
         if (upgradeContainerBase != null) {
 
           if (upgradeContainerBase instanceof CraftingUpgradeContainer) {
-            this.isCrafting = true;
-            this.isSmelting = false;
+            mode = Mode.CRAFTING;
             this.outputSlot = upgradeContainerBase.getSlots().get(9);
             this.resetWidgetOffsets();
           } else if (upgradeContainerBase instanceof SmeltingUpgradeContainer) {
-            this.isSmelting = true;
-            this.isCrafting = false;
+            mode = Mode.SMELTING;
             this.outputSlot = upgradeContainerBase.getSlots().get(2);
             this.resetWidgetOffsets();
+          } else if (upgradeContainerBase instanceof AutoSmeltingUpgradeContainer) {
+            mode = Mode.AUTOSMELTING;
+            this.outputSlot = upgradeContainerBase.getSlots().get(16);
+            this.resetWidgetOffsets();
           } else {
-            this.isSmelting = false;
-            this.isCrafting = false;
+            mode = Mode.NONE;
           }
         } else {
-          this.isCrafting = false;
-          this.isSmelting = false;
+          mode = Mode.NONE;
         }
       } else {
-        this.isCrafting = false;
-        this.isSmelting = false;
+        mode = Mode.NONE;
       }
     }
   }
@@ -111,7 +118,7 @@ public class BackpackUpgradeRecipesWidget extends AbstractRecipesWidget implemen
   public void render(PoseStack pMatrixStack, int pMouseX, int pMouseY,
                      float pRenderPartialTicks) {
 
-    if (this.isCrafting || this.isSmelting) {
+    if (mode != Mode.NONE) {
       super.render(pMatrixStack, pMouseX, pMouseY, pRenderPartialTicks);
     }
   }
@@ -119,7 +126,7 @@ public class BackpackUpgradeRecipesWidget extends AbstractRecipesWidget implemen
   @Override
   public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
 
-    if (this.isCrafting || this.isSmelting) {
+    if (mode != Mode.NONE) {
       return super.mouseClicked(pMouseX, pMouseY, pButton);
     }
     return false;
@@ -127,13 +134,26 @@ public class BackpackUpgradeRecipesWidget extends AbstractRecipesWidget implemen
 
   @Override
   public int getXPos() {
-    int xOffset = this.isCrafting ? -21 : 0;
+    int xOffset = mode == Mode.CRAFTING ? -21 : 0;
     return getOutputSlot().x - xOffset;
   }
 
   @Override
   public int getYPos() {
-    int yOffset = this.isCrafting ? 0 : -23;
+    int yOffset = 0;
+
+    if (mode == Mode.SMELTING) {
+      yOffset = -23;
+    } else if (mode == Mode.AUTOSMELTING) {
+      yOffset = -22;
+    }
     return getOutputSlot().y + yOffset;
+  }
+
+  enum Mode {
+    CRAFTING,
+    SMELTING,
+    AUTOSMELTING,
+    NONE
   }
 }

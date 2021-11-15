@@ -30,6 +30,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
@@ -41,10 +42,13 @@ import net.p3pp3rf1y.sophisticatedbackpacks.common.gui.BackpackContainer;
 import net.p3pp3rf1y.sophisticatedbackpacks.common.gui.UpgradeContainerBase;
 import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.crafting.CraftingUpgradeContainer;
 import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.crafting.CraftingUpgradeItem;
+import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.AutoSmeltingUpgradeContainer;
+import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.AutoSmeltingUpgradeItem;
 import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.SmeltingLogic;
 import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.SmeltingLogicContainer;
 import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.SmeltingUpgradeContainer;
 import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.SmeltingUpgradeItem;
+import net.p3pp3rf1y.sophisticatedbackpacks.util.RecipeHelper;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphPacketDistributor;
@@ -62,9 +66,10 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
   @Override
   public void setup() {
     PolymorphApi.common().registerItemStack2RecipeData(pStack -> {
-      if (pStack.getItem() instanceof CraftingUpgradeItem) {
+      Item item = pStack.getItem();
+      if (item instanceof CraftingUpgradeItem) {
         return new StackRecipeData(pStack);
-      } else if (pStack.getItem() instanceof SmeltingUpgradeItem) {
+      } else if (item instanceof SmeltingUpgradeItem || item instanceof AutoSmeltingUpgradeItem) {
         return new SmeltingUpgradeStackRecipeData(pStack);
       }
       return null;
@@ -113,6 +118,13 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
                   .get();
           ((AccessorSmeltingLogic) logic).setSmeltingRecipeInitialized(false);
           return true;
+        } else if (upgradeContainerBase instanceof AutoSmeltingUpgradeContainer) {
+          SmeltingLogicContainer smeltingLogicContainer =
+              ((AutoSmeltingUpgradeContainer) upgradeContainerBase).getSmeltingLogicContainer();
+          SmeltingLogic logic =
+              ((AccessorSmeltingLogicContainer) smeltingLogicContainer).getSupplySmeltingLogic()
+                  .get();
+          ((AccessorSmeltingLogic) logic).setSmeltingRecipeInitialized(false);
         }
         return false;
       }).orElse(false);
@@ -141,6 +153,19 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
                 } else if (upgradeContainerBase instanceof SmeltingUpgradeContainer) {
                   boolean hasInput =
                       ((SmeltingUpgradeContainer) upgradeContainerBase).getSmeltingLogicContainer()
+                          .getSmeltingSlots().get(0).hasItem();
+
+                  if (hasInput) {
+                    ResourceLocation rl =
+                        recipeData.getSelectedRecipe().map(Recipe::getId).orElse(null);
+                    commonApi.getPacketDistributor()
+                        .sendRecipesListS2C(serverPlayerEntity, recipeData.getRecipesList(), rl);
+                  } else {
+                    commonApi.getPacketDistributor().sendRecipesListS2C(serverPlayerEntity);
+                  }
+                } else if (upgradeContainerBase instanceof AutoSmeltingUpgradeContainer) {
+                  boolean hasInput =
+                      ((AutoSmeltingUpgradeContainer) upgradeContainerBase).getSmeltingLogicContainer()
                           .getSmeltingSlots().get(0).hasItem();
 
                   if (hasInput) {
@@ -185,14 +210,13 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
             PolymorphUtils.wrapItems(pInput), world, pUpgrade);
       }
     }
-    return Optional.empty();
+    return RecipeHelper.getSmeltingRecipe(pInput);
   }
 
   public static void onOpenTab(int pId, Player pPlayer,
                                Map<Integer, UpgradeContainerBase<?, ?>> pUpgradeContainers) {
 
-    if (!pPlayer.level.isClientSide() && pPlayer instanceof ServerPlayer) {
-      ServerPlayer serverPlayerEntity = (ServerPlayer) pPlayer;
+    if (!pPlayer.level.isClientSide() && pPlayer instanceof ServerPlayer serverPlayerEntity) {
       UpgradeContainerBase<?, ?> upgrade = pUpgradeContainers.get(pId);
       IPolymorphCommon commonApi = PolymorphApi.common();
       IPolymorphPacketDistributor packetDistributor = commonApi.getPacketDistributor();
@@ -206,6 +230,9 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
         } else if (upgrade instanceof SmeltingUpgradeContainer) {
           sendSelected = true;
           inventory = PolymorphUtils.wrapItems(upgrade.getSlots().get(0).getItem());
+        } else if (upgrade instanceof AutoSmeltingUpgradeContainer) {
+          sendSelected = true;
+          inventory = PolymorphUtils.wrapItems(upgrade.getSlots().get(14).getItem());
         }
         Container finalInventory = inventory;
         boolean finalSendSelected = sendSelected;
