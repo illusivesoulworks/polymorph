@@ -87,6 +87,7 @@ and has already been tested for functionality.
 - [Sophisticated Backpacks](https://www.curseforge.com/minecraft/mc-mods/sophisticated-backpacks)
   - Crafting Upgrade
   - Smelting Upgrade
+  - Auto-Smelting Upgrade
 - [Tinkers' Construct](https://www.curseforge.com/minecraft/mc-mods/tinkers-construct)
   - Crafting Station
 - [Tom's Storage](https://www.curseforge.com/minecraft/mc-mods/toms-storage)

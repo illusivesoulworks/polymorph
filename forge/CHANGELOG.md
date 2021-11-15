@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.31] - 2021.11.14
+### Added
+- Added Sophisticated Backpack's auto-smelting upgrade compatibility [#105](https://github.com/TheIllusiveC4/Polymorph/issues/105)
+### Fixed
+- Fixed potential fallback errors so that recipes can still operate normally even if the Polymorph logic fails
+
 ## [1.16.5-0.30] - 2021.11.12
 ### Changed
 - Improved recipe output equality logic
