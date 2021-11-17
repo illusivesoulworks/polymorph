@@ -72,7 +72,8 @@ public class RecipeSelection {
       return pOpt.map(recipeData -> recipeData.getRecipe(pType, pInventory, pWorld, pRecipes))
           .orElse(Optional.empty());
     } else {
-      return pWorld.getRecipeManager().getRecipeFor(pType, pInventory, pWorld);
+      return pWorld.getRecipeManager().getRecipesFor(pType, pInventory, pWorld).stream()
+          .findFirst();
     }
   }
 }
