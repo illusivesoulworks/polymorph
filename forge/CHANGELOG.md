@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.33] - 2021.11.23
+### Changed
+- Polymorph now only supports FastWorkbench 4.6.0+ and FastFurnace 4.5.0+
+### Fixed
+- Updated FastWorkbench and FastFurnace compatibility to fix crashes [#109](https://github.com/TheIllusiveC4/Polymorph/issues/109)
+
 ## [1.16.5-0.32] - 2021.11.16
 ### Fixed
 - Fixed potential overflow errors when using certain modded furnaces [#108](https://github.com/TheIllusiveC4/Polymorph/issues/108)

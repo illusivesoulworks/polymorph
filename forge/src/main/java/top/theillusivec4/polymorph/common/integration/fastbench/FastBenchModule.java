@@ -26,11 +26,11 @@ import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.inventory.container.WorkbenchContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import shadows.fastbench.FastBench;
-import shadows.fastbench.gui.ContainerFastBench;
 import shadows.fastbench.net.RecipeMessage;
 import shadows.placebo.util.NetworkUtils;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
@@ -48,7 +48,7 @@ public class FastBenchModule extends AbstractCompatibilityModule {
       PlayerEntity player = null;
       ICraftingRecipe craftingRecipe = (ICraftingRecipe) recipe;
 
-      if (container instanceof ContainerFastBench) {
+      if (container instanceof WorkbenchContainer) {
         AccessorWorkbenchContainer accessor = (AccessorWorkbenchContainer) container;
         inv = accessor.getCraftMatrix();
         result = accessor.getCraftResult();

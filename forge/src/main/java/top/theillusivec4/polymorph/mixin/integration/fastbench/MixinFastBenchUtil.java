@@ -30,18 +30,18 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import shadows.fastbench.gui.ContainerFastBench;
-import shadows.fastbench.gui.CraftingInventoryExt;
+import shadows.fastbench.util.CraftingInventoryExt;
+import shadows.fastbench.util.FastBenchUtil;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
 @SuppressWarnings("unused")
-@Mixin(ContainerFastBench.class)
-public class MixinContainerFastBench {
+@Mixin(FastBenchUtil.class)
+public class MixinFastBenchUtil {
 
   @Redirect(
       at = @At(
           value = "INVOKE",
-          target = "shadows/fastbench/gui/ContainerFastBench.findRecipe(Lnet/minecraft/inventory/CraftingInventory;Lnet/minecraft/world/World;)Lnet/minecraft/item/crafting/IRecipe;"),
+          target = "shadows/fastbench/util/FastBenchUtil.findRecipe(Lnet/minecraft/inventory/CraftingInventory;Lnet/minecraft/world/World;)Lnet/minecraft/item/crafting/IRecipe;"),
       method = "slotChangedCraftingGrid",
       remap = false)
   private static IRecipe<CraftingInventory> polymorph$findRecipe(CraftingInventory inv, World world,

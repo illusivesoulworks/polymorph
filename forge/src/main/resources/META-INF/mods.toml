@@ -25,3 +25,15 @@ ${mod_description}
     versionRange="[1.16.5,1.17)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.polymorph]]
+    modId="fastbench"
+    mandatory=false
+    versionRange="[4.6.0,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.polymorph]]
+    modId="fastfurnace"
+    mandatory=false
+    versionRange="[4.5.0,)"
+    ordering="NONE"
+    side="BOTH"
