@@ -40,6 +40,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.base.IPolymorphClient;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
@@ -88,6 +90,7 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
       return null;
     });
     MinecraftForge.EVENT_BUS.addListener(this::worldTick);
+    MinecraftForge.EVENT_BUS.addListener(this::serverStopped);
   }
 
   private void worldTick(final TickEvent.WorldTickEvent evt) {
@@ -95,6 +98,10 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
     if (!loaded && evt.phase == TickEvent.Phase.END) {
       loaded = true;
     }
+  }
+
+  private void serverStopped(final FMLServerStoppedEvent evt) {
+    loaded = false;
   }
 
   @Override
