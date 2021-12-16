@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
-import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
@@ -63,7 +63,8 @@ import top.theillusivec4.polymorph.common.integration.PolymorphIntegrations;
 @SuppressWarnings("unused")
 public class CommonEventsListener {
 
-  private static final Map<TileEntity, ITileEntityRecipeData> TICKABLE_TILES = new WeakHashMap<>();
+  private static final Map<TileEntity, ITileEntityRecipeData> TICKABLE_TILES =
+      new ConcurrentHashMap<>();
 
   @SubscribeEvent
   public void serverAboutToStart(final FMLServerAboutToStartEvent evt) {
@@ -117,8 +118,9 @@ public class CommonEventsListener {
 
       for (Map.Entry<TileEntity, ITileEntityRecipeData> entry : TICKABLE_TILES.entrySet()) {
         TileEntity te = entry.getKey();
+        World teWorld = te.getWorld();
 
-        if (te.isRemoved() || (te.getWorld() != null && te.getWorld().isRemote())) {
+        if (te.isRemoved() || teWorld == null || teWorld.isRemote()) {
           toRemove.add(te);
         } else {
           entry.getValue().tick();
