@@ -106,9 +106,9 @@ dependencies {
     compileOnly fg.deobf("curse.maven:fastworkbenchminus-394185:${file_fastworkbenchminus}")
     compileOnly fg.deobf("curse.maven:fastfurnaceminus-389989:${file_fastfurnaceminus}")
 
-    compile fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
-    compile fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
-    compile fg.deobf("curse.maven:placebo-283644:${file_placebo}")
+    compileOnly fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
+    compileOnly fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
+    compileOnly fg.deobf("curse.maven:placebo-283644:${file_placebo}")
 
     compileOnly fg.deobf("curse.maven:ironfurnaces-237664:${file_ironfurnaces}")
 

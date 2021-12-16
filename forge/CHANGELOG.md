@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.34] - 2021.12.15
+### Fixed
+- Fixed dedicated server lag [#117](https://github.com/TheIllusiveC4/Polymorph/issues/117)
+- Fixed freezes with Applied Energistics 2 pattern terminal [#114](https://github.com/TheIllusiveC4/Polymorph/issues/114)
+- Fixed freezes with loading Refined Storage integration
+
 ## [1.16.5-0.33] - 2021.11.23
 ### Changed
 - Polymorph now only supports FastWorkbench 4.6.0+ and FastFurnace 4.5.0+
