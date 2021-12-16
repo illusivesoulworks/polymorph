@@ -24,7 +24,9 @@ package top.theillusivec4.polymorph.common;
 import com.mojang.datafixers.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedSet;
+import java.util.WeakHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
@@ -61,14 +63,18 @@ import top.theillusivec4.polymorph.common.integration.PolymorphIntegrations;
 @SuppressWarnings("unused")
 public class CommonEventsListener {
 
+  private static final Map<TileEntity, ITileEntityRecipeData> TICKABLE_TILES = new WeakHashMap<>();
+
   @SubscribeEvent
   public void serverAboutToStart(final FMLServerAboutToStartEvent evt) {
     PolymorphApi.common().setServer(evt.getServer());
+    TICKABLE_TILES.clear();
   }
 
   @SubscribeEvent
   public void serverStopped(final FMLServerStoppedEvent evt) {
     PolymorphApi.common().setServer(null);
+    TICKABLE_TILES.clear();
   }
 
   @SubscribeEvent
@@ -106,20 +112,35 @@ public class CommonEventsListener {
     World world = evt.world;
 
     if (!world.isRemote() && evt.phase == TickEvent.Phase.END) {
-      List<TileEntity> tileEntities = new ArrayList<>(world.loadedTileEntityList);
+      IPolymorphCommon commonApi = PolymorphApi.common();
+      List<TileEntity> toRemove = new ArrayList<>();
 
-      for (TileEntity tileEntity : tileEntities) {
-        PolymorphApi.common().getRecipeData(tileEntity).ifPresent(ITileEntityRecipeData::tick);
+      for (Map.Entry<TileEntity, ITileEntityRecipeData> entry : TICKABLE_TILES.entrySet()) {
+        TileEntity te = entry.getKey();
+
+        if (te.isRemoved() || (te.getWorld() != null && te.getWorld().isRemote())) {
+          toRemove.add(te);
+        } else {
+          entry.getValue().tick();
+        }
+      }
+
+      for (TileEntity te : toRemove) {
+        TICKABLE_TILES.remove(te);
       }
     }
   }
 
   @SubscribeEvent
-  public void attachCapabilities(final AttachCapabilitiesEvent<TileEntity> pEvent) {
+  public void attachCapabilitiesTileEntity(final AttachCapabilitiesEvent<TileEntity> pEvent) {
     TileEntity te = pEvent.getObject();
     PolymorphApi.common().tryCreateRecipeData(te).ifPresent(
-        recipeData -> pEvent.addCapability(PolymorphCapabilities.TILE_ENTITY_RECIPE_DATA_ID,
-            new TileEntityRecipeDataProvider(recipeData)));
+        recipeData -> {
+          pEvent.addCapability(PolymorphCapabilities.TILE_ENTITY_RECIPE_DATA_ID,
+              new TileEntityRecipeDataProvider(recipeData));
+          TICKABLE_TILES.put(te, recipeData);
+          pEvent.addListener(() -> TICKABLE_TILES.remove(te));
+        });
   }
 
   @SubscribeEvent
