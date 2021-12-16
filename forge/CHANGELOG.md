@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.36] - 2021.12.16
+### Fixed
+- Fixed freezes with Applied Energistics 2 pattern terminal [#114](https://github.com/TheIllusiveC4/Polymorph/issues/114)
+
 ## [1.16.5-0.35] - 2021.12.15
 ### Fixed
 - Fixed ConcurrentModificationException [#118](https://github.com/TheIllusiveC4/Polymorph/issues/118)

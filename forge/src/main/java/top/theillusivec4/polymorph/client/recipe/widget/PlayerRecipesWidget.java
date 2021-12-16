@@ -21,11 +21,14 @@
 
 package top.theillusivec4.polymorph.client.recipe.widget;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.ResourceLocation;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.widget.AbstractRecipesWidget;
+import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 
 public class PlayerRecipesWidget extends AbstractRecipesWidget {
 
@@ -38,7 +41,15 @@ public class PlayerRecipesWidget extends AbstractRecipesWidget {
 
   @Override
   public void selectRecipe(ResourceLocation pResourceLocation) {
-    PolymorphApi.common().getPacketDistributor().sendPlayerRecipeSelectionC2S(pResourceLocation);
+    IPolymorphCommon commonApi = PolymorphApi.common();
+    PlayerEntity player = Minecraft.getInstance().player;
+
+    if (player != null) {
+      player.world.getRecipeManager().getRecipe(pResourceLocation).ifPresent(
+          recipe -> commonApi.getRecipeData(player)
+              .ifPresent(recipeData -> recipeData.selectRecipe(recipe)));
+    }
+    commonApi.getPacketDistributor().sendPlayerRecipeSelectionC2S(pResourceLocation);
   }
 
   @Override

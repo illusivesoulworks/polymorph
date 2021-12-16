@@ -32,17 +32,10 @@ import net.minecraft.item.crafting.IRecipe;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.client.recipe.widget.PlayerRecipesWidget;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
-import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
 import top.theillusivec4.polymorph.mixin.integration.appliedenergistics2.AccessorCraftingTermContainer;
 import top.theillusivec4.polymorph.mixin.integration.appliedenergistics2.AccessorPatternTermContainer;
 
 public class AppliedEnergisticsModule extends AbstractCompatibilityModule {
-
-  @Override
-  public void setup() {
-    PolymorphNetwork.register(CPacketCallUpdate.class, CPacketCallUpdate::encode,
-        CPacketCallUpdate::decode, CPacketCallUpdate::handle);
-  }
 
   @Override
   public void clientSetup() {
