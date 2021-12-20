@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.9-SNAPSHOT'
+    id 'fabric-loom' version '0.10-SNAPSHOT'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
@@ -68,7 +68,7 @@ dependencies {
     modImplementation fabricApi.module("fabric-commands-v0", project.fabric_version)
     modImplementation fabricApi.module("fabric-networking-v0", project.fabric_version)
     modImplementation fabricApi.module("fabric-screen-handler-api-v1", project.fabric_version)
-    modImplementation fabricApi.module("fabric-networking-blockentity-v0", project.fabric_version)
+    modImplementation fabricApi.module("fabric-networking-blockentity-v0", "0.40.1+1.17")
 
     modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
     modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${project.cca_version}"
