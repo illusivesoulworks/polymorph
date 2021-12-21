@@ -62,7 +62,7 @@ public abstract class MixinGridNetworkNode extends NetworkNode {
       method = "onCraftingMatrixChanged")
   private <C extends IInventory, T extends IRecipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, IRecipeType<T> type, C inventory, World world) {
-    return RefinedStorageModule.getRecipe(type, inventory, world, this.pos);
+    return RefinedStorageModule.getRecipe(type, inventory, world, this.pos, this.ticks);
   }
 
   @Inject(
@@ -70,7 +70,7 @@ public abstract class MixinGridNetworkNode extends NetworkNode {
       method = "onCreatePattern",
       remap = false)
   private void polymorph$onCreatePattern(CallbackInfo ci) {
-    RefinedStorageModule.appendPattern(this.exactPattern, this.patterns.getStackInSlot(1), this.pos,
-        this.world);
+    RefinedStorageModule.appendPattern(this.exactPattern, this.patterns.getStackInSlot(1),
+        this.world, this.pos, this.ticks);
   }
 }

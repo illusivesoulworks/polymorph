@@ -38,10 +38,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.base.IPolymorphClient;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
@@ -50,8 +46,6 @@ import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModul
 import top.theillusivec4.polymorph.mixin.integration.refinedstorage.AccessorGrid;
 
 public class RefinedStorageModule extends AbstractCompatibilityModule {
-
-  public static boolean loaded = false;
 
   @Override
   public void clientSetup() {
@@ -89,19 +83,6 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
       }
       return null;
     });
-    MinecraftForge.EVENT_BUS.addListener(this::worldTick);
-    MinecraftForge.EVENT_BUS.addListener(this::serverStopped);
-  }
-
-  private void worldTick(final TickEvent.WorldTickEvent evt) {
-
-    if (!loaded && evt.phase == TickEvent.Phase.END) {
-      loaded = true;
-    }
-  }
-
-  private void serverStopped(final FMLServerStoppedEvent evt) {
-    loaded = false;
   }
 
   @Override
@@ -120,9 +101,9 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
   }
 
   public static <C extends IInventory, T extends IRecipe<C>> Optional<T> getRecipe(
-      IRecipeType<T> type, C inventory, World world, BlockPos pos) {
+      IRecipeType<T> type, C inventory, World world, BlockPos pos, int ticks) {
 
-    if (!world.isRemote() && loaded) {
+    if (pos != null && ticks > 1) {
       TileEntity te = world.getTileEntity(pos);
 
       if (te != null) {
@@ -132,8 +113,8 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
     return world.getRecipeManager().getRecipe(type, inventory, world);
   }
 
-  public static void appendPattern(boolean exactPattern, ItemStack stack, BlockPos pos,
-                                   World world) {
+  public static void appendPattern(boolean exactPattern, ItemStack stack, World world, BlockPos pos,
+                                   int ticks) {
 
     if (exactPattern) {
       CompoundNBT tag = stack.getTag();
@@ -142,7 +123,7 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
         stack.setTag(new CompoundNBT());
       }
 
-      if (!world.isRemote() && loaded) {
+      if (world != null && pos != null && ticks > 1) {
         TileEntity te = world.getTileEntity(pos);
 
         if (te instanceof GridTile) {
