@@ -2,78 +2,39 @@ package top.theillusivec4.polymorph.common;
 
 import dev.onyxstudios.cca.api.v3.block.BlockComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.block.BlockComponentInitializer;
-import java.util.Optional;
-import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
+import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
+import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
+import dev.onyxstudios.cca.api.v3.item.ItemComponentFactoryRegistry;
+import dev.onyxstudios.cca.api.v3.item.ItemComponentInitializer;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.gui.screen.ingame.AbstractFurnaceScreen;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.screen.AbstractFurnaceScreenHandler;
-import net.minecraft.world.World;
+import net.minecraft.entity.player.PlayerEntity;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.api.PolymorphComponents;
-import top.theillusivec4.polymorph.api.type.BlockEntityRecipeSelector;
-import top.theillusivec4.polymorph.client.recipe.FurnaceRecipeController;
-import top.theillusivec4.polymorph.common.impl.FurnaceRecipeSelector;
+import top.theillusivec4.polymorph.api.common.base.PolymorphCommon;
+import top.theillusivec4.polymorph.common.component.PlayerRecipeDataImpl;
+import top.theillusivec4.polymorph.common.component.PolymorphComponents;
 
-public class PolymorphComponentInitializer implements BlockComponentInitializer {
+public class PolymorphComponentInitializer implements BlockComponentInitializer,
+    EntityComponentInitializer, ItemComponentInitializer {
 
   @Override
-  public void registerBlockComponentFactories(
-      BlockComponentFactoryRegistry blockComponentFactoryRegistry) {
-    PolymorphApi.getInstance().addBlockEntity(blockEntity -> {
-      if (blockEntity instanceof AbstractFurnaceBlockEntity) {
-        return new FurnaceRecipeSelector((AbstractFurnaceBlockEntity) blockEntity);
-      }
-      return null;
-    });
-    blockComponentFactoryRegistry
-        .registerFor(BlockEntity.class, PolymorphComponents.BLOCK_ENTITY_RECIPE_SELECTOR,
-            blockEntity -> PolymorphApi.getInstance().getBlockEntityRecipeSelector(blockEntity)
-                .orElse(new EmptySelector()));
+  public void registerBlockComponentFactories(BlockComponentFactoryRegistry registry) {
+    PolymorphCommon commonApi = PolymorphApi.common();
+    registry.beginRegistration(BlockEntity.class, PolymorphComponents.BLOCK_ENTITY_RECIPE_DATA)
+        .filter(commonApi::hasBlockRecipeData)
+        .end(commonApi::createBlockRecipeData);
   }
 
-  static class EmptySelector implements BlockEntityRecipeSelector {
+  @Override
+  public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
+    registry.registerFor(PlayerEntity.class, PolymorphComponents.PLAYER_RECIPE_DATA,
+        PlayerRecipeDataImpl::new);
+  }
 
-    @Override
-    public Optional<? extends Recipe<?>> getRecipe(World world) {
-      return Optional.empty();
-    }
-
-    @Override
-    public Optional<? extends Recipe<?>> getSelectedRecipe() {
-      return Optional.empty();
-    }
-
-    @Override
-    public RecipeType<? extends Recipe<?>> getRecipeType() {
-      return null;
-    }
-
-    @Override
-    public void setSelectedRecipe(Recipe<?> recipe) {
-
-    }
-
-    @Override
-    public void setSavedRecipe(String recipe) {
-
-    }
-
-    @Override
-    public BlockEntity getParent() {
-      return null;
-    }
-
-    @Override
-    public void readFromNbt(NbtCompound nbtCompound) {
-
-    }
-
-    @Override
-    public void writeToNbt(NbtCompound nbtCompound) {
-
-    }
+  @Override
+  public void registerItemComponentFactories(ItemComponentFactoryRegistry registry) {
+    PolymorphCommon commonApi = PolymorphApi.common();
+    registry.registerFor(item -> commonApi.hasItemRecipeData(item.getClass()),
+        PolymorphComponents.STACK_RECIPE_DATA,
+        item -> commonApi.createItemRecipeData(item.getItem()));
   }
 }

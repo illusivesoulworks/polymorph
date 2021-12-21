@@ -18,6 +18,7 @@
 package top.theillusivec4.polymorph.mixin.core;
 
 import java.util.Optional;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
@@ -27,7 +28,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import top.theillusivec4.polymorph.mixin.util.MixinHooks;
+import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
 @Mixin(value = RecipeManager.class, priority = 900)
 public class MixinRecipeManager {
@@ -36,7 +37,10 @@ public class MixinRecipeManager {
   private <C extends Inventory, T extends Recipe<C>> void polymorph$getRecipe(
       RecipeType<T> recipeTypeIn, C inventoryIn, World worldIn,
       CallbackInfoReturnable<Optional<T>> cb) {
-    MixinHooks.getSelectedRecipe(recipeTypeIn, inventoryIn, worldIn)
-        .ifPresent(recipe -> cb.setReturnValue(Optional.of(recipe)));
+
+    if (inventoryIn instanceof BlockEntity) {
+      RecipeSelection.getBlockEntityRecipe(recipeTypeIn, inventoryIn, worldIn,
+          (BlockEntity) inventoryIn).ifPresent(recipe -> cb.setReturnValue(Optional.of(recipe)));
+    }
   }
 }

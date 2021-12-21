@@ -4,15 +4,14 @@
   "package": "top.theillusivec4.polymorph.mixin.integration",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "AccessorCraftingTermContainer",
-    "AccessorPatternTermContainer",
-    "MixinCraftingTermContainer",
-    "MixinPatternTermContainer",
-    "MixinImprovedStations",
-    "MixinFastBench"
+    "appliedenergistics2.AccessorCraftingTermContainer",
+    "appliedenergistics2.AccessorPatternTermContainer",
+    "appliedenergistics2.MixinCraftingTermContainer",
+    "appliedenergistics2.MixinPatternTermContainer",
+    "fastbench.MixinFastBench"
   ],
   "client": [
-    "MixinRoughlyEnoughItems"
+    "roughlyenoughitems.MixinRoughlyEnoughItems"
   ],
   "server": [],
   "plugin": "top.theillusivec4.polymorph.mixin.IntegratedMixinPlugin",

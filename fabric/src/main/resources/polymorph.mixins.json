@@ -4,11 +4,14 @@
   "package": "top.theillusivec4.polymorph.mixin.core",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "AccessorAbstractFurnaceBlockEntity",
-    "AccessorAbstractFurnaceScreenHandler",
+    "AccessorCraftingScreenHandler",
     "AccessorIngredient",
+    "AccessorPlayerScreenHandler",
+    "AccessorSmithingRecipe",
     "MixinCraftingScreenHandler",
+    "MixinPolymorphApi",
     "MixinRecipeManager",
+    "MixinServerPlayerEntity",
     "MixinSmithingScreenHandler"
   ],
   "client": [

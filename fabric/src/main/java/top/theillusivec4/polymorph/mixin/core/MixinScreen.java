@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.theillusivec4.polymorph.mixin.util.ClientMixinHooks;
+import top.theillusivec4.polymorph.client.ClientEventsListener;
 
 @Mixin(Screen.class)
 public class MixinScreen {
@@ -30,6 +30,6 @@ public class MixinScreen {
   @Inject(at = @At("TAIL"), method = "init(Lnet/minecraft/client/MinecraftClient;II)V")
   public void init(CallbackInfo cb) {
     @SuppressWarnings("ConstantConditions") Screen screen = (Screen) (Object) this;
-    ClientMixinHooks.initSelector(screen);
+    ClientEventsListener.initScreen(screen);
   }
 }

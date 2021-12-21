@@ -69,7 +69,9 @@ dependencies {
     modImplementation fabricApi.module("fabric-networking-v0", project.fabric_version)
 
     modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
+    modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cca_version}"
     modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${project.cca_version}"
+    modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-item:${project.cca_version}"
 
     modCompileOnly "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
     modRuntime "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
@@ -81,15 +83,17 @@ dependencies {
     modRuntime "teamreborn:energy:0.1.1"
     modCompileOnly "curse.maven:improvedstations-355914:3032328"
     modRuntime "curse.maven:improvedstations-355914:3032328"
-    modCompileOnly "appeng:appliedenergistics2-fabric:8.4.0-alpha.2"
-    modRuntime "appeng:appliedenergistics2-fabric:8.4.0-alpha.2"
+    modCompileOnly "appeng:appliedenergistics2-fabric:${project.ae2_version}"
+    modRuntime "appeng:appliedenergistics2-fabric:${project.ae2_version}"
     modCompileOnly "curse.maven:fastbench-364531:${project.file_fastbench}"
     modRuntime "curse.maven:fastbench-364531:${project.file_fastbench}"
     modRuntime "curse.maven:fastfurnace-364540:${project.file_fastfurnace}"
     modRuntime "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
+    include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cca_version}"
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${project.cca_version}"
+    include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-item:${project.cca_version}"
 }
 
 processResources {

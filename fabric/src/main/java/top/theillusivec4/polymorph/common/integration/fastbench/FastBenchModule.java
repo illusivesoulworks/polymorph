@@ -1,22 +1,37 @@
 package top.theillusivec4.polymorph.common.integration.fastbench;
 
 import net.minecraft.inventory.CraftingResultInventory;
+import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Recipe;
+import net.minecraft.screen.CraftingScreenHandler;
+import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
+import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
+import top.theillusivec4.polymorph.mixin.core.AccessorCraftingScreenHandler;
+import top.theillusivec4.polymorph.mixin.core.AccessorPlayerScreenHandler;
 
-public class FastBenchModule {
+public class FastBenchModule extends AbstractCompatibilityModule {
 
-  public static void setLastRecipe(ServerPlayerEntity serverPlayerEntity, Recipe<?> recipe) {
-    ScreenHandler screenHandler = serverPlayerEntity.currentScreenHandler;
+  @Override
+  public boolean selectRecipe(ScreenHandler screenHandler, Recipe<?> recipe) {
 
-    for (Slot slot : screenHandler.slots) {
+    if (recipe instanceof CraftingRecipe) {
+      CraftingResultInventory result = null;
 
-      if (slot.inventory instanceof CraftingResultInventory) {
-        ((CraftingResultInventory) slot.inventory).setLastRecipe(recipe);
-        break;
+      if (screenHandler instanceof CraftingScreenHandler) {
+        AccessorCraftingScreenHandler accessor = (AccessorCraftingScreenHandler) screenHandler;
+        result = accessor.getResult();
+      } else if (screenHandler instanceof PlayerScreenHandler) {
+        AccessorPlayerScreenHandler accessor = (AccessorPlayerScreenHandler) screenHandler;
+        result = accessor.getCraftingResult();
+      }
+
+      if (result != null) {
+        result.setLastRecipe(recipe);
       }
     }
+    return false;
   }
 }

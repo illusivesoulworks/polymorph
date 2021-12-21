@@ -1,16 +1,17 @@
 package top.theillusivec4.polymorph.common.network;
 
 import net.minecraft.util.Identifier;
-import top.theillusivec4.polymorph.common.PolymorphMod;
+import top.theillusivec4.polymorph.api.PolymorphApi;
 
 public class PolymorphPackets {
 
-  public static final Identifier GET_RECIPES = new Identifier(PolymorphMod.MOD_ID, "get_recipes");
-  public static final Identifier SEND_RECIPES = new Identifier(PolymorphMod.MOD_ID, "send_recipes");
-  public static final Identifier SELECT_CRAFT = new Identifier(PolymorphMod.MOD_ID, "select_craft");
-  public static final Identifier SELECT_PERSIST =
-      new Identifier(PolymorphMod.MOD_ID, "select_persist");
+  public static final Identifier PLAYER_SELECT =
+      new Identifier(PolymorphApi.MOD_ID, "player_select");
+  public static final Identifier PERSISTENT_SELECT =
+      new Identifier(PolymorphApi.MOD_ID, "persistent_select");
+  public static final Identifier STACK_SELECT = new Identifier(PolymorphApi.MOD_ID, "stack_select");
+  public static final Identifier RECIPES_LIST = new Identifier(PolymorphApi.MOD_ID, "recipes_list");
   public static final Identifier HIGHLIGHT_RECIPE =
-      new Identifier(PolymorphMod.MOD_ID, "highlight_recipe");
-  public static final Identifier ADD_CRAFTER = new Identifier(PolymorphMod.MOD_ID, "add_crafter");
+      new Identifier(PolymorphApi.MOD_ID, "highlight_recipe");
+  public static final Identifier RECIPE_SYNC = new Identifier(PolymorphApi.MOD_ID, "recipe_sync");
 }

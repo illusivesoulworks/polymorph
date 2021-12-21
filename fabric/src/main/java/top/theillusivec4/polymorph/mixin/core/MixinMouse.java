@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.theillusivec4.polymorph.mixin.util.ClientMixinHooks;
+import top.theillusivec4.polymorph.client.ClientEventsListener;
 
 @Mixin(Mouse.class)
 public class MixinMouse {
@@ -46,7 +46,7 @@ public class MixinMouse {
     double e = this.y * (double) this.client.getWindow().getScaledHeight() / (double) this.client
         .getWindow().getHeight();
 
-    if (ClientMixinHooks.clickSelector(screen, d, e, button)) {
+    if (ClientEventsListener.clickScreen(screen, d, e, button)) {
       cb.cancel();
     }
   }
