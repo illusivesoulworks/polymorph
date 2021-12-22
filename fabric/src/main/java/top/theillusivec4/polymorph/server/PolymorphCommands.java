@@ -125,7 +125,7 @@ public class PolymorphCommands {
     }
     pOutput.add("===================================================================");
     pOutput.add(
-        Registry.RECIPE_TYPE.getKey(pType) + " recipe conflicts (" + conflicts.size() + ")");
+        Registry.RECIPE_TYPE.getId(pType) + " recipe conflicts (" + conflicts.size() + ")");
     pOutput.add("===================================================================");
     pOutput.add("");
     int count = 1;
