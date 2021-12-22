@@ -52,7 +52,7 @@ public interface RecipeData<E> extends Component {
 
   @Override
   default void readFromNbt(NbtCompound tag) {
-    this.readNbt(tag);
+    this.readNbt(tag.getCompound("Data"));
   }
 
   void readNbt(NbtCompound pCompound);

@@ -1,5 +1,6 @@
 package top.theillusivec4.polymorph.api.common.base;
 
+import java.util.Map;
 import java.util.Optional;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,17 +14,13 @@ import top.theillusivec4.polymorph.api.common.component.StackRecipeData;
 
 public interface PolymorphCommon {
 
-  boolean hasBlockRecipeData(Class<? extends BlockEntity> pBlockEntity);
-
-  BlockEntityRecipeData createBlockRecipeData(BlockEntity pBlockEntity);
+  Map<Class<? extends BlockEntity>, BlockEntity2RecipeData> getAllBlockRecipeData();
 
   Optional<BlockEntityRecipeData> getRecipeData(BlockEntity pBlockEntity);
 
   Optional<BlockEntityRecipeData> getRecipeDataFromBlockEntity(ScreenHandler pScreenHandler);
 
-  boolean hasItemRecipeData(Class<? extends Item> pItem);
-
-  StackRecipeData createItemRecipeData(Item pItem);
+  Map<Item, Item2RecipeData> getAllItemRecipeData();
 
   Optional<StackRecipeData> getRecipeData(ItemStack pStack);
 
@@ -36,7 +33,7 @@ public interface PolymorphCommon {
 
   void registerScreenHandler2BlockEntity(ScreenHandler2BlockEntity pScreenHandler2BlockEntity);
 
-  void registerItem2RecipeData(Class<? extends Item> pItem, Item2RecipeData pItem2RecipeData);
+  void registerItem2RecipeData(Item pItem, Item2RecipeData pItem2RecipeData);
 
   void registerScreenHandler2ItemStack(ScreenHandler2ItemStack pScreenHandler2ItemStack);
 

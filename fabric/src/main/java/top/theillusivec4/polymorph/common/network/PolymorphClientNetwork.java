@@ -40,7 +40,7 @@ public class PolymorphClientNetwork {
     });
   }
 
-  private static void syncRecipe(MinecraftClient pClient, ClientPlayNetworkHandler pHandler,
+  private static void sendRecipesList(MinecraftClient pClient, ClientPlayNetworkHandler pHandler,
                                  PacketByteBuf pBuf, PacketSender pSender) {
     SortedSet<RecipePair> recipeDataset = new TreeSet<>();
     Identifier selected = null;
@@ -72,8 +72,8 @@ public class PolymorphClientNetwork {
     });
   }
 
-  private static void sendRecipesList(MinecraftClient pClient, ClientPlayNetworkHandler pHandler,
-                                      PacketByteBuf pBuf, PacketSender pSender) {
+  private static void syncRecipe(MinecraftClient pClient, ClientPlayNetworkHandler pHandler,
+                                 PacketByteBuf pBuf, PacketSender pSender) {
     SortedSet<RecipePair> recipeDataset = new TreeSet<>();
     Identifier selected = null;
 

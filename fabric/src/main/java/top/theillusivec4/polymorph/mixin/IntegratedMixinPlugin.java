@@ -56,8 +56,8 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
     for (Map.Entry<String, String> entry : CLASS_TO_MOD.entrySet()) {
 
       if (targetClassName.startsWith(entry.getKey())) {
-        return CONFIG_ACTIVATED.contains(entry.getValue()) &&
-            FabricLoader.getInstance().isModLoaded(CLASS_TO_MOD.get(entry.getValue()));
+        String modid = entry.getValue();
+        return CONFIG_ACTIVATED.contains(modid) && FabricLoader.getInstance().isModLoaded(modid);
       }
     }
     return true;

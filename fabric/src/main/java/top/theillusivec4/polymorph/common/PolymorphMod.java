@@ -24,6 +24,8 @@ public class PolymorphMod implements ModInitializer {
     PolymorphNetwork.setup();
     PolymorphCommands.setup();
     CommonEventsListener.setup();
+    PolymorphIntegrations.init();
+    PolymorphIntegrations.setup();
     PolymorphCommon commonApi = PolymorphApi.common();
     commonApi.registerBlockEntity2RecipeData(AbstractFurnaceBlockEntity.class,
         blockEntity -> new FurnaceRecipeData((AbstractFurnaceBlockEntity) blockEntity));
@@ -37,7 +39,5 @@ public class PolymorphMod implements ModInitializer {
       }
       return null;
     });
-    PolymorphIntegrations.init();
-    PolymorphIntegrations.setup();
   }
 }

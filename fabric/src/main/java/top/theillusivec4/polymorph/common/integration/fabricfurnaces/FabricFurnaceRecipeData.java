@@ -13,7 +13,7 @@ public class FabricFurnaceRecipeData extends AbstractHighlightedRecipeData<BaseF
 
   @Override
   protected DefaultedList<ItemStack> getInput() {
-    return DefaultedList.copyOf(ItemStack.EMPTY, this.getOwner().getStack(2));
+    return DefaultedList.copyOf(ItemStack.EMPTY, this.getOwner().getStack(0));
   }
 
   @Override

@@ -1,5 +1,6 @@
 package top.theillusivec4.polymorph.common.impl;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,21 +30,15 @@ public class PolymorphCommonImpl implements PolymorphCommon {
   private final List<ScreenHandler2BlockEntity> screenHandler2BlockEntities = new ArrayList<>();
   private final List<ScreenHandler2ItemStack> screenHandler2ItemStacks = new ArrayList<>();
   private final PolymorphPacketDistributor distributor = new PolymorphPacketDistributorImpl();
-  private final Map<Class<? extends Item>, Item2RecipeData> itemStack2RecipeData =
-      new HashMap<>();
+  private final Map<Item, Item2RecipeData> itemStack2RecipeData = new HashMap<>();
   private final Map<Class<? extends BlockEntity>, BlockEntity2RecipeData> blockEntity2RecipeData =
       new HashMap<>();
 
   private MinecraftServer server = null;
 
   @Override
-  public boolean hasBlockRecipeData(Class<? extends BlockEntity> pBlockEntity) {
-    return this.blockEntity2RecipeData.containsKey(pBlockEntity);
-  }
-
-  @Override
-  public BlockEntityRecipeData createBlockRecipeData(BlockEntity pBlockEntity) {
-    return this.blockEntity2RecipeData.get(pBlockEntity.getClass()).createRecipeData(pBlockEntity);
+  public Map<Class<? extends BlockEntity>, BlockEntity2RecipeData> getAllBlockRecipeData() {
+    return ImmutableMap.copyOf(this.blockEntity2RecipeData);
   }
 
   @Override
@@ -66,13 +61,8 @@ public class PolymorphCommonImpl implements PolymorphCommon {
   }
 
   @Override
-  public boolean hasItemRecipeData(Class<? extends Item> pItem) {
-    return this.blockEntity2RecipeData.containsKey(pItem);
-  }
-
-  @Override
-  public StackRecipeData createItemRecipeData(Item pItem) {
-    return this.itemStack2RecipeData.get(pItem.getClass()).createRecipeData(pItem);
+  public Map<Item, Item2RecipeData> getAllItemRecipeData() {
+    return ImmutableMap.copyOf(this.itemStack2RecipeData);
   }
 
   @Override
@@ -111,8 +101,7 @@ public class PolymorphCommonImpl implements PolymorphCommon {
   }
 
   @Override
-  public void registerItem2RecipeData(Class<? extends Item> pItem,
-                                      Item2RecipeData pItemStack2RecipeData) {
+  public void registerItem2RecipeData(Item pItem, Item2RecipeData pItemStack2RecipeData) {
     this.itemStack2RecipeData.put(pItem, pItemStack2RecipeData);
   }
 

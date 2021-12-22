@@ -9,6 +9,7 @@
     "AccessorPlayerScreenHandler",
     "AccessorSmithingRecipe",
     "MixinCraftingScreenHandler",
+    "MixinBlockEntity",
     "MixinPolymorphApi",
     "MixinRecipeManager",
     "MixinServerPlayerEntity",

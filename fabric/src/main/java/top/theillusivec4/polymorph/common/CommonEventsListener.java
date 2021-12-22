@@ -20,18 +20,24 @@ import top.theillusivec4.polymorph.api.common.base.PolymorphCommon;
 import top.theillusivec4.polymorph.api.common.base.PolymorphPacketDistributor;
 import top.theillusivec4.polymorph.api.common.base.RecipePair;
 import top.theillusivec4.polymorph.api.common.component.BlockEntityRecipeData;
+import top.theillusivec4.polymorph.common.component.PolymorphComponents;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.common.integration.PolymorphIntegrations;
 
 public class CommonEventsListener {
 
-  private static final Map<BlockEntity, BlockEntityRecipeData> TICKABLE_TILES =
+  private static final Map<BlockEntity, BlockEntityRecipeData> TICKABLE_BLOCKS =
       new ConcurrentHashMap<>();
 
   public static void setup() {
     ServerLifecycleEvents.SERVER_STARTING.register(CommonEventsListener::serverStarting);
     ServerLifecycleEvents.SERVER_STOPPED.register(CommonEventsListener::serverStopped);
     ServerTickEvents.END_WORLD_TICK.register(CommonEventsListener::worldTick);
+  }
+
+  public static void addTickableBlock(BlockEntity be) {
+    PolymorphComponents.getRecipeData(be)
+        .ifPresent(recipeData -> TICKABLE_BLOCKS.put(be, recipeData));
   }
 
   public static void openScreenHandler(ServerPlayerEntity player) {
@@ -61,7 +67,7 @@ public class CommonEventsListener {
   private static void worldTick(final ServerWorld serverWorld) {
     List<BlockEntity> toRemove = new ArrayList<>();
 
-    for (Map.Entry<BlockEntity, BlockEntityRecipeData> entry : TICKABLE_TILES.entrySet()) {
+    for (Map.Entry<BlockEntity, BlockEntityRecipeData> entry : TICKABLE_BLOCKS.entrySet()) {
       BlockEntity be = entry.getKey();
       World beWorld = be.getWorld();
 
@@ -73,17 +79,17 @@ public class CommonEventsListener {
     }
 
     for (BlockEntity be : toRemove) {
-      TICKABLE_TILES.remove(be);
+      TICKABLE_BLOCKS.remove(be);
     }
   }
 
   private static void serverStopped(final MinecraftServer server) {
     PolymorphApi.common().setServer(null);
-    TICKABLE_TILES.clear();
+    TICKABLE_BLOCKS.clear();
   }
 
   private static void serverStarting(final MinecraftServer server) {
     PolymorphApi.common().setServer(server);
-    TICKABLE_TILES.clear();
+    TICKABLE_BLOCKS.clear();
   }
 }
