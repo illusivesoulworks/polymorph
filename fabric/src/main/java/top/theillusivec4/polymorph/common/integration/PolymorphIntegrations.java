@@ -24,6 +24,7 @@ import top.theillusivec4.polymorph.common.integration.fabricfurnaces.FabricFurna
 import top.theillusivec4.polymorph.common.integration.fastbench.FastBenchModule;
 import top.theillusivec4.polymorph.common.integration.fastfurnace.FastFurnaceModule;
 import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
+import top.theillusivec4.polymorph.common.integration.toms_storage.TomsStorageModule;
 
 public class PolymorphIntegrations {
 
@@ -38,6 +39,7 @@ public class PolymorphIntegrations {
     INTEGRATIONS.put(Mod.APPLIED_ENERGISTICS_2.getId(), () -> AppliedEnergisticsModule::new);
     INTEGRATIONS.put(Mod.IRON_FURNACES.getId(), () -> IronFurnacesModule::new);
     INTEGRATIONS.put(Mod.FABRICFURNACES.getId(), () -> FabricFurnacesModule::new);
+    INTEGRATIONS.put(Mod.TOMS_STORAGE.getId(), () -> TomsStorageModule::new);
   }
 
   public static void loadConfig() {

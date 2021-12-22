@@ -83,6 +83,8 @@ dependencies {
     modRuntime "teamreborn:energy:0.1.1"
     modCompileOnly "curse.maven:improvedstations-355914:3032328"
     modRuntime "curse.maven:improvedstations-355914:3032328"
+    modCompileOnly "curse.maven:toms-396826:${project.file_toms}"
+    modRuntime "curse.maven:toms-396826:${project.file_toms}"
     modCompileOnly "appeng:appliedenergistics2-fabric:${project.ae2_version}"
     modRuntime "appeng:appliedenergistics2-fabric:${project.ae2_version}"
     modCompileOnly "curse.maven:fastbench-364531:${project.file_fastbench}"

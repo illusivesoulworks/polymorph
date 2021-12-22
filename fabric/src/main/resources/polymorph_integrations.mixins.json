@@ -8,7 +8,10 @@
     "appliedenergistics2.AccessorPatternTermContainer",
     "appliedenergistics2.MixinCraftingTermContainer",
     "appliedenergistics2.MixinPatternTermContainer",
-    "fastbench.MixinFastBench"
+    "fastbench.MixinFastBench",
+    "toms_storage.AccessorContainerStorageTerminal",
+    "toms_storage.AccessorTileEntityCraftingTerminal",
+    "toms_storage.MixinTileEntityCraftingTerminal"
   ],
   "client": [
     "roughlyenoughitems.MixinRoughlyEnoughItems"

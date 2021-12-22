@@ -34,9 +34,10 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
   private static final Set<String> CONFIG_ACTIVATED = new HashSet<>();
 
   static {
-    CLASS_TO_MOD.put("me.shedaniel.rei.", "roughlyenoughitems-runtime");
-    CLASS_TO_MOD.put("appeng.", "appliedenergistics2");
-    CLASS_TO_MOD.put("tfar.fastbench.", "fastbench");
+    CLASS_TO_MOD.put("me.shedaniel.rei.", PolymorphIntegrations.Mod.REI.getId());
+    CLASS_TO_MOD.put("appeng.", PolymorphIntegrations.Mod.APPLIED_ENERGISTICS_2.getId());
+    CLASS_TO_MOD.put("tfar.fastbench.", PolymorphIntegrations.Mod.FASTBENCH.getId());
+    CLASS_TO_MOD.put("com.tom.storagemod.", PolymorphIntegrations.Mod.TOMS_STORAGE.getId());
   }
 
   @Override
