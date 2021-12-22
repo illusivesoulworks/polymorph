@@ -8,12 +8,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.function.Supplier;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.commons.io.FileUtils;
@@ -43,22 +42,31 @@ public class PolymorphIntegrations {
   }
 
   public static void loadConfig() {
-    List<IntegrationConfig> temp = new ArrayList<>();
+    Map<String, IntegrationConfig> defaultModConfigs = new TreeMap<>();
 
     for (PolymorphIntegrations.Mod mod : PolymorphIntegrations.Mod.values()) {
-      temp.add(new IntegrationConfig(mod.getId(), true));
+      defaultModConfigs.put(mod.getId(), new IntegrationConfig(mod.getId(), true));
     }
-    IntegrationConfig[] defaults = temp.toArray(new IntegrationConfig[0]);
-    IntegrationConfig[] config = fromJson(TypeToken.get(IntegrationConfig[].class),
+    IntegrationConfig[] defaults = defaultModConfigs.values().toArray(new IntegrationConfig[0]);
+    IntegrationConfig[] configs = fromJson(TypeToken.get(IntegrationConfig[].class),
         new File(FabricLoader.getInstance().getConfigDir().toString(),
             PolymorphApi.MOD_ID + "-integrations.json"), defaults);
+    Map<String, IntegrationConfig> currentModConfigs = new TreeMap<>(defaultModConfigs);
 
-    for (IntegrationConfig integrationConfig : config) {
+    for (IntegrationConfig config : configs) {
+      currentModConfigs.replace(config.id, config);
+    }
 
-      if (integrationConfig.enabled) {
-        CONFIG_ACTIVATED.add(integrationConfig.id);
+    for (IntegrationConfig config : currentModConfigs.values()) {
+
+      if (config.enabled) {
+        CONFIG_ACTIVATED.add(config.id);
       }
     }
+    toJson(TypeToken.get(IntegrationConfig[].class),
+        new File(FabricLoader.getInstance().getConfigDir().toString(),
+            PolymorphApi.MOD_ID + "-integrations.json"),
+        currentModConfigs.values().toArray(new IntegrationConfig[0]));
   }
 
   public static void init() {
@@ -100,7 +108,8 @@ public class PolymorphIntegrations {
     APPLIED_ENERGISTICS_2("appliedenergistics2"),
     IRON_FURNACES("ironfurnaces"),
     FASTFURNACE("fastfurnace"),
-    FABRICFURNACES("fabric-furnaces");
+    FABRICFURNACES("fabric-furnaces"),
+    IMPROVEDSTATIONS("improved-stations");
 
     private final String id;
 

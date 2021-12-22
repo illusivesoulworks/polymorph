@@ -9,6 +9,7 @@
     "appliedenergistics2.MixinCraftingTermContainer",
     "appliedenergistics2.MixinPatternTermContainer",
     "fastbench.MixinFastBench",
+    "improvedstations.MixinCraftingStationScreenHandler",
     "toms_storage.AccessorContainerStorageTerminal",
     "toms_storage.AccessorTileEntityCraftingTerminal",
     "toms_storage.MixinTileEntityCraftingTerminal"
