@@ -33,6 +33,8 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
 import top.theillusivec4.polymorph.common.integration.appliedenergistics2.AppliedEnergisticsModule;
 import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
+import top.theillusivec4.polymorph.common.integration.fastbench.FastBenchModule;
+import top.theillusivec4.polymorph.common.integration.fastfurnace.FastFurnaceModule;
 import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
 import top.theillusivec4.polymorph.common.integration.sophisticatedbackpacks.SophisticatedBackpacksModule;
 import top.theillusivec4.polymorph.common.integration.toms_storage.TomsStorageModule;
@@ -50,6 +52,8 @@ public class PolymorphIntegrations {
     INTEGRATIONS.put(Mod.SOPHISTICATED_BACKPACKS.getId(), () -> SophisticatedBackpacksModule::new);
     INTEGRATIONS.put(Mod.IRON_FURNACES.getId(), () -> IronFurnacesModule::new);
     INTEGRATIONS.put(Mod.APPLIED_ENERGISTICS_2.getId(), () -> AppliedEnergisticsModule::new);
+    INTEGRATIONS.put(Mod.FASTFURNACE.getId(), () -> FastFurnaceModule::new);
+    INTEGRATIONS.put(Mod.FASTWORKBENCH.getId(), () -> FastBenchModule::new);
   }
 
   public static void loadConfig() {
@@ -116,6 +120,8 @@ public class PolymorphIntegrations {
     CYCLIC("cyclic"),
     SOPHISTICATED_BACKPACKS("sophisticatedbackpacks"),
     IRON_FURNACES("ironfurnaces"),
+    FASTFURNACE("fastfurnace"),
+    FASTWORKBENCH("fastbench"),
     APPLIED_ENERGISTICS_2("appliedenergistics2");
 
     private final String id;

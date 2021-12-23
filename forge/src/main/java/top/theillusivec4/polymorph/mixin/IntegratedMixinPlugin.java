@@ -50,6 +50,8 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
         PolymorphIntegrations.Mod.SOPHISTICATED_BACKPACKS.getId());
     CLASS_TO_MOD.put("ironfurnaces.", PolymorphIntegrations.Mod.IRON_FURNACES.getId());
     CLASS_TO_MOD.put("appeng.", PolymorphIntegrations.Mod.APPLIED_ENERGISTICS_2.getId());
+    CLASS_TO_MOD.put("shadows.fastfurnace.", PolymorphIntegrations.Mod.FASTFURNACE.getId());
+    CLASS_TO_MOD.put("shadows.fastbench.", PolymorphIntegrations.Mod.FASTWORKBENCH.getId());
   }
 
   @Override
