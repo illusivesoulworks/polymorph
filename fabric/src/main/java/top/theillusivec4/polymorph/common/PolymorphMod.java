@@ -1,45 +1,43 @@
 package top.theillusivec4.polymorph.common;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Supplier;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.screen.slot.Slot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
-import top.theillusivec4.polymorph.common.integration.fabricfurnaces.FabricFurnacesModule;
-import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
+import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.api.common.base.PolymorphCommon;
+import top.theillusivec4.polymorph.common.component.FurnaceRecipeData;
+import top.theillusivec4.polymorph.common.integration.PolymorphIntegrations;
 import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
 import top.theillusivec4.polymorph.server.PolymorphCommands;
 
 public class PolymorphMod implements ModInitializer {
 
-  public static final Map<String, Supplier<AbstractCompatibilityModule>> INTEGRATIONS =
-      new HashMap<>();
-
   public static final String MOD_ID = "polymorph";
   public static final Logger LOGGER = LogManager.getLogger();
-
-  public static boolean isFastFurnaceLoaded = false;
-
-  static {
-    INTEGRATIONS.put("ironfurnaces", IronFurnacesModule::new);
-    INTEGRATIONS.put("fabric-furnaces", FabricFurnacesModule::new);
-  }
 
   @Override
   public void onInitialize() {
     PolymorphNetwork.setup();
     PolymorphCommands.setup();
+    CommonEventsListener.setup();
+    PolymorphIntegrations.init();
+    PolymorphIntegrations.setup();
+    PolymorphCommon commonApi = PolymorphApi.common();
+    commonApi.registerBlockEntity2RecipeData(AbstractFurnaceBlockEntity.class,
+        blockEntity -> new FurnaceRecipeData((AbstractFurnaceBlockEntity) blockEntity));
+    commonApi.registerScreenHandler2BlockEntity(container -> {
+      for (Slot inventorySlot : container.slots) {
+        Inventory inventory = inventorySlot.inventory;
 
-    FabricLoader loader = FabricLoader.getInstance();
-    isFastFurnaceLoaded = loader.isModLoaded("fastfurnace");
-    INTEGRATIONS.forEach((modid, supplier) -> {
-
-      if (loader.isModLoaded(modid)) {
-        supplier.get().setup();
+        if (inventory instanceof BlockEntity) {
+          return (BlockEntity) inventory;
+        }
       }
+      return null;
     });
   }
 }

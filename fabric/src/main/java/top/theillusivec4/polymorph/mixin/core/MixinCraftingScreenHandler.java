@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import top.theillusivec4.polymorph.mixin.util.MixinHooks;
+import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
 @Mixin(CraftingScreenHandler.class)
 public class MixinCraftingScreenHandler {
@@ -22,8 +22,8 @@ public class MixinCraftingScreenHandler {
   @Redirect(at = @At(value = "INVOKE", target = "net/minecraft/recipe/RecipeManager.getFirstMatch(Lnet/minecraft/recipe/RecipeType;Lnet/minecraft/inventory/Inventory;Lnet/minecraft/world/World;)Ljava/util/Optional;"), method = "updateResult")
   private static <C extends Inventory, T extends Recipe<C>> Optional<T> polymorph$getFirstMatch(
       RecipeManager recipeManager, RecipeType<T> type, C inventory, World world,
-      ScreenHandler handler, World unused, PlayerEntity player, CraftingInventory craftingInventory,
-      CraftingResultInventory resultInventory) {
-    return MixinHooks.getResult(recipeManager, type, inventory, world, player);
+      ScreenHandler screenHandler, World unused, PlayerEntity player,
+      CraftingInventory craftingInventory, CraftingResultInventory resultInventory) {
+    return RecipeSelection.getPlayerRecipe(screenHandler, type, inventory, world, player);
   }
 }

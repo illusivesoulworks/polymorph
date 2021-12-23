@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.9-SNAPSHOT'
+    id 'fabric-loom' version '0.10-SNAPSHOT'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
@@ -67,27 +67,34 @@ dependencies {
     modImplementation fabricApi.module("fabric-command-api-v1", project.fabric_version)
     modImplementation fabricApi.module("fabric-commands-v0", project.fabric_version)
     modImplementation fabricApi.module("fabric-networking-v0", project.fabric_version)
-    modImplementation fabricApi.module("fabric-screen-handler-api-v1", project.fabric_version)
-    modImplementation fabricApi.module("fabric-networking-blockentity-v0", project.fabric_version)
 
     modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
+    modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cca_version}"
     modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${project.cca_version}"
+    modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-item:${project.cca_version}"
 
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
-    modRuntime "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
+    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
     modCompileOnly "curse.maven:fabricfurnaces-315534:${project.file_fabricfurnaces}"
-    modRuntime "curse.maven:fabricfurnaces-315534:${project.file_fabricfurnaces}"
-    modRuntime 'com.github.Draylar.omega-config:omega-config:1.17-SNAPSHOT'
+    modRuntimeOnly "curse.maven:fabricfurnaces-315534:${project.file_fabricfurnaces}"
+    modRuntimeOnly 'com.github.Draylar.omega-config:omega-config:1.17-SNAPSHOT'
     modCompileOnly "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
-    modRuntime "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
-    modRuntime "teamreborn:energy:0.1.1"
+    modRuntimeOnly "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
+    modRuntimeOnly "teamreborn:energy:0.1.1"
+    modCompileOnly "curse.maven:toms-396826:${project.file_toms}"
+    modRuntimeOnly "curse.maven:toms-396826:${project.file_toms}"
+    modCompileOnly "appeng:appliedenergistics2-fabric:${project.ae2_version}"
+    modRuntimeOnly "appeng:appliedenergistics2-fabric:${project.ae2_version}"
     modCompileOnly "curse.maven:improvedstations-355914:${project.file_improvedstations}"
-    modRuntime "curse.maven:improvedstations-355914:${project.file_improvedstations}"
-    modRuntime "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modRuntime "curse.maven:fastfurnace-364540:${project.file_fastfurnace}"
+    modRuntimeOnly "curse.maven:improvedstations-355914:${project.file_improvedstations}"
+    modCompileOnly "curse.maven:recipecache-473492:${project.file_recipecache}"
+    modRuntimeOnly "curse.maven:recipecache-473492:${project.file_recipecache}"
+    modRuntimeOnly "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
+    include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cca_version}"
     include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${project.cca_version}"
+    include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-item:${project.cca_version}"
 }
 
 processResources {
@@ -131,7 +138,7 @@ curseforge {
         mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
 
         relations {
-            embeddedLibrary 'fabric-api'
+            requiredDependency 'fabric-api'
             embeddedLibrary 'cardinal-components'
         }
 

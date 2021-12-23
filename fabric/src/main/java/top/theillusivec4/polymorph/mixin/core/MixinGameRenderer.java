@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.theillusivec4.polymorph.mixin.util.ClientMixinHooks;
+import top.theillusivec4.polymorph.client.ClientEventsListener;
 
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
@@ -34,12 +34,12 @@ public class MixinGameRenderer {
   MinecraftClient client;
 
   @Inject(at = @At("TAIL"), method = "render")
-  public void polymorph$render(CallbackInfo cb) {
+  public void render(CallbackInfo cb) {
     int i = (int) (this.client.mouse.getX() * (double) this.client.getWindow().getScaledWidth()
         / (double) this.client.getWindow().getWidth());
     int j = (int) (this.client.mouse.getY() * (double) this.client.getWindow().getScaledHeight()
         / (double) this.client.getWindow().getHeight());
-    ClientMixinHooks.renderSelector(this.client.currentScreen, new MatrixStack(), i, j,
+    ClientEventsListener.renderScreen(this.client.currentScreen, new MatrixStack(), i, j,
         this.client.getLastFrameDuration());
   }
 }

@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.theillusivec4.polymorph.mixin.util.ClientMixinHooks;
+import top.theillusivec4.polymorph.client.ClientEventsListener;
 
 @Mixin(Mouse.class)
 public class MixinMouse {
@@ -32,7 +32,7 @@ public class MixinMouse {
   private static void polymorph$mouseClick(boolean[] unused, Screen screen, double mouseX,
                                            double mouseY, int button, CallbackInfo cb) {
 
-    if (ClientMixinHooks.clickSelector(screen, mouseX, mouseY, button)) {
+    if (ClientEventsListener.clickScreen(screen, mouseX, mouseY, button)) {
       cb.cancel();
     }
   }

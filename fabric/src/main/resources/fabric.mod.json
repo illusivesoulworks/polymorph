@@ -20,16 +20,18 @@
     "main": [
       "top.theillusivec4.polymorph.common.PolymorphMod"
     ],
-    "cardinal-components-block": [
+    "cardinal-components": [
       "top.theillusivec4.polymorph.common.PolymorphComponentInitializer"
     ],
-    "rei": [
-      "top.theillusivec4.polymorph.common.integration.roughlyenoughitems.PolymorphReiPlugin"
+    "rei_plugins": [
+      "top.theillusivec4.polymorph.common.integration.roughlyenoughitems.RoughlyEnoughItemsModule"
     ]
   },
   "custom": {
     "cardinal-components": [
-      "polymorph:block_entity_recipe_selector"
+      "polymorph:player_recipe_data",
+      "polymorph:block_entity_recipe_data",
+      "polymorph:stack_recipe_data"
     ]
   },
   "mixins": [
@@ -38,12 +40,10 @@
   ],
   "depends": {
     "fabricloader": ">=0.7.4",
-    "fabric-resource-loader-v0": "*",
-    "fabric-lifecycle-events-v1": "*",
-    "fabric-networking-api-v1": "*",
-    "fabric-command-api-v1": "*",
-    "fabric-commands-v0": "*",
+    "fabric": "*",
     "cardinal-components-block": ">=3.1.1",
+    "cardinal-components-item": ">=3.1.1",
+    "cardinal-components-entity": ">=3.1.1",
     "minecraft": "1.17.x"
   }
 }

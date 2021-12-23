@@ -1,84 +1,105 @@
 package top.theillusivec4.polymorph.common.network;
 
-import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Recipe;
+import net.minecraft.screen.ForgingScreenHandler;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
 import net.minecraft.world.World;
-import top.theillusivec4.polymorph.api.PolymorphComponents;
-import top.theillusivec4.polymorph.common.util.CraftingPlayers;
+import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
+import top.theillusivec4.polymorph.common.integration.PolymorphIntegrations;
 
 public class PolymorphNetwork {
 
   public static void setup() {
-    ServerPlayNetworking.registerGlobalReceiver(PolymorphPackets.GET_RECIPES,
-        (minecraftServer, serverPlayerEntity, serverPlayNetworkHandler, packetByteBuf, packetSender) -> minecraftServer.execute(
-            () -> {
-              World world = serverPlayerEntity.getEntityWorld();
-              ScreenHandler screenHandler = serverPlayerEntity.currentScreenHandler;
-              Inventory inventory = screenHandler.slots.get(0).inventory;
+    ServerPlayNetworking.registerGlobalReceiver(PolymorphPackets.PLAYER_SELECT,
+        PolymorphNetwork::handlePlayerSelect);
+    ServerPlayNetworking.registerGlobalReceiver(PolymorphPackets.PERSISTENT_SELECT,
+        PolymorphNetwork::handlePersistentSelect);
+    ServerPlayNetworking.registerGlobalReceiver(PolymorphPackets.STACK_SELECT,
+        PolymorphNetwork::handleStackSelect);
+  }
 
-              if (inventory instanceof BlockEntity) {
-                PolymorphComponents.BLOCK_ENTITY_RECIPE_SELECTOR.maybeGet((BlockEntity) inventory)
-                    .ifPresent(selector -> {
-                      @SuppressWarnings("unchecked") List<? extends Recipe<?>> recipes =
-                          world.getRecipeManager().values().stream()
-                              .filter((val) -> val.getType() == selector.getRecipeType())
-                              .flatMap((val) -> Util.stream(selector.getRecipeType()
-                                  .match((Recipe<Inventory>) val, world,
-                                      (Inventory) selector.getParent())))
-                              .sorted(Comparator
-                                  .comparing((recipe) -> recipe.getOutput().getTranslationKey()))
-                              .collect(Collectors.toList());
-                      PacketByteBuf buf = PacketByteBufs.create();
+  private static void handlePlayerSelect(MinecraftServer pServer, ServerPlayerEntity pPlayer,
+                                         ServerPlayNetworkHandler pHandler, PacketByteBuf pBuf,
+                                         PacketSender pResponseSender) {
+    Identifier identifier = pBuf.readIdentifier();
+    pServer.execute(() -> {
+      ScreenHandler screenHandler = pPlayer.currentScreenHandler;
+      pPlayer.world.getRecipeManager().get(identifier).ifPresent(recipe -> {
+        PolymorphApi.common().getRecipeData(pPlayer)
+            .ifPresent(recipeData -> recipeData.selectRecipe(recipe));
 
-                      if (!recipes.isEmpty()) {
-                        buf.writeIdentifier(selector.getSelectedRecipe().map(Recipe::getId)
-                            .orElse(recipes.get(0).getId()));
+        for (AbstractCompatibilityModule integration : PolymorphIntegrations.get()) {
 
-                        for (Recipe<?> recipe : recipes) {
-                          buf.writeString(recipe.getId().toString());
-                        }
-                      }
-                      ServerPlayNetworking
-                          .send(serverPlayerEntity, PolymorphPackets.SEND_RECIPES, buf);
-                    });
-              }
-            }));
-    ServerPlayNetworking.registerGlobalReceiver(PolymorphPackets.SELECT_CRAFT,
-        (minecraftServer, serverPlayerEntity, serverPlayNetworkHandler, packetByteBuf, packetSender) -> {
-          Identifier id = packetByteBuf.readIdentifier();
-          minecraftServer.execute(() -> {
-            CraftingPlayers.add(serverPlayerEntity, id);
-            serverPlayerEntity.currentScreenHandler.onContentChanged(
-                serverPlayerEntity.currentScreenHandler.slots.get(0).inventory);
-          });
-        });
-    ServerPlayNetworking.registerGlobalReceiver(PolymorphPackets.SELECT_PERSIST,
-        (minecraftServer, serverPlayerEntity, serverPlayNetworkHandler, packetByteBuf, packetSender) -> {
-          Identifier id = packetByteBuf.readIdentifier();
-          minecraftServer.execute(() -> {
-            World world = serverPlayerEntity.getEntityWorld();
-            Optional<? extends Recipe<?>> recipe = world.getRecipeManager().get(id);
-            recipe.ifPresent(res -> {
-              ScreenHandler screenHandler = serverPlayerEntity.currentScreenHandler;
-              Inventory inventory = screenHandler.slots.get(0).inventory;
+          if (integration.selectRecipe(screenHandler, recipe)) {
+            return;
+          }
+        }
+        screenHandler.onContentChanged(pPlayer.getInventory());
 
-              if (inventory instanceof BlockEntity) {
-                PolymorphComponents.BLOCK_ENTITY_RECIPE_SELECTOR.maybeGet((BlockEntity) inventory)
-                    .ifPresent(selector -> selector.setSelectedRecipe(res));
+        if (screenHandler instanceof ForgingScreenHandler) {
+          ((ForgingScreenHandler) screenHandler).updateResult();
+        }
+      });
+    });
+  }
+
+  private static void handlePersistentSelect(MinecraftServer pServer, ServerPlayerEntity pPlayer,
+                                             ServerPlayNetworkHandler pHandler, PacketByteBuf pBuf,
+                                             PacketSender pResponseSender) {
+    Identifier identifier = pBuf.readIdentifier();
+    pServer.execute(() -> {
+      World world = pPlayer.getEntityWorld();
+      Optional<? extends Recipe<?>> maybeRecipe =
+          world.getRecipeManager().get(identifier);
+      maybeRecipe.ifPresent(recipe -> {
+        ScreenHandler screenHandler = pPlayer.currentScreenHandler;
+        PolymorphApi.common().getRecipeDataFromBlockEntity(screenHandler)
+            .ifPresent(recipeData -> {
+              recipeData.selectRecipe(recipe);
+
+              for (AbstractCompatibilityModule integration : PolymorphIntegrations.get()) {
+
+                if (integration.selectRecipe(recipeData.getOwner(), recipe) ||
+                    integration.selectRecipe(screenHandler, recipe)) {
+                  return;
+                }
               }
             });
-          });
-        });
+      });
+    });
+  }
+
+  private static void handleStackSelect(MinecraftServer pServer, ServerPlayerEntity pPlayer,
+                                        ServerPlayNetworkHandler pHandler, PacketByteBuf pBuf,
+                                        PacketSender pResponseSender) {
+    Identifier identifier = pBuf.readIdentifier();
+    pServer.execute(() -> {
+      World world = pPlayer.getEntityWorld();
+      Optional<? extends Recipe<?>> maybeRecipe =
+          world.getRecipeManager().get(identifier);
+      maybeRecipe.ifPresent(recipe -> {
+        ScreenHandler screenHandler = pPlayer.currentScreenHandler;
+        PolymorphApi.common().getRecipeDataFromBlockEntity(screenHandler)
+            .ifPresent(recipeData -> {
+              recipeData.selectRecipe(recipe);
+
+              for (AbstractCompatibilityModule integration : PolymorphIntegrations.get()) {
+
+                if (integration.selectRecipe(screenHandler, recipe)) {
+                  return;
+                }
+              }
+            });
+      });
+    });
   }
 }

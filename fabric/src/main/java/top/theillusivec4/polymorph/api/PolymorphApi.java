@@ -17,36 +17,18 @@
 
 package top.theillusivec4.polymorph.api;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
-import net.minecraft.block.entity.BlockEntity;
-import top.theillusivec4.polymorph.api.type.BlockEntityRecipeSelector;
+import top.theillusivec4.polymorph.api.client.base.PolymorphClient;
+import top.theillusivec4.polymorph.api.common.base.PolymorphCommon;
 
 public final class PolymorphApi {
 
-  private static final List<Function<BlockEntity, BlockEntityRecipeSelector>> SELECTORS =
-      new ArrayList<>();
-  private static final PolymorphApi INSTANCE = new PolymorphApi();
+  public static final String MOD_ID = "polymorph";
 
-  public static PolymorphApi getInstance() {
-    return INSTANCE;
+  public static PolymorphCommon common() {
+    throw new IllegalStateException("Polymorph Common API missing!");
   }
 
-  public Optional<BlockEntityRecipeSelector> getBlockEntityRecipeSelector(BlockEntity be) {
-
-    for (Function<BlockEntity, BlockEntityRecipeSelector> controllerFunction : SELECTORS) {
-      BlockEntityRecipeSelector controller = controllerFunction.apply(be);
-
-      if (controller != null) {
-        return Optional.of(controller);
-      }
-    }
-    return Optional.empty();
-  }
-
-  public void addBlockEntity(Function<BlockEntity, BlockEntityRecipeSelector> selectorFunction) {
-    SELECTORS.add(selectorFunction);
+  public static PolymorphClient client() {
+    throw new IllegalStateException("Polymorph Client API missing!");
   }
 }

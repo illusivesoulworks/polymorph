@@ -2,12 +2,20 @@
   "required": true,
   "minVersion": "0.8",
   "package": "top.theillusivec4.polymorph.mixin.integration",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "MixinImprovedStations"
+    "appliedenergistics2.AccessorCraftingTermContainer",
+    "appliedenergistics2.AccessorPatternTermContainer",
+    "appliedenergistics2.MixinCraftingTermContainer",
+    "appliedenergistics2.MixinPatternTermContainer",
+    "improvedstations.MixinCraftingStationScreenHandler",
+    "recipecache.MixinCraftingLookup",
+    "toms_storage.AccessorContainerStorageTerminal",
+    "toms_storage.AccessorTileEntityCraftingTerminal",
+    "toms_storage.MixinTileEntityCraftingTerminal"
   ],
   "client": [
-    "MixinRoughlyEnoughItems"
+    "roughlyenoughitems.MixinRoughlyEnoughItems"
   ],
   "server": [],
   "plugin": "top.theillusivec4.polymorph.mixin.IntegratedMixinPlugin",

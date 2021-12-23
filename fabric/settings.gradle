@@ -8,3 +8,5 @@ pluginManagement {
         maven { url 'https://plugins.gradle.org/m2/' }
     }
 }
+
+rootProject.name = "polymorph-fabric"

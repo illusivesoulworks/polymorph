@@ -1,9 +1,8 @@
 package top.theillusivec4.polymorph.mixin.core;
 
 import java.util.List;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.screen.ForgingScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -18,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.theillusivec4.polymorph.common.network.PolymorphPackets;
-import top.theillusivec4.polymorph.mixin.util.MixinHooks;
+import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
 @Mixin(SmithingScreenHandler.class)
 public abstract class MixinSmithingScreenHandler extends ForgingScreenHandler {
@@ -41,15 +40,17 @@ public abstract class MixinSmithingScreenHandler extends ForgingScreenHandler {
   private List<SmithingRecipe> polymorph$getRecipes(List<SmithingRecipe> recipes) {
     this.recipes = recipes;
 
-    if (this.player instanceof ServerPlayerEntity) {
-      ServerPlayNetworking.send((ServerPlayerEntity) this.player, PolymorphPackets.SEND_RECIPES,
-          PacketByteBufs.empty());
+    if (this.player instanceof ServerPlayerEntity && recipes.isEmpty()) {
+      PolymorphApi.common().getPacketDistributor()
+          .sendRecipesListS2C((ServerPlayerEntity) this.player);
     }
     return recipes;
   }
 
   @Inject(at = @At(value = "INVOKE_ASSIGN", target = "java/util/List.get(I)Ljava/lang/Object;", shift = At.Shift.BY, by = 3), method = "updateResult")
   private void polymorph$updateResult(CallbackInfo ci) {
-    this.currentRecipe = MixinHooks.getSmithingRecipe(this.player, this.recipes);
+    this.currentRecipe =
+        RecipeSelection.getPlayerRecipe(this, RecipeType.SMITHING, this.input, this.player.world,
+            this.player, this.recipes).orElse(null);
   }
 }
