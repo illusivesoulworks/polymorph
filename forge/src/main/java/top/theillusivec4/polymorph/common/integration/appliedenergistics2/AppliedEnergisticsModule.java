@@ -29,21 +29,13 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.client.recipe.widget.PlayerRecipesWidget;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
-import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
 import top.theillusivec4.polymorph.mixin.integration.appliedenergistics2.AccessorCraftingTermMenu;
 import top.theillusivec4.polymorph.mixin.integration.appliedenergistics2.AccessorPatternTermMenu;
 
 public class AppliedEnergisticsModule extends AbstractCompatibilityModule {
-
-  @Override
-  public void setup() {
-    PolymorphNetwork.register(CPacketCallUpdate.class, CPacketCallUpdate::encode,
-        CPacketCallUpdate::decode, CPacketCallUpdate::handle);
-  }
 
   @Override
   public void clientSetup() {
@@ -86,9 +78,5 @@ public class AppliedEnergisticsModule extends AbstractCompatibilityModule {
       }
     }
     return false;
-  }
-
-  public static void callUpdate() {
-    PolymorphNetwork.get().send(PacketDistributor.SERVER.noArg(), new CPacketCallUpdate());
   }
 }

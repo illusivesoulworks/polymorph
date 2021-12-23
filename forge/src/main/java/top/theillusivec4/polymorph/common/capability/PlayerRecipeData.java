@@ -21,12 +21,16 @@
 
 package top.theillusivec4.polymorph.common.capability;
 
+import com.mojang.datafixers.util.Pair;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.annotation.Nonnull;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
@@ -34,7 +38,9 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 import top.theillusivec4.polymorph.api.common.capability.IPlayerRecipeData;
+import top.theillusivec4.polymorph.client.recipe.RecipesWidget;
 
 public class PlayerRecipeData extends AbstractRecipeData<Player> implements
     IPlayerRecipeData {
@@ -65,6 +71,21 @@ public class PlayerRecipeData extends AbstractRecipeData<Player> implements
       PolymorphApi.common().getPacketDistributor()
           .sendPlayerSyncS2C((ServerPlayer) this.getOwner(), this.getRecipesList(),
               this.getSelectedRecipe().map(Recipe::getId).orElse(null));
+    }
+  }
+
+  @Override
+  public void sendRecipesListToListeners(boolean pEmpty) {
+    Pair<SortedSet<IRecipePair>, ResourceLocation> packetData =
+        pEmpty ? new Pair<>(new TreeSet<>(), null) : this.getPacketData();
+    Player player = this.getOwner();
+
+    if (player.level.isClientSide()) {
+      RecipesWidget.get().ifPresent(
+          widget -> widget.setRecipesList(packetData.getFirst(), packetData.getSecond()));
+    } else if (player instanceof ServerPlayer) {
+      PolymorphApi.common().getPacketDistributor()
+          .sendRecipesListS2C((ServerPlayer) player, packetData.getFirst(), packetData.getSecond());
     }
   }
 

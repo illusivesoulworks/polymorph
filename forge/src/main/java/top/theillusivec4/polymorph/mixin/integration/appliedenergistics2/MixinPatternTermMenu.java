@@ -27,20 +27,14 @@ import appeng.menu.me.items.PatternTermMenu;
 import java.util.Optional;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
-import top.theillusivec4.polymorph.common.integration.appliedenergistics2.AppliedEnergisticsModule;
 
 @SuppressWarnings("unused")
 @Mixin(PatternTermMenu.class)
@@ -48,18 +42,6 @@ public abstract class MixinPatternTermMenu extends ItemTerminalMenu {
 
   public MixinPatternTermMenu(int id, Inventory ip, ITerminalHost monitorable) {
     super(id, ip, monitorable);
-  }
-
-  @Inject(
-      at = @At("RETURN"),
-      method = "getAndUpdateOutput",
-      remap = false
-  )
-  private void polymorph$getAndUpdateOutput(CallbackInfoReturnable<ItemStack> pCir) {
-
-    if (this.isClient()) {
-      AppliedEnergisticsModule.callUpdate();
-    }
   }
 
   @Redirect(
