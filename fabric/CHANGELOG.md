@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.14-1.16.5] - 2021.12.22
+### Added
+- Added Tom's Storage Crafting Terminal compatibility
+- Added `polymorph-integrations.toml` configuration file to turn off/on any mod compatibility (in case any module is
+either bugged or undesired)
+### Changed
+- Rewrote the entire mod again, fixing many old issues but be aware of new issues or old resolved issue that may resurface
+- Improved `/polymorph conflicts` command to more accurately catch conflicts, output easier-to-read results, and include
+recipes for smelting and smithing
+
 ## [0.0.13-1.16.5] - 2021.09.28
 ### Added
 - Added FastBench support [#92](https://github.com/TheIllusiveC4/Polymorph/issues/92)
