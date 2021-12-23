@@ -22,7 +22,7 @@
 package top.theillusivec4.polymorph.mixin.integration.appliedenergistics2;
 
 import appeng.api.storage.ITerminalHost;
-import appeng.menu.me.items.ItemTerminalMenu;
+import appeng.menu.me.common.MEStorageMenu;
 import appeng.menu.me.items.PatternTermMenu;
 import java.util.Optional;
 import net.minecraft.entity.player.PlayerInventory;
@@ -30,6 +30,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,10 +39,11 @@ import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
 @SuppressWarnings("unused")
 @Mixin(PatternTermMenu.class)
-public abstract class MixinPatternTermContainer extends ItemTerminalMenu {
+public abstract class MixinPatternTermContainer extends MEStorageMenu {
 
-  public MixinPatternTermContainer(int id, PlayerInventory ip, ITerminalHost monitorable) {
-    super(id, ip, monitorable);
+  public MixinPatternTermContainer(ScreenHandlerType<?> menuType, int id, PlayerInventory ip,
+                                   ITerminalHost host) {
+    super(menuType, id, ip, host);
   }
 
   @Redirect(

@@ -271,7 +271,7 @@ public class SelectionWidget extends DrawableHelper implements Drawable, Element
       }
       final int zLevel = 900;
       mStack.push();
-      Matrix4f mat = mStack.peek().getModel();
+      Matrix4f mat = mStack.peek().getPositionMatrix();
       drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY - 4,
           tooltipX + tooltipTextWidth + 3,
           tooltipY - 3, backgroundColor, backgroundColor);

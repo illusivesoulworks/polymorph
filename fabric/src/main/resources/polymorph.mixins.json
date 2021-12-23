@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "top.theillusivec4.polymorph.mixin.core",
-  "compatibilityLevel": "JAVA_16",
+  "compatibilityLevel": "JAVA_17",
   "mixins": [
     "AccessorCraftingScreenHandler",
     "AccessorIngredient",

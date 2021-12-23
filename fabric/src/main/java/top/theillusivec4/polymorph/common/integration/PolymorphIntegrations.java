@@ -19,7 +19,6 @@ import org.apache.commons.io.FileUtils;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.common.PolymorphMod;
 import top.theillusivec4.polymorph.common.integration.appliedenergistics2.AppliedEnergisticsModule;
-import top.theillusivec4.polymorph.common.integration.fabricfurnaces.FabricFurnacesModule;
 import top.theillusivec4.polymorph.common.integration.fastfurnace.FastFurnaceModule;
 import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
 import top.theillusivec4.polymorph.common.integration.recipecache.RecipeCacheModule;
@@ -36,7 +35,6 @@ public class PolymorphIntegrations {
     INTEGRATIONS.put(Mod.FASTFURNACE.getId(), () -> FastFurnaceModule::new);
     INTEGRATIONS.put(Mod.APPLIED_ENERGISTICS_2.getId(), () -> AppliedEnergisticsModule::new);
     INTEGRATIONS.put(Mod.IRON_FURNACES.getId(), () -> IronFurnacesModule::new);
-    INTEGRATIONS.put(Mod.FABRICFURNACES.getId(), () -> FabricFurnacesModule::new);
     INTEGRATIONS.put(Mod.TOMS_STORAGE.getId(), () -> TomsStorageModule::new);
     INTEGRATIONS.put(Mod.RECIPECACHE.getId(), () -> RecipeCacheModule::new);
   }
@@ -104,12 +102,10 @@ public class PolymorphIntegrations {
   public enum Mod {
     REI("roughlyenoughitems-runtime"),
     TOMS_STORAGE("toms_storage"),
-    APPLIED_ENERGISTICS_2("appliedenergistics2"),
+    APPLIED_ENERGISTICS_2("ae2"),
     IRON_FURNACES("ironfurnaces"),
     FASTFURNACE("fastfurnace"),
-    FABRICFURNACES("fabric-furnaces"),
-    RECIPECACHE("recipecache"),
-    IMPROVEDSTATIONS("improved-stations");
+    RECIPECACHE("recipecache");
 
     private final String id;
 
