@@ -69,8 +69,8 @@ public class JeiModule implements IModPlugin {
       RecipesWidget.get().ifPresent(widget -> {
         Screen screen = Minecraft.getInstance().screen;
 
-        if (screen instanceof AbstractContainerScreen<?> && widget.getSelectionWidget().isActive()) {
-          AbstractContainerScreen<?> containerScreen = (AbstractContainerScreen<?>) screen;
+        if (screen instanceof AbstractContainerScreen<?> containerScreen &&
+            widget.getSelectionWidget().isActive()) {
           int x = containerScreen.getGuiLeft() + widget.getXPos();
           int y = containerScreen.getGuiTop() + widget.getYPos();
           int size = widget.getSelectionWidget().getOutputWidgets().size();

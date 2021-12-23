@@ -39,7 +39,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Constants;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 import top.theillusivec4.polymorph.api.common.capability.IRecipeData;
@@ -64,9 +63,9 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
   @SuppressWarnings("unchecked")
   @Override
   public <T extends Recipe<C>, C extends Container> Optional<T> getRecipe(RecipeType<T> pType,
-                                                                            C pInventory,
-                                                                            Level pWorld,
-                                                                            List<T> pRecipes) {
+                                                                          C pInventory,
+                                                                          Level pWorld,
+                                                                          List<T> pRecipes) {
     this.getLoadedRecipe().flatMap(id -> pWorld.getRecipeManager().byKey(id))
         .ifPresent(selected -> {
           try {
@@ -237,7 +236,7 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
     if (pCompound.contains("RecipeDataSet")) {
       Set<IRecipePair> dataset = this.getRecipesList();
       dataset.clear();
-      ListTag list = pCompound.getList("RecipeDataSet", Constants.NBT.TAG_COMPOUND);
+      ListTag list = pCompound.getList("RecipeDataSet", Tag.TAG_COMPOUND);
 
       for (Tag inbt : list) {
         CompoundTag tag = (CompoundTag) inbt;

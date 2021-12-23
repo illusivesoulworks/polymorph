@@ -19,40 +19,40 @@
  *
  */
 
-package top.theillusivec4.polymorph.mixin.integration.appliedenergistics2;
+package top.theillusivec4.polymorph.mixin.integration.refinedstorageaddons;
 
-import appeng.api.storage.ITerminalHost;
-import appeng.menu.me.common.MEStorageMenu;
-import appeng.menu.me.items.PatternTermMenu;
+import com.refinedmods.refinedstorage.api.network.grid.ICraftingGridListener;
+import com.refinedmods.refinedstorageaddons.item.WirelessCraftingGrid;
 import java.util.Optional;
+import java.util.Set;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
+import top.theillusivec4.polymorph.common.integration.refinedstorage.RefinedStorageModule;
 
 @SuppressWarnings("unused")
-@Mixin(PatternTermMenu.class)
-public abstract class MixinPatternTermMenu extends MEStorageMenu {
+@Mixin(WirelessCraftingGrid.class)
+public class MixinWirelessCraftingGrid {
 
-  public MixinPatternTermMenu(MenuType<?> menuType, int id, Inventory ip, ITerminalHost host) {
-    super(menuType, id, ip, host);
-  }
+  @Shadow(remap = false)
+  @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+  private Set<ICraftingGridListener> listeners;
 
   @Redirect(
       at = @At(
           value = "INVOKE",
           target = "net/minecraft/world/item/crafting/RecipeManager.getRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;"),
-      method = "getAndUpdateOutput")
+      method = "slotsChanged")
   private <C extends Container, T extends Recipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, RecipeType<T> type, C inventory, Level world) {
-    return RecipeSelection.getPlayerRecipe(type, inventory, world,
-        this.getPlayerInventory().player);
+    return RefinedStorageModule.getWirelessRecipe(recipeManager, type, inventory, world,
+        listeners.stream().findFirst().orElse(null));
   }
 }

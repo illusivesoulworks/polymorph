@@ -39,9 +39,9 @@ import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 public interface IRecipeData<E> {
 
   <T extends Recipe<C>, C extends Container> Optional<T> getRecipe(RecipeType<T> pType,
-                                                                     C pInventory,
-                                                                     Level pWorld,
-                                                                     List<T> pRecipes);
+                                                                   C pInventory,
+                                                                   Level pWorld,
+                                                                   List<T> pRecipes);
 
   void selectRecipe(@Nonnull Recipe<?> pRecipe);
 

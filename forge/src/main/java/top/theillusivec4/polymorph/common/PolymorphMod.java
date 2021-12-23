@@ -39,7 +39,6 @@ import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.client.ClientEventsListener;
 import top.theillusivec4.polymorph.client.PolymorphClientMod;
 import top.theillusivec4.polymorph.common.capability.FurnaceRecipeData;
-import top.theillusivec4.polymorph.common.capability.PolymorphCapabilities;
 import top.theillusivec4.polymorph.common.integration.PolymorphIntegrations;
 import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
 import top.theillusivec4.polymorph.server.PolymorphCommands;

@@ -24,7 +24,7 @@ package top.theillusivec4.polymorph.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.polymorph.api.client.base.ITickingRecipesWidget;
@@ -39,7 +39,7 @@ public class ClientEventsListener {
     if (pEvent.phase == TickEvent.Phase.END) {
       Minecraft mc = Minecraft.getInstance();
       RecipesWidget.get().ifPresent(widget -> {
-        if (mc.player == null || mc.player.containerMenu == null || mc.screen == null) {
+        if (mc.player == null || mc.screen == null) {
           RecipesWidget.clear();
         } else if (widget instanceof ITickingRecipesWidget) {
           ((ITickingRecipesWidget) widget).tick();
@@ -49,8 +49,8 @@ public class ClientEventsListener {
   }
 
   @SubscribeEvent
-  public void initGui(GuiScreenEvent.InitGuiEvent.Post pEvent) {
-    Screen screen = pEvent.getGui();
+  public void initGui(ScreenEvent.InitScreenEvent.Post pEvent) {
+    Screen screen = pEvent.getScreen();
 
     if (screen instanceof AbstractContainerScreen) {
       RecipesWidget.create((AbstractContainerScreen<?>) screen);
@@ -58,19 +58,19 @@ public class ClientEventsListener {
   }
 
   @SubscribeEvent
-  public void render(GuiScreenEvent.DrawScreenEvent.Post pEvent) {
+  public void render(ScreenEvent.DrawScreenEvent.Post pEvent) {
 
-    if (pEvent.getGui() instanceof AbstractContainerScreen) {
+    if (pEvent.getScreen() instanceof AbstractContainerScreen) {
       RecipesWidget.get().ifPresent(
-          recipeController -> recipeController.render(pEvent.getMatrixStack(), pEvent.getMouseX(),
-              pEvent.getMouseY(), pEvent.getRenderPartialTicks()));
+          recipeController -> recipeController.render(pEvent.getPoseStack(), pEvent.getMouseX(),
+              pEvent.getMouseY(), pEvent.getPartialTicks()));
     }
   }
 
   @SubscribeEvent
-  public void mouseClick(GuiScreenEvent.MouseClickedEvent.Pre pEvent) {
+  public void mouseClick(ScreenEvent.MouseClickedEvent.Pre pEvent) {
 
-    if (pEvent.getGui() instanceof AbstractContainerScreen) {
+    if (pEvent.getScreen() instanceof AbstractContainerScreen) {
       RecipesWidget.get().ifPresent(recipeController -> {
         if (recipeController.mouseClicked(pEvent.getMouseX(), pEvent.getMouseY(),
             pEvent.getButton())) {

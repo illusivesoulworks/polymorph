@@ -34,6 +34,7 @@ public abstract class PersistentRecipesWidget extends AbstractRecipesWidget {
 
   @Override
   public void selectRecipe(ResourceLocation pResourceLocation) {
-    PolymorphApi.common().getPacketDistributor().sendPersistentRecipeSelectionC2S(pResourceLocation);
+    PolymorphApi.common().getPacketDistributor()
+        .sendPersistentRecipeSelectionC2S(pResourceLocation);
   }
 }

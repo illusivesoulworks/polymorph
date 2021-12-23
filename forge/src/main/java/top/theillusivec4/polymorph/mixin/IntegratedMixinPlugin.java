@@ -52,6 +52,11 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
     CLASS_TO_MOD.put("appeng.", PolymorphIntegrations.Mod.APPLIED_ENERGISTICS_2.getId());
     CLASS_TO_MOD.put("shadows.fastfurnace.", PolymorphIntegrations.Mod.FASTFURNACE.getId());
     CLASS_TO_MOD.put("shadows.fastbench.", PolymorphIntegrations.Mod.FASTWORKBENCH.getId());
+    CLASS_TO_MOD.put("de.ellpeck.prettypipes.", PolymorphIntegrations.Mod.PRETTY_PIPES.getId());
+    CLASS_TO_MOD.put("com.refinedmods.refinedstorage.",
+        PolymorphIntegrations.Mod.REFINED_STORAGE.getId());
+    CLASS_TO_MOD.put("com.refinedmods.refinedstorageaddons.",
+        PolymorphIntegrations.Mod.REFINED_STORAGE_ADDONS.getId());
   }
 
   @Override

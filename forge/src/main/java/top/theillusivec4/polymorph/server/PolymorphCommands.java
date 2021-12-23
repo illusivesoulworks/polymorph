@@ -98,9 +98,9 @@ public class PolymorphCommands {
   }
 
   private static <C extends Container, T extends Recipe<C>> int scanRecipes(RecipeType<T> pType,
-                                                                              List<String> pOutput,
-                                                                              RecipeManager pRecipeManager,
-                                                                              Function<Recipe<?>, RecipeWrapper> pFactory) {
+                                                                            List<String> pOutput,
+                                                                            RecipeManager pRecipeManager,
+                                                                            Function<Recipe<?>, RecipeWrapper> pFactory) {
     Collection<RecipeWrapper> recipes =
         pRecipeManager.getAllRecipesFor(pType).stream().map(pFactory).collect(Collectors.toList());
     List<Set<ResourceLocation>> conflicts = new ArrayList<>();

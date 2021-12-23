@@ -31,7 +31,8 @@ public class CrafterRecipesWidget extends PersistentRecipesWidget {
 
   private final ContainerCrafter container;
 
-  public CrafterRecipesWidget(AbstractContainerScreen<?> screen, ContainerCrafter containerCrafter) {
+  public CrafterRecipesWidget(AbstractContainerScreen<?> screen,
+                              ContainerCrafter containerCrafter) {
     super(screen);
     this.container = containerCrafter;
   }

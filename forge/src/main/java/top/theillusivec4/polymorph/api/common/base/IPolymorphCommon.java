@@ -38,7 +38,8 @@ public interface IPolymorphCommon {
 
   LazyOptional<IBlockEntityRecipeData> getRecipeData(BlockEntity pTileEntity);
 
-  LazyOptional<IBlockEntityRecipeData> getRecipeDataFromTileEntity(AbstractContainerMenu pContainer);
+  LazyOptional<IBlockEntityRecipeData> getRecipeDataFromTileEntity(
+      AbstractContainerMenu pContainer);
 
   Optional<IStackRecipeData> tryCreateRecipeData(ItemStack pStack);
 

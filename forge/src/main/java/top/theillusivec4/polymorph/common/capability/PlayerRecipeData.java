@@ -51,9 +51,9 @@ public class PlayerRecipeData extends AbstractRecipeData<Player> implements
 
   @Override
   public <T extends Recipe<C>, C extends Container> Optional<T> getRecipe(RecipeType<T> pType,
-                                                                            C pInventory,
-                                                                            Level pWorld,
-                                                                            List<T> pRecipes) {
+                                                                          C pInventory,
+                                                                          Level pWorld,
+                                                                          List<T> pRecipes) {
     Optional<T> maybeRecipe = super.getRecipe(pType, pInventory, pWorld, pRecipes);
     this.syncPlayerRecipeData();
     return maybeRecipe;

@@ -19,37 +19,34 @@
  *
  */
 
-package top.theillusivec4.polymorph.mixin.core;
+package top.theillusivec4.polymorph.mixin.integration.refinedstorage;
 
+import com.refinedmods.refinedstorage.api.autocrafting.ICraftingPatternContainer;
+import com.refinedmods.refinedstorage.apiimpl.autocrafting.CraftingPatternFactory;
 import java.util.Optional;
 import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import top.theillusivec4.polymorph.common.integration.refinedstorage.RefinedStorageModule;
 
 @SuppressWarnings("unused")
-@Mixin(value = RecipeManager.class, priority = 900)
-public class MixinRecipeManager {
+@Mixin(CraftingPatternFactory.class)
+public class MixinCraftingPatternFactory {
 
-  @Inject(
-      at = @At("HEAD"),
-      method = "getRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;",
-      cancellable = true)
-  private <C extends Container, T extends Recipe<C>> void polymorph$getRecipe(
-      RecipeType<T> recipeTypeIn, C inventoryIn, Level worldIn,
-      CallbackInfoReturnable<Optional<T>> cb) {
-
-    if (inventoryIn instanceof BlockEntity) {
-      RecipeSelection.getTileEntityRecipe(recipeTypeIn, inventoryIn, worldIn,
-              (BlockEntity) inventoryIn)
-          .ifPresent(recipe -> cb.setReturnValue(Optional.of(recipe)));
-    }
+  @Redirect(
+      at = @At(
+          value = "INVOKE",
+          target = "net/minecraft/world/item/crafting/RecipeManager.getRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;"),
+      method = "create")
+  private <C extends Container, T extends Recipe<C>> Optional<T> polymorph$getPatternRecipe(
+      RecipeManager recipeManager, RecipeType<T> type, C inventory, Level world, Level unused,
+      ICraftingPatternContainer container, ItemStack stack) {
+    return RefinedStorageModule.getPatternRecipe(stack, type, inventory, world);
   }
 }

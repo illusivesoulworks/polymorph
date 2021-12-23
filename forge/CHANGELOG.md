@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.18.1-0.33] - 2021.12.23
+### Added
+- Re-added all mod compatibility from 1.16.5
+### Changed
+- Updated to Minecraft 1.18.1
+- Updated to Forge 39.0+
+
 ## [1.17.1-0.32] - 2021.12.23
 ### Added
 - Re-added FastFurnace and FastWorkbench compatibility

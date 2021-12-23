@@ -23,21 +23,16 @@ package top.theillusivec4.polymorph.common;
 
 import com.mojang.datafixers.util.Pair;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ChunkHolder;
-import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -45,9 +40,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.chunk.ChunkSource;
-import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -55,9 +47,9 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
+import net.minecraftforge.event.server.ServerAboutToStartEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fmlserverevents.FMLServerAboutToStartEvent;
-import net.minecraftforge.fmlserverevents.FMLServerStoppedEvent;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphPacketDistributor;
@@ -70,7 +62,6 @@ import top.theillusivec4.polymorph.common.capability.PlayerRecipeData;
 import top.theillusivec4.polymorph.common.capability.PolymorphCapabilities;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.common.integration.PolymorphIntegrations;
-import top.theillusivec4.polymorph.mixin.core.AccessorChunkMap;
 
 @SuppressWarnings("unused")
 public class CommonEventsListener {
@@ -86,13 +77,13 @@ public class CommonEventsListener {
   }
 
   @SubscribeEvent
-  public void serverAboutToStart(final FMLServerAboutToStartEvent evt) {
+  public void serverAboutToStart(final ServerAboutToStartEvent evt) {
     PolymorphApi.common().setServer(evt.getServer());
     TICKABLE_BLOCKS.clear();
   }
 
   @SubscribeEvent
-  public void serverStopped(final FMLServerStoppedEvent evt) {
+  public void serverStopped(final ServerStoppedEvent evt) {
     PolymorphApi.common().setServer(null);
     TICKABLE_BLOCKS.clear();
   }

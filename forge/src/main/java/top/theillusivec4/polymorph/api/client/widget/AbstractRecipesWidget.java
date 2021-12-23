@@ -22,7 +22,6 @@
 package top.theillusivec4.polymorph.api.client.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import java.util.Comparator;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -48,7 +47,8 @@ public abstract class AbstractRecipesWidget implements IRecipesWidget {
   protected SelectionWidget selectionWidget;
   protected OpenSelectionButton openButton;
 
-  public AbstractRecipesWidget(AbstractContainerScreen<?> pContainerScreen, int pXOffset, int pYOffset) {
+  public AbstractRecipesWidget(AbstractContainerScreen<?> pContainerScreen, int pXOffset,
+                               int pYOffset) {
     this.containerScreen = pContainerScreen;
     this.xOffset = pXOffset;
     this.yOffset = pYOffset;

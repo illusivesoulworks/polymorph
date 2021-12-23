@@ -21,7 +21,6 @@
 
 package top.theillusivec4.polymorph.common.impl;
 
-import java.util.Objects;
 import javax.annotation.Nonnull;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;

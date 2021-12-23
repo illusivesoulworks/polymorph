@@ -36,6 +36,9 @@ import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
 import top.theillusivec4.polymorph.common.integration.fastbench.FastBenchModule;
 import top.theillusivec4.polymorph.common.integration.fastfurnace.FastFurnaceModule;
 import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
+import top.theillusivec4.polymorph.common.integration.prettypipes.PrettyPipesModule;
+import top.theillusivec4.polymorph.common.integration.refinedstorage.RefinedStorageModule;
+import top.theillusivec4.polymorph.common.integration.refinedstorageaddons.RefinedStorageAddonsModule;
 import top.theillusivec4.polymorph.common.integration.sophisticatedbackpacks.SophisticatedBackpacksModule;
 import top.theillusivec4.polymorph.common.integration.toms_storage.TomsStorageModule;
 
@@ -54,6 +57,9 @@ public class PolymorphIntegrations {
     INTEGRATIONS.put(Mod.APPLIED_ENERGISTICS_2.getId(), () -> AppliedEnergisticsModule::new);
     INTEGRATIONS.put(Mod.FASTFURNACE.getId(), () -> FastFurnaceModule::new);
     INTEGRATIONS.put(Mod.FASTWORKBENCH.getId(), () -> FastBenchModule::new);
+    INTEGRATIONS.put(Mod.PRETTY_PIPES.getId(), () -> PrettyPipesModule::new);
+    INTEGRATIONS.put(Mod.REFINED_STORAGE.getId(), () -> RefinedStorageModule::new);
+    INTEGRATIONS.put(Mod.REFINED_STORAGE_ADDONS.getId(), () -> RefinedStorageAddonsModule::new);
   }
 
   public static void loadConfig() {
@@ -122,7 +128,10 @@ public class PolymorphIntegrations {
     IRON_FURNACES("ironfurnaces"),
     FASTFURNACE("fastfurnace"),
     FASTWORKBENCH("fastbench"),
-    APPLIED_ENERGISTICS_2("appliedenergistics2");
+    PRETTY_PIPES("prettypipes"),
+    REFINED_STORAGE("refinedstorage"),
+    REFINED_STORAGE_ADDONS("refinedstorageaddons"),
+    APPLIED_ENERGISTICS_2("ae2");
 
     private final String id;
 

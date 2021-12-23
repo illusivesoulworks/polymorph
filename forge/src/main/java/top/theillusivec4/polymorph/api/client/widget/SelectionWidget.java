@@ -156,7 +156,7 @@ public class SelectionWidget extends GuiComponent
       this.outputWidgets.forEach(button -> {
         button.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
 
-        if (button.visible && button.isHovered()) {
+        if (button.visible && button.isHoveredOrFocused()) {
           this.hoveredButton = button;
         }
       });
@@ -194,7 +194,7 @@ public class SelectionWidget extends GuiComponent
       List<ClientTooltipComponent> components =
           net.minecraftforge.client.ForgeHooksClient.gatherTooltipComponents(pStack, pText, pMouseX,
               pScreen.width, pScreen.height, pFontRenderer, pFontRenderer);
-      RenderTooltipEvent.Pre preEvent = ForgeHooksClient.preTooltipEvent(pStack, pPoseStack,
+      RenderTooltipEvent.Pre preEvent = ForgeHooksClient.onRenderTooltipPre(pStack, pPoseStack,
           pMouseX, pMouseY, pScreen.width, pScreen.height, components, pFontRenderer,
           pFontRenderer);
 
@@ -205,7 +205,7 @@ public class SelectionWidget extends GuiComponent
       int j = pText.size() == 1 ? -2 : 0;
 
       for (ClientTooltipComponent clienttooltipcomponent : components) {
-        int k = clienttooltipcomponent.getWidth(preEvent.getFontRenderer());
+        int k = clienttooltipcomponent.getWidth(preEvent.getFont());
         if (k > i) {
           i = k;
         }
@@ -234,7 +234,7 @@ public class SelectionWidget extends GuiComponent
       bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
       Matrix4f matrix4f = pPoseStack.last().pose();
       RenderTooltipEvent.Color colorEvent =
-          ForgeHooksClient.colorTooltipEvent(pStack, pPoseStack, j2, k2, preEvent.getFontRenderer(),
+          ForgeHooksClient.onRenderTooltipColor(pStack, pPoseStack, j2, k2, preEvent.getFont(),
               components);
       fillGradient(matrix4f, bufferbuilder, j2 - 3, k2 - 4, j2 + i + 3, k2 - 3, blitOffset,
           colorEvent.getBackgroundStart(), colorEvent.getBackgroundStart());
@@ -271,7 +271,7 @@ public class SelectionWidget extends GuiComponent
 
       for (int i2 = 0; i2 < components.size(); ++i2) {
         ClientTooltipComponent clienttooltipcomponent1 = components.get(i2);
-        clienttooltipcomponent1.renderText(preEvent.getFontRenderer(), j2, l1, matrix4f,
+        clienttooltipcomponent1.renderText(preEvent.getFont(), j2, l1, matrix4f,
             multibuffersource$buffersource);
         l1 += clienttooltipcomponent1.getHeight() + (i2 == 0 ? 2 : 0);
       }
@@ -282,8 +282,8 @@ public class SelectionWidget extends GuiComponent
 
       for (int l2 = 0; l2 < components.size(); ++l2) {
         ClientTooltipComponent clienttooltipcomponent2 = components.get(l2);
-        clienttooltipcomponent2.renderImage(preEvent.getFontRenderer(), j2, l1, pPoseStack,
-            itemRenderer, blitOffset, pScreen.getMinecraft().getTextureManager());
+        clienttooltipcomponent2.renderImage(preEvent.getFont(), j2, l1, pPoseStack, itemRenderer,
+            blitOffset);
         l1 += clienttooltipcomponent2.getHeight() + (l2 == 0 ? 2 : 0);
       }
       itemRenderer.blitOffset = f;

@@ -25,10 +25,10 @@ version = "${mod_version}"
 group = "top.theillusivec4.polymorph"
 archivesBaseName = "polymorph-forge"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'parchment', version: '2021.10.31-1.17.1'
+    mappings channel: 'parchment', version: '2021.12.19-1.18.1'
 
     runs {
         client {
@@ -93,7 +93,7 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 
-    implementation fg.deobf("mezz.jei:jei-1.17.1:${version_jei}")
+    implementation fg.deobf("mezz.jei:jei-1.18.1:${version_jei}")
 
     implementation fg.deobf("curse.maven:craftingcraft-237581:${file_craftingcraft}")
     implementation fg.deobf("curse.maven:tomsstorage-378609:${file_tom}")
@@ -105,6 +105,9 @@ dependencies {
     implementation fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
     implementation fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
     implementation fg.deobf("curse.maven:placebo-283644:${file_placebo}")
+	implementation fg.deobf("curse.maven:refinedstorage-243076:${file_refinedstorage}")
+    implementation fg.deobf("curse.maven:refinedstorageaddons-272302:${file_refinedaddons}")
+	implementation fg.deobf("curse.maven:prettypipes-376737:${file_prettypipes}")
 
     runtimeOnly fg.deobf("curse.maven:vanillatweaks-272637:${file_vanillatweaks}")
 	runtimeOnly fg.deobf("curse.maven:balm-531761:${file_balm}")

@@ -21,7 +21,7 @@
 
 package top.theillusivec4.polymorph.mixin.integration.cyclic;
 
-import com.lothrazar.cyclic.base.TileEntityBase;
+import com.lothrazar.cyclic.block.TileBlockEntityCyclic;
 import com.lothrazar.cyclic.block.crafter.TileCrafter;
 import java.util.ArrayList;
 import net.minecraft.core.BlockPos;
@@ -37,7 +37,7 @@ import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
 
 @SuppressWarnings("unused")
 @Mixin(TileCrafter.class)
-public abstract class MixinTileCrafter extends TileEntityBase {
+public abstract class MixinTileCrafter extends TileBlockEntityCyclic {
 
   public MixinTileCrafter(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
     super(tileEntityTypeIn, pos, state);

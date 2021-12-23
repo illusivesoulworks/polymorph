@@ -19,40 +19,47 @@
  *
  */
 
-package top.theillusivec4.polymorph.mixin.integration.appliedenergistics2;
+package top.theillusivec4.polymorph.mixin.integration.prettypipes;
 
-import appeng.api.storage.ITerminalHost;
-import appeng.menu.me.common.MEStorageMenu;
-import appeng.menu.me.items.PatternTermMenu;
+import de.ellpeck.prettypipes.terminal.containers.CraftingTerminalContainer;
+import de.ellpeck.prettypipes.terminal.containers.ItemTerminalContainer;
 import java.util.Optional;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
 @SuppressWarnings("unused")
-@Mixin(PatternTermMenu.class)
-public abstract class MixinPatternTermMenu extends MEStorageMenu {
+@Mixin(CraftingTerminalContainer.class)
+public class MixinCraftingTerminalContainer extends ItemTerminalContainer {
 
-  public MixinPatternTermMenu(MenuType<?> menuType, int id, Inventory ip, ITerminalHost host) {
-    super(menuType, id, ip, host);
+  @Shadow(remap = false)
+  @Final
+  private Player player;
+
+  public MixinCraftingTerminalContainer(@Nullable MenuType<?> type, int id, Player player,
+                                        BlockPos pos) {
+    super(type, id, player, pos);
   }
 
   @Redirect(
       at = @At(
           value = "INVOKE",
           target = "net/minecraft/world/item/crafting/RecipeManager.getRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;"),
-      method = "getAndUpdateOutput")
+      method = "slotsChanged")
   private <C extends Container, T extends Recipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, RecipeType<T> type, C inventory, Level world) {
-    return RecipeSelection.getPlayerRecipe(type, inventory, world,
-        this.getPlayerInventory().player);
+    return RecipeSelection.getPlayerRecipe(type, inventory, world, this.player);
   }
 }

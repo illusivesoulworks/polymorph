@@ -19,18 +19,17 @@
  *
  */
 
-package top.theillusivec4.polymorph.common.integration.toms_storage;
+package top.theillusivec4.polymorph.common.integration.refinedstorage;
 
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.inventory.Slot;
 import top.theillusivec4.polymorph.client.recipe.widget.PersistentRecipesWidget;
 
-public class CraftingTerminalRecipesWidget extends PersistentRecipesWidget {
+public class GridBlockEntityRecipesWidget extends PersistentRecipesWidget {
 
   private final Slot outputSlot;
 
-  public CraftingTerminalRecipesWidget(AbstractContainerScreen<?> containerScreen,
-                                       Slot outputSlot) {
+  public GridBlockEntityRecipesWidget(AbstractContainerScreen<?> containerScreen, Slot outputSlot) {
     super(containerScreen);
     this.outputSlot = outputSlot;
   }

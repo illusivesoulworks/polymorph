@@ -19,24 +19,22 @@
  *
  */
 
-package top.theillusivec4.polymorph.common.integration.toms_storage;
+package top.theillusivec4.polymorph.common.integration.prettypipes;
 
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.world.inventory.Slot;
-import top.theillusivec4.polymorph.client.recipe.widget.PersistentRecipesWidget;
+import de.ellpeck.prettypipes.terminal.containers.CraftingTerminalContainer;
+import top.theillusivec4.polymorph.api.PolymorphApi;
+import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 
-public class CraftingTerminalRecipesWidget extends PersistentRecipesWidget {
-
-  private final Slot outputSlot;
-
-  public CraftingTerminalRecipesWidget(AbstractContainerScreen<?> containerScreen,
-                                       Slot outputSlot) {
-    super(containerScreen);
-    this.outputSlot = outputSlot;
-  }
+public class PrettyPipesModule extends AbstractCompatibilityModule {
 
   @Override
-  public Slot getOutputSlot() {
-    return this.outputSlot;
+  public void clientSetup() {
+    PolymorphApi.client().registerWidget(containerScreen -> {
+      if (containerScreen.getMenu() instanceof CraftingTerminalContainer) {
+        return PolymorphApi.client().findCraftingResultSlot(containerScreen)
+            .map(slot -> new CraftingTerminalRecipesWidget(containerScreen, slot)).orElse(null);
+      }
+      return null;
+    });
   }
 }

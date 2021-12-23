@@ -19,24 +19,17 @@
  *
  */
 
-package top.theillusivec4.polymorph.common.integration.toms_storage;
+package top.theillusivec4.polymorph.mixin.integration.refinedstorage;
 
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.world.inventory.Slot;
-import top.theillusivec4.polymorph.client.recipe.widget.PersistentRecipesWidget;
+import com.refinedmods.refinedstorage.apiimpl.network.node.GridNetworkNode;
+import com.refinedmods.refinedstorageaddons.item.WirelessCraftingGrid;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-public class CraftingTerminalRecipesWidget extends PersistentRecipesWidget {
+@Mixin({GridNetworkNode.class, WirelessCraftingGrid.class})
+public interface AccessorGrid {
 
-  private final Slot outputSlot;
-
-  public CraftingTerminalRecipesWidget(AbstractContainerScreen<?> containerScreen,
-                                       Slot outputSlot) {
-    super(containerScreen);
-    this.outputSlot = outputSlot;
-  }
-
-  @Override
-  public Slot getOutputSlot() {
-    return this.outputSlot;
-  }
+  @Accessor(remap = false)
+  void setCurrentRecipe(CraftingRecipe pRecipe);
 }

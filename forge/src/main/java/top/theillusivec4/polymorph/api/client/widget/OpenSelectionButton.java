@@ -34,8 +34,9 @@ public class OpenSelectionButton extends ImageButton {
   private int xOffset;
   private int yOffset;
 
-  public OpenSelectionButton(AbstractContainerScreen<?> pContainerScreen, int pX, int pY, Button.OnPress pOnPress) {
-    super(0,0, 16, 16, 0, 0, 17, AbstractRecipesWidget.WIDGETS, 256, 256, pOnPress);
+  public OpenSelectionButton(AbstractContainerScreen<?> pContainerScreen, int pX, int pY,
+                             Button.OnPress pOnPress) {
+    super(0, 0, 16, 16, 0, 0, 17, AbstractRecipesWidget.WIDGETS, 256, 256, pOnPress);
     this.containerScreen = pContainerScreen;
     this.xOffset = pX;
     this.yOffset = pY;

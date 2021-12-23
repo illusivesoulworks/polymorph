@@ -24,7 +24,7 @@ package top.theillusivec4.polymorph.common.impl;
 import java.util.SortedSet;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphPacketDistributor;
 import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 import top.theillusivec4.polymorph.common.network.PolymorphNetwork;

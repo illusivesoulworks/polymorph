@@ -22,11 +22,12 @@
 package top.theillusivec4.polymorph.mixin.integration.appliedenergistics2;
 
 import appeng.api.storage.ITerminalHost;
+import appeng.menu.me.common.MEStorageMenu;
 import appeng.menu.me.items.CraftingTermMenu;
-import appeng.menu.me.items.ItemTerminalMenu;
 import java.util.Optional;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -38,10 +39,10 @@ import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
 @SuppressWarnings("unused")
 @Mixin(CraftingTermMenu.class)
-public abstract class MixinCraftingTermMenu extends ItemTerminalMenu {
+public abstract class MixinCraftingTermMenu extends MEStorageMenu {
 
-  public MixinCraftingTermMenu(int id, Inventory ip, ITerminalHost monitorable) {
-    super(id, ip, monitorable);
+  public MixinCraftingTermMenu(MenuType<?> menuType, int id, Inventory ip, ITerminalHost host) {
+    super(menuType, id, ip, host);
   }
 
   @Redirect(
