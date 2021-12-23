@@ -117,7 +117,7 @@ java {
 sourceSets {
     main {
         resources {
-            srcDirs += 'docs'
+            srcDirs += '../docs'
         }
     }
 }
@@ -128,7 +128,7 @@ curseforge {
         id = "${curse_id}"
         releaseType = "${curse_release}"
         changelogType = 'markdown'
-        changelog = file('docs/CHANGELOG.md')
+        changelog = file('CHANGELOG.md')
         addGameVersion "Java 16"
         addGameVersion "Fabric"
         "${curse_versions}".split(',').each {
