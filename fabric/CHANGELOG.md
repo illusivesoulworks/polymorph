@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.16-1.18.1] - 2021.12.23
+### Changed
+- Updated to Minecraft 1.18.1
+- Updated to CCA 4.0.1
+### Removed
+- Removed Fabric Furnaces and Improved Stations compatibility as they are not currently available on 1.18.1
+
 ## [0.0.15-1.17.1] - 2021.12.22
 ### Added
 - Added Tom's Storage Crafting Terminal compatibility
