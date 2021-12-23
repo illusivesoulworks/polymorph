@@ -145,7 +145,7 @@ curseforge {
         mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
 
         relations {
-            embeddedLibrary 'fabric-api'
+            requiredDependency 'fabric-api'
             embeddedLibrary 'cardinal-components'
         }
 
