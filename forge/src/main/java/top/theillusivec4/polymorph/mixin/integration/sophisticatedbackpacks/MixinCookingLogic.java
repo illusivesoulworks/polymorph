@@ -23,8 +23,9 @@ package top.theillusivec4.polymorph.mixin.integration.sophisticatedbackpacks;
 
 import java.util.Optional;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
-import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.SmeltingLogic;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.cooking.CookingLogic;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,8 +34,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import top.theillusivec4.polymorph.common.integration.sophisticatedbackpacks.SophisticatedBackpacksModule;
 
 @SuppressWarnings("unused")
-@Mixin(SmeltingLogic.class)
-public abstract class MixinSmeltingLogic {
+@Mixin(CookingLogic.class)
+public abstract class MixinCookingLogic {
 
   @Shadow(remap = false)
   @Final
@@ -43,10 +44,11 @@ public abstract class MixinSmeltingLogic {
   @Redirect(
       at = @At(
           value = "INVOKE",
-          target = "net/p3pp3rf1y/sophisticatedbackpacks/util/RecipeHelper.getSmeltingRecipe(Lnet/minecraft/world/item/ItemStack;)Ljava/util/Optional;"),
-      method = "getSmeltingRecipe",
+          target = "net/p3pp3rf1y/sophisticatedbackpacks/util/RecipeHelper.getCookingRecipe(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/crafting/RecipeType;)Ljava/util/Optional;"),
+      method = "getCookingRecipe",
       remap = false)
-  private Optional<SmeltingRecipe> polymorph$getSmeltingRecipe(ItemStack pStack) {
-    return SophisticatedBackpacksModule.getSmeltingRecipe(pStack, this.upgrade);
+  private Optional<? extends AbstractCookingRecipe> polymorph$getCookingRecipe(ItemStack pStack,
+                                                                               RecipeType<? extends AbstractCookingRecipe> pRecipeType) {
+    return SophisticatedBackpacksModule.getCookingRecipe(pStack, pRecipeType, this.upgrade);
   }
 }

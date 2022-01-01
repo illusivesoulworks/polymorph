@@ -32,22 +32,26 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
 import net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackScreen;
 import net.p3pp3rf1y.sophisticatedbackpacks.common.gui.BackpackContainer;
 import net.p3pp3rf1y.sophisticatedbackpacks.common.gui.UpgradeContainerBase;
+import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.cooking.AutoBlastingUpgradeItem;
+import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.cooking.AutoCookingUpgradeContainer;
+import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.cooking.AutoSmeltingUpgradeItem;
+import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.cooking.AutoSmokingUpgradeItem;
+import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.cooking.BlastingUpgradeItem;
+import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.cooking.CookingLogic;
+import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.cooking.CookingLogicContainer;
+import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.cooking.CookingUpgradeContainer;
+import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.cooking.SmeltingUpgradeItem;
+import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.cooking.SmokingUpgradeItem;
 import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.crafting.CraftingUpgradeContainer;
 import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.crafting.CraftingUpgradeItem;
-import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.AutoSmeltingUpgradeContainer;
-import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.AutoSmeltingUpgradeItem;
-import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.SmeltingLogic;
-import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.SmeltingLogicContainer;
-import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.SmeltingUpgradeContainer;
-import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.SmeltingUpgradeItem;
 import net.p3pp3rf1y.sophisticatedbackpacks.util.RecipeHelper;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
@@ -56,10 +60,10 @@ import top.theillusivec4.polymorph.common.capability.StackRecipeData;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.common.util.PolymorphUtils;
+import top.theillusivec4.polymorph.mixin.integration.sophisticatedbackpacks.AccessorCookingLogic;
+import top.theillusivec4.polymorph.mixin.integration.sophisticatedbackpacks.AccessorCookingLogicContainer;
 import top.theillusivec4.polymorph.mixin.integration.sophisticatedbackpacks.AccessorCraftingUpgradeContainer;
 import top.theillusivec4.polymorph.mixin.integration.sophisticatedbackpacks.AccessorRecipeHelper;
-import top.theillusivec4.polymorph.mixin.integration.sophisticatedbackpacks.AccessorSmeltingLogic;
-import top.theillusivec4.polymorph.mixin.integration.sophisticatedbackpacks.AccessorSmeltingLogicContainer;
 
 public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
 
@@ -69,8 +73,10 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
       Item item = pStack.getItem();
       if (item instanceof CraftingUpgradeItem) {
         return new StackRecipeData(pStack);
-      } else if (item instanceof SmeltingUpgradeItem || item instanceof AutoSmeltingUpgradeItem) {
-        return new SmeltingUpgradeStackRecipeData(pStack);
+      } else if (item instanceof SmeltingUpgradeItem || item instanceof AutoSmeltingUpgradeItem ||
+          item instanceof BlastingUpgradeItem || item instanceof AutoBlastingUpgradeItem ||
+          item instanceof SmokingUpgradeItem || item instanceof AutoSmokingUpgradeItem) {
+        return new CookingUpgradeStackRecipeData(pStack);
       }
       return null;
     });
@@ -110,21 +116,21 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
             ((BackpackContainer) container).sendSlotUpdates();
             return true;
           }
-        } else if (upgradeContainerBase instanceof SmeltingUpgradeContainer) {
-          SmeltingLogicContainer smeltingLogicContainer =
-              ((SmeltingUpgradeContainer) upgradeContainerBase).getSmeltingLogicContainer();
-          SmeltingLogic logic =
-              ((AccessorSmeltingLogicContainer) smeltingLogicContainer).getSupplySmeltingLogic()
+        } else if (upgradeContainerBase instanceof CookingUpgradeContainer) {
+          CookingLogicContainer<?> smeltingLogicContainer =
+              ((CookingUpgradeContainer<?, ?>) upgradeContainerBase).getSmeltingLogicContainer();
+          CookingLogic<?> logic =
+              ((AccessorCookingLogicContainer) smeltingLogicContainer).getSupplyCoookingLogic()
                   .get();
-          ((AccessorSmeltingLogic) logic).setSmeltingRecipeInitialized(false);
+          ((AccessorCookingLogic) logic).setCookingRecipeInitialized(false);
           return true;
-        } else if (upgradeContainerBase instanceof AutoSmeltingUpgradeContainer) {
-          SmeltingLogicContainer smeltingLogicContainer =
-              ((AutoSmeltingUpgradeContainer) upgradeContainerBase).getSmeltingLogicContainer();
-          SmeltingLogic logic =
-              ((AccessorSmeltingLogicContainer) smeltingLogicContainer).getSupplySmeltingLogic()
+        } else if (upgradeContainerBase instanceof AutoCookingUpgradeContainer) {
+          CookingLogicContainer<?> smeltingLogicContainer =
+              ((AutoCookingUpgradeContainer<?, ?>) upgradeContainerBase).getCookingLogicContainer();
+          CookingLogic<?> logic =
+              ((AccessorCookingLogicContainer) smeltingLogicContainer).getSupplyCoookingLogic()
                   .get();
-          ((AccessorSmeltingLogic) logic).setSmeltingRecipeInitialized(false);
+          ((AccessorCookingLogic) logic).setCookingRecipeInitialized(false);
         }
         return false;
       }).orElse(false);
@@ -150,10 +156,10 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
                     commonApi.getPacketDistributor()
                         .sendRecipesListS2C(serverPlayerEntity, recipeData.getRecipesList());
                   }
-                } else if (upgradeContainerBase instanceof SmeltingUpgradeContainer) {
+                } else if (upgradeContainerBase instanceof CookingUpgradeContainer) {
                   boolean hasInput =
-                      ((SmeltingUpgradeContainer) upgradeContainerBase).getSmeltingLogicContainer()
-                          .getSmeltingSlots().get(0).hasItem();
+                      ((CookingUpgradeContainer<?, ?>) upgradeContainerBase).getSmeltingLogicContainer()
+                          .getCookingSlots().get(0).hasItem();
 
                   if (hasInput) {
                     ResourceLocation rl =
@@ -163,10 +169,10 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
                   } else {
                     commonApi.getPacketDistributor().sendRecipesListS2C(serverPlayerEntity);
                   }
-                } else if (upgradeContainerBase instanceof AutoSmeltingUpgradeContainer) {
+                } else if (upgradeContainerBase instanceof AutoCookingUpgradeContainer) {
                   boolean hasInput =
-                      ((AutoSmeltingUpgradeContainer) upgradeContainerBase).getSmeltingLogicContainer()
-                          .getSmeltingSlots().get(0).hasItem();
+                      ((AutoCookingUpgradeContainer<?, ?>) upgradeContainerBase).getCookingLogicContainer()
+                          .getCookingSlots().get(0).hasItem();
 
                   if (hasInput) {
                     ResourceLocation rl =
@@ -199,18 +205,20 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
     }
   }
 
-  public static Optional<SmeltingRecipe> getSmeltingRecipe(ItemStack pInput, ItemStack pUpgrade) {
+  public static Optional<? extends AbstractCookingRecipe> getCookingRecipe(ItemStack pInput,
+                                                                           RecipeType<? extends AbstractCookingRecipe> pRecipeType,
+                                                                           ItemStack pUpgrade) {
     WeakReference<Level> weakReference = AccessorRecipeHelper.getWorld();
 
     if (weakReference != null) {
       Level world = weakReference.get();
 
       if (world != null) {
-        return RecipeSelection.getStackRecipe(RecipeType.SMELTING,
-            PolymorphUtils.wrapItems(pInput), world, pUpgrade);
+        return RecipeSelection.getStackRecipe(pRecipeType, PolymorphUtils.wrapItems(pInput), world,
+            pUpgrade);
       }
     }
-    return RecipeHelper.getSmeltingRecipe(pInput);
+    return RecipeHelper.getCookingRecipe(pInput, pRecipeType);
   }
 
   public static void onOpenTab(int pId, Player pPlayer,
@@ -227,10 +235,10 @@ public class SophisticatedBackpacksModule extends AbstractCompatibilityModule {
 
         if (upgrade instanceof CraftingUpgradeContainer) {
           inventory = ((CraftingUpgradeContainer) upgrade).getCraftMatrix();
-        } else if (upgrade instanceof SmeltingUpgradeContainer) {
+        } else if (upgrade instanceof CookingUpgradeContainer) {
           sendSelected = true;
           inventory = PolymorphUtils.wrapItems(upgrade.getSlots().get(0).getItem());
-        } else if (upgrade instanceof AutoSmeltingUpgradeContainer) {
+        } else if (upgrade instanceof AutoCookingUpgradeContainer) {
           sendSelected = true;
           inventory = PolymorphUtils.wrapItems(upgrade.getSlots().get(14).getItem());
         }
