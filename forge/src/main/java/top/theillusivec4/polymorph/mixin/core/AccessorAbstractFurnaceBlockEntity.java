@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 C4
+ * Copyright (C) 2020-2022 C4
  *
  * This file is part of Polymorph.
  *
@@ -19,31 +19,17 @@
  *
  */
 
-package top.theillusivec4.polymorph.common.capability;
+package top.theillusivec4.polymorph.mixin.core;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
-import top.theillusivec4.polymorph.mixin.core.AccessorAbstractFurnaceBlockEntity;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-public class FurnaceRecipeData extends AbstractHighlightedRecipeData<AbstractFurnaceBlockEntity> {
+@Mixin(AbstractFurnaceBlockEntity.class)
+public interface AccessorAbstractFurnaceBlockEntity {
 
-  public FurnaceRecipeData(AbstractFurnaceBlockEntity pOwner) {
-    super(pOwner);
-  }
-
-  @Override
-  protected NonNullList<ItemStack> getInput() {
-
-    if (((AccessorAbstractFurnaceBlockEntity) this.getOwner()).getItems() != null) {
-      return NonNullList.of(ItemStack.EMPTY, this.getOwner().getItem(0));
-    } else {
-      return NonNullList.create();
-    }
-  }
-
-  @Override
-  public boolean isEmpty() {
-    return this.getInput().get(0).isEmpty();
-  }
+  @Accessor
+  NonNullList<ItemStack> getItems();
 }
