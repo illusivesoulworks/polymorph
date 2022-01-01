@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_16",
   "refmap": "polymorph.refmap.json",
   "mixins": [
+    "AccessorAbstractFurnaceBlockEntity",
     "AccessorChunkMap",
     "AccessorUpgradeRecipe",
     "AccessorCraftingMenu",
