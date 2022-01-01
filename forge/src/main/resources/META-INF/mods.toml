@@ -37,3 +37,9 @@ ${mod_description}
     versionRange="[4.5.0,)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.polymorph]]
+    modId="sophisticatedbackpacks"
+    mandatory=false
+    versionRange="[1.16.5-3.15.0,)"
+    ordering="NONE"
+    side="BOTH"

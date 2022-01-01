@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.38] - 2022.01.01
+### Changed
+- Updated to Sophisticated Backpacks 1.16.5-3.15.0+ [#127](https://github.com/TheIllusiveC4/Polymorph/issues/127)
+### Fixed
+- Fixed NPE furnace crash [#122](https://github.com/TheIllusiveC4/Polymorph/issues/122)
+- Fixed NPE from JEI crash [#124](https://github.com/TheIllusiveC4/Polymorph/issues/124)
+
 ## [1.16.5-0.37] - 2021.12.20
 ### Fixed
 - Fixed freezes with loading Refined Storage integration [#120](https://github.com/TheIllusiveC4/Polymorph/issues/120)

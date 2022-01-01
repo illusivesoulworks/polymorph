@@ -24,6 +24,7 @@ package top.theillusivec4.polymorph.common.capability;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.util.NonNullList;
+import top.theillusivec4.polymorph.mixin.core.AccessorAbstractFurnaceTileEntity;
 
 public class FurnaceRecipeData extends AbstractHighlightedRecipeData<AbstractFurnaceTileEntity> {
 
@@ -33,7 +34,12 @@ public class FurnaceRecipeData extends AbstractHighlightedRecipeData<AbstractFur
 
   @Override
   protected NonNullList<ItemStack> getInput() {
-    return NonNullList.from(ItemStack.EMPTY, this.getOwner().getStackInSlot(0));
+
+    if (((AccessorAbstractFurnaceTileEntity) this.getOwner()).getItems() != null) {
+      return NonNullList.from(ItemStack.EMPTY, this.getOwner().getStackInSlot(0));
+    } else {
+      return NonNullList.create();
+    }
   }
 
   @Override

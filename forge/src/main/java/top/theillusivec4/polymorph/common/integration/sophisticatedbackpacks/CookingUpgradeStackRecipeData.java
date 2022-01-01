@@ -29,9 +29,9 @@ import net.minecraft.util.ResourceLocation;
 import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 import top.theillusivec4.polymorph.common.capability.StackRecipeData;
 
-public class SmeltingUpgradeStackRecipeData extends StackRecipeData {
+public class CookingUpgradeStackRecipeData extends StackRecipeData {
 
-  public SmeltingUpgradeStackRecipeData(ItemStack pOwner) {
+  public CookingUpgradeStackRecipeData(ItemStack pOwner) {
     super(pOwner);
   }
 

@@ -27,9 +27,9 @@ import net.minecraft.util.ResourceLocation;
 import net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackScreen;
 import net.p3pp3rf1y.sophisticatedbackpacks.common.gui.BackpackContainer;
 import net.p3pp3rf1y.sophisticatedbackpacks.common.gui.UpgradeContainerBase;
+import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.cooking.AutoCookingUpgradeContainer;
+import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.cooking.CookingUpgradeContainer;
 import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.crafting.CraftingUpgradeContainer;
-import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.AutoSmeltingUpgradeContainer;
-import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.SmeltingUpgradeContainer;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.base.ITickingRecipesWidget;
 import top.theillusivec4.polymorph.api.client.widget.AbstractRecipesWidget;
@@ -56,9 +56,9 @@ public class BackpackUpgradeRecipesWidget extends AbstractRecipesWidget implemen
 
       if (upgradeContainerBase instanceof CraftingUpgradeContainer) {
         mode = Mode.CRAFTING;
-      } else if (upgradeContainerBase instanceof SmeltingUpgradeContainer) {
+      } else if (upgradeContainerBase instanceof CookingUpgradeContainer) {
         mode = Mode.SMELTING;
-      } else if (upgradeContainerBase instanceof AutoSmeltingUpgradeContainer) {
+      } else if (upgradeContainerBase instanceof AutoCookingUpgradeContainer) {
         mode = Mode.AUTOSMELTING;
       } else {
         mode = Mode.NONE;
@@ -84,11 +84,11 @@ public class BackpackUpgradeRecipesWidget extends AbstractRecipesWidget implemen
             mode = Mode.CRAFTING;
             this.outputSlot = upgradeContainerBase.getSlots().get(9);
             this.resetWidgetOffsets();
-          } else if (upgradeContainerBase instanceof SmeltingUpgradeContainer) {
+          } else if (upgradeContainerBase instanceof CookingUpgradeContainer) {
             mode = Mode.SMELTING;
             this.outputSlot = upgradeContainerBase.getSlots().get(2);
             this.resetWidgetOffsets();
-          } else if (upgradeContainerBase instanceof AutoSmeltingUpgradeContainer) {
+          } else if (upgradeContainerBase instanceof AutoCookingUpgradeContainer) {
             mode = Mode.AUTOSMELTING;
             this.outputSlot = upgradeContainerBase.getSlots().get(16);
             this.resetWidgetOffsets();

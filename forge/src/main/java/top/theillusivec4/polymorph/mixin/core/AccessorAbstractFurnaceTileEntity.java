@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 C4
+ * Copyright (C) 2020-2022 C4
  *
  * This file is part of Polymorph.
  *
@@ -19,15 +19,17 @@
  *
  */
 
-package top.theillusivec4.polymorph.mixin.integration.sophisticatedbackpacks;
+package top.theillusivec4.polymorph.mixin.core;
 
-import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.smelting.SmeltingLogic;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.AbstractFurnaceTileEntity;
+import net.minecraft.util.NonNullList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(SmeltingLogic.class)
-public interface AccessorSmeltingLogic {
+@Mixin(AbstractFurnaceTileEntity.class)
+public interface AccessorAbstractFurnaceTileEntity {
 
-  @Accessor(remap = false)
-  void setSmeltingRecipeInitialized(boolean pVal);
+  @Accessor
+  NonNullList<ItemStack> getItems();
 }

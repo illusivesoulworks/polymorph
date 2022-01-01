@@ -52,11 +52,17 @@ public class JeiModule implements IModPlugin {
     return new ResourceLocation(PolymorphApi.MOD_ID, "jei");
   }
 
-  public static void selectRecipe(Object recipe) {
+  @SuppressWarnings("ConstantConditions")
+  public static void selectRecipe(Object object) {
 
-    if (recipe instanceof IRecipe<?>) {
-      PolymorphApi.common().getPacketDistributor()
-          .sendPlayerRecipeSelectionC2S(((IRecipe<?>) recipe).getId());
+    if (object instanceof IRecipe<?>) {
+      ResourceLocation resourceLocation = ((IRecipe<?>) object).getId();
+
+      // This technically should always be true but apparently some mods violate this rule, so we
+      // have to check for it
+      if (resourceLocation != null) {
+        PolymorphApi.common().getPacketDistributor().sendPlayerRecipeSelectionC2S(resourceLocation);
+      }
     }
   }
 
