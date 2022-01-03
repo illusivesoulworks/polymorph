@@ -22,7 +22,7 @@
 package top.theillusivec4.polymorph.common.integration.appliedenergistics2;
 
 import appeng.menu.me.items.CraftingTermMenu;
-import appeng.menu.me.items.PatternTermMenu;
+import appeng.menu.me.items.PatternEncodingTermMenu;
 import appeng.menu.slot.CraftingTermSlot;
 import appeng.menu.slot.PatternTermSlot;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -48,13 +48,13 @@ public class AppliedEnergisticsModule extends AbstractCompatibilityModule {
             return new PlayerRecipesWidget(pContainerScreen, inventorySlot);
           }
         }
-      } else if (pContainerScreen.getMenu() instanceof PatternTermMenu) {
+      } else if (pContainerScreen.getMenu() instanceof PatternEncodingTermMenu) {
 
         for (Slot inventorySlot : pContainerScreen.getMenu().slots) {
 
           if (inventorySlot instanceof PatternTermSlot) {
             return new PatternTermRecipesWidget(pContainerScreen,
-                (PatternTermMenu) pContainerScreen.getMenu(), inventorySlot);
+                (PatternEncodingTermMenu) pContainerScreen.getMenu(), inventorySlot);
           }
         }
       }
@@ -71,7 +71,7 @@ public class AppliedEnergisticsModule extends AbstractCompatibilityModule {
         ((AccessorCraftingTermMenu) container).setCurrentRecipe((CraftingRecipe) recipe);
         container.slotsChanged(((CraftingTermMenu) container).getPlayerInventory());
         return true;
-      } else if (container instanceof PatternTermMenu) {
+      } else if (container instanceof PatternEncodingTermMenu) {
         ((AccessorPatternTermMenu) container).setCurrentRecipe((CraftingRecipe) recipe);
         ((AccessorPatternTermMenu) container).callGetAndUpdateOutput();
         return true;

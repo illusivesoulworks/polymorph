@@ -86,6 +86,14 @@ repositories {
 		name = "CurseMaven"
         url = "https://www.cursemaven.com"
     }
+    maven {
+        name "Modmaven"
+        url "https://modmaven.dev/"
+        // For Gradle 5.1 and above, limit it to just AE2
+        content {
+            includeGroup 'appeng'
+        }
+    }
 }
 
 dependencies {
@@ -94,6 +102,7 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 
     implementation fg.deobf("mezz.jei:jei-1.18.1:${version_jei}")
+    implementation fg.deobf("appeng:appliedenergistics2:${version_ae2}")
 
     implementation fg.deobf("curse.maven:craftingcraft-237581:${file_craftingcraft}")
     implementation fg.deobf("curse.maven:tomsstorage-378609:${file_tom}")
@@ -101,7 +110,6 @@ dependencies {
     implementation fg.deobf("curse.maven:cyclic-239286:${file_cyclic}")
     implementation fg.deobf("curse.maven:sophisticatedbackpacks-422301:${file_sophisticated}")
     implementation fg.deobf("curse.maven:ironfurnaces-237664:${file_ironfurnaces}")
-    implementation fg.deobf("curse.maven:ae2-223794:${file_ae2}")
     implementation fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
     implementation fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
     implementation fg.deobf("curse.maven:placebo-283644:${file_placebo}")

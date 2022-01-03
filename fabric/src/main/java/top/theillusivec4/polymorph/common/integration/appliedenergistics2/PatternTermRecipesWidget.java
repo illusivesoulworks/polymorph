@@ -21,7 +21,8 @@
 
 package top.theillusivec4.polymorph.common.integration.appliedenergistics2;
 
-import appeng.menu.me.items.PatternTermMenu;
+import appeng.menu.me.items.PatternEncodingTermMenu;
+import appeng.parts.encoding.EncodingMode;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.recipe.CraftingRecipe;
@@ -32,10 +33,10 @@ import top.theillusivec4.polymorph.mixin.integration.appliedenergistics2.Accesso
 
 public class PatternTermRecipesWidget extends PlayerRecipesWidget {
 
-  private final PatternTermMenu container;
+  private final PatternEncodingTermMenu container;
 
   public PatternTermRecipesWidget(HandledScreen<?> containerScreen,
-                                  PatternTermMenu container, Slot outputSlot) {
+                                  PatternEncodingTermMenu container, Slot outputSlot) {
     super(containerScreen, outputSlot);
     this.container = container;
   }
@@ -54,7 +55,7 @@ public class PatternTermRecipesWidget extends PlayerRecipesWidget {
   public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY,
                      float pRenderPartialTicks) {
 
-    if (container.isCraftingMode()) {
+    if (container.mode == EncodingMode.CRAFTING) {
       super.render(pMatrixStack, pMouseX, pMouseY, pRenderPartialTicks);
     }
   }
@@ -62,7 +63,7 @@ public class PatternTermRecipesWidget extends PlayerRecipesWidget {
   @Override
   public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
 
-    if (!container.isCraftingMode()) {
+    if (container.mode != EncodingMode.CRAFTING) {
       return false;
     }
     return super.mouseClicked(pMouseX, pMouseY, pButton);

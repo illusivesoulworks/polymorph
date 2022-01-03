@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.17-1.18.1] - 2022.01.02
+### Changed
+- Updated to Applied Energistics 2 10.0.0-beta.3 [#129](https://github.com/TheIllusiveC4/Polymorph/issues/129)
+
 ## [0.0.16-1.18.1] - 2021.12.23
 ### Changed
 - Updated to Minecraft 1.18.1

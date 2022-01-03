@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.18.1-0.35] - 2022.01.02
+### Changed
+- Updated to Applied Energistics 2 10.0.0-beta.3 [#129](https://github.com/TheIllusiveC4/Polymorph/issues/129)
+
 ## [1.18.1-0.34] - 2022.01.01
 ### Changed
 - Updated to Sophisticated Backpacks 1.18.1-3.15.0+ [#127](https://github.com/TheIllusiveC4/Polymorph/issues/127)

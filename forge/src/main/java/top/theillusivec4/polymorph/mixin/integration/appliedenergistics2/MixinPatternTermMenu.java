@@ -23,7 +23,7 @@ package top.theillusivec4.polymorph.mixin.integration.appliedenergistics2;
 
 import appeng.api.storage.ITerminalHost;
 import appeng.menu.me.common.MEStorageMenu;
-import appeng.menu.me.items.PatternTermMenu;
+import appeng.menu.me.items.PatternEncodingTermMenu;
 import java.util.Optional;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -38,7 +38,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
 @SuppressWarnings("unused")
-@Mixin(PatternTermMenu.class)
+@Mixin(PatternEncodingTermMenu.class)
 public abstract class MixinPatternTermMenu extends MEStorageMenu {
 
   public MixinPatternTermMenu(MenuType<?> menuType, int id, Inventory ip, ITerminalHost host) {

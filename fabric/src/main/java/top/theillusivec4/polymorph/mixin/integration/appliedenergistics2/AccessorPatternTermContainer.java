@@ -21,14 +21,14 @@
 
 package top.theillusivec4.polymorph.mixin.integration.appliedenergistics2;
 
-import appeng.menu.me.items.PatternTermMenu;
+import appeng.menu.me.items.PatternEncodingTermMenu;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.CraftingRecipe;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(PatternTermMenu.class)
+@Mixin(PatternEncodingTermMenu.class)
 public interface AccessorPatternTermContainer {
 
   @Accessor(remap = false)
