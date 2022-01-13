@@ -39,6 +39,7 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
     CLASS_TO_MOD.put("com.tom.storagemod.", PolymorphIntegrations.Mod.TOMS_STORAGE.getId());
     CLASS_TO_MOD.put("tfar.fastbench.", PolymorphIntegrations.Mod.FASTBENCH.getId());
     CLASS_TO_MOD.put("com.biom4st3r.recipecache.", PolymorphIntegrations.Mod.RECIPECACHE.getId());
+    CLASS_TO_MOD.put("me.shedaniel.istations.", PolymorphIntegrations.Mod.IMPROVEDSTATIONS.getId());
   }
 
   @Override

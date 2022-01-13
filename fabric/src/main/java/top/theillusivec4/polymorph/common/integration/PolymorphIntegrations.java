@@ -108,6 +108,7 @@ public class PolymorphIntegrations {
     IRON_FURNACES("ironfurnaces"),
     FASTFURNACE("fastfurnace"),
     RECIPECACHE("recipecache"),
+    IMPROVEDSTATIONS("improved-stations"),
     FASTBENCH("fastbench");
 
     private final String id;
