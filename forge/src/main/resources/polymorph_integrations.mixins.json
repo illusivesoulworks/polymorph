@@ -18,6 +18,7 @@
     "ironfurnaces.AccessorBlockIronFurnaceTileBase",
     "ironfurnaces.MixinBlockIronFurnaceTileBase",
     "jei.MixinRecipeTransferUtil",
+    "occultism.MixinStorageControllerContainerBase",
     "prettypipes.MixinCraftingTerminalContainer",
     "refinedstorage.AccessorGrid",
     "refinedstorage.MixinCraftingPatternFactory",

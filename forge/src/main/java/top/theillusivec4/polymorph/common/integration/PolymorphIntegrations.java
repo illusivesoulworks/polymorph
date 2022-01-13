@@ -36,6 +36,7 @@ import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
 import top.theillusivec4.polymorph.common.integration.fastbench.FastBenchModule;
 import top.theillusivec4.polymorph.common.integration.fastfurnace.FastFurnaceModule;
 import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
+import top.theillusivec4.polymorph.common.integration.occultism.OccultismModule;
 import top.theillusivec4.polymorph.common.integration.prettypipes.PrettyPipesModule;
 import top.theillusivec4.polymorph.common.integration.refinedstorage.RefinedStorageModule;
 import top.theillusivec4.polymorph.common.integration.refinedstorageaddons.RefinedStorageAddonsModule;
@@ -60,6 +61,7 @@ public class PolymorphIntegrations {
     INTEGRATIONS.put(Mod.PRETTY_PIPES.getId(), () -> PrettyPipesModule::new);
     INTEGRATIONS.put(Mod.REFINED_STORAGE.getId(), () -> RefinedStorageModule::new);
     INTEGRATIONS.put(Mod.REFINED_STORAGE_ADDONS.getId(), () -> RefinedStorageAddonsModule::new);
+    INTEGRATIONS.put(Mod.OCCULTISM.getId(), () -> OccultismModule::new);
   }
 
   public static void loadConfig() {
@@ -131,7 +133,8 @@ public class PolymorphIntegrations {
     PRETTY_PIPES("prettypipes"),
     REFINED_STORAGE("refinedstorage"),
     REFINED_STORAGE_ADDONS("refinedstorageaddons"),
-    APPLIED_ENERGISTICS_2("ae2");
+    APPLIED_ENERGISTICS_2("ae2"),
+    OCCULTISM("occultism");
 
     private final String id;
 

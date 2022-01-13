@@ -116,9 +116,13 @@ dependencies {
 	implementation fg.deobf("curse.maven:refinedstorage-243076:${file_refinedstorage}")
     implementation fg.deobf("curse.maven:refinedstorageaddons-272302:${file_refinedaddons}")
 	implementation fg.deobf("curse.maven:prettypipes-376737:${file_prettypipes}")
+    implementation fg.deobf("curse.maven:occultism-361026:${file_occultism}")
 
     runtimeOnly fg.deobf("curse.maven:vanillatweaks-272637:${file_vanillatweaks}")
 	runtimeOnly fg.deobf("curse.maven:balm-531761:${file_balm}")
+    runtimeOnly fg.deobf("curse.maven:patchouli-306770:3594394")
+    runtimeOnly fg.deobf("curse.maven:curios-309927:3600023")
+    runtimeOnly fg.deobf("curse.maven:geckolib-388172:3601144")
 }
 
 def replaceResources = tasks.register("replaceResources", Copy) {

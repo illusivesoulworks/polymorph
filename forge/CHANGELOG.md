@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.18.1-0.36] - 2022.01.13
+### Added
+- Added Occultism Storage Actuator compatibility [#132](https://github.com/TheIllusiveC4/Polymorph/issues/132)
+
 ## [1.18.1-0.35] - 2022.01.02
 ### Changed
 - Updated to Applied Energistics 2 10.0.0-beta.3 [#129](https://github.com/TheIllusiveC4/Polymorph/issues/129)
