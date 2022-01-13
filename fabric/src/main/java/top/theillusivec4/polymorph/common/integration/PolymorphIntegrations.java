@@ -19,6 +19,7 @@ import org.apache.commons.io.FileUtils;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.common.PolymorphMod;
 import top.theillusivec4.polymorph.common.integration.appliedenergistics2.AppliedEnergisticsModule;
+import top.theillusivec4.polymorph.common.integration.fastbench.FastBenchModule;
 import top.theillusivec4.polymorph.common.integration.fastfurnace.FastFurnaceModule;
 import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
 import top.theillusivec4.polymorph.common.integration.recipecache.RecipeCacheModule;
@@ -32,6 +33,7 @@ public class PolymorphIntegrations {
   private static final Set<AbstractCompatibilityModule> ACTIVE_INTEGRATIONS = new HashSet<>();
 
   static {
+    INTEGRATIONS.put(Mod.FASTBENCH.getId(), () -> FastBenchModule::new);
     INTEGRATIONS.put(Mod.FASTFURNACE.getId(), () -> FastFurnaceModule::new);
     INTEGRATIONS.put(Mod.APPLIED_ENERGISTICS_2.getId(), () -> AppliedEnergisticsModule::new);
     INTEGRATIONS.put(Mod.IRON_FURNACES.getId(), () -> IronFurnacesModule::new);
@@ -105,7 +107,8 @@ public class PolymorphIntegrations {
     APPLIED_ENERGISTICS_2("ae2"),
     IRON_FURNACES("ironfurnaces"),
     FASTFURNACE("fastfurnace"),
-    RECIPECACHE("recipecache");
+    RECIPECACHE("recipecache"),
+    FASTBENCH("fastbench");
 
     private final String id;
 

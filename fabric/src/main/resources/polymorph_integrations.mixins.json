@@ -8,6 +8,7 @@
     "appliedenergistics2.AccessorPatternTermContainer",
     "appliedenergistics2.MixinCraftingTermContainer",
     "appliedenergistics2.MixinPatternTermContainer",
+    "fastbench.MixinFastBench",
     "recipecache.MixinCraftingLookup",
     "toms_storage.AccessorContainerStorageTerminal",
     "toms_storage.AccessorTileEntityCraftingTerminal",
