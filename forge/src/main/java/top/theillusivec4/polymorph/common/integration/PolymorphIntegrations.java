@@ -39,6 +39,7 @@ import top.theillusivec4.polymorph.common.integration.fastbenchminusreplacement.
 import top.theillusivec4.polymorph.common.integration.fastfurnace.FastFurnaceModule;
 import top.theillusivec4.polymorph.common.integration.fastfurnaceminusreplacement.FastFurnaceMinusModule;
 import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
+import top.theillusivec4.polymorph.common.integration.occultism.OccultismModule;
 import top.theillusivec4.polymorph.common.integration.prettypipes.PrettyPipesModule;
 import top.theillusivec4.polymorph.common.integration.refinedstorage.RefinedStorageModule;
 import top.theillusivec4.polymorph.common.integration.refinedstorageaddons.RefinedStorageAddonsModule;
@@ -68,6 +69,7 @@ public class PolymorphIntegrations {
     INTEGRATIONS.put(Mod.IRON_FURNACES.getId(), () -> IronFurnacesModule::new);
     INTEGRATIONS.put(Mod.FASTFURNACE_MINUS_REPLACEMENT.getId(), () -> FastFurnaceMinusModule::new);
     INTEGRATIONS.put(Mod.FASTWORKBENCH_MINUS_REPLACEMENT.getId(), () -> FastBenchMinusModule::new);
+    INTEGRATIONS.put(Mod.OCCULTISM.getId(), () -> OccultismModule::new);
   }
 
   public static void loadConfig() {
@@ -143,7 +145,8 @@ public class PolymorphIntegrations {
     IRON_FURNACES("ironfurnaces"),
     FASTFURNACE("fastfurnace"),
     FASTWORKBENCH_MINUS_REPLACEMENT("fastbenchminusreplacement"),
-    FASTFURNACE_MINUS_REPLACEMENT("fastfurnaceminusreplacement");
+    FASTFURNACE_MINUS_REPLACEMENT("fastfurnaceminusreplacement"),
+    OCCULTISM("occultism");
 
     private final String id;
 

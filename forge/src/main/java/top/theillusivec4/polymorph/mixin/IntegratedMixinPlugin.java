@@ -61,7 +61,10 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
     CLASS_TO_MOD.put("appeng.", PolymorphIntegrations.Mod.APPLIED_ENERGISTICS_2.getId());
     CLASS_TO_MOD.put("shadows.fastfurnace.", PolymorphIntegrations.Mod.FASTFURNACE.getId());
     CLASS_TO_MOD.put("ironfurnaces.", PolymorphIntegrations.Mod.IRON_FURNACES.getId());
-    CLASS_TO_MOD.put("tfar.fastbenchminusreplacement.", PolymorphIntegrations.Mod.FASTWORKBENCH_MINUS_REPLACEMENT.getId());
+    CLASS_TO_MOD.put("tfar.fastbenchminusreplacement.",
+        PolymorphIntegrations.Mod.FASTWORKBENCH_MINUS_REPLACEMENT.getId());
+    CLASS_TO_MOD.put("com.github.klikli_dev.occultism.",
+        PolymorphIntegrations.Mod.OCCULTISM.getId());
   }
 
   @Override
