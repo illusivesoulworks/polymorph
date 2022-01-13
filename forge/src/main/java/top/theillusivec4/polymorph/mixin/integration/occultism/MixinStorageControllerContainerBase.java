@@ -24,8 +24,7 @@ public class MixinStorageControllerContainerBase {
       at = @At(
           value = "INVOKE",
           target = "net/minecraft/world/item/crafting/RecipeManager.getRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;"),
-      method = "findRecipeForMatrixClient",
-      remap = false)
+      method = "findRecipeForMatrixClient")
   private <C extends Container, T extends Recipe<C>> Optional<T> polymorph$findRecipeClient(
       RecipeManager recipeManager, RecipeType<T> type, C inventory, Level world) {
     return RecipeSelection.getPlayerRecipe(type, inventory, world, this.player);
@@ -35,8 +34,7 @@ public class MixinStorageControllerContainerBase {
       at = @At(
           value = "INVOKE",
           target = "net/minecraft/world/item/crafting/RecipeManager.getRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;"),
-      method = "findRecipeForMatrix",
-      remap = false)
+      method = "findRecipeForMatrix")
   private <C extends Container, T extends Recipe<C>> Optional<T> polymorph$findRecipe(
       RecipeManager recipeManager, RecipeType<T> type, C inventory, Level world) {
     return RecipeSelection.getPlayerRecipe(type, inventory, world, this.player);
