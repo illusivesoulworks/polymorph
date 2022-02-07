@@ -23,7 +23,7 @@ package top.theillusivec4.polymorph.mixin.integration.sophisticatedbackpacks;
 
 import java.lang.ref.WeakReference;
 import net.minecraft.world.level.Level;
-import net.p3pp3rf1y.sophisticatedbackpacks.util.RecipeHelper;
+import net.p3pp3rf1y.sophisticatedcore.util.RecipeHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 

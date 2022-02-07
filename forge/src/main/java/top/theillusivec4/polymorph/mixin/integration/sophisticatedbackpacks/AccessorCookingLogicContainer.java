@@ -22,8 +22,8 @@
 package top.theillusivec4.polymorph.mixin.integration.sophisticatedbackpacks;
 
 import java.util.function.Supplier;
-import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.cooking.CookingLogic;
-import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.cooking.CookingLogicContainer;
+import net.p3pp3rf1y.sophisticatedcore.upgrades.cooking.CookingLogic;
+import net.p3pp3rf1y.sophisticatedcore.upgrades.cooking.CookingLogicContainer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 

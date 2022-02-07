@@ -23,7 +23,7 @@ package top.theillusivec4.polymorph.mixin.integration.sophisticatedbackpacks;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.crafting.CraftingUpgradeContainer;
+import net.p3pp3rf1y.sophisticatedcore.upgrades.crafting.CraftingUpgradeContainer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;

@@ -23,8 +23,8 @@ package top.theillusivec4.polymorph.mixin.integration.sophisticatedbackpacks;
 
 import java.util.Map;
 import net.minecraft.world.entity.player.Player;
-import net.p3pp3rf1y.sophisticatedbackpacks.common.gui.BackpackContainer;
-import net.p3pp3rf1y.sophisticatedbackpacks.common.gui.UpgradeContainerBase;
+import net.p3pp3rf1y.sophisticatedcore.common.gui.StorageContainerMenu;
+import net.p3pp3rf1y.sophisticatedcore.common.gui.UpgradeContainerBase;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,8 +34,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.theillusivec4.polymorph.common.integration.sophisticatedbackpacks.SophisticatedBackpacksModule;
 
 @SuppressWarnings("unused")
-@Mixin(BackpackContainer.class)
-public class MixinBackpackContainer {
+@Mixin(StorageContainerMenu.class)
+public class MixinStorageContainerMenu {
 
   @Shadow(remap = false)
   @Final

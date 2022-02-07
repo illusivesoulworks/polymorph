@@ -127,6 +127,7 @@ public class PolymorphIntegrations {
     SIMPLE_STORAGE_NETWORK("storagenetwork"),
     CYCLIC("cyclic"),
     SOPHISTICATED_BACKPACKS("sophisticatedbackpacks"),
+    SOPHISTICATED_CORE("sophisticatedcore"),
     IRON_FURNACES("ironfurnaces"),
     FASTFURNACE("fastfurnace"),
     FASTWORKBENCH("fastbench"),

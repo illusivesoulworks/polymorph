@@ -25,7 +25,7 @@ import java.util.Optional;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.p3pp3rf1y.sophisticatedbackpacks.upgrades.cooking.CookingLogic;
+import net.p3pp3rf1y.sophisticatedcore.upgrades.cooking.CookingLogic;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -44,7 +44,7 @@ public abstract class MixinCookingLogic {
   @Redirect(
       at = @At(
           value = "INVOKE",
-          target = "net/p3pp3rf1y/sophisticatedbackpacks/util/RecipeHelper.getCookingRecipe(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/crafting/RecipeType;)Ljava/util/Optional;"),
+          target = "net/p3pp3rf1y/sophisticatedcore/util/RecipeHelper.getCookingRecipe(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/crafting/RecipeType;)Ljava/util/Optional;"),
       method = "getCookingRecipe",
       remap = false)
   private Optional<? extends AbstractCookingRecipe> polymorph$getCookingRecipe(ItemStack pStack,
