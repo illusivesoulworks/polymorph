@@ -25,7 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -39,6 +41,26 @@ import top.theillusivec4.polymorph.api.common.capability.IRecipeData;
 import top.theillusivec4.polymorph.api.common.capability.IStackRecipeData;
 
 public class RecipeSelection {
+
+  public static <T extends Recipe<C>, C extends Container> Optional<T> getPlayerRecipe(
+      RecipeType<T> pType, C pInventory, Level pWorld, List<Slot> slots) {
+    Player player = null;
+
+    for (Slot slot : slots) {
+
+      if (slot.container instanceof Inventory inv) {
+        player = inv.player;
+        break;
+      }
+    }
+
+    if (player != null) {
+      return getPlayerRecipe(pType, pInventory, pWorld, player, new ArrayList<>());
+    } else {
+      return pWorld.getRecipeManager().getRecipesFor(pType, pInventory, pWorld).stream()
+          .findFirst();
+    }
+  }
 
   public static <T extends Recipe<C>, C extends Container> Optional<T> getPlayerRecipe(
       RecipeType<T> pType, C pInventory, Level pWorld, Player pPlayer) {

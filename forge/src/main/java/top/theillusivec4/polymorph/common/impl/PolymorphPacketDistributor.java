@@ -22,6 +22,7 @@
 package top.theillusivec4.polymorph.common.impl;
 
 import java.util.SortedSet;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.PacketDistributor;
@@ -31,6 +32,7 @@ import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
 import top.theillusivec4.polymorph.common.network.client.CPacketPersistentRecipeSelection;
 import top.theillusivec4.polymorph.common.network.client.CPacketPlayerRecipeSelection;
 import top.theillusivec4.polymorph.common.network.client.CPacketStackRecipeSelection;
+import top.theillusivec4.polymorph.common.network.server.SPacketBlockEntityRecipeSync;
 import top.theillusivec4.polymorph.common.network.server.SPacketHighlightRecipe;
 import top.theillusivec4.polymorph.common.network.server.SPacketPlayerRecipeSync;
 import top.theillusivec4.polymorph.common.network.server.SPacketRecipesList;
@@ -85,5 +87,11 @@ public class PolymorphPacketDistributor implements IPolymorphPacketDistributor {
                                 ResourceLocation pSelected) {
     PolymorphNetwork.get().send(PacketDistributor.PLAYER.with(() -> pPlayer),
         new SPacketPlayerRecipeSync(pRecipesList, pSelected));
+  }
+
+  @Override
+  public void sendBlockEntitySyncS2C(BlockPos pBlockPos, ResourceLocation pSelected) {
+    PolymorphNetwork.get().send(PacketDistributor.ALL.noArg(),
+        new SPacketBlockEntityRecipeSync(pBlockPos, pSelected));
   }
 }

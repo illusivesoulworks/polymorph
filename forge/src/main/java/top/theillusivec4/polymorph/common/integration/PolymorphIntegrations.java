@@ -33,6 +33,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
 import top.theillusivec4.polymorph.common.integration.appliedenergistics2.AppliedEnergisticsModule;
 import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
+import top.theillusivec4.polymorph.common.integration.extendedcrafting.ExtendedCraftingModule;
 import top.theillusivec4.polymorph.common.integration.fastbench.FastBenchModule;
 import top.theillusivec4.polymorph.common.integration.fastfurnace.FastFurnaceModule;
 import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
@@ -62,6 +63,7 @@ public class PolymorphIntegrations {
     INTEGRATIONS.put(Mod.REFINED_STORAGE.getId(), () -> RefinedStorageModule::new);
     INTEGRATIONS.put(Mod.REFINED_STORAGE_ADDONS.getId(), () -> RefinedStorageAddonsModule::new);
     INTEGRATIONS.put(Mod.OCCULTISM.getId(), () -> OccultismModule::new);
+    INTEGRATIONS.put(Mod.EXTENDED_CRAFTING.getId(), () -> ExtendedCraftingModule::new);
   }
 
   public static void loadConfig() {
@@ -135,6 +137,7 @@ public class PolymorphIntegrations {
     REFINED_STORAGE("refinedstorage"),
     REFINED_STORAGE_ADDONS("refinedstorageaddons"),
     APPLIED_ENERGISTICS_2("ae2"),
+    EXTENDED_CRAFTING("extendedcrafting"),
     OCCULTISM("occultism");
 
     private final String id;

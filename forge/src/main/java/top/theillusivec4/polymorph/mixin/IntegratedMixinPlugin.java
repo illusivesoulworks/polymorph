@@ -61,6 +61,8 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
         PolymorphIntegrations.Mod.REFINED_STORAGE_ADDONS.getId());
     CLASS_TO_MOD.put("com.github.klikli_dev.occultism.",
         PolymorphIntegrations.Mod.OCCULTISM.getId());
+    CLASS_TO_MOD.put("com.blakebr0.extendedcrafting.",
+        PolymorphIntegrations.Mod.EXTENDED_CRAFTING.getId());
   }
 
   @Override
