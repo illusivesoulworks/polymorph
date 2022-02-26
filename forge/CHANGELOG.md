@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.18.1-0.38] - 2022.02.26
+### Added
+- Added `uk_ua.json` localization (thanks Sushomeister!)
+- Added Extended Crafting Basic Table and Basic Auto Table compatibility [#144](https://github.com/TheIllusiveC4/Polymorph/issues/144)
+### Changed
+- Optimized performance issues with block entities [#149](https://github.com/TheIllusiveC4/Polymorph/issues/149)
+
 ## [1.18.1-0.37] - 2022.02.07
 ### Changed
 - Updated to Sophisticated Backpacks 1.18.1-3.15.9+ [#146](https://github.com/TheIllusiveC4/Polymorph/issues/146)
