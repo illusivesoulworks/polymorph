@@ -59,7 +59,7 @@ public abstract class AbstractBlockEntityRecipeData<E extends BlockEntity>
       ItemStack lastStack = this.lastInput.get(i);
       ItemStack currentStack = currentInput.get(i);
 
-      if (!ItemStack.matches(lastStack, currentStack)) {
+      if (!ItemStack.isSame(lastStack, currentStack)) {
         changed = true;
       }
       this.lastInput.set(i, currentStack.copy());
