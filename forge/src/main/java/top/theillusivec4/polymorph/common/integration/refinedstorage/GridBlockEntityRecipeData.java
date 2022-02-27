@@ -25,6 +25,7 @@ import com.refinedmods.refinedstorage.blockentity.grid.GridBlockEntity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import top.theillusivec4.polymorph.common.capability.AbstractBlockEntityRecipeData;
 
 public class GridBlockEntityRecipeData extends AbstractBlockEntityRecipeData<GridBlockEntity> {
@@ -35,16 +36,21 @@ public class GridBlockEntityRecipeData extends AbstractBlockEntityRecipeData<Gri
 
   @Override
   protected NonNullList<ItemStack> getInput() {
-    CraftingContainer craftingInventory = this.getOwner().getNode().getCraftingMatrix();
+    GridBlockEntity blockEntity = this.getOwner();
+    Level level = blockEntity.getLevel();
 
-    if (craftingInventory != null) {
-      NonNullList<ItemStack> stacks =
-          NonNullList.withSize(craftingInventory.getContainerSize(), ItemStack.EMPTY);
+    if (level != null) {
+      CraftingContainer craftingInventory = blockEntity.getNode().getCraftingMatrix();
 
-      for (int i = 0; i < craftingInventory.getContainerSize(); i++) {
-        stacks.set(i, craftingInventory.getItem(i));
+      if (craftingInventory != null) {
+        NonNullList<ItemStack> stacks =
+            NonNullList.withSize(craftingInventory.getContainerSize(), ItemStack.EMPTY);
+
+        for (int i = 0; i < craftingInventory.getContainerSize(); i++) {
+          stacks.set(i, craftingInventory.getItem(i));
+        }
+        return stacks;
       }
-      return stacks;
     }
     return NonNullList.create();
   }
