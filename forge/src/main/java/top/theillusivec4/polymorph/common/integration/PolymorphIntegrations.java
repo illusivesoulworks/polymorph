@@ -34,6 +34,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 import top.theillusivec4.polymorph.common.integration.appliedenergistics2.AppliedEnergisticsModule;
 import top.theillusivec4.polymorph.common.integration.craftingstation.CraftingStationModule;
 import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
+import top.theillusivec4.polymorph.common.integration.extendedcrafting.ExtendedCraftingModule;
 import top.theillusivec4.polymorph.common.integration.fastbench.FastBenchModule;
 import top.theillusivec4.polymorph.common.integration.fastbenchminusreplacement.FastBenchMinusModule;
 import top.theillusivec4.polymorph.common.integration.fastfurnace.FastFurnaceModule;
@@ -70,6 +71,7 @@ public class PolymorphIntegrations {
     INTEGRATIONS.put(Mod.FASTFURNACE_MINUS_REPLACEMENT.getId(), () -> FastFurnaceMinusModule::new);
     INTEGRATIONS.put(Mod.FASTWORKBENCH_MINUS_REPLACEMENT.getId(), () -> FastBenchMinusModule::new);
     INTEGRATIONS.put(Mod.OCCULTISM.getId(), () -> OccultismModule::new);
+    INTEGRATIONS.put(Mod.EXTENDED_CRAFTING.getId(), () -> ExtendedCraftingModule::new);
   }
 
   public static void loadConfig() {
@@ -146,6 +148,7 @@ public class PolymorphIntegrations {
     FASTFURNACE("fastfurnace"),
     FASTWORKBENCH_MINUS_REPLACEMENT("fastbenchminusreplacement"),
     FASTFURNACE_MINUS_REPLACEMENT("fastfurnaceminusreplacement"),
+    EXTENDED_CRAFTING("extendedcrafting"),
     OCCULTISM("occultism");
 
     private final String id;

@@ -102,6 +102,8 @@ dependencies {
     compile fg.deobf("curse.maven:cyclic-239286:${file_cyclic}")
     compile fg.deobf("curse.maven:sophisticatedbackpacks-422301:${file_sophisticated}")
     compile fg.deobf("curse.maven:ae2-223794:${file_ae2}")
+    compile fg.deobf("curse.maven:extendedcrafting-268387:${file_extendedcrafting}")
+    compile fg.deobf("curse.maven:cucumber-272335:${file_cucumber}")
 
     compileOnly fg.deobf("curse.maven:occultism-361026:${file_occultism}")
     compileOnly fg.deobf("curse.maven:fastworkbenchminus-394185:${file_fastworkbenchminus}")

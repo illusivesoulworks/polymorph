@@ -33,6 +33,7 @@ import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.common.network.client.CPacketPersistentRecipeSelection;
 import top.theillusivec4.polymorph.common.network.client.CPacketPlayerRecipeSelection;
 import top.theillusivec4.polymorph.common.network.client.CPacketStackRecipeSelection;
+import top.theillusivec4.polymorph.common.network.server.SPacketBlockEntityRecipeSync;
 import top.theillusivec4.polymorph.common.network.server.SPacketHighlightRecipe;
 import top.theillusivec4.polymorph.common.network.server.SPacketPlayerRecipeSync;
 import top.theillusivec4.polymorph.common.network.server.SPacketRecipesList;
@@ -69,6 +70,8 @@ public class PolymorphNetwork {
         SPacketHighlightRecipe::decode, SPacketHighlightRecipe::handle);
     register(SPacketPlayerRecipeSync.class, SPacketPlayerRecipeSync::encode,
         SPacketPlayerRecipeSync::decode, SPacketPlayerRecipeSync::handle);
+    register(SPacketBlockEntityRecipeSync.class, SPacketBlockEntityRecipeSync::encode,
+        SPacketBlockEntityRecipeSync::decode, SPacketBlockEntityRecipeSync::handle);
   }
 
   public static <M> void register(Class<M> pClass, BiConsumer<M, PacketBuffer> pEncoder,

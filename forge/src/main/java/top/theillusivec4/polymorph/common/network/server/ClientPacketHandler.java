@@ -24,9 +24,12 @@ package top.theillusivec4.polymorph.common.network.server;
 import java.util.Optional;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.tileentity.TileEntity;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.base.IRecipesWidget;
 import top.theillusivec4.polymorph.client.recipe.RecipesWidget;
+import top.theillusivec4.polymorph.common.capability.PolymorphCapabilities;
 
 public class ClientPacketHandler {
 
@@ -39,6 +42,20 @@ public class ClientPacketHandler {
         clientPlayerEntity.world.getRecipeManager().getRecipe(pPacket.getSelected()).ifPresent(
             recipeData::setSelectedRecipe);
       });
+    }
+  }
+
+  public static void handle(SPacketBlockEntityRecipeSync pPacket) {
+    ClientWorld level = Minecraft.getInstance().world;
+
+    if (level != null) {
+      TileEntity blockEntity = level.getTileEntity(pPacket.getBlockPos());
+
+      if (blockEntity != null) {
+        PolymorphCapabilities.getRecipeData(blockEntity)
+            .ifPresent(recipeData -> level.getRecipeManager().getRecipe(pPacket.getSelected())
+                .ifPresent(recipeData::setSelectedRecipe));
+      }
     }
   }
 

@@ -24,6 +24,7 @@ package top.theillusivec4.polymorph.api.common.base;
 import java.util.SortedSet;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 
 public interface IPolymorphPacketDistributor {
 
@@ -44,4 +45,6 @@ public interface IPolymorphPacketDistributor {
 
   void sendPlayerSyncS2C(ServerPlayerEntity pPlayer, SortedSet<IRecipePair> pRecipesList,
                          ResourceLocation pSelected);
+
+  void sendBlockEntitySyncS2C(BlockPos pBlockPos, ResourceLocation pSelected);
 }

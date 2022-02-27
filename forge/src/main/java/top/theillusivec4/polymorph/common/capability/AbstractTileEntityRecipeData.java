@@ -59,7 +59,7 @@ public abstract class AbstractTileEntityRecipeData<E extends TileEntity>
       ItemStack lastStack = this.lastInput.get(i);
       ItemStack currentStack = currentInput.get(i);
 
-      if (!ItemStack.areItemStacksEqual(lastStack, currentStack)) {
+      if (!ItemStack.areItemsEqual(lastStack, currentStack)) {
         changed = true;
       }
       this.lastInput.set(i, currentStack.copy());
