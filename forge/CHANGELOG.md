@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.40] - 2022.03.01
+### Added
+- Added `uk_ua.json` localization (thanks Sushomeister!)
+- Added Extended Crafting Basic Table and Basic Auto Table compatibility [#144](https://github.com/TheIllusiveC4/Polymorph/issues/144)
+### Changed
+- Optimized performance issues with tile entities [#149](https://github.com/TheIllusiveC4/Polymorph/issues/149)
+### Fixed
+- Fixed NPE crash with Refined Storage integration [#150](https://github.com/TheIllusiveC4/Polymorph/issues/150)
+
 ## [1.16.5-0.39] - 2022.01.13
 ### Added
 - Added Occultism Storage Actuator compatibility [#132](https://github.com/TheIllusiveC4/Polymorph/issues/132)
