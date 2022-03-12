@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.18.1-0.40] - 2022.03.11
+### Added
+- Re-added Tinkers' Construct integration [#156](https://github.com/TheIllusiveC4/Polymorph/issues/156)
+
 ## [1.18.1-0.39] - 2022.02.26
 ### Fixed
 - Fixed NPE crash with Refined Storage integration [#150](https://github.com/TheIllusiveC4/Polymorph/issues/150)
