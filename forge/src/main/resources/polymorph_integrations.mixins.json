@@ -37,6 +37,8 @@
     "sophisticatedbackpacks.MixinCraftingUpgradeContainer",
     "sophisticatedbackpacks.MixinCookingLogic",
     "storagenetwork.MixinContainerNetwork",
+    "tconstruct.AccessorCraftingStationBlockEntity",
+    "tconstruct.MixinCraftingStationBlockEntity",
     "toms_storage.AccessorContainerStorageTerminal",
     "toms_storage.AccessorTileEntityCraftingTerminal",
     "toms_storage.MixinTileEntityCraftingTerminal"

@@ -19,17 +19,29 @@
  *
  */
 
-package top.theillusivec4.polymorph.mixin.core;
+package top.theillusivec4.polymorph.common.integration.tconstruct;
 
-import net.minecraft.server.level.ChunkHolder;
-import net.minecraft.server.level.ChunkMap;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Invoker;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.world.inventory.Slot;
+import top.theillusivec4.polymorph.client.recipe.widget.PersistentRecipesWidget;
 
-@Mixin(ChunkMap.class)
-public interface AccessorChunkMap {
+public class CraftingStationRecipesWidget extends PersistentRecipesWidget {
 
-  @Invoker
-  Iterable<ChunkHolder> callGetChunks();
+  private final Slot outputSlot;
 
+  public CraftingStationRecipesWidget(AbstractContainerScreen<?> pContainerScreen,
+                                      Slot pOutputSlot) {
+    super(pContainerScreen);
+    this.outputSlot = pOutputSlot;
+  }
+
+  @Override
+  public Slot getOutputSlot() {
+    return this.outputSlot;
+  }
+
+  @Override
+  public int getYPos() {
+    return getOutputSlot().y + 8;
+  }
 }

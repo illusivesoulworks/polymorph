@@ -63,6 +63,8 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
         PolymorphIntegrations.Mod.OCCULTISM.getId());
     CLASS_TO_MOD.put("com.blakebr0.extendedcrafting.",
         PolymorphIntegrations.Mod.EXTENDED_CRAFTING.getId());
+    CLASS_TO_MOD.put("slimeknights.tconstruct.",
+        PolymorphIntegrations.Mod.TINKERS_CONSTRUCT.getId());
   }
 
   @Override

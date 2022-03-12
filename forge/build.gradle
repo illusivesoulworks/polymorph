@@ -119,6 +119,8 @@ dependencies {
     implementation fg.deobf("curse.maven:occultism-361026:${file_occultism}")
     implementation fg.deobf("curse.maven:extendedcrafting-268387:${file_extendedcrafting}")
     implementation fg.deobf("curse.maven:cucumber-272335:${file_cucumber}")
+    implementation fg.deobf("curse.maven:tinkers-74072:${file_tinkers}")
+    implementation fg.deobf("curse.maven:mantle-74924:${file_mantle}")
 
     runtimeOnly fg.deobf("curse.maven:vanillatweaks-272637:${file_vanillatweaks}")
 	runtimeOnly fg.deobf("curse.maven:balm-531761:${file_balm}")

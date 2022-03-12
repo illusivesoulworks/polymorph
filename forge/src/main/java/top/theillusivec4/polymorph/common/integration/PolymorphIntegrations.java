@@ -42,6 +42,7 @@ import top.theillusivec4.polymorph.common.integration.prettypipes.PrettyPipesMod
 import top.theillusivec4.polymorph.common.integration.refinedstorage.RefinedStorageModule;
 import top.theillusivec4.polymorph.common.integration.refinedstorageaddons.RefinedStorageAddonsModule;
 import top.theillusivec4.polymorph.common.integration.sophisticatedbackpacks.SophisticatedBackpacksModule;
+import top.theillusivec4.polymorph.common.integration.tconstruct.TinkersConstructModule;
 import top.theillusivec4.polymorph.common.integration.toms_storage.TomsStorageModule;
 
 public class PolymorphIntegrations {
@@ -64,6 +65,7 @@ public class PolymorphIntegrations {
     INTEGRATIONS.put(Mod.REFINED_STORAGE_ADDONS.getId(), () -> RefinedStorageAddonsModule::new);
     INTEGRATIONS.put(Mod.OCCULTISM.getId(), () -> OccultismModule::new);
     INTEGRATIONS.put(Mod.EXTENDED_CRAFTING.getId(), () -> ExtendedCraftingModule::new);
+    INTEGRATIONS.put(Mod.TINKERS_CONSTRUCT.getId(), () -> TinkersConstructModule::new);
   }
 
   public static void loadConfig() {
@@ -138,6 +140,7 @@ public class PolymorphIntegrations {
     REFINED_STORAGE_ADDONS("refinedstorageaddons"),
     APPLIED_ENERGISTICS_2("ae2"),
     EXTENDED_CRAFTING("extendedcrafting"),
+    TINKERS_CONSTRUCT("tconstruct"),
     OCCULTISM("occultism");
 
     private final String id;
