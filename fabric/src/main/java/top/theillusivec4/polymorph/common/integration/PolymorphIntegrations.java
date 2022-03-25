@@ -19,9 +19,11 @@ import org.apache.commons.io.FileUtils;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.common.PolymorphMod;
 import top.theillusivec4.polymorph.common.integration.appliedenergistics2.AppliedEnergisticsModule;
+import top.theillusivec4.polymorph.common.integration.camsbackpacks.CamsBackpacksModule;
 import top.theillusivec4.polymorph.common.integration.fastbench.FastBenchModule;
 import top.theillusivec4.polymorph.common.integration.fastfurnace.FastFurnaceModule;
 import top.theillusivec4.polymorph.common.integration.ironfurnaces.IronFurnacesModule;
+import top.theillusivec4.polymorph.common.integration.origins.OriginsModule;
 import top.theillusivec4.polymorph.common.integration.recipecache.RecipeCacheModule;
 import top.theillusivec4.polymorph.common.integration.toms_storage.TomsStorageModule;
 
@@ -39,6 +41,8 @@ public class PolymorphIntegrations {
     INTEGRATIONS.put(Mod.IRON_FURNACES.getId(), () -> IronFurnacesModule::new);
     INTEGRATIONS.put(Mod.TOMS_STORAGE.getId(), () -> TomsStorageModule::new);
     INTEGRATIONS.put(Mod.RECIPECACHE.getId(), () -> RecipeCacheModule::new);
+    INTEGRATIONS.put(Mod.ORIGINS.getId(), () -> OriginsModule::new);
+    INTEGRATIONS.put(Mod.CAMMIES_WEARABLE_BACKPACKS.getId(), () -> CamsBackpacksModule::new);
   }
 
   public static void loadConfig() {
@@ -109,6 +113,8 @@ public class PolymorphIntegrations {
     FASTFURNACE("fastfurnace"),
     RECIPECACHE("recipecache"),
     IMPROVEDSTATIONS("improved-stations"),
+    ORIGINS("origins"),
+    CAMMIES_WEARABLE_BACKPACKS("camsbackpacks"),
     FASTBENCH("fastbench");
 
     private final String id;

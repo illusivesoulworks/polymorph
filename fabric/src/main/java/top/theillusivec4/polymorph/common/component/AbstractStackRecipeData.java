@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.RecipePair;
 import top.theillusivec4.polymorph.api.common.component.StackRecipeData;
+import top.theillusivec4.polymorph.api.common.event.PolymorphRecipeEvents;
 import top.theillusivec4.polymorph.common.PolymorphMod;
 import top.theillusivec4.polymorph.common.impl.RecipePairImpl;
 
@@ -97,6 +98,7 @@ public abstract class AbstractStackRecipeData extends ItemComponent implements S
     List<T> recipes =
         pRecipes.isEmpty() ? pWorld.getRecipeManager().getAllMatches(pType, pInventory, pWorld) :
             pRecipes;
+    PolymorphRecipeEvents.FETCH_RECIPES.invoker().modify(this, (List<Recipe<?>>) recipes);
 
     if (recipes.isEmpty()) {
       this.setFailing(true);
