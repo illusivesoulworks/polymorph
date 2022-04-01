@@ -47,4 +47,6 @@ public interface IPolymorphPacketDistributor {
                          ResourceLocation pSelected);
 
   void sendBlockEntitySyncS2C(BlockPos pBlockPos, ResourceLocation pSelected);
+
+  void sendBlockEntityListener(boolean pAdd);
 }

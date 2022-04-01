@@ -22,25 +22,29 @@
 package top.theillusivec4.polymorph.common.capability;
 
 import com.mojang.datafixers.util.Pair;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.UUID;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 import top.theillusivec4.polymorph.api.common.capability.IBlockEntityRecipeData;
 
 public abstract class AbstractBlockEntityRecipeData<E extends BlockEntity>
     extends AbstractRecipeData<BlockEntity> implements IBlockEntityRecipeData {
 
-  private NonNullList<ItemStack> lastInput;
+  private final Map<UUID, ServerPlayer> listeners = new HashMap<>();
+
+  private NonNullList<Item> lastInput;
 
   public AbstractBlockEntityRecipeData(E pOwner) {
     super(pOwner);
@@ -56,13 +60,18 @@ public abstract class AbstractBlockEntityRecipeData<E extends BlockEntity>
     this.lastInput = validateList(this.lastInput, currentInput.size());
 
     for (int i = 0; i < currentInput.size(); i++) {
-      ItemStack lastStack = this.lastInput.get(i);
+      Item lastItem = this.lastInput.get(i);
       ItemStack currentStack = currentInput.get(i);
+      Item item = Items.AIR;
 
-      if (!ItemStack.isSame(lastStack, currentStack)) {
+      if (currentStack.getCount() > 0) {
+        item = currentStack.getItem();
+      }
+
+      if (lastItem != currentStack.getItem()) {
         changed = true;
       }
-      this.lastInput.set(i, currentStack.copy());
+      this.lastInput.set(i, item);
     }
 
     if (changed) {
@@ -70,12 +79,22 @@ public abstract class AbstractBlockEntityRecipeData<E extends BlockEntity>
     }
   }
 
-  private NonNullList<ItemStack> validateList(NonNullList<ItemStack> pList, int pSize) {
+  @Override
+  public void addListener(ServerPlayer serverPlayer) {
+    this.listeners.put(serverPlayer.getUUID(), serverPlayer);
+  }
+
+  @Override
+  public void removeListener(ServerPlayer serverPlayer) {
+    this.listeners.remove(serverPlayer.getUUID());
+  }
+
+  private NonNullList<Item> validateList(NonNullList<Item> pList, int pSize) {
 
     if (pList.size() == pSize) {
       return pList;
     } else {
-      NonNullList<ItemStack> resized = NonNullList.withSize(pSize, ItemStack.EMPTY);
+      NonNullList<Item> resized = NonNullList.withSize(pSize, Items.AIR);
 
       for (int i = 0; i < Math.min(resized.size(), pList.size()); i++) {
         resized.set(i, pList.get(i));
@@ -86,21 +105,7 @@ public abstract class AbstractBlockEntityRecipeData<E extends BlockEntity>
 
   @Override
   public Set<ServerPlayer> getListeners() {
-    Level world = this.getOwner().getLevel();
-    Set<ServerPlayer> players = new HashSet<>();
-
-    if (world instanceof ServerLevel) {
-
-      for (ServerPlayer player : ((ServerLevel) world).getPlayers((serverPlayer -> true))) {
-        PolymorphApi.common().getRecipeDataFromTileEntity(player.containerMenu)
-            .ifPresent(recipeData -> {
-              if (recipeData == this) {
-                players.add(player);
-              }
-            });
-      }
-    }
-    return players;
+    return new HashSet<>(this.listeners.values());
   }
 
   @SuppressWarnings("unchecked")

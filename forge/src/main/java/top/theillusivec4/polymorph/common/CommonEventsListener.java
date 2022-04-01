@@ -22,11 +22,7 @@
 package top.theillusivec4.polymorph.common;
 
 import com.mojang.datafixers.util.Pair;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.SortedSet;
-import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.core.Direction;
@@ -62,12 +58,10 @@ import top.theillusivec4.polymorph.common.capability.PlayerRecipeData;
 import top.theillusivec4.polymorph.common.capability.PolymorphCapabilities;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.common.integration.PolymorphIntegrations;
+import top.theillusivec4.polymorph.common.util.BlockEntityTicker;
 
 @SuppressWarnings("unused")
 public class CommonEventsListener {
-
-  private static final Map<BlockEntity, IBlockEntityRecipeData> TICKABLE_BLOCKS =
-      new ConcurrentHashMap<>();
 
   @SubscribeEvent
   public void registerCapabilities(final RegisterCapabilitiesEvent evt) {
@@ -79,13 +73,11 @@ public class CommonEventsListener {
   @SubscribeEvent
   public void serverAboutToStart(final ServerAboutToStartEvent evt) {
     PolymorphApi.common().setServer(evt.getServer());
-    TICKABLE_BLOCKS.clear();
   }
 
   @SubscribeEvent
   public void serverStopped(final ServerStoppedEvent evt) {
     PolymorphApi.common().setServer(null);
-    TICKABLE_BLOCKS.clear();
   }
 
   @SubscribeEvent
@@ -121,23 +113,8 @@ public class CommonEventsListener {
   public void worldTick(final TickEvent.WorldTickEvent evt) {
     Level world = evt.world;
 
-    if (!world.isClientSide() && evt.phase == TickEvent.Phase.END) {
-      IPolymorphCommon commonApi = PolymorphApi.common();
-      List<BlockEntity> toRemove = new ArrayList<>();
-
-      for (Map.Entry<BlockEntity, IBlockEntityRecipeData> entry : TICKABLE_BLOCKS.entrySet()) {
-        BlockEntity be = entry.getKey();
-
-        if (be.isRemoved() || (be.getLevel() != null && be.getLevel().isClientSide())) {
-          toRemove.add(be);
-        } else {
-          entry.getValue().tick();
-        }
-      }
-
-      for (BlockEntity be : toRemove) {
-        TICKABLE_BLOCKS.remove(be);
-      }
+    if (!world.isClientSide() && evt.phase == TickEvent.Phase.END && world.getGameTime() % 5 == 0) {
+      BlockEntityTicker.tick();
     }
   }
 
@@ -149,8 +126,6 @@ public class CommonEventsListener {
           LazyOptional<IBlockEntityRecipeData> cap = LazyOptional.of(() -> recipeData);
           pEvent.addCapability(PolymorphCapabilities.BLOCK_ENTITY_RECIPE_DATA_ID,
               new BlockEntityRecipeDataProvider(cap));
-          TICKABLE_BLOCKS.put(be, recipeData);
-          pEvent.addListener(() -> TICKABLE_BLOCKS.remove(be));
         });
   }
 

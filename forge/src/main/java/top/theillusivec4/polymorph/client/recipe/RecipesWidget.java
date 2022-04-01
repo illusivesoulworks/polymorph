@@ -30,6 +30,8 @@ import net.minecraft.resources.ResourceLocation;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.base.IRecipesWidget;
 import top.theillusivec4.polymorph.api.common.base.IRecipePair;
+import top.theillusivec4.polymorph.api.common.capability.IBlockEntityRecipeData;
+import top.theillusivec4.polymorph.client.recipe.widget.PersistentRecipesWidget;
 import top.theillusivec4.polymorph.client.recipe.widget.PlayerRecipesWidget;
 
 public class RecipesWidget {
@@ -61,6 +63,10 @@ public class RecipesWidget {
     }
 
     if (widget != null) {
+
+      if (widget instanceof PersistentRecipesWidget) {
+        PolymorphApi.common().getPacketDistributor().sendBlockEntityListener(true);
+      }
       widget.initChildWidgets();
       lastScreen = pContainerScreen;
 
@@ -74,6 +80,10 @@ public class RecipesWidget {
   }
 
   public static void clear() {
+
+    if (widget instanceof PersistentRecipesWidget) {
+      PolymorphApi.common().getPacketDistributor().sendBlockEntityListener(false);
+    }
     widget = null;
     lastScreen = null;
   }
