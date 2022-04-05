@@ -62,7 +62,10 @@ public class FastBenchModule extends AbstractCompatibilityModule {
       if (inv != null && result != null && player != null) {
         ItemStack stack = craftingRecipe.assemble(inv);
 
-        if (!ItemStack.matches(stack, result.getItem(0))) {
+        // Some mods seem to be violating the non-null contract so this check is necessary
+        // https://github.com/TheIllusiveC4/Polymorph/issues/163
+        // noinspection ConstantConditions
+        if (stack != null && !ItemStack.matches(stack, result.getItem(0))) {
           PacketDistro.sendTo(FastBench.CHANNEL, new RecipeMessage(craftingRecipe, stack), player);
           result.setItem(0, stack);
           result.setRecipeUsed(craftingRecipe);
