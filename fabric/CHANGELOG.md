@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.21-1.18.2] - 2022.05.15
+### Changed
+- Updated to Minecraft 1.18.2
+- Updated Applied Energistics 2 integration to 11.0.0+ [#170](https://github.com/TheIllusiveC4/Polymorph/issues/170)
+### Fixed
+- Fixed recipe outputs merging items with different NBT elements [#169](https://github.com/TheIllusiveC4/Polymorph/issues/169)
+
 ## [0.0.20-1.18.2] - 2022.03.24
 ### Added
 - Added Origins `modify_crafting` power type compatibility

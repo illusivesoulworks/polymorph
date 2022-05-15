@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.18.2-0.44] - 2022.05.15
+### Changed
+- Updated to Minecraft 1.18.2
+- Updated Applied Energistics 2 integration to 11.0.0+ [#170](https://github.com/TheIllusiveC4/Polymorph/issues/170)
+### Fixed
+- Fixed recipe outputs merging items with different NBT elements [#169](https://github.com/TheIllusiveC4/Polymorph/issues/169)
+
 ## [1.18.1-0.43] - 2022.04.04
 ### Fixed
 - Fixed NullPointerException error log with FastWorkbench [#163](https://github.com/TheIllusiveC4/Polymorph/issues/163)
