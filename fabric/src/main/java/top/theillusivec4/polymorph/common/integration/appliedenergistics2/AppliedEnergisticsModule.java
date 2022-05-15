@@ -29,8 +29,8 @@ import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.server.network.ServerPlayerEntity;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.client.recipe.widget.PlayerRecipesWidget;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.mixin.integration.appliedenergistics2.AccessorCraftingTermContainer;
 import top.theillusivec4.polymorph.mixin.integration.appliedenergistics2.AccessorPatternTermContainer;
@@ -45,7 +45,9 @@ public class AppliedEnergisticsModule extends AbstractCompatibilityModule {
         for (Slot inventorySlot : pHandledScreen.getScreenHandler().slots) {
 
           if (inventorySlot instanceof CraftingTermSlot) {
-            return new PlayerRecipesWidget(pHandledScreen, inventorySlot);
+            return new CraftingTermRecipesWidget(
+                (CraftingTermMenu) pHandledScreen.getScreenHandler(), pHandledScreen,
+                inventorySlot);
           }
         }
       } else if (pHandledScreen.getScreenHandler() instanceof PatternEncodingTermMenu) {
@@ -69,13 +71,26 @@ public class AppliedEnergisticsModule extends AbstractCompatibilityModule {
 
       if (container instanceof CraftingTermMenu) {
         ((AccessorCraftingTermContainer) container).setCurrentRecipe((CraftingRecipe) recipe);
-        container.onContentChanged(((CraftingTermMenu) container).getPlayerInventory());
+        ((AccessorCraftingTermContainer) container).callUpdateCurrentRecipeAndOutput(true);
         return true;
       } else if (container instanceof PatternEncodingTermMenu) {
         ((AccessorPatternTermContainer) container).setCurrentRecipe((CraftingRecipe) recipe);
         ((AccessorPatternTermContainer) container).callGetAndUpdateOutput();
         return true;
       }
+    }
+    return false;
+  }
+
+  @Override
+  public boolean openScreenHandler(ScreenHandler pScreenHandler, ServerPlayerEntity pPlayer) {
+
+    if (pScreenHandler instanceof CraftingTermMenu) {
+      ((AccessorCraftingTermContainer) pScreenHandler).callUpdateCurrentRecipeAndOutput(true);
+      return true;
+    } else if (pScreenHandler instanceof PatternEncodingTermMenu) {
+      ((AccessorPatternTermContainer) pScreenHandler).callGetAndUpdateOutput();
+      return true;
     }
     return false;
   }

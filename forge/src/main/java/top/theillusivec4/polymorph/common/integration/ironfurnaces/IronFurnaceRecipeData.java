@@ -21,7 +21,7 @@
 
 package top.theillusivec4.polymorph.common.integration.ironfurnaces;
 
-import ironfurnaces.tileentity.BlockIronFurnaceTileBase;
+import ironfurnaces.tileentity.furnaces.BlockIronFurnaceTileBase;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import net.minecraft.core.NonNullList;

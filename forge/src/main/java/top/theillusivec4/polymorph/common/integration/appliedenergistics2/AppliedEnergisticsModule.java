@@ -25,12 +25,12 @@ import appeng.menu.me.items.CraftingTermMenu;
 import appeng.menu.me.items.PatternEncodingTermMenu;
 import appeng.menu.slot.CraftingTermSlot;
 import appeng.menu.slot.PatternTermSlot;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import top.theillusivec4.polymorph.api.PolymorphApi;
-import top.theillusivec4.polymorph.client.recipe.widget.PlayerRecipesWidget;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.mixin.integration.appliedenergistics2.AccessorCraftingTermMenu;
 import top.theillusivec4.polymorph.mixin.integration.appliedenergistics2.AccessorPatternTermMenu;
@@ -45,7 +45,8 @@ public class AppliedEnergisticsModule extends AbstractCompatibilityModule {
         for (Slot inventorySlot : pContainerScreen.getMenu().slots) {
 
           if (inventorySlot instanceof CraftingTermSlot) {
-            return new PlayerRecipesWidget(pContainerScreen, inventorySlot);
+            return new CraftingTermRecipesWidget((CraftingTermMenu) pContainerScreen.getMenu(),
+                pContainerScreen, inventorySlot);
           }
         }
       } else if (pContainerScreen.getMenu() instanceof PatternEncodingTermMenu) {
@@ -69,13 +70,26 @@ public class AppliedEnergisticsModule extends AbstractCompatibilityModule {
 
       if (container instanceof CraftingTermMenu) {
         ((AccessorCraftingTermMenu) container).setCurrentRecipe((CraftingRecipe) recipe);
-        container.slotsChanged(((CraftingTermMenu) container).getPlayerInventory());
+        ((AccessorCraftingTermMenu) container).callUpdateCurrentRecipeAndOutput(true);
         return true;
       } else if (container instanceof PatternEncodingTermMenu) {
         ((AccessorPatternTermMenu) container).setCurrentRecipe((CraftingRecipe) recipe);
         ((AccessorPatternTermMenu) container).callGetAndUpdateOutput();
         return true;
       }
+    }
+    return false;
+  }
+
+  @Override
+  public boolean openContainer(AbstractContainerMenu container, ServerPlayer serverPlayerEntity) {
+
+    if (container instanceof CraftingTermMenu) {
+      ((AccessorCraftingTermMenu) container).callUpdateCurrentRecipeAndOutput(true);
+      return true;
+    } else if (container instanceof PatternEncodingTermMenu) {
+      ((AccessorPatternTermMenu) container).callGetAndUpdateOutput();
+      return true;
     }
     return false;
   }

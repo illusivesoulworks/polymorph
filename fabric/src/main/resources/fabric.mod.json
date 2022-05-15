@@ -44,9 +44,9 @@
     "cardinal-components-block": ">=4.0.1",
     "cardinal-components-item": ">=4.0.1",
     "cardinal-components-entity": ">=4.0.1",
-    "minecraft": "1.18.x"
+    "minecraft": "1.18.2"
   },
   "breaks": {
-    "ae2": "<10.0.0-beta.3"
+    "ae2": "<11.0.0"
   }
 }

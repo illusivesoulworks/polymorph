@@ -21,8 +21,8 @@
 
 package top.theillusivec4.polymorph.mixin.integration.ironfurnaces;
 
-import ironfurnaces.tileentity.BlockIronFurnaceTileBase;
-import ironfurnaces.tileentity.LRUCache;
+import ironfurnaces.tileentity.furnaces.BlockIronFurnaceTileBase;
+import ironfurnaces.util.LRUCache;
 import java.util.Optional;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;

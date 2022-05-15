@@ -28,7 +28,7 @@ archivesBaseName = "polymorph-forge"
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'parchment', version: '2021.12.19-1.18.1'
+    mappings channel: 'parchment', version: '2022.05.02-1.18.2'
 
     runs {
         client {
@@ -101,7 +101,7 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 
-    implementation fg.deobf("mezz.jei:jei-1.18.1:${version_jei}")
+    implementation fg.deobf("mezz.jei:jei-1.18.2:${version_jei}")
     implementation fg.deobf("appeng:appliedenergistics2:${version_ae2}")
 
     implementation fg.deobf("curse.maven:craftingcraft-237581:${file_craftingcraft}")
@@ -109,6 +109,7 @@ dependencies {
     implementation fg.deobf("curse.maven:simplestoragenetwork-268495:${file_ssn}")
     implementation fg.deobf("curse.maven:cyclic-239286:${file_cyclic}")
     implementation fg.deobf("curse.maven:sophisticatedbackpacks-422301:${file_sophisticated}")
+    implementation fg.deobf("curse.maven:sophisticatedcore-618298:${file_sophisticatedcore}")
     implementation fg.deobf("curse.maven:ironfurnaces-237664:${file_ironfurnaces}")
     implementation fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
     implementation fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
@@ -124,9 +125,9 @@ dependencies {
 
     runtimeOnly fg.deobf("curse.maven:vanillatweaks-272637:${file_vanillatweaks}")
 	runtimeOnly fg.deobf("curse.maven:balm-531761:${file_balm}")
-    runtimeOnly fg.deobf("curse.maven:patchouli-306770:3594394")
-    runtimeOnly fg.deobf("curse.maven:curios-309927:3600023")
-    runtimeOnly fg.deobf("curse.maven:geckolib-388172:3601144")
+    runtimeOnly fg.deobf("curse.maven:patchouli-306770:3729975")
+    runtimeOnly fg.deobf("curse.maven:curios-309927:3748873")
+    runtimeOnly fg.deobf("curse.maven:geckolib-388172:3785773")
 }
 
 def replaceResources = tasks.register("replaceResources", Copy) {

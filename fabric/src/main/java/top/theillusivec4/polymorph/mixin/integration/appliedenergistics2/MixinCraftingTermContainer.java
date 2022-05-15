@@ -50,9 +50,9 @@ public abstract class MixinCraftingTermContainer extends MEStorageMenu {
       at = @At(
           value = "INVOKE",
           target = "net/minecraft/recipe/RecipeManager.getFirstMatch(Lnet/minecraft/recipe/RecipeType;Lnet/minecraft/inventory/Inventory;Lnet/minecraft/world/World;)Ljava/util/Optional;"),
-      method = "onContentChanged")
+      method = "updateCurrentRecipeAndOutput")
   private <C extends Inventory, T extends Recipe<C>> Optional<T> polymorph$getFirstMatch(
-      RecipeManager recipeManager, RecipeType<T> type, C inventory, World world, Inventory unused) {
+      RecipeManager recipeManager, RecipeType<T> type, C inventory, World world, boolean unused) {
     return RecipeSelection.getPlayerRecipe(this, type, inventory, world,
         this.getPlayerInventory().player);
   }

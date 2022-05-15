@@ -21,9 +21,9 @@
 
 package top.theillusivec4.polymorph.common.integration.ironfurnaces;
 
-import ironfurnaces.container.BlockIronFurnaceContainerBase;
-import ironfurnaces.tileentity.BlockIronFurnaceTileBase;
-import ironfurnaces.tileentity.LRUCache;
+import ironfurnaces.container.furnaces.BlockIronFurnaceContainerBase;
+import ironfurnaces.tileentity.furnaces.BlockIronFurnaceTileBase;
+import ironfurnaces.util.LRUCache;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.polymorph.api.PolymorphApi;

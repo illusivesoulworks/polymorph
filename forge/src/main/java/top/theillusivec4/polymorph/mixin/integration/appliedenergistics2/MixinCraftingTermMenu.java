@@ -49,9 +49,9 @@ public abstract class MixinCraftingTermMenu extends MEStorageMenu {
       at = @At(
           value = "INVOKE",
           target = "net/minecraft/world/item/crafting/RecipeManager.getRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;"),
-      method = "slotsChanged")
+      method = "updateCurrentRecipeAndOutput")
   private <C extends Container, T extends Recipe<C>> Optional<T> polymorph$getRecipe(
-      RecipeManager recipeManager, RecipeType<T> type, C inventory, Level world, Container unused) {
+      RecipeManager recipeManager, RecipeType<T> type, C inventory, Level world, boolean unused) {
     return RecipeSelection.getPlayerRecipe(type, inventory, world,
         this.getPlayerInventory().player);
   }

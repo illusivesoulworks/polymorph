@@ -77,10 +77,10 @@ dependencies {
     modImplementation fabricApi.module("fabric-commands-v0", project.fabric_version)
     modImplementation fabricApi.module("fabric-networking-v0", project.fabric_version)
 
-    modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
-    modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cca_version}"
-    modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${project.cca_version}"
-    modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-item:${project.cca_version}"
+    modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}"
+    modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}"
+    modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-block:${project.cca_version}"
+    modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cca_version}"
 
     modCompileOnly "curse.maven:cammiesbackpacks-443091:${project.file_cammiesbackpacks}"
     modRuntimeOnly "curse.maven:cammiesbackpacks-443091:${project.file_cammiesbackpacks}"
@@ -102,10 +102,10 @@ dependencies {
     modRuntimeOnly "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_version}"
     modRuntimeOnly "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
-    include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cca_version}"
-    include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-block:${project.cca_version}"
-    include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-item:${project.cca_version}"
+    include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}"
+    include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}"
+    include "dev.onyxstudios.cardinal-components-api:cardinal-components-block:${project.cca_version}"
+    include "dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cca_version}"
 }
 
 processResources {

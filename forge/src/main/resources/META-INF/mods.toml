@@ -34,6 +34,12 @@ No more recipe conflicts! Adds an option to choose the crafting result if more t
 [[dependencies.polymorph]]
     modId="appliedenergistics2"
     mandatory=false
-    versionRange="[10.0.0-beta.3,)"
+    versionRange="[11.0.0,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.polymorph]]
+    modId="ironfurnaces"
+    mandatory=false
+    versionRange="[3.3.0,)"
     ordering="NONE"
     side="BOTH"

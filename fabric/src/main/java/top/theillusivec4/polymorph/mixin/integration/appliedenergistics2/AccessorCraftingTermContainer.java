@@ -26,10 +26,14 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.recipe.Recipe;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(CraftingTermMenu.class)
 public interface AccessorCraftingTermContainer {
 
   @Accessor(remap = false)
   void setCurrentRecipe(Recipe<CraftingInventory> pCurrentRecipe);
+
+  @Invoker(remap = false)
+  void callUpdateCurrentRecipeAndOutput(boolean force);
 }
