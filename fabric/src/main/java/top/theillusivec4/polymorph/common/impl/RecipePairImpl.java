@@ -35,7 +35,15 @@ public class RecipePairImpl implements RecipePair {
       int compare = output1.getTranslationKey().compareTo(output2.getTranslationKey());
 
       if (compare == 0) {
-        return output1.getCount() - output2.getCount();
+        int diff = output1.getCount() - output2.getCount();
+
+        if (diff == 0) {
+          String tag1 = output1.getNbt() != null ? output1.getNbt().asString() : "";
+          String tag2  = output2.getNbt() != null ? output2.getNbt().asString() : "";
+          return tag1.compareTo(tag2);
+        } else {
+          return diff;
+        }
       } else {
         return compare;
       }

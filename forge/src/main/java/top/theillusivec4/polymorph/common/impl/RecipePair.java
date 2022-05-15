@@ -57,7 +57,15 @@ public class RecipePair implements IRecipePair {
       int compare = output1.getDescriptionId().compareTo(output2.getDescriptionId());
 
       if (compare == 0) {
-        return output1.getCount() - output2.getCount();
+        int diff = output1.getCount() - output2.getCount();
+
+        if (diff == 0) {
+          String tag1 = output1.getTag() != null ? output1.getTag().getAsString() : "";
+          String tag2  = output2.getTag() != null ? output2.getTag().getAsString() : "";
+          return tag1.compareTo(tag2);
+        } else {
+          return diff;
+        }
       } else {
         return compare;
       }
