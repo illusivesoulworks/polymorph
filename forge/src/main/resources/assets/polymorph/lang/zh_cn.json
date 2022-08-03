@@ -1,4 +1,0 @@
-{
-  "commands.polymorph.conflicts.starting": "正在检测冲突的合成表……",
-  "commands.polymorph.conflicts.success": "发现 %d 个潜在的合成表冲突。请查看 logs/conflicts.log 获取更多信息。"
-}

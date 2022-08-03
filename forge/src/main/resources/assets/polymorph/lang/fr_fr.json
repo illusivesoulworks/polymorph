@@ -1,4 +1,0 @@
-{
-  "commands.polymorph.conflicts.starting": "Recherche des conflits de recette...",
-  "commands.polymorph.conflicts.success": "%d conflits potentiels trouvés. Regardez logs/conflicts.log pour plus de détails."
-}

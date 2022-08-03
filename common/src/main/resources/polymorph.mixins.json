@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.illusivesoulworks.polymorph.mixin.core",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AccessorAbstractFurnaceBlockEntity",
+    "AccessorCraftingMenu",
+    "AccessorInventoryMenu",
+    "AccessorUpgradeRecipe",
+    "MixinCraftingMenu",
+    "MixinPolymorphApi",
+    "MixinRecipeManager",
+    "MixinSmithingMenu"
+  ],
+  "injectors": {
+    "defaultRequire": 1,
+    "maxShiftBy": 3
+  },
+  "refmap": "${refmap_target}refmap.json"
+}

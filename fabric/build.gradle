@@ -1,106 +1,34 @@
 plugins {
-    id 'fabric-loom' version '0.10-SNAPSHOT'
-    id 'com.matthewprenger.cursegradle' version '1.4.0'
+    id 'fabric-loom' version '0.12-SNAPSHOT'
+    id 'maven-publish'
+    id 'idea'
+	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-
-archivesBaseName = project.archives_base_name
-version = project.mod_version
-group = project.maven_group
-
-minecraft {
-}
+archivesBaseName = "${mod_id}-fabric"
 
 repositories {
-    maven { 
-        url = "https://jitpack.io" 
-    }
     maven {
-        url = "https://maven.shedaniel.me"
-    }
-    maven {
-        name = "Ladysnake Mods"
+        name = "Ladysnake Libs"
         url = "https://ladysnake.jfrog.io/artifactory/mods"
-    }
-    maven {
-        url = "https://www.cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
-    }
-    maven {
-        name = "Modmuss50"
-        url = "https://maven.modmuss50.me/"
-    }
-    maven {
-        name = "Modmaven"
-        url = "https://modmaven.dev/"
-        content {
-            includeGroup "appeng"
-        }
-    }
-    maven {
-        name = "BuildCraft"
-        url = "https://mod-buildcraft.com/maven"
-    }
-    maven {
-        name = "Technici4n"
-        url = "https://raw.githubusercontent.com/Technici4n/Technici4n-maven/master/"
-        content {
-            includeGroup "net.fabricmc.fabric-api" // until PR # is merged
-            includeGroup "dev.technici4n"
-        }
-    }
-    maven {
-        url = "https://maven.bai.lol"
-    }
-    maven {
-        url "https://maven.jamieswhiteshirt.com/libs-release"
-        content {
-            includeGroup "com.jamieswhiteshirt"
-        }
     }
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation fabricApi.module("fabric-api-base", project.fabric_version)
-    modImplementation fabricApi.module("fabric-lifecycle-events-v1", project.fabric_version)
-    modImplementation fabricApi.module("fabric-networking-api-v1", project.fabric_version)
-    modImplementation fabricApi.module("fabric-resource-loader-v0", project.fabric_version)
-    modImplementation fabricApi.module("fabric-command-api-v1", project.fabric_version)
-    modImplementation fabricApi.module("fabric-commands-v0", project.fabric_version)
-    modImplementation fabricApi.module("fabric-networking-v0", project.fabric_version)
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings(loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${fabric_parchment_mc_version}:${fabric_parchment_version}@zip")
+    })
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+    implementation project(":common")
 
     modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}"
     modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}"
     modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-block:${project.cca_version}"
     modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cca_version}"
-
-    modCompileOnly "curse.maven:cammiesbackpacks-443091:${project.file_cammiesbackpacks}"
-    modRuntimeOnly "curse.maven:cammiesbackpacks-443091:${project.file_cammiesbackpacks}"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
-    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
-    modCompileOnly "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
-    modRuntimeOnly "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
-    modRuntimeOnly "teamreborn:energy:0.1.1"
-    modCompileOnly "curse.maven:toms-396826:${project.file_toms}"
-    modRuntimeOnly "curse.maven:toms-396826:${project.file_toms}"
-    modCompileOnly "appeng:appliedenergistics2-fabric:${project.ae2_version}"
-    modRuntimeOnly "appeng:appliedenergistics2-fabric:${project.ae2_version}"
-    modCompileOnly "curse.maven:recipecache-473492:${project.file_recipecache}"
-    modRuntimeOnly "curse.maven:recipecache-473492:${project.file_recipecache}"
-    modCompileOnly "curse.maven:fastbench-364531:${project.file_fastbench}"
-    modRuntimeOnly "curse.maven:fastbench-364531:${project.file_fastbench}"
-    modCompileOnly "curse.maven:improvedstations-355914:${project.file_improvedstations}"
-    modRuntimeOnly "curse.maven:improvedstations-355914:${project.file_improvedstations}"
-    modRuntimeOnly "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_version}"
-    modRuntimeOnly "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}"
     include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}"
@@ -108,27 +36,60 @@ dependencies {
     include "dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cca_version}"
 }
 
+loom {
+    runs {
+        client {
+            client()
+            setConfigName("Fabric Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        server {
+            server()
+            setConfigName("Fabric Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+    }
+}
+
+
 processResources {
+    from project(":common").sourceSets.main.resources
     inputs.property "version", project.version
 
     filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
+        expand 'version': project.version, 'fabric_mc_version_range': project.fabric_mc_version_range, 'license': project.license,
+                'mod_id': project.mod_id, 'mod_author': project.mod_author, 'mod_description': project.mod_description,
+                'mod_name': project.mod_name, 'issue_tracker': project.issue_tracker
+    }
+
+    filesMatching("pack.mcmeta") {
+        expand 'mod_name': project.mod_name
+    }
+
+    filesMatching('*.mixins.json') {
+        expand "refmap_target": "${archivesBaseName}-"
+    }
 }
 
-tasks.withType(JavaCompile).configureEach {
-	it.options.encoding = "UTF-8"
-	it.options.release = 17
+tasks.withType(JavaCompile) {
+    source(project(":common").sourceSets.main.allSource)
 }
 
-java {
-    withSourcesJar()
-}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId project.archivesBaseName
+            version project.version
+            from components.java
+        }
+    }
 
-sourceSets {
-    main {
-        resources {
-            srcDirs += '../docs'
+    repositories {
+        maven {
+            url "file://" + System.getenv("local_maven")
         }
     }
 }
@@ -136,13 +97,13 @@ sourceSets {
 curseforge {
     project {
         apiKey = findProperty('curseKey') ?: 0
-        id = "${curse_id}"
-        releaseType = "${curse_release}"
+        id = "${cf_fabric_id}"
+        releaseType = "${cf_release}"
         changelogType = 'markdown'
-        changelog = file('CHANGELOG.md')
+        changelog = file("../CHANGELOG_LATEST.md")
         addGameVersion "Java 17"
         addGameVersion "Fabric"
-        "${curse_versions}".split(',').each {
+        "${cf_versions}".split(',').each {
             addGameVersion "${it}"
         }
         addArtifact(sourcesJar)
@@ -150,7 +111,6 @@ curseforge {
 
         relations {
             requiredDependency 'fabric-api'
-            embeddedLibrary 'cardinal-components'
         }
 
         afterEvaluate {

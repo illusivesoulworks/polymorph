@@ -1,17 +1,16 @@
 modLoader="javafml"
-loaderVersion="${loader_version}"
-license="LGPL-3.0-or-later"
-issueTrackerURL="https://github.com/TheIllusiveC4/Polymorph/issues"
-logoFile="polymorph_icon.png"
+loaderVersion="[41,)"
+license="${license}"
 logoBlur=false
+issueTrackerURL="${issue_tracker}"
+logoFile="${mod_id}_icon.png"
 [[mods]]
-modId="polymorph"
+modId="${mod_id}"
 version="${version}"
-displayName="Polymorph"
-displayURL="https://github.com/TheIllusiveC4/Polymorph"
-authors="C4"
+displayName="${mod_name}"
+authors="${mod_author}"
 description='''
-No more recipe conflicts! Adds an option to choose the crafting result if more than one is available.
+${mod_description}
 '''
 [[dependencies.polymorph]]
     modId="forge"
@@ -22,24 +21,6 @@ No more recipe conflicts! Adds an option to choose the crafting result if more t
 [[dependencies.polymorph]]
     modId="minecraft"
     mandatory=true
-    versionRange="${mc_version_range}"
-    ordering="NONE"
-    side="BOTH"
-[[dependencies.polymorph]]
-    modId="sophisticatedbackpacks"
-    mandatory=false
-    versionRange="[1.18.1-3.15.15,)"
-    ordering="NONE"
-    side="BOTH"
-[[dependencies.polymorph]]
-    modId="appliedenergistics2"
-    mandatory=false
-    versionRange="[11.0.0,)"
-    ordering="NONE"
-    side="BOTH"
-[[dependencies.polymorph]]
-    modId="ironfurnaces"
-    mandatory=false
-    versionRange="[3.3.0,)"
+    versionRange="${forge_mc_version_range}"
     ordering="NONE"
     side="BOTH"

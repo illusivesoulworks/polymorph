@@ -1,4 +1,0 @@
-{
-  "commands.polymorph.conflicts.starting": "Tražim sukobe među receptima...",
-  "commands.polymorph.conflicts.success": "Pronađeno %d potencijalnih sukoba. Provjeri logs/conflicts.log za više detalja."
-}

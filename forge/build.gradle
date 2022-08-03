@@ -1,133 +1,109 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-		maven { url = 'https://maven.parchmentmc.org' }
-        maven { url = 'https://plugins.gradle.org/m2/' }
-        maven {
-            url "https://repo.spongepowered.org/repository/maven-public/"
-            content { includeGroup "org.spongepowered" }
+        maven { url = 'https://maven.minecraftforge.net' }
+		maven { url = 'https://plugins.gradle.org/m2/' }
+		maven {
+            name = 'ParchmentMC'
+            url = 'https://maven.parchmentmc.org/'
+        }
+		maven {
+            name = 'Sponge / Mixin'
+            url = 'https://repo.spongepowered.org/repository/maven-public/'
         }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath group: 'gradle.plugin.com.matthewprenger', name: 'CurseGradle', version: '1.4.0'
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
         classpath group: 'org.parchmentmc', name: 'librarian', version: '1.+'
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath group: 'gradle.plugin.com.matthewprenger', name: 'CurseGradle', version: '1.4.0'
     }
 }
+apply plugin: 'java'
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'com.matthewprenger.cursegradle'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
+apply plugin: 'com.matthewprenger.cursegradle'
 
-version = "${mod_version}"
-group = "top.theillusivec4.polymorph"
-archivesBaseName = "polymorph-forge"
+archivesBaseName = "${mod_id}-forge"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+mixin {
+    add sourceSets.main, "${mod_id}.refmap.json"
+
+    config "${mod_id}.mixins.json"
+}
 
 minecraft {
-    mappings channel: 'parchment', version: '2022.05.02-1.18.2'
+    mappings channel: 'parchment', version: "${forge_parchment_version}"
+    
+    if (project.hasProperty('forge_ats_enabled') && project.findProperty('forge_ats_enabled').toBoolean()) {
+        // This location is hardcoded in Forge and can not be changed.
+        // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
+        accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+        project.logger.debug('Forge Access Transformers are enabled for this project.')
+    }
 
     runs {
         client {
             workingDirectory project.file('run')
-            
-			arg "-mixin.config=polymorph.mixins.json"
-            arg "-mixin.config=polymorph_integrations.mixins.json"
-			property 'mixin.env.disableRefMap', 'true'
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-
+            ideaModule "${rootProject.name}.${project.name}.main"
+            taskName 'Client'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+			args "-mixin.config=${mod_id}.mixins.json"
             mods {
-                polymorph {
+                modClientRun {
                     source sourceSets.main
+                    source project(":common").sourceSets.main
                 }
             }
         }
 
         server {
             workingDirectory project.file('run')
-
-            arg "-mixin.config=polymorph.mixins.json"
-            arg "-mixin.config=polymorph_integrations.mixins.json"
-			property 'mixin.env.disableRefMap', 'true'
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-
+            ideaModule "${rootProject.name}.${project.name}.main"
+            taskName 'Server'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+			args "-mixin.config=${mod_id}.mixins.json"
             mods {
-                polymorph {
+                modServerRun {
                     source sourceSets.main
+                    source project(":common").sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            ideaModule "${rootProject.name}.${project.name}.main"
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            taskName 'Data'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+			args "-mixin.config=${mod_id}.mixins.json"
+            mods {
+                modDataRun {
+                    source sourceSets.main
+                    source project(":common").sourceSets.main
                 }
             }
         }
     }
 }
 
-mixin {
-    add sourceSets.main, "polymorph.refmap.json"
-}
-
-
-repositories {
-    maven {
-        // Maven for JEI
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        // Maven for JEI fallback
-        name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
-    }
-    maven {
-		// Maven for CurseForge files
-		name = "CurseMaven"
-        url = "https://www.cursemaven.com"
-    }
-    maven {
-        name "Modmaven"
-        url "https://modmaven.dev/"
-        // For Gradle 5.1 and above, limit it to just AE2
-        content {
-            includeGroup 'appeng'
-        }
-    }
-}
+sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${forge_version}"
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    compileOnly project(":common")
+	annotationProcessor 'org.spongepowered:mixin:0.8.4-SNAPSHOT:processor'
+}
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
-
-    implementation fg.deobf("mezz.jei:jei-1.18.2:${version_jei}")
-    implementation fg.deobf("appeng:appliedenergistics2:${version_ae2}")
-
-    implementation fg.deobf("curse.maven:craftingcraft-237581:${file_craftingcraft}")
-    implementation fg.deobf("curse.maven:tomsstorage-378609:${file_tom}")
-    implementation fg.deobf("curse.maven:simplestoragenetwork-268495:${file_ssn}")
-    implementation fg.deobf("curse.maven:cyclic-239286:${file_cyclic}")
-    implementation fg.deobf("curse.maven:sophisticatedbackpacks-422301:${file_sophisticated}")
-    implementation fg.deobf("curse.maven:sophisticatedcore-618298:${file_sophisticatedcore}")
-    implementation fg.deobf("curse.maven:ironfurnaces-237664:${file_ironfurnaces}")
-    implementation fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
-    implementation fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
-    implementation fg.deobf("curse.maven:placebo-283644:${file_placebo}")
-	implementation fg.deobf("curse.maven:refinedstorage-243076:${file_refinedstorage}")
-    implementation fg.deobf("curse.maven:refinedstorageaddons-272302:${file_refinedaddons}")
-	implementation fg.deobf("curse.maven:prettypipes-376737:${file_prettypipes}")
-    implementation fg.deobf("curse.maven:occultism-361026:${file_occultism}")
-    implementation fg.deobf("curse.maven:extendedcrafting-268387:${file_extendedcrafting}")
-    implementation fg.deobf("curse.maven:cucumber-272335:${file_cucumber}")
-    implementation fg.deobf("curse.maven:tinkers-74072:${file_tinkers}")
-    implementation fg.deobf("curse.maven:mantle-74924:${file_mantle}")
-
-    runtimeOnly fg.deobf("curse.maven:vanillatweaks-272637:${file_vanillatweaks}")
-	runtimeOnly fg.deobf("curse.maven:balm-531761:${file_balm}")
-    runtimeOnly fg.deobf("curse.maven:patchouli-306770:3729975")
-    runtimeOnly fg.deobf("curse.maven:curios-309927:3748873")
-    runtimeOnly fg.deobf("curse.maven:geckolib-388172:3785773")
+tasks.withType(JavaCompile) {
+    source(project(":common").sourceSets.main.allSource)
 }
 
 def replaceResources = tasks.register("replaceResources", Copy) {
@@ -135,60 +111,56 @@ def replaceResources = tasks.register("replaceResources", Copy) {
 
     it.from(sourceSets.main.resources) {
         include "META-INF/mods.toml"
-        expand 'version': version, 'mc_version_range': mc_version_range, 'forge_version_range': forge_version_range, "loader_version": loader_version
+        expand 'version': version, 'forge_mc_version_range': forge_mc_version_range, 'forge_version_range': forge_version_range,
+                'license': license, 'mod_id': mod_id, 'mod_author': mod_author, 'mod_description': mod_description,
+                'mod_name': mod_name, 'issue_tracker': issue_tracker
+    }
+    it.from(project(":common").sourceSets.main.resources) {
+        include "pack.mcmeta"
+        expand 'mod_name': mod_name
     }
     it.into "$buildDir/resources/main/"
 }
 
 processResources {
-    from("CHANGELOG.md")
+    from project(":common").sourceSets.main.resources
     duplicatesStrategy(DuplicatesStrategy.FAIL)
     exclude('META-INF/mods.toml')
+    exclude('pack.mcmeta')
+
+    filesMatching('*.mixins.json') {
+        expand "refmap_target": "${mod_id}."
+    }
     configure { finalizedBy(replaceResources) }
-}
-
-sourceSets {
-    main {
-        resources {
-            srcDirs += '../docs'
-        }
-    }
-}
-
-jar {
-    manifest {
-        attributes(["Specification-Title"		: "Polymorph",
-                    "Specification-Vendor"		: "C4",
-                    "Specification-Version"		: "1",
-                    "Implementation-Title"		: "Polymorph",
-                    "Implementation-Version"	: "${getArchiveVersion()}",
-                    "Implementation-Vendor" 	: "C4",
-                    "Implementation-Timestamp"	: new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    "MixinConfigs"				: "polymorph.mixins.json,polymorph_integrations.mixins.json"],)
-    }
-}
-
-task sourcesJar(type: Jar) {
-    archiveClassifier.set('sources')
-    from sourceSets.main.allJava
-}
-
-artifacts {
-    archives sourcesJar
 }
 
 jar.finalizedBy('reobfJar')
 
-curseforge {
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId project.archivesBaseName
+            version project.version
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file://" + System.getenv("local_maven")
+        }
+    }
+}
 
+curseforge {
     project {
         apiKey = findProperty('curseKey') ?: 0
-        id = '388800'
-        releaseType = "${curse_release}"
+        id = "${cf_forge_id}"
+        releaseType = "${cf_release}"
         changelogType = 'markdown'
-        changelog = file('CHANGELOG.md')
+        changelog = file("../CHANGELOG_LATEST.md")
         addArtifact(sourcesJar)
-        "${curse_versions}".split(',').each {
+        "${cf_versions}".split(',').each {
             addGameVersion "${it}"
         }
     }

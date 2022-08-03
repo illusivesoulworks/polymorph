@@ -1,30 +1,27 @@
 {
   "schemaVersion": 1,
-  "id": "polymorph",
+  "id": "${mod_id}",
   "version": "${version}",
-  "name": "Polymorph",
-  "description": "No more recipe conflicts! Adds an option to choose the crafting result if more than one is available.",
-  "authors": ["C4"],
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+    "${mod_author}"
+  ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/polymorph-fabric",
-    "sources": "https://github.com/TheIllusiveC4/Polymorph",
-    "issues": "https://github.com/TheIllusiveC4/Polymorph/issues"
+    "issues": "${issue_tracker}"
   },
-  "license": "LGPL-3.0-or-later",
-  "icon": "assets/polymorph/polymorph_icon.png",
+  "license": "${license}",
+  "icon": "${mod_id}_icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "top.theillusivec4.polymorph.client.PolymorphClientMod"
-    ],
     "main": [
-      "top.theillusivec4.polymorph.common.PolymorphMod"
+      "com.illusivesoulworks.polymorph.PolymorphFabricMod"
+    ],
+    "client": [
+      "com.illusivesoulworks.polymorph.PolymorphFabricClientMod"
     ],
     "cardinal-components": [
-      "top.theillusivec4.polymorph.common.PolymorphComponentInitializer"
-    ],
-    "rei_plugins": [
-      "top.theillusivec4.polymorph.common.integration.roughlyenoughitems.RoughlyEnoughItemsModule"
+      "com.illusivesoulworks.polymorph.common.components.PolymorphFabricComponents"
     ]
   },
   "custom": {
@@ -36,17 +33,12 @@
   },
   "mixins": [
     "polymorph.mixins.json",
-    "polymorph_integrations.mixins.json"
+    "polymorph.fabric.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.7.4",
+    "fabricloader": ">=0.14",
     "fabric": "*",
-    "cardinal-components-block": ">=4.0.1",
-    "cardinal-components-item": ">=4.0.1",
-    "cardinal-components-entity": ">=4.0.1",
-    "minecraft": "1.18.2"
-  },
-  "breaks": {
-    "ae2": "<11.0.0"
+    "minecraft": "${fabric_mc_version_range}",
+    "java": ">=17"
   }
 }
