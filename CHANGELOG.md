@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 Prior to version 0.45.0, this project used MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH.
 
+## [0.45.0+1.19.2] - 2022.08.11
+### Changed
+- Updated to Minecraft 1.19.2
+- [Forge] Updated to Forge 43+
+- [Fabric] Updated to Fabric API 0.59.0+
+
 ## [0.45.0+1.19.1] - 2022.08.03
 ### Changed
 - Merged Forge and Fabric versions of the project together using the [MultiLoader template](https://github.com/jaredlll08/MultiLoader-Template)
