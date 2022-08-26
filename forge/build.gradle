@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://plugins.gradle.org/m2/' }
         maven {
             url "https://repo.spongepowered.org/repository/maven-public/"
@@ -9,7 +9,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
         classpath group: 'gradle.plugin.com.matthewprenger', name: 'CurseGradle', version: '1.4.0'
     }
@@ -22,7 +22,7 @@ version = "${mod_version}"
 group = "${mod_group}"
 archivesBaseName = "${mod_id}-forge"
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
 minecraft {
     mappings channel: "snapshot", version: "20210309-1.16.5"
@@ -86,24 +86,24 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.2:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 
-    compile fg.deobf("mezz.jei:jei-1.16.5:${version_jei}")
+    implementation fg.deobf("mezz.jei:jei-1.16.5:${version_jei}")
 
-    compile fg.deobf("curse.maven:craftingcraft-237581:${file_craftingcraft}")
-    compile fg.deobf("curse.maven:craftingstation-318551:${file_craftingstation}")
-    compile fg.deobf("curse.maven:refinedstorage-243076:${file_refinedstorage}")
-    compile fg.deobf("curse.maven:refinedstorageaddons-272302:${file_refinedaddons}")
-    compile fg.deobf("curse.maven:prettypipes-376737:${file_prettypipes}")
-    compile fg.deobf("curse.maven:tomsstorage-378609:${file_tom}")
-    compile fg.deobf("curse.maven:simplestoragenetwork-268495:${file_ssn}")
-    compile fg.deobf("curse.maven:tinkers-74072:${file_tinkers}")
-    compile fg.deobf("curse.maven:mantle-74924:${file_mantle}")
-    compile fg.deobf("curse.maven:cyclic-239286:${file_cyclic}")
-    compile fg.deobf("curse.maven:sophisticatedbackpacks-422301:${file_sophisticated}")
-    compile fg.deobf("curse.maven:ae2-223794:${file_ae2}")
-    compile fg.deobf("curse.maven:extendedcrafting-268387:${file_extendedcrafting}")
-    compile fg.deobf("curse.maven:cucumber-272335:${file_cucumber}")
+    implementation fg.deobf("curse.maven:craftingcraft-237581:${file_craftingcraft}")
+    implementation fg.deobf("curse.maven:craftingstation-318551:${file_craftingstation}")
+    implementation fg.deobf("curse.maven:refinedstorage-243076:${file_refinedstorage}")
+    implementation fg.deobf("curse.maven:refinedstorageaddons-272302:${file_refinedaddons}")
+    implementation fg.deobf("curse.maven:prettypipes-376737:${file_prettypipes}")
+    implementation fg.deobf("curse.maven:tomsstorage-378609:${file_tom}")
+    implementation fg.deobf("curse.maven:simplestoragenetwork-268495:${file_ssn}")
+    implementation fg.deobf("curse.maven:tinkers-74072:${file_tinkers}")
+    implementation fg.deobf("curse.maven:mantle-74924:${file_mantle}")
+    implementation fg.deobf("curse.maven:cyclic-239286:${file_cyclic}")
+    implementation fg.deobf("curse.maven:sophisticatedbackpacks-422301:${file_sophisticated}")
+    implementation fg.deobf("curse.maven:ae2-223794:${file_ae2}")
+    implementation fg.deobf("curse.maven:extendedcrafting-268387:${file_extendedcrafting}")
+    implementation fg.deobf("curse.maven:cucumber-272335:${file_cucumber}")
 
     compileOnly fg.deobf("curse.maven:occultism-361026:${file_occultism}")
     compileOnly fg.deobf("curse.maven:fastworkbenchminus-394185:${file_fastworkbenchminus}")
@@ -150,17 +150,21 @@ task sourcesJar(type: Jar) {
 
 tasks.build.dependsOn sourcesJar
 
-processResources {
-    from("CHANGELOG.md")
+def replaceResources = tasks.register("replaceResources", Copy) {
+    it.outputs.upToDateWhen { false }
 
-    from(sourceSets.main.resources.srcDirs) {
-        include 'META-INF/mods.toml'
+    it.from(sourceSets.main.resources) {
+        include "META-INF/mods.toml"
         expand 'version': project.version, 'mod_id' : mod_id, 'mod_name': mod_name, 'mod_url': mod_url, 'mod_author': mod_author, 'mod_description': mod_description, 'mod_icon': mod_icon
     }
+    it.into "$buildDir/resources/main/"
+}
 
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'META-INF/mods.toml'
-    }
+processResources {
+    from("CHANGELOG.md")
+    duplicatesStrategy(DuplicatesStrategy.FAIL)
+    exclude('META-INF/mods.toml')
+    configure { finalizedBy(replaceResources) }
 }
 
 curseforge {
