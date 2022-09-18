@@ -39,14 +39,11 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphCommon;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.mixin.integration.cyclic.AccessorContainerCrafter;
-import top.theillusivec4.polymorph.mixin.integration.cyclic.AccessorTileCrafter;
 
 public class CyclicModule extends AbstractCompatibilityModule {
 
@@ -71,8 +68,7 @@ public class CyclicModule extends AbstractCompatibilityModule {
   public void clientSetup() {
     PolymorphApi.client().registerWidget(containerScreen -> {
       if (containerScreen instanceof ScreenCrafter &&
-          containerScreen.getMenu() instanceof ContainerCrafter) {
-        ContainerCrafter containerCrafter = (ContainerCrafter) containerScreen.getMenu();
+          containerScreen.getMenu() instanceof ContainerCrafter containerCrafter) {
         return new CrafterRecipesWidget(containerScreen, containerCrafter);
       }
       return null;
@@ -85,24 +81,6 @@ public class CyclicModule extends AbstractCompatibilityModule {
     if (container instanceof CraftingBagContainer) {
       PolymorphApi.common().getRecipeData(serverPlayerEntity)
           .ifPresent(recipeData -> container.slotsChanged(null));
-      return true;
-    }
-    return false;
-  }
-
-  @SuppressWarnings("ConstantConditions")
-  @Override
-  public boolean selectRecipe(BlockEntity tileEntity, Recipe<?> recipe) {
-
-    if (tileEntity instanceof TileCrafter) {
-      AccessorTileCrafter tileCrafter = (AccessorTileCrafter) tileEntity;
-      tileCrafter.setLastValidRecipe(recipe);
-      tileCrafter.setRecipeOutput(recipe.getResultItem());
-      LazyOptional<IItemHandler> preview = tileCrafter.getPreview();
-
-      if (preview != null) {
-        tileCrafter.callSetPreviewSlot(preview.orElse(null), recipe.getResultItem());
-      }
       return true;
     }
     return false;

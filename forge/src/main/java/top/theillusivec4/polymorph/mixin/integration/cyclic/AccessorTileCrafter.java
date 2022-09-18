@@ -22,8 +22,8 @@
 package top.theillusivec4.polymorph.mixin.integration.cyclic;
 
 import com.lothrazar.cyclic.block.crafter.TileCrafter;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,16 +35,4 @@ public interface AccessorTileCrafter {
 
   @Accessor(remap = false)
   LazyOptional<IItemHandler> getGridCap();
-
-  @Accessor(remap = false)
-  LazyOptional<IItemHandler> getPreview();
-
-  @Accessor(remap = false)
-  void setLastValidRecipe(Recipe<?> pLastValidRecipe);
-
-  @Accessor(remap = false)
-  void setRecipeOutput(ItemStack pRecipeOutput);
-
-  @Invoker(remap = false)
-  void callSetPreviewSlot(IItemHandler pPreviewHandler, ItemStack pStack);
 }

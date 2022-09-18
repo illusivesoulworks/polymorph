@@ -23,7 +23,7 @@ package top.theillusivec4.polymorph.mixin.integration.cyclic;
 
 import com.lothrazar.cyclic.gui.ContainerBase;
 import com.lothrazar.cyclic.item.crafting.CraftingBagContainer;
-import com.lothrazar.cyclic.item.craftingsimple.CraftingStickContainer;
+import com.lothrazar.cyclic.item.crafting.simple.CraftingStickContainer;
 import java.util.Optional;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.MenuType;

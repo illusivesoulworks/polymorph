@@ -43,3 +43,9 @@ No more recipe conflicts! Adds an option to choose the crafting result if more t
     versionRange="[3.3.0,)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.polymorph]]
+    modId="cyclic"
+    mandatory=false
+    versionRange="[1.18.2-1.7.9,)"
+    ordering="NONE"
+    side="BOTH"

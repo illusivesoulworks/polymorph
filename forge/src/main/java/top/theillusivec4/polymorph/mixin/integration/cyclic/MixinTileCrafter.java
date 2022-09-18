@@ -24,34 +24,43 @@ package top.theillusivec4.polymorph.mixin.integration.cyclic;
 import com.lothrazar.cyclic.block.TileBlockEntityCyclic;
 import com.lothrazar.cyclic.block.crafter.TileCrafter;
 import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import top.theillusivec4.polymorph.common.integration.cyclic.CyclicModule;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
 @SuppressWarnings("unused")
 @Mixin(TileCrafter.class)
 public abstract class MixinTileCrafter extends TileBlockEntityCyclic {
 
+  @Shadow
+  @Final
+  private CraftingContainer craftMatrix;
+
   public MixinTileCrafter(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
     super(tileEntityTypeIn, pos, state);
   }
 
-  @SuppressWarnings("ConstantConditions")
-  @Inject(
-      at = @At("HEAD"),
-      method = "tryRecipes",
-      remap = false,
-      cancellable = true)
-  private void polymorph$tryRecipes(ArrayList<ItemStack> stacks,
-                                    CallbackInfoReturnable<Recipe<?>> cir) {
-    CyclicModule.getRecipe(stacks, this.level, (TileCrafter) (Object) this)
-        .ifPresent(cir::setReturnValue);
+  @Redirect(
+      at = @At(
+          target = "net/minecraft/world/item/crafting/RecipeManager.getAllRecipesFor(Lnet/minecraft/world/item/crafting/RecipeType;)Ljava/util/List;",
+          value = "INVOKE"),
+      method = "findMatchingRecipe")
+  private List<CraftingRecipe> polymorph$findMatchingRecipe(RecipeManager manager,
+                                                            RecipeType<?> recipeType) {
+    List<CraftingRecipe> output = new ArrayList<>();
+    RecipeSelection.getTileEntityRecipe(RecipeType.CRAFTING, this.craftMatrix, this.level, this)
+        .ifPresent(output::add);
+    return output;
   }
 }
