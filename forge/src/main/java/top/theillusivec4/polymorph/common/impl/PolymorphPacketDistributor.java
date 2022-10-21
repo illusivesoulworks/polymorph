@@ -29,6 +29,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 import top.theillusivec4.polymorph.api.common.base.IPolymorphPacketDistributor;
 import top.theillusivec4.polymorph.api.common.base.IRecipePair;
 import top.theillusivec4.polymorph.common.network.PolymorphNetwork;
+import top.theillusivec4.polymorph.common.network.client.CPacketBlockEntityListener;
 import top.theillusivec4.polymorph.common.network.client.CPacketPersistentRecipeSelection;
 import top.theillusivec4.polymorph.common.network.client.CPacketPlayerRecipeSelection;
 import top.theillusivec4.polymorph.common.network.client.CPacketStackRecipeSelection;
@@ -93,5 +94,11 @@ public class PolymorphPacketDistributor implements IPolymorphPacketDistributor {
   public void sendBlockEntitySyncS2C(BlockPos pBlockPos, ResourceLocation pSelected) {
     PolymorphNetwork.get().send(PacketDistributor.ALL.noArg(),
         new SPacketBlockEntityRecipeSync(pBlockPos, pSelected));
+  }
+
+  @Override
+  public void sendBlockEntityListener(boolean pAdd) {
+    PolymorphNetwork.get()
+        .send(PacketDistributor.SERVER.noArg(), new CPacketBlockEntityListener(pAdd));
   }
 }

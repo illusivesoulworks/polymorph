@@ -158,6 +158,16 @@ public class PolymorphCapabilities {
     }
 
     @Override
+    public void addListener(ServerPlayerEntity player) {
+
+    }
+
+    @Override
+    public void removeListener(ServerPlayerEntity player) {
+
+    }
+
+    @Override
     public boolean isFailing() {
       return false;
     }

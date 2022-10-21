@@ -59,23 +59,19 @@ import top.theillusivec4.polymorph.common.capability.PlayerRecipeData;
 import top.theillusivec4.polymorph.common.capability.PolymorphCapabilities;
 import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModule;
 import top.theillusivec4.polymorph.common.integration.PolymorphIntegrations;
+import top.theillusivec4.polymorph.common.util.BlockEntityTicker;
 
 @SuppressWarnings("unused")
 public class CommonEventsListener {
 
-  private static final Map<TileEntity, ITileEntityRecipeData> TICKABLE_TILES =
-      new ConcurrentHashMap<>();
-
   @SubscribeEvent
   public void serverAboutToStart(final FMLServerAboutToStartEvent evt) {
     PolymorphApi.common().setServer(evt.getServer());
-    TICKABLE_TILES.clear();
   }
 
   @SubscribeEvent
   public void serverStopped(final FMLServerStoppedEvent evt) {
     PolymorphApi.common().setServer(null);
-    TICKABLE_TILES.clear();
   }
 
   @SubscribeEvent
@@ -112,24 +108,8 @@ public class CommonEventsListener {
   public void worldTick(final TickEvent.WorldTickEvent evt) {
     World world = evt.world;
 
-    if (!world.isRemote() && evt.phase == TickEvent.Phase.END) {
-      IPolymorphCommon commonApi = PolymorphApi.common();
-      List<TileEntity> toRemove = new ArrayList<>();
-
-      for (Map.Entry<TileEntity, ITileEntityRecipeData> entry : TICKABLE_TILES.entrySet()) {
-        TileEntity te = entry.getKey();
-        World teWorld = te.getWorld();
-
-        if (te.isRemoved() || teWorld == null || teWorld.isRemote()) {
-          toRemove.add(te);
-        } else {
-          entry.getValue().tick();
-        }
-      }
-
-      for (TileEntity te : toRemove) {
-        TICKABLE_TILES.remove(te);
-      }
+    if (!world.isRemote() && evt.phase == TickEvent.Phase.END && world.getGameTime() % 5 == 0) {
+      BlockEntityTicker.tick();
     }
   }
 
@@ -140,8 +120,6 @@ public class CommonEventsListener {
         recipeData -> {
           pEvent.addCapability(PolymorphCapabilities.TILE_ENTITY_RECIPE_DATA_ID,
               new TileEntityRecipeDataProvider(recipeData));
-          TICKABLE_TILES.put(te, recipeData);
-          pEvent.addListener(() -> TICKABLE_TILES.remove(te));
         });
   }
 
