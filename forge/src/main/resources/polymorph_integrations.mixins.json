@@ -22,6 +22,7 @@
     "extendedcrafting.MixinTableContainer",
     "fastbench.MixinFastBenchUtil",
     "fastbenchminusreplacement.MixinMixinHooks",
+    "fastsuite.MixinAuxRecipeManager",
     "ironfurnaces.AccessorBlockIronFurnaceTileBase",
     "ironfurnaces.MixinBlockIronFurnaceTileBase",
     "jei.MixinRecipeTransferUtil",

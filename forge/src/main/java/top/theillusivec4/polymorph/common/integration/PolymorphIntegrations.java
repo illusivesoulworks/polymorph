@@ -146,6 +146,7 @@ public class PolymorphIntegrations {
     APPLIED_ENERGISTICS_2("appliedenergistics2"),
     IRON_FURNACES("ironfurnaces"),
     FASTFURNACE("fastfurnace"),
+    FASTSUITE("fastsuite"),
     FASTWORKBENCH_MINUS_REPLACEMENT("fastbenchminusreplacement"),
     FASTFURNACE_MINUS_REPLACEMENT("fastfurnaceminusreplacement"),
     EXTENDED_CRAFTING("extendedcrafting"),

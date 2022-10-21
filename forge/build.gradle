@@ -32,7 +32,8 @@ minecraft {
             workingDirectory project.file('run')
             arg "-mixin.config=" + "${mod_id}".toString() + ".mixins.json"
             arg "-mixin.config=" + "${mod_id}_integrations".toString() + ".mixins.json"
-            jvmArg "-Dmixin.env.disableRefMap=true"
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
@@ -48,7 +49,8 @@ minecraft {
             workingDirectory project.file('run')
             arg "-mixin.config=" + "${mod_id}".toString() + ".mixins.json"
             arg "-mixin.config=" + "${mod_id}_integrations".toString() + ".mixins.json"
-            jvmArg "-Dmixin.env.disableRefMap=true"
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
@@ -104,6 +106,7 @@ dependencies {
     implementation fg.deobf("curse.maven:ae2-223794:${file_ae2}")
     implementation fg.deobf("curse.maven:extendedcrafting-268387:${file_extendedcrafting}")
     implementation fg.deobf("curse.maven:cucumber-272335:${file_cucumber}")
+    implementation fg.deobf("curse.maven:fastsuite-475117:${file_fastsuite}")
 
     compileOnly fg.deobf("curse.maven:occultism-361026:${file_occultism}")
     compileOnly fg.deobf("curse.maven:fastworkbenchminus-394185:${file_fastworkbenchminus}")
@@ -111,7 +114,7 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
     compileOnly fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
-    compileOnly fg.deobf("curse.maven:placebo-283644:${file_placebo}")
+    implementation fg.deobf("curse.maven:placebo-283644:${file_placebo}")
 
     compileOnly fg.deobf("curse.maven:ironfurnaces-237664:${file_ironfurnaces}")
 
