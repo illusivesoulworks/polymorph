@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.16.5-0.41] - 2022.10.20
+### Added
+- Added FastSuite compatibility [#182](https://github.com/illusivesoulworks/polymorph/issues/182)
+### Changed
+- Greatly improved performance
+
 ## [1.16.5-0.40] - 2022.03.01
 ### Added
 - Added `uk_ua.json` localization (thanks Sushomeister!)
