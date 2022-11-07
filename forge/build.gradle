@@ -33,6 +33,7 @@ mixin {
     add sourceSets.main, "${mod_id}.refmap.json"
 
     config "${mod_id}.mixins.json"
+    config "${mod_id}-integrations.forge.mixins.json"
 }
 
 minecraft {
@@ -52,7 +53,8 @@ minecraft {
             taskName 'Client'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-			args "-mixin.config=${mod_id}.mixins.json"
+            args "-mixin.config=${mod_id}.mixins.json"
+            args "-mixin.config=${mod_id}-integrations.forge.mixins.json"
             mods {
                 modClientRun {
                     source sourceSets.main
@@ -68,6 +70,7 @@ minecraft {
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 			args "-mixin.config=${mod_id}.mixins.json"
+            args "-mixin.config=${mod_id}-integrations.forge.mixins.json"
             mods {
                 modServerRun {
                     source sourceSets.main
@@ -83,7 +86,8 @@ minecraft {
             taskName 'Data'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-			args "-mixin.config=${mod_id}.mixins.json"
+            args "-mixin.config=${mod_id}.mixins.json"
+            args "-mixin.config=${mod_id}-integrations.forge.mixins.json"
             mods {
                 modDataRun {
                     source sourceSets.main
@@ -100,6 +104,16 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":common")
 	annotationProcessor 'org.spongepowered:mixin:0.8.4-SNAPSHOT:processor'
+
+    implementation fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
+    implementation fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
+    implementation fg.deobf("curse.maven:fastsuite-475117:${file_fastsuite}")
+    implementation fg.deobf("curse.maven:placebo-283644:${file_placebo}")
+
+    implementation fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_range}")
+    jarJar fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_range}") {
+        jarJar.pin(it, "${spectrelib_version}")
+    }
 }
 
 tasks.withType(JavaCompile) {

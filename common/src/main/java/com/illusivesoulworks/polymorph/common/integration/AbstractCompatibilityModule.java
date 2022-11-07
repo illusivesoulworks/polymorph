@@ -24,23 +24,28 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public abstract class AbstractCompatibilityModule {
 
-  public void setup() {
+  protected void setup() {
     // NO-OP
   }
 
-  public void clientSetup() {
+  protected void clientSetup() {
     // NO-OP
   }
 
-  public boolean selectRecipe(AbstractContainerMenu container, Recipe<?> recipe) {
+  protected boolean selectRecipe(AbstractContainerMenu containerMenu, Recipe<?> recipe) {
     return false;
   }
 
-  public boolean selectRecipe(BlockEntity tileEntity, Recipe<?> recipe) {
+  protected boolean selectRecipe(BlockEntity blockEntity, Recipe<?> recipe) {
     return false;
   }
 
-  public boolean openContainer(AbstractContainerMenu container, ServerPlayer serverPlayerEntity) {
+  protected boolean openContainer(AbstractContainerMenu containerMenu,
+                                  ServerPlayer serverPlayerEntity) {
     return false;
+  }
+
+  protected void disable() {
+    // NO-OP
   }
 }

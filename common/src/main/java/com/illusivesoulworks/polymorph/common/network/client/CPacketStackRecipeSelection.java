@@ -18,7 +18,6 @@
 package com.illusivesoulworks.polymorph.common.network.client;
 
 import com.illusivesoulworks.polymorph.api.PolymorphApi;
-import com.illusivesoulworks.polymorph.common.integration.AbstractCompatibilityModule;
 import com.illusivesoulworks.polymorph.common.integration.PolymorphIntegrations;
 import java.util.Optional;
 import net.minecraft.network.FriendlyByteBuf;
@@ -47,13 +46,7 @@ public record CPacketStackRecipeSelection(ResourceLocation recipe) {
       PolymorphApi.common().getRecipeDataFromItemStack(container)
           .ifPresent(recipeData -> {
             recipeData.selectRecipe(recipe);
-
-            for (AbstractCompatibilityModule integration : PolymorphIntegrations.get()) {
-
-              if (integration.selectRecipe(container, recipe)) {
-                return;
-              }
-            }
+            PolymorphIntegrations.selectRecipe(container, recipe);
           });
     });
   }

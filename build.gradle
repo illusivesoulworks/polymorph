@@ -53,6 +53,16 @@ subprojects {
             name = 'ParchmentMC'
             url = 'https://maven.parchmentmc.org/'
         }
+
+        maven {
+            name = 'CurseMaven'
+            url = 'https://www.cursemaven.com'
+        }
+
+        maven {
+            name = 'Illusive Soulworks'
+            url = 'https://maven.theillusivec4.top/'
+        }
     }
 
     tasks.withType(JavaCompile).configureEach {

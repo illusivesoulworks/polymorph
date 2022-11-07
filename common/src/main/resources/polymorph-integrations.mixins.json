@@ -1,0 +1,9 @@
+{
+  "required": false,
+  "package": "com.illusivesoulworks.polymorph.mixin.integration",
+  "compatibilityLevel": "JAVA_16",
+  "refmap": "polymorph.refmap.json",
+  "mixins": [],
+  "plugin": "com.illusivesoulworks.polymorph.mixin.IntegratedMixinPlugin",
+  "minVersion": "0.8"
+}

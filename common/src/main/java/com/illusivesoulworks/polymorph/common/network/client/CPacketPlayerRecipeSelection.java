@@ -41,13 +41,7 @@ public record CPacketPlayerRecipeSelection(ResourceLocation recipe) {
     player.level.getRecipeManager().byKey(packet.recipe).ifPresent(recipe -> {
       PolymorphApi.common().getRecipeData(player)
           .ifPresent(recipeData -> recipeData.selectRecipe(recipe));
-
-      for (AbstractCompatibilityModule integration : PolymorphIntegrations.get()) {
-
-        if (integration.selectRecipe(container, recipe)) {
-          return;
-        }
-      }
+      PolymorphIntegrations.selectRecipe(container, recipe);
       container.slotsChanged(player.getInventory());
 
       if (container instanceof ItemCombinerMenu) {

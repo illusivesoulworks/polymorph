@@ -47,14 +47,7 @@ public record CPacketPersistentRecipeSelection(ResourceLocation recipe) {
       PolymorphApi.common().getRecipeDataFromBlockEntity(container)
           .ifPresent(recipeData -> {
             recipeData.selectRecipe(recipe);
-
-            for (AbstractCompatibilityModule integration : PolymorphIntegrations.get()) {
-
-              if (integration.selectRecipe(recipeData.getOwner(), recipe) ||
-                  integration.selectRecipe(container, recipe)) {
-                return;
-              }
-            }
+            PolymorphIntegrations.selectRecipe(recipeData.getOwner(), container, recipe);
           });
     });
   }

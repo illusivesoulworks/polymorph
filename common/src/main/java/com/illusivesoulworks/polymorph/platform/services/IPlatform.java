@@ -32,7 +32,11 @@ public interface IPlatform {
 
   Path getGameDir();
 
+  Path getConfigDir();
+
   boolean isModLoaded(String id);
+
+  boolean isModFileLoaded(String id);
 
   boolean isShaped(Recipe<?> recipe);
 

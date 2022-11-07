@@ -17,50 +17,57 @@
 
 package com.illusivesoulworks.polymorph.common.integration;
 
+import com.electronwill.nightconfig.core.ConfigSpec;
+import com.electronwill.nightconfig.core.file.FileConfig;
 import com.google.common.collect.ImmutableSet;
 import com.illusivesoulworks.polymorph.platform.Services;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class PolymorphIntegrations {
 
-  private static final Set<String> CONFIG_ACTIVATED = new HashSet<>();
-  private static final Map<String, Supplier<Supplier<AbstractCompatibilityModule>>> INTEGRATIONS =
-      new HashMap<>();
-  private static final Set<AbstractCompatibilityModule> ACTIVE_INTEGRATIONS = new HashSet<>();
+  private static final Set<String> ACTIVATED = ConcurrentHashMap.newKeySet();
+  private static final Map<String, AbstractCompatibilityModule> ACTIVE_INTEGRATIONS =
+      new ConcurrentHashMap<>();
 
-//  public static void loadConfig() {
-//    ConfigSpec spec = new ConfigSpec();
-//
-//    for (Mod mod : Mod.values()) {
-//      spec.define(mod.getId(), true);
-//    }
-//    FileConfig config =
-//        FileConfig.of(FMLPaths.CONFIGDIR.get().resolve("polymorph-integrations.toml"));
-//    config.load();
-//
-//    if (!spec.isCorrect(config)) {
-//      spec.correct(config);
-//    }
-//
-//    for (Mod mod : Mod.values()) {
-//
-//      if (config.get(mod.getId())) {
-//        CONFIG_ACTIVATED.add(mod.getId());
-//      }
-//    }
-//    config.save();
-//    config.close();
-//  }
+  private static final Map<String, Supplier<Supplier<AbstractCompatibilityModule>>> INTEGRATIONS =
+      Services.INTEGRATION_PLATFORM.createCompatibilityModules();
+
+  public static void loadConfig() {
+    ConfigSpec spec = new ConfigSpec();
+
+    for (Mod mod : Mod.values()) {
+      spec.define(mod.getId(), mod.getDefaultValue());
+    }
+    FileConfig config =
+        FileConfig.of(Services.PLATFORM.getGameDir().resolve("polymorph-integrations.toml"));
+    config.load();
+
+    if (!spec.isCorrect(config)) {
+      spec.correct(config);
+    }
+
+    for (Mod mod : Mod.values()) {
+
+      if (config.get(mod.getId())) {
+        ACTIVATED.add(mod.getId());
+      }
+    }
+    config.save();
+    config.close();
+  }
 
   public static void init() {
     INTEGRATIONS.forEach((modid, supplier) -> {
 
-      if (CONFIG_ACTIVATED.contains(modid) && Services.PLATFORM.isModLoaded(modid)) {
-        ACTIVE_INTEGRATIONS.add(supplier.get().get());
+      if (Services.PLATFORM.isModLoaded(modid)) {
+        ACTIVE_INTEGRATIONS.put(modid, supplier.get().get());
       }
     });
   }
@@ -79,41 +86,80 @@ public class PolymorphIntegrations {
     }
   }
 
-  public static Set<AbstractCompatibilityModule> get() {
-    return ImmutableSet.copyOf(ACTIVE_INTEGRATIONS);
+  public static void selectRecipe(BlockEntity blockEntity, AbstractContainerMenu containerMenu,
+                                  Recipe<?> recipe) {
+
+    for (AbstractCompatibilityModule integration : PolymorphIntegrations.get()) {
+
+      if (integration.selectRecipe(blockEntity, recipe) ||
+          integration.selectRecipe(containerMenu, recipe)) {
+        return;
+      }
+    }
   }
 
-//  public static Set<String> getConfigActivated() {
-//    return ImmutableSet.copyOf(CONFIG_ACTIVATED);
-//  }
+  public static void selectRecipe(AbstractContainerMenu containerMenu,
+                                  Recipe<?> recipe) {
 
-//  public enum Mod {
-//    JEI("jei"),
-//    CRAFTINGCRAFT("craftingcraft"),
-//    TOMS_STORAGE("toms_storage"),
-//    SIMPLE_STORAGE_NETWORK("storagenetwork"),
-//    CYCLIC("cyclic"),
-//    SOPHISTICATED_BACKPACKS("sophisticatedbackpacks"),
-//    SOPHISTICATED_CORE("sophisticatedcore"),
-//    IRON_FURNACES("ironfurnaces"),
-//    FASTFURNACE("fastfurnace"),
-//    FASTWORKBENCH("fastbench"),
-//    PRETTY_PIPES("prettypipes"),
-//    REFINED_STORAGE("refinedstorage"),
-//    REFINED_STORAGE_ADDONS("refinedstorageaddons"),
-//    APPLIED_ENERGISTICS_2("ae2"),
-//    EXTENDED_CRAFTING("extendedcrafting"),
-//    TINKERS_CONSTRUCT("tconstruct"),
-//    OCCULTISM("occultism");
-//
-//    private final String id;
-//
-//    Mod(String pId) {
-//      this.id = pId;
-//    }
-//
-//    public String getId() {
-//      return this.id;
-//    }
-//  }
+    for (AbstractCompatibilityModule integration : PolymorphIntegrations.get()) {
+
+      if (integration.selectRecipe(containerMenu, recipe)) {
+        return;
+      }
+    }
+  }
+
+  public static void openContainer(AbstractContainerMenu containerMenu, ServerPlayer serverPlayer) {
+
+    for (AbstractCompatibilityModule integration : get()) {
+
+      if (integration.openContainer(containerMenu, serverPlayer)) {
+        return;
+      }
+    }
+  }
+
+  public static Set<AbstractCompatibilityModule> get() {
+    return ImmutableSet.copyOf(ACTIVE_INTEGRATIONS.values());
+  }
+
+  public static boolean isActive(String id) {
+    return ACTIVATED.contains(id);
+  }
+
+  public static void disable(String id) {
+    ACTIVATED.remove(id);
+    INTEGRATIONS.remove(id);
+    AbstractCompatibilityModule module = ACTIVE_INTEGRATIONS.remove(id);
+
+    if (module != null) {
+      module.disable();
+    }
+  }
+
+  public enum Mod {
+    FASTFURNACE("fastfurnace", true),
+    FASTWORKBENCH("fastbench", true),
+    FASTSUITE("fastsuite", true);
+
+    private final String id;
+    private final boolean defaultValue;
+
+    Mod(String id) {
+      this(id, false);
+    }
+
+    Mod(String id, boolean defaultValue) {
+      this.id = id;
+      this.defaultValue = defaultValue;
+    }
+
+    public boolean getDefaultValue() {
+      return this.defaultValue;
+    }
+
+    public String getId() {
+      return this.id;
+    }
+  }
 }

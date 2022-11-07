@@ -44,8 +44,18 @@ public class FabricPlatform implements IPlatform {
   }
 
   @Override
+  public Path getConfigDir() {
+    return FabricLoader.getInstance().getConfigDir();
+  }
+
+  @Override
   public boolean isModLoaded(String modId) {
     return FabricLoader.getInstance().isModLoaded(modId);
+  }
+
+  @Override
+  public boolean isModFileLoaded(String id) {
+    return isModLoaded(id);
   }
 
   @Override

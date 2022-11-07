@@ -32,6 +32,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 public class ForgePlatform implements IPlatform {
@@ -45,8 +46,18 @@ public class ForgePlatform implements IPlatform {
   }
 
   @Override
+  public Path getConfigDir() {
+    return FMLPaths.CONFIGDIR.get();
+  }
+
+  @Override
   public boolean isModLoaded(String id) {
     return ModList.get().isLoaded(id);
+  }
+
+  @Override
+  public boolean isModFileLoaded(String id) {
+    return FMLLoader.getLoadingModList().getModFileById(id) != null;
   }
 
   @Override

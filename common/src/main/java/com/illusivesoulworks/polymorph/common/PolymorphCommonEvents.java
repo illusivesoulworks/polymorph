@@ -21,7 +21,6 @@ import com.illusivesoulworks.polymorph.api.PolymorphApi;
 import com.illusivesoulworks.polymorph.api.common.base.IPolymorphCommon;
 import com.illusivesoulworks.polymorph.api.common.base.IPolymorphPacketDistributor;
 import com.illusivesoulworks.polymorph.api.common.base.IRecipePair;
-import com.illusivesoulworks.polymorph.common.integration.AbstractCompatibilityModule;
 import com.illusivesoulworks.polymorph.common.integration.PolymorphIntegrations;
 import com.illusivesoulworks.polymorph.common.util.BlockEntityTicker;
 import com.mojang.datafixers.util.Pair;
@@ -57,13 +56,7 @@ public class PolymorphCommonEvents {
                   data.getSecond());
             }
           });
-
-      for (AbstractCompatibilityModule integration : PolymorphIntegrations.get()) {
-
-        if (integration.openContainer(containerMenu, serverPlayerEntity)) {
-          return;
-        }
-      }
+      PolymorphIntegrations.openContainer(containerMenu, serverPlayerEntity);
     }
   }
 }
