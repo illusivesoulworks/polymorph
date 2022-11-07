@@ -8,5 +8,8 @@
     "fastsuite.PolymorphMixinAuxRecipeManager"
   ],
   "plugin": "com.illusivesoulworks.polymorph.mixin.IntegratedMixinPlugin",
-  "minVersion": "0.8"
+  "minVersion": "0.8",
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

@@ -37,7 +37,6 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin, IMixinErrorHan
   private static final Map<String, String> CLASS_TO_MOD = new HashMap<>();
 
   static {
-    CLASS_TO_MOD.put("shadows.fastfurnace.", PolymorphIntegrations.Mod.FASTFURNACE.getId());
     CLASS_TO_MOD.put("shadows.fastbench.", PolymorphIntegrations.Mod.FASTWORKBENCH.getId());
     CLASS_TO_MOD.put("shadows.fastsuite.", PolymorphIntegrations.Mod.FASTSUITE.getId());
   }
@@ -97,22 +96,27 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin, IMixinErrorHan
   @Override
   public ErrorAction onApplyError(String targetClassName, Throwable th, IMixinInfo mixin,
                                   ErrorAction action) {
-    String modId = "{MOD NOT FOUND - THIS SHOULD NOT HAPPEN}";
 
-    for (Map.Entry<String, String> entry : CLASS_TO_MOD.entrySet()) {
-      String id = entry.getValue();
+    if (mixin.getConfig().getMixinPackage()
+        .startsWith("com.illusivesoulworks.polymorph.mixin.integration")) {
+      String modId = "{MOD NOT FOUND - THIS SHOULD NOT HAPPEN}";
 
-      if (targetClassName.startsWith(entry.getKey())) {
-        modId = id;
-        break;
+      for (Map.Entry<String, String> entry : CLASS_TO_MOD.entrySet()) {
+        String id = entry.getValue();
+
+        if (targetClassName.startsWith(entry.getKey())) {
+          modId = id;
+          break;
+        }
       }
+      PolymorphIntegrations.disable(modId);
+      PolymorphConstants.LOG.error("Polymorph encountered an error while transforming: {}",
+          targetClassName);
+      PolymorphConstants.LOG.error("The integration module for {} will be disabled.", modId);
+      PolymorphConstants.LOG.error(
+          "Please report this bug to Polymorph only, do not report this to {}.", modId);
+      return ErrorAction.WARN;
     }
-    PolymorphIntegrations.disable(modId);
-    PolymorphConstants.LOG.error("Polymorph encountered an error while transforming: {}",
-        targetClassName);
-    PolymorphConstants.LOG.error("The integration module for {} will be disabled.", modId);
-    PolymorphConstants.LOG.error(
-        "Please report this bug to Polymorph only, do not report this to {}.", modId);
     return null;
   }
 }

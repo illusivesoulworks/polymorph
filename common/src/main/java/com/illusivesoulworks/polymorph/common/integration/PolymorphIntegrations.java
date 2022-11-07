@@ -18,9 +18,15 @@
 package com.illusivesoulworks.polymorph.common.integration;
 
 import com.electronwill.nightconfig.core.ConfigSpec;
-import com.electronwill.nightconfig.core.file.FileConfig;
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.google.common.collect.ImmutableSet;
+import com.illusivesoulworks.polymorph.PolymorphConstants;
 import com.illusivesoulworks.polymorph.platform.Services;
+import java.text.Collator;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,13 +47,22 @@ public class PolymorphIntegrations {
 
   public static void loadConfig() {
     ConfigSpec spec = new ConfigSpec();
+    List<Mod> mods = Arrays.asList(Mod.values());
 
-    for (Mod mod : Mod.values()) {
+    if (mods.isEmpty()) {
+      return;
+    }
+    Collections.sort(mods);
+
+    for (Mod mod : mods) {
       spec.define(mod.getId(), mod.getDefaultValue());
     }
-    FileConfig config =
-        FileConfig.of(Services.PLATFORM.getConfigDir().resolve("polymorph-integrations.toml"));
+    CommentedFileConfig config =
+        CommentedFileConfig.of(
+            Services.PLATFORM.getConfigDir().resolve("polymorph-integrations.toml"));
     config.load();
+    config.setComment(mods.get(0).getId(),
+        " Please be aware that enabling any third-party mod integration introduces instability and performance overheads, caution is strongly advised.\n If crashes or issues arise, disable these modules as the first step in troubleshooting and report the issue to Polymorph.");
 
     if (!spec.isCorrect(config)) {
       spec.correct(config);
