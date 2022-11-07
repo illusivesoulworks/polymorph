@@ -46,7 +46,7 @@ public class PolymorphIntegrations {
       spec.define(mod.getId(), mod.getDefaultValue());
     }
     FileConfig config =
-        FileConfig.of(Services.PLATFORM.getGameDir().resolve("polymorph-integrations.toml"));
+        FileConfig.of(Services.PLATFORM.getConfigDir().resolve("polymorph-integrations.toml"));
     config.load();
 
     if (!spec.isCorrect(config)) {
