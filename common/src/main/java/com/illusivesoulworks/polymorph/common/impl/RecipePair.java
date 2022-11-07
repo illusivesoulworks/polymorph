@@ -39,25 +39,20 @@ public record RecipePair(ResourceLocation resourceLocation,
   public int compareTo(@Nonnull IRecipePair other) {
     ItemStack output1 = this.getOutput();
     ItemStack output2 = other.getOutput();
+    int compare = output1.getDescriptionId().compareTo(output2.getDescriptionId());
 
-    if (ItemStack.matches(output1, output2)) {
-      return 0;
-    } else {
-      int compare = output1.getDescriptionId().compareTo(output2.getDescriptionId());
+    if (compare == 0) {
+      int diff = output1.getCount() - output2.getCount();
 
-      if (compare == 0) {
-        int diff = output1.getCount() - output2.getCount();
-
-        if (diff == 0) {
-          String tag1 = output1.getTag() != null ? output1.getTag().getAsString() : "";
-          String tag2 = output2.getTag() != null ? output2.getTag().getAsString() : "";
-          return tag1.compareTo(tag2);
-        } else {
-          return diff;
-        }
+      if (diff == 0) {
+        String tag1 = output1.getTag() != null ? output1.getTag().getAsString() : "";
+        String tag2 = output2.getTag() != null ? output2.getTag().getAsString() : "";
+        return tag1.compareTo(tag2);
       } else {
-        return compare;
+        return diff;
       }
+    } else {
+      return compare;
     }
   }
 }

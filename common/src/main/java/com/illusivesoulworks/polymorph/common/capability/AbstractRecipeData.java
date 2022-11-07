@@ -37,6 +37,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -125,7 +126,13 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
           this.getSelectedRecipe().map(recipe -> recipe.getId().equals(id)).orElse(false)) {
         ref.set(entry);
       }
-      newDataset.add(new RecipePair(id, entry.assemble(inventory)));
+      ItemStack output = entry.getResultItem();
+
+      // noinspection ConstantConditions
+      if (output == null || output.isEmpty() || entry instanceof CustomRecipe) {
+        output = entry.assemble(inventory);
+      }
+      newDataset.add(new RecipePair(id, output));
     }
     this.setRecipesList(newDataset);
     result = ref.get();
