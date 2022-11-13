@@ -80,6 +80,14 @@ tasks.withType(JavaCompile) {
     source(project(":common").sourceSets.main.allSource)
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDirs += '../licenses'
+        }
+    }
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {

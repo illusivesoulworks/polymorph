@@ -120,6 +120,14 @@ tasks.withType(JavaCompile) {
     source(project(":common").sourceSets.main.allSource)
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDirs += '../licenses'
+        }
+    }
+}
+
 def replaceResources = tasks.register("replaceResources", Copy) {
     it.outputs.upToDateWhen { false }
 
@@ -149,6 +157,23 @@ processResources {
 }
 
 jar.finalizedBy('reobfJar')
+
+reobf {
+    jarJar {}
+}
+
+tasks.jarJar.configure {
+    archiveClassifier.set("")
+    from(rootProject.file("LICENSE"))
+    from(rootProject.file("COPYING"))
+    from(rootProject.file("COPYING.LESSER"))
+    from(rootProject.file("README.md"))
+    from(rootProject.file("CHANGELOG.md"))
+}
+
+jarJar {
+    enable()
+}
 
 publishing {
     publications {

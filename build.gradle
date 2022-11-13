@@ -1,5 +1,4 @@
 subprojects {
-    
     apply plugin: 'java'
     
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -7,6 +6,7 @@ subprojects {
     java.withJavadocJar()
         
     jar {
+        archiveClassifier.set("slim")
         from(rootProject.file("LICENSE"))
         from(rootProject.file("COPYING"))
         from(rootProject.file("COPYING.LESSER"))
