@@ -55,16 +55,6 @@ public class PolymorphForgeNetwork {
             .networkProtocolVersion(() -> PTC_VERSION).clientAcceptedVersions(PTC_VERSION::equals)
             .serverAcceptedVersions(PTC_VERSION::equals).simpleChannel();
 
-    // Client-to-Server
-    registerC2S(CPacketPlayerRecipeSelection.class, CPacketPlayerRecipeSelection::encode,
-        CPacketPlayerRecipeSelection::decode, CPacketPlayerRecipeSelection::handle);
-    registerC2S(CPacketPersistentRecipeSelection.class, CPacketPersistentRecipeSelection::encode,
-        CPacketPersistentRecipeSelection::decode, CPacketPersistentRecipeSelection::handle);
-    registerC2S(CPacketStackRecipeSelection.class, CPacketStackRecipeSelection::encode,
-        CPacketStackRecipeSelection::decode, CPacketStackRecipeSelection::handle);
-    registerC2S(CPacketBlockEntityListener.class, CPacketBlockEntityListener::encode,
-        CPacketBlockEntityListener::decode, CPacketBlockEntityListener::handle);
-
     // Server-to-Client
     registerS2C(SPacketRecipesList.class, SPacketRecipesList::encode, SPacketRecipesList::decode,
         SPacketRecipesList::handle);
@@ -74,6 +64,16 @@ public class PolymorphForgeNetwork {
         SPacketPlayerRecipeSync::decode, SPacketPlayerRecipeSync::handle);
     registerS2C(SPacketBlockEntityRecipeSync.class, SPacketBlockEntityRecipeSync::encode,
         SPacketBlockEntityRecipeSync::decode, SPacketBlockEntityRecipeSync::handle);
+
+    // Client-to-Server
+    registerC2S(CPacketPlayerRecipeSelection.class, CPacketPlayerRecipeSelection::encode,
+        CPacketPlayerRecipeSelection::decode, CPacketPlayerRecipeSelection::handle);
+    registerC2S(CPacketPersistentRecipeSelection.class, CPacketPersistentRecipeSelection::encode,
+        CPacketPersistentRecipeSelection::decode, CPacketPersistentRecipeSelection::handle);
+    registerC2S(CPacketStackRecipeSelection.class, CPacketStackRecipeSelection::encode,
+        CPacketStackRecipeSelection::decode, CPacketStackRecipeSelection::handle);
+    registerC2S(CPacketBlockEntityListener.class, CPacketBlockEntityListener::encode,
+        CPacketBlockEntityListener::decode, CPacketBlockEntityListener::handle);
   }
 
   public static <M> void registerC2S(Class<M> clazz, BiConsumer<M, FriendlyByteBuf> encoder,

@@ -198,6 +198,7 @@ curseforge {
         releaseType = "${cf_release}"
         changelogType = 'markdown'
         changelog = file("../CHANGELOG_LATEST.md")
+        mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
         addArtifact(sourcesJar)
         "${cf_versions}".split(',').each {
             addGameVersion "${it}"
