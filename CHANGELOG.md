@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 Prior to version 0.45.0, this project used MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH.
 
+## [0.46.0+1.19.2] - 2022.11.13
+### Added
+- [Forge] Re-added FastSuite, FastWorkbench, and FastFurnace support [#188](https://github.com/illusivesoulworks/polymorph/issues/188)
+### Fixed
+- Fixed Polymorph not differentiating some outputs by NBT values [#195](https://github.com/illusivesoulworks/polymorph/issues/195)
+
 ## [0.45.0+1.19.2] - 2022.08.11
 ### Changed
 - Updated to Minecraft 1.19.2
