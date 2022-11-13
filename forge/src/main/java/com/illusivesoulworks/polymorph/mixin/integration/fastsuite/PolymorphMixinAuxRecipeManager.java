@@ -35,9 +35,8 @@ public class PolymorphMixinAuxRecipeManager {
 
   @Inject(
       at = @At("HEAD"),
-      method = "getRecipeFor(Lnet/minecraft/item/crafting/IRecipeType;Lnet/minecraft/inventory/IInventory;Lnet/minecraft/world/World;)Ljava/util/Optional;",
-      cancellable = true,
-      remap = false)
+      method = "getRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;",
+      cancellable = true)
   private <C extends Container, T extends Recipe<C>> void polymorph$getRecipe(
       RecipeType<T> recipeType, C container, Level level, CallbackInfoReturnable<Optional<T>> cb) {
 
