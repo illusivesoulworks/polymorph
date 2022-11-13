@@ -21,6 +21,7 @@ import com.illusivesoulworks.polymorph.api.common.base.IPolymorphPacketDistribut
 import com.illusivesoulworks.polymorph.api.common.capability.IBlockEntityRecipeData;
 import com.illusivesoulworks.polymorph.api.common.capability.IPlayerRecipeData;
 import com.illusivesoulworks.polymorph.api.common.capability.IStackRecipeData;
+import com.illusivesoulworks.polymorph.common.integration.PolymorphIntegrations;
 import java.nio.file.Path;
 import java.util.Optional;
 import net.minecraft.world.entity.player.Player;
@@ -29,6 +30,8 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 public interface IPlatform {
+
+  PolymorphIntegrations.Loader getLoader();
 
   Path getGameDir();
 

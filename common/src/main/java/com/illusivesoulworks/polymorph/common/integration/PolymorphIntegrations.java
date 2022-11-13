@@ -20,12 +20,9 @@ package com.illusivesoulworks.polymorph.common.integration;
 import com.electronwill.nightconfig.core.ConfigSpec;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.google.common.collect.ImmutableSet;
-import com.illusivesoulworks.polymorph.PolymorphConstants;
 import com.illusivesoulworks.polymorph.platform.Services;
-import java.text.Collator;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,7 +44,7 @@ public class PolymorphIntegrations {
 
   public static void loadConfig() {
     ConfigSpec spec = new ConfigSpec();
-    List<Mod> mods = Arrays.asList(Mod.values());
+    List<Mod> mods = Arrays.asList(Mod.values(Services.PLATFORM.getLoader()));
 
     if (mods.isEmpty()) {
       return;
@@ -62,7 +59,7 @@ public class PolymorphIntegrations {
             Services.PLATFORM.getConfigDir().resolve("polymorph-integrations.toml"));
     config.load();
     config.setComment(mods.get(0).getId(),
-        " Please be aware that enabling any third-party mod integration introduces instability and performance overheads, caution is strongly advised.\n If crashes or issues arise, disable these modules as the first step in troubleshooting and report the issue to Polymorph.");
+        " Please be aware that enabling any third-party mod integration introduces instability and performance overheads, caution is strongly advised.\n If crashes or issues arise, disable the related modules as the first step in troubleshooting and report the issue to Polymorph.");
 
     if (!spec.isCorrect(config)) {
       spec.correct(config);
@@ -153,20 +150,24 @@ public class PolymorphIntegrations {
   }
 
   public enum Mod {
-    FASTFURNACE("fastfurnace", true),
-    FASTWORKBENCH("fastbench", true),
-    FASTSUITE("fastsuite", true);
+    FASTFURNACE("fastfurnace", true, Loader.FORGE),
+    FASTWORKBENCH("fastbench", true, Loader.FORGE),
+    FASTSUITE("fastsuite", true, Loader.FORGE);
 
     private final String id;
     private final boolean defaultValue;
+    private final Loader[] loaders;
 
-    Mod(String id) {
-      this(id, false);
+    Mod(String id, Loader defaultLoader, Loader... extraLoaders) {
+      this(id, false, defaultLoader, extraLoaders);
     }
 
-    Mod(String id, boolean defaultValue) {
+    Mod(String id, boolean defaultValue, Loader defaultLoader, Loader... extraLoaders) {
       this.id = id;
       this.defaultValue = defaultValue;
+      this.loaders = new Loader[extraLoaders.length + 1];
+      this.loaders[0] = defaultLoader;
+      System.arraycopy(extraLoaders, 0, this.loaders, 1, this.loaders.length - 1);
     }
 
     public boolean getDefaultValue() {
@@ -176,5 +177,16 @@ public class PolymorphIntegrations {
     public String getId() {
       return this.id;
     }
+
+    public static Mod[] values(Loader loader) {
+      return Arrays.stream(Mod.values())
+          .filter(mod -> Arrays.stream(mod.loaders).anyMatch(test -> test == loader))
+          .toArray(Mod[]::new);
+    }
+  }
+
+  public enum Loader {
+    FABRIC,
+    FORGE
   }
 }
