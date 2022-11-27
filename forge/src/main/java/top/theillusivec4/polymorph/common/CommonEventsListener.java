@@ -43,6 +43,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -106,6 +107,14 @@ public class CommonEventsListener {
           return;
         }
       }
+    }
+  }
+
+  @SubscribeEvent
+  public void playerDisconnected(final PlayerEvent.PlayerLoggedOutEvent evt) {
+
+    if (evt.getPlayer() instanceof ServerPlayer serverPlayer) {
+      BlockEntityTicker.remove(serverPlayer);
     }
   }
 

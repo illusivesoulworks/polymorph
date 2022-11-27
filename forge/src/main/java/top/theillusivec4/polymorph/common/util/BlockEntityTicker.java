@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import top.theillusivec4.polymorph.api.common.capability.IBlockEntityRecipeData;
@@ -11,7 +12,7 @@ import top.theillusivec4.polymorph.api.common.capability.IBlockEntityRecipeData;
 public class BlockEntityTicker {
 
   private static final Map<BlockEntity, IBlockEntityRecipeData> TICKABLE_BLOCKS =
-      new HashMap<>();
+      new ConcurrentHashMap<>();
 
   public static void tick() {
     List<BlockEntity> toRemove = new ArrayList<>();
@@ -56,5 +57,9 @@ public class BlockEntityTicker {
     for (BlockEntity blockEntity : toRemove) {
       TICKABLE_BLOCKS.remove(blockEntity);
     }
+  }
+
+  public static void clear() {
+    TICKABLE_BLOCKS.clear();
   }
 }

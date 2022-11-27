@@ -24,13 +24,13 @@ package top.theillusivec4.polymorph.client.recipe;
 import com.mojang.datafixers.util.Pair;
 import java.util.Optional;
 import java.util.SortedSet;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.resources.ResourceLocation;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.client.base.IRecipesWidget;
 import top.theillusivec4.polymorph.api.common.base.IRecipePair;
-import top.theillusivec4.polymorph.api.common.capability.IBlockEntityRecipeData;
 import top.theillusivec4.polymorph.client.recipe.widget.PersistentRecipesWidget;
 import top.theillusivec4.polymorph.client.recipe.widget.PlayerRecipesWidget;
 
@@ -64,7 +64,8 @@ public class RecipesWidget {
 
     if (widget != null) {
 
-      if (widget instanceof PersistentRecipesWidget) {
+      if (widget instanceof PersistentRecipesWidget &&
+          Minecraft.getInstance().getConnection() != null) {
         PolymorphApi.common().getPacketDistributor().sendBlockEntityListener(true);
       }
       widget.initChildWidgets();
@@ -81,7 +82,8 @@ public class RecipesWidget {
 
   public static void clear() {
 
-    if (widget instanceof PersistentRecipesWidget) {
+    if (widget instanceof PersistentRecipesWidget &&
+        Minecraft.getInstance().getConnection() != null) {
       PolymorphApi.common().getPacketDistributor().sendBlockEntityListener(false);
     }
     widget = null;

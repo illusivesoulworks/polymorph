@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.18.2-0.46] - 2022.11.27
+### Fixed
+- Fixed network crash [#167](https://github.com/illusivesoulworks/polymorph/issues/167)
+
 ## [1.18.2-0.45] - 2022.09.18
 ### Fixed
 - Fixed crash with Cyclic 1.18.2-1.7.9+ [#184](https://github.com/illusivesoulworks/polymorph/issues/184)

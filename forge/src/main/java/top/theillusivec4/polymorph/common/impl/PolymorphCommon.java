@@ -36,6 +36,7 @@ import top.theillusivec4.polymorph.api.common.capability.IBlockEntityRecipeData;
 import top.theillusivec4.polymorph.api.common.capability.IPlayerRecipeData;
 import top.theillusivec4.polymorph.api.common.capability.IStackRecipeData;
 import top.theillusivec4.polymorph.common.capability.PolymorphCapabilities;
+import top.theillusivec4.polymorph.common.util.BlockEntityTicker;
 
 public class PolymorphCommon implements IPolymorphCommon {
 
@@ -61,6 +62,7 @@ public class PolymorphCommon implements IPolymorphCommon {
   @Override
   public void setServer(MinecraftServer pServer) {
     this.server = pServer;
+    BlockEntityTicker.clear();
   }
 
   @Override
