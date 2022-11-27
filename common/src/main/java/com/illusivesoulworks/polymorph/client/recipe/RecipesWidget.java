@@ -25,6 +25,7 @@ import com.illusivesoulworks.polymorph.client.recipe.widget.PlayerRecipesWidget;
 import com.mojang.datafixers.util.Pair;
 import java.util.Optional;
 import java.util.SortedSet;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.resources.ResourceLocation;
@@ -59,7 +60,8 @@ public class RecipesWidget {
 
     if (widget != null) {
 
-      if (widget instanceof PersistentRecipesWidget) {
+      if (widget instanceof PersistentRecipesWidget &&
+          Minecraft.getInstance().getConnection() != null) {
         PolymorphApi.common().getPacketDistributor().sendBlockEntityListenerC2S(true);
       }
       widget.initChildWidgets();
@@ -76,7 +78,8 @@ public class RecipesWidget {
 
   public static void clear() {
 
-    if (widget instanceof PersistentRecipesWidget) {
+    if (widget instanceof PersistentRecipesWidget &&
+        Minecraft.getInstance().getConnection() != null) {
       PolymorphApi.common().getPacketDistributor().sendBlockEntityListenerC2S(false);
     }
     widget = null;

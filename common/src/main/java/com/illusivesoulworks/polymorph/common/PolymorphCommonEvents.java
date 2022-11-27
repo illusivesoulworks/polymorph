@@ -40,6 +40,10 @@ public class PolymorphCommonEvents {
     }
   }
 
+  public static void playerDisconnected(ServerPlayer serverPlayer) {
+    BlockEntityTicker.remove(serverPlayer);
+  }
+
   public static void openContainer(Player player, AbstractContainerMenu containerMenu) {
 
     if (!player.level.isClientSide() && player instanceof ServerPlayer serverPlayerEntity) {

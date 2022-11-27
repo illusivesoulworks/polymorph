@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -41,6 +42,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -63,6 +65,14 @@ public class CommonEventsListener {
   @SubscribeEvent
   public void serverAboutToStart(final ServerAboutToStartEvent evt) {
     PolymorphApi.common().setServer(evt.getServer());
+  }
+
+  @SubscribeEvent
+  public void playerLoggedOut(final PlayerEvent.PlayerLoggedOutEvent evt) {
+
+    if (evt.getEntity() instanceof ServerPlayer serverPlayer) {
+      PolymorphCommonEvents.playerDisconnected(serverPlayer);
+    }
   }
 
   @SubscribeEvent
