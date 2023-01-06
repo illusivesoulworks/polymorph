@@ -77,10 +77,15 @@ public abstract class MixinSmithingMenu extends ItemCombinerMenu {
           target = "java/util/List.get(I)Ljava/lang/Object;",
           shift = At.Shift.BY,
           by = 3),
-      method = "createResult")
+      method = "createResult",
+      cancellable = true)
   private void polymorph$updateRepairOutput(CallbackInfo ci) {
     this.selectedRecipe =
         RecipeSelection.getPlayerRecipe(RecipeType.SMITHING, this.inputSlots,
             this.player.level, this.player, this.recipes).orElse(null);
+
+    if (this.selectedRecipe == null) {
+      ci.cancel();
+    }
   }
 }

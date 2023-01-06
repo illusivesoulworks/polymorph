@@ -22,6 +22,7 @@
 package top.theillusivec4.polymorph.common.capability;
 
 import com.mojang.datafixers.util.Pair;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -122,19 +123,32 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
       this.sendRecipesListToListeners(true);
       return Optional.empty();
     }
+    List<T> validRecipes = new ArrayList<>();
 
     for (T entry : recipes) {
       ResourceLocation id = entry.getId();
+      ItemStack crafted = entry.assemble(pInventory);
+
+      if (crafted.isEmpty()) {
+        continue;
+      }
 
       if (ref.get() == null &&
           this.getSelectedRecipe().map(recipe -> recipe.getId().equals(id)).orElse(false)) {
         ref.set(entry);
       }
-      newDataset.add(new RecipePair(id, entry.assemble(pInventory)));
+      newDataset.add(new RecipePair(id, crafted));
+      validRecipes.add(entry);
+    }
+
+    if (validRecipes.isEmpty()) {
+      this.setFailing(true);
+      this.sendRecipesListToListeners(true);
+      return Optional.empty();
     }
     this.setRecipesList(newDataset);
     result = ref.get();
-    result = result != null ? result : recipes.get(0);
+    result = result != null ? result : validRecipes.get(0);
     this.lastRecipe = result;
     this.setSelectedRecipe(result);
     this.setFailing(false);
