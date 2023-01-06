@@ -35,6 +35,7 @@ import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import top.theillusivec4.polymorph.common.PolymorphMod;
 import top.theillusivec4.polymorph.common.crafting.RecipeSelection;
 
 @SuppressWarnings("unused")
@@ -50,6 +51,6 @@ public class MixinCraftingMenu {
       RecipeManager recipeManager, RecipeType<T> type, C inventory, Level world,
       AbstractContainerMenu p_150547_, Level p_150548_, Player player,
       CraftingContainer p_150550_, ResultContainer p_150551_) {
-    return RecipeSelection.getPlayerRecipe(type, inventory, world, player);
+    return RecipeSelection.getPlayerRecipe(p_150547_, type, inventory, world, player);
   }
 }

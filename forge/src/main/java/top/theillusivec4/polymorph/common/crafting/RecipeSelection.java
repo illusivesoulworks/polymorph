@@ -27,6 +27,7 @@ import java.util.Optional;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -60,6 +61,13 @@ public class RecipeSelection {
       return pWorld.getRecipeManager().getRecipesFor(pType, pInventory, pWorld).stream()
           .findFirst();
     }
+  }
+
+  public static <T extends Recipe<C>, C extends Container> Optional<T> getPlayerRecipe(
+      AbstractContainerMenu containerMenu, RecipeType<T> pType, C pInventory, Level pWorld, Player pPlayer) {
+    LazyOptional<IPlayerRecipeData> maybeData = PolymorphApi.common().getRecipeData(pPlayer);
+    maybeData.ifPresent(recipeData -> recipeData.setContainerMenu(containerMenu));
+    return getRecipe(pType, pInventory, pWorld, maybeData, new ArrayList<>());
   }
 
   public static <T extends Recipe<C>, C extends Container> Optional<T> getPlayerRecipe(

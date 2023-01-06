@@ -34,6 +34,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -55,7 +56,11 @@ public class PlayerRecipeData extends AbstractRecipeData<Player> implements
                                                                           Level pWorld,
                                                                           List<T> pRecipes) {
     Optional<T> maybeRecipe = super.getRecipe(pType, pInventory, pWorld, pRecipes);
-    this.syncPlayerRecipeData();
+
+    if (this.getContainerMenu() == this.getOwner().containerMenu) {
+      this.syncPlayerRecipeData();
+    }
+    this.setContainerMenu(null);
     return maybeRecipe;
   }
 
@@ -76,16 +81,20 @@ public class PlayerRecipeData extends AbstractRecipeData<Player> implements
 
   @Override
   public void sendRecipesListToListeners(boolean pEmpty) {
-    Pair<SortedSet<IRecipePair>, ResourceLocation> packetData =
-        pEmpty ? new Pair<>(new TreeSet<>(), null) : this.getPacketData();
-    Player player = this.getOwner();
 
-    if (player.level.isClientSide()) {
-      RecipesWidget.get().ifPresent(
-          widget -> widget.setRecipesList(packetData.getFirst(), packetData.getSecond()));
-    } else if (player instanceof ServerPlayer) {
-      PolymorphApi.common().getPacketDistributor()
-          .sendRecipesListS2C((ServerPlayer) player, packetData.getFirst(), packetData.getSecond());
+    if (this.getContainerMenu() == this.getOwner().containerMenu) {
+      Pair<SortedSet<IRecipePair>, ResourceLocation> packetData =
+          pEmpty ? new Pair<>(new TreeSet<>(), null) : this.getPacketData();
+      Player player = this.getOwner();
+
+      if (player.level.isClientSide()) {
+        RecipesWidget.get().ifPresent(
+            widget -> widget.setRecipesList(packetData.getFirst(), packetData.getSecond()));
+      } else if (player instanceof ServerPlayer) {
+        PolymorphApi.common().getPacketDistributor()
+            .sendRecipesListS2C((ServerPlayer) player, packetData.getFirst(),
+                packetData.getSecond());
+      }
     }
   }
 
@@ -98,5 +107,17 @@ public class PlayerRecipeData extends AbstractRecipeData<Player> implements
     } else {
       return new HashSet<>();
     }
+  }
+
+  private AbstractContainerMenu containerMenu;
+
+  @Override
+  public void setContainerMenu(AbstractContainerMenu containerMenu) {
+    this.containerMenu = containerMenu;
+  }
+
+  @Override
+  public AbstractContainerMenu getContainerMenu() {
+    return this.containerMenu;
   }
 }

@@ -22,6 +22,11 @@
 package top.theillusivec4.polymorph.api.common.capability;
 
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 public interface IPlayerRecipeData extends IRecipeData<Player> {
+
+  void setContainerMenu(AbstractContainerMenu containerMenu);
+
+  AbstractContainerMenu getContainerMenu();
 }
