@@ -1,0 +1,4 @@
+{
+  "commands.polymorph.conflicts.starting": "正在搜尋配方衝突……",
+  "commands.polymorph.conflicts.success": "找到 %d 個潛在衝突。詳細資訊請查看 logs/conflicts.log。"
+}
