@@ -25,7 +25,7 @@ dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
     compileOnly group: 'org.objectweb.asm', name: 'com.springsource.org.objectweb.asm.tree', version: '3.2.0'
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-    implementation group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-common', version: '[0.3.0,)'
+    implementation group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-common', version: "${spectrelib_version}"
     implementation group: 'com.electronwill.night-config', name: 'core', version: '3.6.5'
 }
 

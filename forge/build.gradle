@@ -37,7 +37,7 @@ mixin {
 }
 
 minecraft {
-    mappings channel: 'parchment', version: "${forge_parchment_version}"
+    mappings channel: 'parchment', version: "${parchment_mc_version}-${parchment_version}-${minecraft_version}"
     
     if (project.hasProperty('forge_ats_enabled') && project.findProperty('forge_ats_enabled').toBoolean()) {
         // This location is hardcoded in Forge and can not be changed.
