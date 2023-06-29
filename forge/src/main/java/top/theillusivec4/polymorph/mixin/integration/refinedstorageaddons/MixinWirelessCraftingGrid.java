@@ -49,7 +49,7 @@ public class MixinWirelessCraftingGrid {
       at = @At(
           value = "INVOKE",
           target = "net/minecraft/world/item/crafting/RecipeManager.getRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;"),
-      method = "slotsChanged")
+      method = "onCraftingMatrixChanged")
   private <C extends Container, T extends Recipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, RecipeType<T> type, C inventory, Level world) {
     return RefinedStorageModule.getWirelessRecipe(recipeManager, type, inventory, world,

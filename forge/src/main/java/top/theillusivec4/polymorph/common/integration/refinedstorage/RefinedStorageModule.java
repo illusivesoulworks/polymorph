@@ -31,7 +31,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
@@ -157,7 +156,8 @@ public class RefinedStorageModule extends AbstractCompatibilityModule {
       ICraftingGridListener listener) {
 
     if (listener instanceof GridContainerMenu container) {
-      return RecipeSelection.getPlayerRecipe(type, inventory, world, container.getPlayer());
+      return RecipeSelection.getPlayerRecipe(container, type, inventory, world,
+          container.getPlayer());
     }
     return world.getRecipeManager().getRecipeFor(type, inventory, world);
   }
