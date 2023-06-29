@@ -40,6 +40,12 @@ dependencies {
     include "dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cca_version}"
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("net.fabricmc:fabric-loader:${fabric_loader_version}")
+    }
+}
+
 loom {
     runs {
         client {

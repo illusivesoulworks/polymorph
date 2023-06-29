@@ -39,6 +39,15 @@ public record RecipePair(ResourceLocation resourceLocation,
   public int compareTo(@Nonnull IRecipePair other) {
     ItemStack output1 = this.getOutput();
     ItemStack output2 = other.getOutput();
+
+    // Sort vanilla recipes after modded recipes if they appear in the same list
+    if (this.getResourceLocation().getNamespace().equals("minecraft") &&
+        !other.getResourceLocation().getNamespace().equals("minecraft")) {
+      return 1;
+    } else if (!this.getResourceLocation().getNamespace().equals("minecraft") &&
+        other.getResourceLocation().getNamespace().equals("minecraft")) {
+      return -1;
+    }
     int compare = output1.getDescriptionId().compareTo(output2.getDescriptionId());
 
     if (compare == 0) {
