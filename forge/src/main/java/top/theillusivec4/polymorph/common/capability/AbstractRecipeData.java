@@ -30,13 +30,16 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -56,9 +59,12 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
   private ResourceLocation loadedRecipe;
   private boolean isFailing;
 
+  private NonNullList<Item> input;
+
   public AbstractRecipeData(E pOwner) {
     this.recipesList = new TreeSet<>();
     this.owner = pOwner;
+    this.input = NonNullList.create();
   }
 
   @SuppressWarnings("unchecked")
@@ -67,11 +73,12 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
                                                                           C pInventory,
                                                                           Level pWorld,
                                                                           List<T> pRecipes) {
+    boolean isEmpty = this.isEmpty(pInventory);
     this.getLoadedRecipe().flatMap(id -> pWorld.getRecipeManager().byKey(id))
         .ifPresent(selected -> {
           try {
             if (selected.getType() == pType &&
-                (((T) selected).matches(pInventory, pWorld) || isEmpty(pInventory))) {
+                (((T) selected).matches(pInventory, pWorld) || isEmpty)) {
               this.setSelectedRecipe(selected);
             }
           } catch (ClassCastException e) {
@@ -81,7 +88,7 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
           this.loadedRecipe = null;
         });
 
-    if (this.isEmpty(pInventory)) {
+    if (isEmpty) {
       this.setFailing(false);
       this.sendRecipesListToListeners(true);
       return Optional.empty();
@@ -108,10 +115,34 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
     });
     T result = ref.get();
 
-    if (result != null) {
-      this.setFailing(false);
-      this.sendRecipesListToListeners(false);
-      return Optional.of(result);
+    if (result != null && !(this instanceof AbstractBlockEntityRecipeData)) {
+      boolean inputChanged = false;
+      int size = pInventory.getContainerSize();
+      NonNullList<Item> currentInput = NonNullList.withSize(size, Items.AIR);
+
+      if (size != this.input.size()) {
+        inputChanged = true;
+      }
+
+      for (int i = 0; i < size; i++) {
+        ItemStack stack = pInventory.getItem(i);
+        Item item = stack.getItem();
+
+        if (!inputChanged && i < this.input.size() && item != this.input.get(i)) {
+          inputChanged = true;
+        }
+
+        if (!stack.isEmpty()) {
+          currentInput.set(i, item);
+        }
+      }
+      this.input = currentInput;
+
+      if (!inputChanged) {
+        this.setFailing(false);
+        this.sendRecipesListToListeners(false);
+        return Optional.of(result);
+      }
     }
     SortedSet<IRecipePair> newDataset = new TreeSet<>();
     List<T> recipes =
@@ -142,6 +173,25 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
     }
 
     if (validRecipes.isEmpty()) {
+      this.setFailing(true);
+      this.sendRecipesListToListeners(true);
+      return Optional.empty();
+    }
+
+
+    if (result == null) {
+      ResourceLocation rl = newDataset.first().getResourceLocation();
+
+      for (T recipe : recipes) {
+
+        if (recipe.getId().equals(rl)) {
+          result = recipe;
+          break;
+        }
+      }
+    }
+
+    if (result == null) {
       this.setFailing(true);
       this.sendRecipesListToListeners(true);
       return Optional.empty();

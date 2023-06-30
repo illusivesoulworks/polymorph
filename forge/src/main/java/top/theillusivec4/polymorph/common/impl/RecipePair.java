@@ -51,6 +51,15 @@ public class RecipePair implements IRecipePair {
     ItemStack output1 = this.getOutput();
     ItemStack output2 = pOther.getOutput();
 
+    // Sort vanilla recipes after modded recipes if they appear in the same list
+    if (this.getResourceLocation().getNamespace().equals("minecraft") &&
+        !pOther.getResourceLocation().getNamespace().equals("minecraft")) {
+      return 1;
+    } else if (!this.getResourceLocation().getNamespace().equals("minecraft") &&
+        pOther.getResourceLocation().getNamespace().equals("minecraft")) {
+      return -1;
+    }
+
     if (ItemStack.matches(output1, output2)) {
       return 0;
     } else {

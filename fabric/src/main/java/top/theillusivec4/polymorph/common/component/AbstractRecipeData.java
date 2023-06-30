@@ -9,7 +9,9 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -18,6 +20,7 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import top.theillusivec4.polymorph.api.PolymorphApi;
 import top.theillusivec4.polymorph.api.common.base.RecipePair;
@@ -36,9 +39,12 @@ public abstract class AbstractRecipeData<E> implements RecipeData<E> {
   private Identifier loadedRecipe;
   private boolean isFailing;
 
+  private DefaultedList<Item> input;
+
   public AbstractRecipeData(E pOwner) {
     this.recipesList = new TreeSet<>();
     this.owner = pOwner;
+    this.input = DefaultedList.of();
   }
 
   @SuppressWarnings("unchecked")
@@ -47,11 +53,12 @@ public abstract class AbstractRecipeData<E> implements RecipeData<E> {
                                                                           C pInventory,
                                                                           World pWorld,
                                                                           List<T> pRecipes) {
+    boolean isEmpty = this.isEmpty(pInventory);
     this.getLoadedRecipe().flatMap(id -> pWorld.getRecipeManager().get(id))
         .ifPresent(selected -> {
           try {
             if (selected.getType() == pType &&
-                (((T) selected).matches(pInventory, pWorld) || isEmpty(pInventory))) {
+                (((T) selected).matches(pInventory, pWorld) || isEmpty)) {
               this.setSelectedRecipe(selected);
             }
           } catch (ClassCastException e) {
@@ -61,7 +68,7 @@ public abstract class AbstractRecipeData<E> implements RecipeData<E> {
           this.loadedRecipe = null;
         });
 
-    if (this.isEmpty(pInventory)) {
+    if (isEmpty) {
       this.setFailing(false);
       this.sendRecipesListToListeners(true);
       return Optional.empty();
@@ -88,10 +95,34 @@ public abstract class AbstractRecipeData<E> implements RecipeData<E> {
     });
     T result = ref.get();
 
-    if (result != null) {
-      this.setFailing(false);
-      this.sendRecipesListToListeners(false);
-      return Optional.of(result);
+    if (result != null && !(this instanceof AbstractBlockEntityRecipeData)) {
+      boolean inputChanged = false;
+      int size = pInventory.size();
+      DefaultedList<Item> currentInput = DefaultedList.ofSize(size, Items.AIR);
+
+      if (size != this.input.size()) {
+        inputChanged = true;
+      }
+
+      for (int i = 0; i < size; i++) {
+        ItemStack stack = pInventory.getStack(i);
+        Item item = stack.getItem();
+
+        if (!inputChanged && i < this.input.size() && item != this.input.get(i)) {
+          inputChanged = true;
+        }
+
+        if (!stack.isEmpty()) {
+          currentInput.set(i, item);
+        }
+      }
+      this.input = currentInput;
+
+      if (!inputChanged) {
+        this.setFailing(false);
+        this.sendRecipesListToListeners(false);
+        return Optional.of(result);
+      }
     }
     SortedSet<RecipePair> newDataset = new TreeSet<>();
     List<T> recipes =
@@ -123,6 +154,24 @@ public abstract class AbstractRecipeData<E> implements RecipeData<E> {
     }
 
     if (validRecipes.isEmpty()) {
+      this.setFailing(true);
+      this.sendRecipesListToListeners(true);
+      return Optional.empty();
+    }
+
+    if (result == null) {
+      Identifier rl = newDataset.first().getIdentifier();
+
+      for (T recipe : recipes) {
+
+        if (recipe.getId().equals(rl)) {
+          result = recipe;
+          break;
+        }
+      }
+    }
+
+    if (result == null) {
       this.setFailing(true);
       this.sendRecipesListToListeners(true);
       return Optional.empty();
