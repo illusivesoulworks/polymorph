@@ -50,18 +50,19 @@ public class OutputWidget extends AbstractWidget {
     RenderSystem.setShaderTexture(0, AbstractRecipesWidget.WIDGETS);
     int j = 0;
 
-    if (this.x + 25 > mouseX && this.x <= mouseX &&
-        this.y + 25 > mouseY && this.y <= mouseY) {
+    if (this.getX() + 25 > mouseX && this.getX() <= mouseX &&
+        this.getY() + 25 > mouseY && this.getY() <= mouseY) {
       j += 25;
     }
-    blit(poseStack, this.x, this.y, 600, this.highlighted ? 41 : 16, j, this.width, this.height,
-        256, 256);
+    blit(poseStack, this.getX(), this.getY(), 600, this.highlighted ? 41 : 16, j, this.width,
+        this.height, 256, 256);
     int k = 4;
     ItemRenderer itemRenderer = minecraft.getItemRenderer();
     float zLevel = itemRenderer.blitOffset;
     itemRenderer.blitOffset = 700.0F;
-    itemRenderer.renderAndDecorateItem(this.getOutput(), this.x + k, this.y + k);
-    itemRenderer.renderGuiItemDecorations(minecraft.font, this.getOutput(), this.x + k, this.y + k);
+    itemRenderer.renderAndDecorateItem(this.getOutput(), this.getX() + k, this.getY() + k);
+    itemRenderer.renderGuiItemDecorations(minecraft.font, this.getOutput(), this.getX() + k,
+        this.getY() + k);
     itemRenderer.blitOffset = zLevel;
   }
 
@@ -71,11 +72,6 @@ public class OutputWidget extends AbstractWidget {
 
   public ResourceLocation getResourceLocation() {
     return this.resourceLocation;
-  }
-
-  public void setPosition(int x, int y) {
-    this.x = x;
-    this.y = y;
   }
 
   public void setHighlighted(boolean highlighted) {
@@ -92,12 +88,12 @@ public class OutputWidget extends AbstractWidget {
   }
 
   @Override
-  protected boolean isValidClickButton(int button) {
-    return button == 0 || button == 1;
+  protected void updateWidgetNarration(@Nonnull NarrationElementOutput var1) {
+
   }
 
   @Override
-  public void updateNarration(@Nonnull NarrationElementOutput narrationElementOutput) {
-
+  protected boolean isValidClickButton(int button) {
+    return button == 0 || button == 1;
   }
 }

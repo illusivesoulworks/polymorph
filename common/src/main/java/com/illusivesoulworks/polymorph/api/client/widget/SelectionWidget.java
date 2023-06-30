@@ -21,7 +21,6 @@ import com.illusivesoulworks.polymorph.api.common.base.IRecipePair;
 import com.illusivesoulworks.polymorph.platform.Services;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -29,14 +28,15 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Matrix4f;
 
-public class SelectionWidget extends GuiComponent implements Widget, GuiEventListener {
+public class SelectionWidget extends GuiComponent implements Renderable, GuiEventListener {
 
   private final Consumer<ResourceLocation> onSelect;
   private final AbstractContainerScreen<?> containerScreen;

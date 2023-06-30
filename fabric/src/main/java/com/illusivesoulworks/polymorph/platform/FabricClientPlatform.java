@@ -27,9 +27,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Matrix4f;
 import java.util.List;
-import java.util.stream.Collectors;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -38,8 +36,8 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Matrix4f;
 
 public class FabricClientPlatform implements IClientPlatform {
 
@@ -62,7 +60,7 @@ public class FabricClientPlatform implements IClientPlatform {
       List<ClientTooltipComponent> components = text.stream()
           .map(Component::getVisualOrderText)
           .map(ClientTooltipComponent::create)
-          .collect(Collectors.toList());
+          .toList();
       int i = 0;
       int j = components.size() == 1 ? -2 : 0;
 
@@ -97,21 +95,29 @@ public class FabricClientPlatform implements IClientPlatform {
       Matrix4f matrix = poseStack.last().pose();
       drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 - 4, j2 + i + 3, k2 - 3, blitOffset,
           -267386864, -267386864);
-      drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 + j + 3, j2 + i + 3, k2 + j + 4, blitOffset,
+      drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 + j + 3, j2 + i + 3, k2 + j + 4,
+          blitOffset,
           -267386864, -267386864);
-      drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 - 3, j2 + i + 3, k2 + j + 3, blitOffset, -267386864,
+      drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 - 3, j2 + i + 3, k2 + j + 3, blitOffset,
+          -267386864,
           -267386864);
-      drawer.fillGradient(matrix, bufferbuilder, j2 - 4, k2 - 3, j2 - 3, k2 + j + 3, blitOffset, -267386864,
+      drawer.fillGradient(matrix, bufferbuilder, j2 - 4, k2 - 3, j2 - 3, k2 + j + 3, blitOffset,
+          -267386864,
           -267386864);
-      drawer.fillGradient(matrix, bufferbuilder, j2 + i + 3, k2 - 3, j2 + i + 4, k2 + j + 3, blitOffset,
+      drawer.fillGradient(matrix, bufferbuilder, j2 + i + 3, k2 - 3, j2 + i + 4, k2 + j + 3,
+          blitOffset,
           -267386864, -267386864);
-      drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 - 3 + 1, j2 - 3 + 1, k2 + j + 3 - 1, blitOffset,
+      drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 - 3 + 1, j2 - 3 + 1, k2 + j + 3 - 1,
+          blitOffset,
           1347420415, 1344798847);
-      drawer.fillGradient(matrix, bufferbuilder, j2 + i + 2, k2 - 3 + 1, j2 + i + 3, k2 + j + 3 - 1, blitOffset,
+      drawer.fillGradient(matrix, bufferbuilder, j2 + i + 2, k2 - 3 + 1, j2 + i + 3, k2 + j + 3 - 1,
+          blitOffset,
           1347420415, 1344798847);
-      drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 - 3, j2 + i + 3, k2 - 3 + 1, blitOffset, 1347420415,
+      drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 - 3, j2 + i + 3, k2 - 3 + 1, blitOffset,
+          1347420415,
           1347420415);
-      drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 + j + 2, j2 + i + 3, k2 + j + 3, blitOffset,
+      drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 + j + 2, j2 + i + 3, k2 + j + 3,
+          blitOffset,
           1344798847, 1344798847);
       RenderSystem.enableDepthTest();
       RenderSystem.disableTexture();

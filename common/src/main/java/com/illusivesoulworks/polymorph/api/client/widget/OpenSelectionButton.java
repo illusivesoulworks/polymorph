@@ -47,8 +47,8 @@ public class OpenSelectionButton extends ImageButton {
   public void renderButton(@Nonnull PoseStack poseStack, int mouseX, int mouseY,
                            float partialTicks) {
     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-    this.x = Services.CLIENT_PLATFORM.getScreenLeft(this.containerScreen) + this.xOffset;
-    this.y = Services.CLIENT_PLATFORM.getScreenTop(this.containerScreen) + this.yOffset;
+    this.setX(Services.CLIENT_PLATFORM.getScreenLeft(this.containerScreen) + this.xOffset);
+    this.setY(Services.CLIENT_PLATFORM.getScreenTop(this.containerScreen) + this.yOffset);
     super.renderButton(poseStack, mouseX, mouseY, partialTicks);
   }
 }

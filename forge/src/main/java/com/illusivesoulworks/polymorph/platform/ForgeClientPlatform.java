@@ -26,7 +26,6 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Matrix4f;
 import java.util.List;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -38,6 +37,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.RenderTooltipEvent;
+import org.joml.Matrix4f;
 
 public class ForgeClientPlatform implements IClientPlatform {
 

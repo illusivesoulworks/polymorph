@@ -36,10 +36,9 @@ import java.util.StringJoiner;
 import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -96,7 +95,7 @@ public class PolymorphCommands {
                                                                             RecipeManager pRecipeManager,
                                                                             Function<Recipe<?>, RecipeWrapper> pFactory) {
     Collection<RecipeWrapper> recipes =
-        pRecipeManager.getAllRecipesFor(pType).stream().map(pFactory).collect(Collectors.toList());
+        pRecipeManager.getAllRecipesFor(pType).stream().map(pFactory).toList();
     List<Set<ResourceLocation>> conflicts = new ArrayList<>();
     Set<ResourceLocation> skipped = new TreeSet<>();
     Set<ResourceLocation> processed = new HashSet<>();
@@ -134,7 +133,8 @@ public class PolymorphCommands {
     }
     pOutput.add("===================================================================");
     pOutput.add(
-        Registry.RECIPE_TYPE.getKey(pType) + " recipe conflicts (" + conflicts.size() + ")");
+        BuiltInRegistries.RECIPE_TYPE.getKey(pType) + " recipe conflicts (" + conflicts.size() +
+            ")");
     pOutput.add("===================================================================");
     pOutput.add("");
     int count = 1;

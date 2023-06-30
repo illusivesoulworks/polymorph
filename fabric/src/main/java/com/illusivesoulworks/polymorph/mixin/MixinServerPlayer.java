@@ -34,9 +34,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ServerPlayer.class)
 public abstract class MixinServerPlayer extends Player {
 
-  public MixinServerPlayer(Level level, BlockPos blockPos, float f, GameProfile gameProfile,
-                           @Nullable ProfilePublicKey profilePublicKey) {
-    super(level, blockPos, f, gameProfile, profilePublicKey);
+  public MixinServerPlayer(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
+    super(level, blockPos, f, gameProfile);
   }
 
   @Inject(
