@@ -50,6 +50,7 @@ public class RecipesWidget {
     if (containerScreen == lastScreen && widget != null) {
       return;
     }
+    widget = null;
     Optional<IRecipesWidget> maybeWidget = PolymorphApi.client().getWidget(containerScreen);
     maybeWidget.ifPresent(newWidget -> widget = newWidget);
 
