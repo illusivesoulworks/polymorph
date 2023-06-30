@@ -22,11 +22,12 @@
 package top.theillusivec4.polymorph.mixin.integration.jei;
 
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
-import mezz.jei.gui.recipes.RecipeLayout;
-import mezz.jei.recipes.RecipeTransferManager;
-import mezz.jei.transfer.RecipeTransferUtil;
+import mezz.jei.common.gui.recipes.layout.IRecipeLayoutInternal;
+import mezz.jei.common.recipes.RecipeTransferManager;
+import mezz.jei.common.transfer.RecipeTransferUtil;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -39,12 +40,12 @@ public class MixinRecipeTransferUtil {
 
   @Inject(
       at = @At("HEAD"),
-      method = "transferRecipe(Lmezz/jei/recipes/RecipeTransferManager;Lnet/minecraft/world/inventory/AbstractContainerMenu;Lmezz/jei/gui/recipes/RecipeLayout;Lnet/minecraft/world/entity/player/Player;ZZ)Lmezz/jei/api/recipe/transfer/IRecipeTransferError;",
+      method = "transferRecipe(Lmezz/jei/common/recipes/RecipeTransferManager;Lnet/minecraft/world/inventory/AbstractContainerMenu;Lmezz/jei/common/gui/recipes/layout/IRecipeLayoutInternal;Lnet/minecraft/world/entity/player/Player;ZZ)Lmezz/jei/api/recipe/transfer/IRecipeTransferError;",
       remap = false)
   private static <C extends AbstractContainerMenu, R> void polymorph$transferRecipe(
-      RecipeTransferManager recipeTransferManager, C container, RecipeLayout<R> recipeLayout,
-      Player player, boolean maxTransfer, boolean doTransfer,
-      CallbackInfoReturnable<IRecipeTransferError> cb) {
+      RecipeTransferManager recipeTransferManager, C container,
+      IRecipeLayoutInternal<R> recipeLayout, Player player, boolean maxTransfer, boolean doTransfer,
+      CallbackInfoReturnable<@Nullable IRecipeTransferError> cir) {
     JeiModule.selectRecipe(recipeLayout.getRecipe());
   }
 }

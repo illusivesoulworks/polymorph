@@ -101,7 +101,7 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 
-    implementation fg.deobf("mezz.jei:jei-1.18.2:${version_jei}")
+    implementation(fg.deobf("mezz.jei:jei-1.18.2-forge:${version_jei}"))
     implementation fg.deobf("appeng:appliedenergistics2:${version_ae2}")
 
     implementation fg.deobf("curse.maven:craftingcraft-237581:${file_craftingcraft}")
