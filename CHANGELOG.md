@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 Prior to version 0.45.0, this project used MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH.
 
 ## [0.46.2+1.19.2] - 2023.06.30
+### Added
+- Added `pt_br` localization (thanks FITFC!) [#198](https://github.com/illusivesoulworks/polymorph/pull/198)
+- Added `zh_tw` localization (thanks xMikux!) [#207](https://github.com/illusivesoulworks/polymorph/pull/207)
 ### Changed
 - Recipe outputs now prioritize modded recipes as defaults over vanilla recipes [#189](https://github.com/illusivesoulworks/polymorph/issues/189)
 ### Fixed
