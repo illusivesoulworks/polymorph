@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [0.0.23-1.18.2] - 2023.06.30
 ### Fixed
-- Fixed recipe invalidating logic introduced in 0.0.23
+- Fixed recipe invalidating logic introduced in 0.0.22
 
 ## [0.0.22-1.18.2] - 2023.06.30
 ### Changed
