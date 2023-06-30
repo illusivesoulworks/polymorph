@@ -1,5 +1,6 @@
 package top.theillusivec4.polymorph.common.component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -103,19 +104,32 @@ public abstract class AbstractRecipeData<E> implements RecipeData<E> {
       this.sendRecipesListToListeners(true);
       return Optional.empty();
     }
+    List<T> validRecipes = new ArrayList<>();
 
     for (T entry : recipes) {
       Identifier id = entry.getId();
+      ItemStack crafted = entry.craft(pInventory);
+
+      if (crafted.isEmpty()) {
+        continue;
+      }
 
       if (ref.get() == null &&
           this.getSelectedRecipe().map(recipe -> recipe.getId().equals(id)).orElse(false)) {
         ref.set(entry);
       }
-      newDataset.add(new RecipePairImpl(id, entry.craft(pInventory)));
+      newDataset.add(new RecipePairImpl(id, crafted));
+      validRecipes.add(entry);
+    }
+
+    if (validRecipes.isEmpty()) {
+      this.setFailing(true);
+      this.sendRecipesListToListeners(true);
+      return Optional.empty();
     }
     this.setRecipesList(newDataset);
     result = ref.get();
-    result = result != null ? result : recipes.get(0);
+    result = result != null ? result : validRecipes.get(0);
     this.lastRecipe = result;
     this.setSelectedRecipe(result);
     this.setFailing(false);

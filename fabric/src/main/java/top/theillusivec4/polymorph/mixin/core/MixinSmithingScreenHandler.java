@@ -49,8 +49,7 @@ public abstract class MixinSmithingScreenHandler extends ForgingScreenHandler {
 
   @Inject(at = @At(value = "INVOKE_ASSIGN", target = "java/util/List.get(I)Ljava/lang/Object;", shift = At.Shift.BY, by = 3), method = "updateResult")
   private void polymorph$updateResult(CallbackInfo ci) {
-    this.currentRecipe =
-        RecipeSelection.getPlayerRecipe(this, RecipeType.SMITHING, this.input, this.player.world,
-            this.player, this.recipes).orElse(null);
+    RecipeSelection.getPlayerRecipe(this, RecipeType.SMITHING, this.input, this.player.world,
+        this.player, this.recipes).ifPresent(smithingRecipe -> this.currentRecipe = smithingRecipe);
   }
 }
