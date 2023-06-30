@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.22-1.18.2] - 2023.06.30
+### Changed
+- Recipe outputs now prioritize modded recipes as defaults over vanilla recipes [#189](https://github.com/illusivesoulworks/polymorph/issues/189)
+### Fixed
+- Fixed Polymorph button failing to appear on furnace block entities [#178](https://github.com/illusivesoulworks/polymorph/issues/178)
+- Fixed recipes caching invalid outputs [#181](https://github.com/illusivesoulworks/polymorph/issues/181)
+- Fixed Polymorph button failing to appear when recipes with different inputs have the same output [#183](https://github.com/illusivesoulworks/polymorph/issues/183)
+
 ## [0.0.21-1.18.2] - 2022.05.15
 ### Changed
 - Updated to Minecraft 1.18.2

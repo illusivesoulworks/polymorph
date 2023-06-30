@@ -3,6 +3,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.18.2-0.47] - 2023.06.30
+### Added
+- Added FastSuite integration
+### Changed
+- Recipe outputs now prioritize modded recipes as defaults over vanilla recipes [#189](https://github.com/illusivesoulworks/polymorph/issues/189)
+### Fixed
+- Fixed Polymorph button failing to appear in certain cases on the crafting screen [#177](https://github.com/illusivesoulworks/polymorph/issues/177)
+- Fixed Polymorph button failing to appear on furnace block entities [#178](https://github.com/illusivesoulworks/polymorph/issues/178)
+- Fixed recipes caching invalid outputs [#181](https://github.com/illusivesoulworks/polymorph/issues/181)
+- Fixed Wireless Crafting Grid integration [#185](https://github.com/illusivesoulworks/polymorph/issues/185)
+- Fixed JEI integration [#211](https://github.com/illusivesoulworks/polymorph/issues/211)
+- Fixed Polymorph button failing to appear when recipes with different inputs have the same output [#183](https://github.com/illusivesoulworks/polymorph/issues/183)
+
 ## [1.18.2-0.46] - 2022.11.27
 ### Fixed
 - Fixed network crash [#167](https://github.com/illusivesoulworks/polymorph/issues/167)
