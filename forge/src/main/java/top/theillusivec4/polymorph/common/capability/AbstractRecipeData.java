@@ -177,7 +177,8 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
       this.sendRecipesListToListeners(true);
       return Optional.empty();
     }
-
+    this.setRecipesList(newDataset);
+    result = ref.get();
 
     if (result == null) {
       ResourceLocation rl = newDataset.first().getResourceLocation();
@@ -196,9 +197,6 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
       this.sendRecipesListToListeners(true);
       return Optional.empty();
     }
-    this.setRecipesList(newDataset);
-    result = ref.get();
-    result = result != null ? result : validRecipes.get(0);
     this.lastRecipe = result;
     this.setSelectedRecipe(result);
     this.setFailing(false);
