@@ -113,6 +113,7 @@ dependencies {
     implementation fg.deobf("curse.maven:ironfurnaces-237664:${file_ironfurnaces}")
     implementation fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
     implementation fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
+    implementation fg.deobf("curse.maven:fastsuite-475117:${file_fastsuite}")
     implementation fg.deobf("curse.maven:placebo-283644:${file_placebo}")
 	implementation fg.deobf("curse.maven:refinedstorage-243076:${file_refinedstorage}")
     implementation fg.deobf("curse.maven:refinedstorageaddons-272302:${file_refinedaddons}")

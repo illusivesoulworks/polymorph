@@ -135,6 +135,7 @@ public class PolymorphIntegrations {
     IRON_FURNACES("ironfurnaces"),
     FASTFURNACE("fastfurnace"),
     FASTWORKBENCH("fastbench"),
+    FASTSUITE("fastsuite"),
     PRETTY_PIPES("prettypipes"),
     REFINED_STORAGE("refinedstorage"),
     REFINED_STORAGE_ADDONS("refinedstorageaddons"),
