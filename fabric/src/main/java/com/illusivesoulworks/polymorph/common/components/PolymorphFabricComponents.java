@@ -59,8 +59,7 @@ public class PolymorphFabricComponents implements BlockComponentInitializer,
       BLOCK_ENTITY_2_RECIPE_DATA = new HashMap<>();
 
   public static void setup() {
-    registerBlockEntity(AbstractFurnaceBlockEntity.class,
-        blockEntity -> new FurnaceRecipeDataComponent((AbstractFurnaceBlockEntity) blockEntity));
+
   }
 
   public static void registerBlockEntity(Class<? extends BlockEntity> blockEntityClass,
@@ -75,6 +74,8 @@ public class PolymorphFabricComponents implements BlockComponentInitializer,
 
   @Override
   public void registerBlockComponentFactories(@Nonnull BlockComponentFactoryRegistry registry) {
+    registerBlockEntity(AbstractFurnaceBlockEntity.class,
+        blockEntity -> new FurnaceRecipeDataComponent((AbstractFurnaceBlockEntity) blockEntity));
 
     for (Map.Entry<Class<? extends BlockEntity>, Function<BlockEntity, AbstractBlockEntityRecipeDataComponent<?>>> entry : BLOCK_ENTITY_2_RECIPE_DATA.entrySet()) {
       registry.registerFor(entry.getKey(), BLOCK_ENTITY_RECIPE_DATA,

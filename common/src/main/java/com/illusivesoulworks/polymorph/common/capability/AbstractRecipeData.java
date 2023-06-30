@@ -23,6 +23,7 @@ import com.illusivesoulworks.polymorph.api.common.base.IRecipePair;
 import com.illusivesoulworks.polymorph.api.common.capability.IRecipeData;
 import com.illusivesoulworks.polymorph.common.impl.RecipePair;
 import com.mojang.datafixers.util.Pair;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -149,6 +150,7 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
       this.sendRecipesListToListeners(true);
       return Optional.empty();
     }
+    List<T> validRecipes = new ArrayList<>();
 
     for (T entry : recipes) {
       ResourceLocation id = entry.getId();
@@ -163,7 +165,18 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
       if (output == null || output.isEmpty() || entry instanceof CustomRecipe) {
         output = entry.assemble(inventory);
       }
+
+      if (output.isEmpty()) {
+        continue;
+      }
       newDataset.add(new RecipePair(id, output));
+      validRecipes.add(entry);
+    }
+
+    if (validRecipes.isEmpty()) {
+      this.setFailing(true);
+      this.sendRecipesListToListeners(true);
+      return Optional.empty();
     }
     this.setRecipesList(newDataset);
     result = ref.get();
@@ -171,7 +184,7 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
     if (result == null) {
       ResourceLocation rl = newDataset.first().getResourceLocation();
 
-      for (T recipe : recipes) {
+      for (T recipe : validRecipes) {
 
         if (recipe.getId().equals(rl)) {
           result = recipe;
