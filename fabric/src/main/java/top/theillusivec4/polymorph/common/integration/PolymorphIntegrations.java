@@ -90,6 +90,13 @@ public class PolymorphIntegrations {
     }
   }
 
+  public static void registerBlockEntities() {
+
+    for (AbstractCompatibilityModule integration : get()) {
+      integration.registerBlockEntities();
+    }
+  }
+
   public static void clientSetup() {
 
     for (AbstractCompatibilityModule integration : get()) {

@@ -38,14 +38,19 @@ public class TomsStorageModule extends AbstractCompatibilityModule {
   @Override
   public void setup() {
     PolymorphCommon commonApi = PolymorphApi.common();
-    commonApi.registerBlockEntity2RecipeData(TileEntityCraftingTerminal.class,
-        pTileEntity -> new CraftingTerminalRecipeData((TileEntityCraftingTerminal) pTileEntity));
     commonApi.registerScreenHandler2BlockEntity(pContainer -> {
       if (pContainer instanceof ContainerCraftingTerminal) {
         return ((AccessorContainerStorageTerminal) pContainer).getTe();
       }
       return null;
     });
+  }
+
+  @Override
+  public void registerBlockEntities() {
+    PolymorphCommon commonApi = PolymorphApi.common();
+    commonApi.registerBlockEntity2RecipeData(TileEntityCraftingTerminal.class,
+        pTileEntity -> new CraftingTerminalRecipeData((TileEntityCraftingTerminal) pTileEntity));
   }
 
   @Override

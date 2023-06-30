@@ -31,7 +31,7 @@ import top.theillusivec4.polymorph.common.integration.AbstractCompatibilityModul
 public class IronFurnacesModule extends AbstractCompatibilityModule {
 
   @Override
-  public void setup() {
+  public void registerBlockEntities() {
     PolymorphCommon commonApi = PolymorphApi.common();
     commonApi.registerBlockEntity2RecipeData(BlockIronFurnaceTileBase.class,
         blockEntity -> new IronFurnaceRecipeData((BlockIronFurnaceTileBase) blockEntity));

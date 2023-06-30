@@ -26,4 +26,8 @@ public abstract class AbstractCompatibilityModule {
   public boolean openScreenHandler(ScreenHandler pScreenHandler, ServerPlayerEntity pPlayer) {
     return false;
   }
+
+  public void registerBlockEntities() {
+    // NO-OP
+  }
 }
