@@ -33,9 +33,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @SuppressWarnings("unused")
 @Mixin(SmithingMenu.class)
@@ -67,16 +65,15 @@ public abstract class MixinSmithingMenu extends ItemCombinerMenu {
     return recipes;
   }
 
-  @Inject(
+  @ModifyVariable(
       at = @At(
           value = "INVOKE_ASSIGN",
           target = "java/util/List.get(I)Ljava/lang/Object;",
           shift = At.Shift.BY,
           by = 3),
       method = "createResult")
-  private void polymorph$updateRepairOutput(CallbackInfo ci) {
-    RecipeSelection.getPlayerRecipe((SmithingMenu) (Object) this, RecipeType.SMITHING,
-            this.inputSlots, this.player.level, this.player, this.recipes)
-        .ifPresent(smithingRecipe -> this.selectedRecipe = smithingRecipe);
+  private UpgradeRecipe polymorph$updateRepairOutput(UpgradeRecipe recipe) {
+    return RecipeSelection.getPlayerRecipe((SmithingMenu) (Object) this, RecipeType.SMITHING,
+        this.inputSlots, this.player.level, this.player, this.recipes).orElse(recipe);
   }
 }
