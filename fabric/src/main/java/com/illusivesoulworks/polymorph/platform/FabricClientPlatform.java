@@ -27,17 +27,20 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import java.util.Iterator;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
+import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix4f;
+import org.joml.Vector2ic;
 
 public class FabricClientPlatform implements IClientPlatform {
 
@@ -52,100 +55,65 @@ public class FabricClientPlatform implements IClientPlatform {
   }
 
   @Override
-  public void renderTooltip(ItemStack stack, PoseStack poseStack, List<Component> text, int mouseX,
-                            int mouseY, AbstractContainerScreen<?> containerScreen, Font font,
+  public void renderTooltip(ItemStack stack, PoseStack poseStack, List<ClientTooltipComponent> text,
+                            ClientTooltipPositioner positioner, int mouseX, int mouseY,
+                            AbstractContainerScreen<?> containerScreen, Font font,
                             SelectionWidget.GradientDrawer drawer) {
 
     if (!text.isEmpty()) {
-      List<ClientTooltipComponent> components = text.stream()
-          .map(Component::getVisualOrderText)
-          .map(ClientTooltipComponent::create)
-          .toList();
-      int i = 0;
-      int j = components.size() == 1 ? -2 : 0;
+      int k = 0;
+      int l = text.size() == 1 ? -2 : 0;
 
-      for (ClientTooltipComponent component : components) {
-        int k = component.getWidth(font);
-
-        if (k > i) {
-          i = k;
+      ClientTooltipComponent clientTooltipComponent;
+      for (Iterator var8 = text.iterator(); var8.hasNext();
+           l += clientTooltipComponent.getHeight()) {
+        clientTooltipComponent = (ClientTooltipComponent) var8.next();
+        int m = clientTooltipComponent.getWidth(font);
+        if (m > k) {
+          k = m;
         }
-        j += component.getHeight();
       }
 
-      int j2 = mouseX + 12;
-      int k2 = mouseY - 12;
-      if (j2 + i > containerScreen.width) {
-        j2 -= 28 + i;
-      }
-
-      if (k2 + j + 6 > containerScreen.height) {
-        k2 = containerScreen.height - j - 6;
-      }
-
+      Vector2ic vector2ic = positioner.positionTooltip(containerScreen, mouseX, mouseY, k, l);
+      int p = vector2ic.x();
+      int q = vector2ic.y();
       poseStack.pushPose();
-      ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-      float f = itemRenderer.blitOffset;
-      int blitOffset = 901;
-      itemRenderer.blitOffset = blitOffset;
       Tesselator tesselator = Tesselator.getInstance();
-      BufferBuilder bufferbuilder = tesselator.getBuilder();
+      BufferBuilder bufferBuilder = tesselator.getBuilder();
       RenderSystem.setShader(GameRenderer::getPositionColorShader);
-      bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-      Matrix4f matrix = poseStack.last().pose();
-      drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 - 4, j2 + i + 3, k2 - 3, blitOffset,
-          -267386864, -267386864);
-      drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 + j + 3, j2 + i + 3, k2 + j + 4,
-          blitOffset,
-          -267386864, -267386864);
-      drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 - 3, j2 + i + 3, k2 + j + 3, blitOffset,
-          -267386864,
-          -267386864);
-      drawer.fillGradient(matrix, bufferbuilder, j2 - 4, k2 - 3, j2 - 3, k2 + j + 3, blitOffset,
-          -267386864,
-          -267386864);
-      drawer.fillGradient(matrix, bufferbuilder, j2 + i + 3, k2 - 3, j2 + i + 4, k2 + j + 3,
-          blitOffset,
-          -267386864, -267386864);
-      drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 - 3 + 1, j2 - 3 + 1, k2 + j + 3 - 1,
-          blitOffset,
-          1347420415, 1344798847);
-      drawer.fillGradient(matrix, bufferbuilder, j2 + i + 2, k2 - 3 + 1, j2 + i + 3, k2 + j + 3 - 1,
-          blitOffset,
-          1347420415, 1344798847);
-      drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 - 3, j2 + i + 3, k2 - 3 + 1, blitOffset,
-          1347420415,
-          1347420415);
-      drawer.fillGradient(matrix, bufferbuilder, j2 - 3, k2 + j + 2, j2 + i + 3, k2 + j + 3,
-          blitOffset,
-          1344798847, 1344798847);
+      bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+      Matrix4f matrix4f = poseStack.last().pose();
+      int blitOffset = 901;
+      TooltipRenderUtil.renderTooltipBackground(drawer::fillGradient, matrix4f, bufferBuilder, p, q,
+          k, l, blitOffset);
       RenderSystem.enableDepthTest();
-      RenderSystem.disableTexture();
       RenderSystem.enableBlend();
       RenderSystem.defaultBlendFunc();
-      BufferUploader.drawWithShader(bufferbuilder.end());
-      RenderSystem.disableBlend();
-      RenderSystem.enableTexture();
+      BufferUploader.drawWithShader(bufferBuilder.end());
       MultiBufferSource.BufferSource bufferSource =
           MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
-      poseStack.translate(0.0D, 0.0D, blitOffset);
-      int l1 = k2;
+      poseStack.translate(0.0F, 0.0F, 400.0F);
+      int s = q;
 
-      for (int l2 = 0; l2 < components.size(); ++l2) {
-        ClientTooltipComponent component = components.get(l2);
-        component.renderText(font, j2, l1, matrix, bufferSource);
-        l1 += component.getHeight() + (l2 == 0 ? 2 : 0);
+      int t;
+      ClientTooltipComponent clientTooltipComponent2;
+      for (t = 0; t < text.size(); ++t) {
+        clientTooltipComponent2 = text.get(t);
+        clientTooltipComponent2.renderText(font, p, s, matrix4f, bufferSource);
+        s += clientTooltipComponent2.getHeight() + (t == 0 ? 2 : 0);
       }
+
       bufferSource.endBatch();
-      poseStack.popPose();
-      l1 = k2;
+      s = q;
+      ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 
-      for (int i2 = 0; i2 < components.size(); ++i2) {
-        ClientTooltipComponent component = components.get(i2);
-        component.renderImage(font, j2, l1, poseStack, itemRenderer, blitOffset);
-        l1 += component.getHeight() + (i2 == 0 ? 2 : 0);
+      for (t = 0; t < text.size(); ++t) {
+        clientTooltipComponent2 = text.get(t);
+        clientTooltipComponent2.renderImage(font, p, s, poseStack, itemRenderer);
+        s += clientTooltipComponent2.getHeight() + (t == 0 ? 2 : 0);
       }
-      itemRenderer.blitOffset = f;
+
+      poseStack.popPose();
     }
   }
 }

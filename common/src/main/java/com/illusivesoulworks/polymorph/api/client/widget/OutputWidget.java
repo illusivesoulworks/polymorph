@@ -26,6 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -44,7 +45,7 @@ public class OutputWidget extends AbstractWidget {
   }
 
   @Override
-  public void renderButton(@Nonnull PoseStack poseStack, int mouseX, int mouseY,
+  public void renderWidget(@Nonnull PoseStack poseStack, int mouseX, int mouseY,
                            float partialTicks) {
     Minecraft minecraft = Minecraft.getInstance();
     RenderSystem.setShaderTexture(0, AbstractRecipesWidget.WIDGETS);
@@ -58,12 +59,13 @@ public class OutputWidget extends AbstractWidget {
         this.height, 256, 256);
     int k = 4;
     ItemRenderer itemRenderer = minecraft.getItemRenderer();
-    float zLevel = itemRenderer.blitOffset;
-    itemRenderer.blitOffset = 700.0F;
-    itemRenderer.renderAndDecorateItem(this.getOutput(), this.getX() + k, this.getY() + k);
-    itemRenderer.renderGuiItemDecorations(minecraft.font, this.getOutput(), this.getX() + k,
+    poseStack.pushPose();
+//    poseStack.translate(1);
+    itemRenderer.renderAndDecorateItem(poseStack, this.getOutput(), this.getX() + k,
         this.getY() + k);
-    itemRenderer.blitOffset = zLevel;
+    itemRenderer.renderGuiItemDecorations(poseStack, minecraft.font, this.getOutput(),
+        this.getX() + k, this.getY() + k);
+    poseStack.popPose();
   }
 
   public ItemStack getOutput() {
@@ -78,8 +80,9 @@ public class OutputWidget extends AbstractWidget {
     this.highlighted = highlighted;
   }
 
-  public List<Component> getTooltipText(Screen screen) {
-    return screen.getTooltipFromItem(this.getOutput());
+  public List<ClientTooltipComponent> getTooltipText(Screen screen) {
+    return screen.getTooltipFromItem(this.getOutput()).stream().map(Component::getVisualOrderText)
+        .map(ClientTooltipComponent::create).toList();
   }
 
   @Override

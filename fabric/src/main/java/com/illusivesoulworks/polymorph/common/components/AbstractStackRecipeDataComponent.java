@@ -129,7 +129,7 @@ public abstract class AbstractStackRecipeDataComponent extends ItemComponent imp
           this.getSelectedRecipe().map(recipe -> recipe.getId().equals(id)).orElse(false)) {
         ref.set(entry);
       }
-      newDataset.add(new RecipePair(id, entry.assemble(inventory)));
+      newDataset.add(new RecipePair(id, entry.assemble(inventory, level.registryAccess())));
     }
     this.setRecipesList(newDataset);
     result = ref.get();

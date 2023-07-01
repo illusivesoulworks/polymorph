@@ -31,7 +31,8 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix4f;
@@ -162,10 +163,21 @@ public class SelectionWidget extends GuiComponent implements Renderable, GuiEven
     return false;
   }
 
-  public void renderTooltip(ItemStack stack, PoseStack poseStack, List<Component> text, int mouseX,
-                            int mouseY) {
-    Services.CLIENT_PLATFORM.renderTooltip(stack, poseStack, text, mouseX, mouseY,
-        this.containerScreen, Minecraft.getInstance().font, GuiComponent::fillGradient);
+  @Override
+  public void setFocused(boolean var1) {
+
+  }
+
+  @Override
+  public boolean isFocused() {
+    return false;
+  }
+
+  public void renderTooltip(ItemStack stack, PoseStack poseStack, List<ClientTooltipComponent> text,
+                            int mouseX, int mouseY) {
+    Services.CLIENT_PLATFORM.renderTooltip(stack, poseStack, text,
+        DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, this.containerScreen,
+        Minecraft.getInstance().font, GuiComponent::fillGradient);
   }
 
   public interface GradientDrawer {

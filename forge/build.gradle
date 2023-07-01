@@ -107,10 +107,10 @@ dependencies {
     compileOnly project(":common")
 	annotationProcessor 'org.spongepowered:mixin:0.8.4-SNAPSHOT:processor'
 
-    implementation fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
-    implementation fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
-    implementation fg.deobf("curse.maven:fastsuite-475117:${file_fastsuite}")
-    implementation fg.deobf("curse.maven:placebo-283644:${file_placebo}")
+    compileOnly fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
+    compileOnly fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
+    compileOnly fg.deobf("curse.maven:fastsuite-475117:${file_fastsuite}")
+    compileOnly fg.deobf("curse.maven:placebo-283644:${file_placebo}")
 
     implementation fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_range}")
     jarJar fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_range}") {

@@ -159,11 +159,11 @@ public abstract class AbstractRecipeData<E> implements IRecipeData<E> {
           this.getSelectedRecipe().map(recipe -> recipe.getId().equals(id)).orElse(false)) {
         ref.set(entry);
       }
-      ItemStack output = entry.getResultItem();
+      ItemStack output = entry.getResultItem(level.registryAccess());
 
       // noinspection ConstantConditions
       if (output == null || output.isEmpty() || entry instanceof CustomRecipe) {
-        output = entry.assemble(inventory);
+        output = entry.assemble(inventory, level.registryAccess());
       }
 
       if (output.isEmpty()) {

@@ -18,7 +18,6 @@
 package com.illusivesoulworks.polymorph.server;
 
 import com.illusivesoulworks.polymorph.PolymorphConstants;
-import com.illusivesoulworks.polymorph.mixin.core.AccessorUpgradeRecipe;
 import com.illusivesoulworks.polymorph.platform.Services;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -72,7 +71,7 @@ public class PolymorphCommands {
       count += scanRecipes(RecipeType.SMELTING, output, recipeManager, RecipeWrapper::new);
       count += scanRecipes(RecipeType.BLASTING, output, recipeManager, RecipeWrapper::new);
       count += scanRecipes(RecipeType.SMOKING, output, recipeManager, RecipeWrapper::new);
-      count += scanRecipes(RecipeType.SMITHING, output, recipeManager, SmithingRecipeWrapper::new);
+      count += scanRecipes(RecipeType.SMITHING, output, recipeManager, RecipeWrapper::new);
 
       if (count > 0) {
         try {
@@ -244,26 +243,6 @@ public class PolymorphCommands {
         }
         return true;
       }
-    }
-  }
-
-  private static class SmithingRecipeWrapper extends RecipeWrapper {
-
-    private SmithingRecipeWrapper(Recipe<?> pRecipe) {
-      super(pRecipe);
-    }
-
-    @Override
-    public boolean conflicts(RecipeWrapper pOther) {
-      AccessorUpgradeRecipe smithingRecipe = (AccessorUpgradeRecipe) this.getRecipe();
-      AccessorUpgradeRecipe otherSmithingRecipe = (AccessorUpgradeRecipe) pOther.getRecipe();
-      IngredientWrapper baseWrapper = new IngredientWrapper(smithingRecipe.getBase());
-      IngredientWrapper otherBaseWrapper = new IngredientWrapper(otherSmithingRecipe.getBase());
-      IngredientWrapper additionWrapper = new IngredientWrapper(smithingRecipe.getAddition());
-      IngredientWrapper otherAdditionWrapper =
-          new IngredientWrapper(otherSmithingRecipe.getAddition());
-      return super.conflicts(pOther) &&
-          baseWrapper.matches(otherBaseWrapper) & additionWrapper.matches(otherAdditionWrapper);
     }
   }
 

@@ -7,7 +7,6 @@
     "AccessorAbstractFurnaceBlockEntity",
     "AccessorCraftingMenu",
     "AccessorInventoryMenu",
-    "AccessorUpgradeRecipe",
     "MixinCraftingMenu",
     "MixinPolymorphApi",
     "MixinRecipeManager",

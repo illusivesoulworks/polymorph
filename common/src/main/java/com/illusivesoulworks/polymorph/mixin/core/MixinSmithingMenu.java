@@ -28,7 +28,7 @@ import net.minecraft.world.inventory.ItemCombinerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.SmithingMenu;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.UpgradeRecipe;
+import net.minecraft.world.item.crafting.SmithingRecipe;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -42,10 +42,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinSmithingMenu extends ItemCombinerMenu {
 
   @Unique
-  private List<UpgradeRecipe> recipes;
+  private List<SmithingRecipe> recipes;
 
   @Shadow
-  private UpgradeRecipe selectedRecipe;
+  private SmithingRecipe selectedRecipe;
 
   public MixinSmithingMenu(@Nullable MenuType<?> p_i231587_1_, int p_i231587_2_,
                            Inventory p_i231587_3_, ContainerLevelAccess p_i231587_4_) {
@@ -57,7 +57,7 @@ public abstract class MixinSmithingMenu extends ItemCombinerMenu {
           value = "INVOKE_ASSIGN",
           target = "net/minecraft/world/item/crafting/RecipeManager.getRecipesFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/List;"),
       method = "createResult")
-  private List<UpgradeRecipe> polymorph$getRecipes(List<UpgradeRecipe> recipes) {
+  private List<SmithingRecipe> polymorph$getRecipes(List<SmithingRecipe> recipes) {
     this.recipes = recipes;
 
     if (this.player instanceof ServerPlayer && recipes.isEmpty()) {
