@@ -25,6 +25,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.resources.ResourceLocation;
 
@@ -99,9 +100,9 @@ public abstract class AbstractRecipesWidget implements IRecipesWidget {
   }
 
   @Override
-  public void render(PoseStack poseStack, int mouseX, int mouseY, float renderPartialTicks) {
-    this.selectionWidget.render(poseStack, mouseX, mouseY, renderPartialTicks);
-    this.openButton.render(poseStack, mouseX, mouseY, renderPartialTicks);
+  public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float renderPartialTicks) {
+    this.selectionWidget.render(guiGraphics, mouseX, mouseY, renderPartialTicks);
+    this.openButton.render(guiGraphics, mouseX, mouseY, renderPartialTicks);
   }
 
   @Override

@@ -1,35 +1,20 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-		maven { url = 'https://plugins.gradle.org/m2/' }
-		maven {
-            name = 'ParchmentMC'
-            url = 'https://maven.parchmentmc.org/'
-        }
-		maven {
-            name = 'Sponge / Mixin'
-            url = 'https://repo.spongepowered.org/repository/maven-public/'
-        }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath group: 'org.parchmentmc', name: 'librarian', version: '1.+'
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
-        classpath group: 'net.darkhax.curseforgegradle', name: 'CurseForgeGradle', version: '1.+'
-        classpath group: 'com.modrinth.minotaur', name: 'Minotaur', version: '2.+'
-    }
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'com.modrinth.minotaur' version '2.+'
+    id 'org.spongepowered.mixin' version '0.7.+'
+    id 'net.darkhax.curseforgegradle' version '1.+'
 }
-apply plugin: 'java'
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
-apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'net.darkhax.curseforgegradle'
-apply plugin: 'com.modrinth.minotaur'
 
-archivesBaseName = "${mod_id}-forge"
+version = "${version}"
+group = "top.theillusivec4.${mod_id}"
+
+base {
+    archivesName = "${mod_id}-forge"
+}
 
 mixin {
     add sourceSets.main, "${mod_id}.refmap.json"
@@ -105,7 +90,7 @@ sourceSets.main.resources.srcDir 'src/generated/resources'
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":common")
-	annotationProcessor 'org.spongepowered:mixin:0.8.4-SNAPSHOT:processor'
+	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     compileOnly fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
     compileOnly fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
@@ -130,32 +115,21 @@ sourceSets {
     }
 }
 
-def replaceResources = tasks.register("replaceResources", Copy) {
-    it.outputs.upToDateWhen { false }
-
-    it.from(sourceSets.main.resources) {
-        include "META-INF/mods.toml"
-        expand 'version': version, 'forge_mc_version_range': forge_mc_version_range, 'forge_version_range': forge_version_range,
-                'license': license, 'mod_id': mod_id, 'mod_author': mod_author, 'mod_description': mod_description,
-                'mod_name': mod_name, 'issue_tracker': issue_tracker
-    }
-    it.from(project(":common").sourceSets.main.resources) {
-        include "pack.mcmeta"
-        expand 'mod_name': mod_name
-    }
-    it.into "$buildDir/resources/main/"
-}
-
+def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta', '*.mixins.json']
+def replaceProperties = [
+        forge_version: forge_version, forge_version_range: forge_version_range, version: version,
+        forge_mc_version_range: forge_mc_version_range, license: license, mod_id: mod_id, mod_author: mod_author,
+        mod_description: mod_description, mod_name: mod_name, issue_tracker: issue_tracker, refmap_target: "${mod_id}."
+]
 processResources {
     from project(":common").sourceSets.main.resources
     duplicatesStrategy(DuplicatesStrategy.FAIL)
-    exclude('META-INF/mods.toml')
-    exclude('pack.mcmeta')
+    inputs.properties replaceProperties
+    replaceProperties.put 'project', project
 
-    filesMatching('*.mixins.json') {
-        expand "refmap_target": "${mod_id}."
+    filesMatching(resourceTargets) {
+        expand replaceProperties
     }
-    configure { finalizedBy(replaceResources) }
 }
 
 jar.finalizedBy('reobfJar')
@@ -215,4 +189,8 @@ modrinth {
     uploadFile = file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")
     additionalFiles = [sourcesJar]
     gameVersions = "${release_versions}".split(",") as List<String>
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
 }

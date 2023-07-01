@@ -38,7 +38,7 @@ public record CPacketPlayerRecipeSelection(ResourceLocation recipe) {
 
   public static void handle(CPacketPlayerRecipeSelection packet, ServerPlayer player) {
     AbstractContainerMenu container = player.containerMenu;
-    player.level.getRecipeManager().byKey(packet.recipe).ifPresent(recipe -> {
+    player.level().getRecipeManager().byKey(packet.recipe).ifPresent(recipe -> {
       PolymorphApi.common().getRecipeData(player)
           .ifPresent(recipeData -> recipeData.selectRecipe(recipe));
       PolymorphIntegrations.selectRecipe(container, recipe);

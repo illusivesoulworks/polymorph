@@ -35,7 +35,7 @@ public class ClientPacketHandler {
     if (clientPlayerEntity != null) {
       PolymorphApi.common().getRecipeData(clientPlayerEntity).ifPresent(recipeData -> {
         recipeData.setRecipesList(packet.getRecipeList());
-        clientPlayerEntity.level.getRecipeManager().byKey(packet.getSelected()).ifPresent(
+        clientPlayerEntity.level().getRecipeManager().byKey(packet.getSelected()).ifPresent(
             recipeData::setSelectedRecipe);
       });
     }

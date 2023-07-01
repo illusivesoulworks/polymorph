@@ -74,7 +74,7 @@ public abstract class MixinSmithingMenu extends ItemCombinerMenu {
       method = "createResult")
   private SmithingRecipe polymorph$updateRepairOutput(SmithingRecipe smithingRecipe) {
     return RecipeSelection.getPlayerRecipe((SmithingMenu) (Object) this, RecipeType.SMITHING,
-            this.inputSlots, this.player.level, this.player, this.matchingRecipes)
+            this.inputSlots, this.player.level(), this.player, this.matchingRecipes)
         .orElse(smithingRecipe);
   }
 }

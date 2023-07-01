@@ -86,7 +86,7 @@ public class PlayerRecipeData extends AbstractRecipeData<Player> implements
           isEmpty ? new Pair<>(new TreeSet<>(), null) : this.getPacketData();
       Player player = this.getOwner();
 
-      if (player.level.isClientSide()) {
+      if (player.level().isClientSide()) {
         RecipesWidget.get().ifPresent(
             widget -> widget.setRecipesList(packetData.getFirst(), packetData.getSecond()));
       } else if (player instanceof ServerPlayer) {

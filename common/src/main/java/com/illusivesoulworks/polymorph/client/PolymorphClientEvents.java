@@ -21,6 +21,7 @@ import com.illusivesoulworks.polymorph.api.client.base.ITickingRecipesWidget;
 import com.illusivesoulworks.polymorph.client.recipe.RecipesWidget;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 
@@ -44,12 +45,12 @@ public class PolymorphClientEvents {
     }
   }
 
-  public static void render(Screen screen, PoseStack poseStack, int mouseX, int mouseY,
+  public static void render(Screen screen, GuiGraphics guiGraphics, int mouseX, int mouseY,
                             float partialTicks) {
 
     if (screen instanceof AbstractContainerScreen) {
       RecipesWidget.get().ifPresent(
-          recipeController -> recipeController.render(poseStack, mouseX, mouseY, partialTicks));
+          recipeController -> recipeController.render(guiGraphics, mouseX, mouseY, partialTicks));
     }
   }
 

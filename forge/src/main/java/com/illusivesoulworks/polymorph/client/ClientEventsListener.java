@@ -39,7 +39,7 @@ public class ClientEventsListener {
 
   @SubscribeEvent
   public void render(ScreenEvent.Render.Post evt) {
-    PolymorphClientEvents.render(evt.getScreen(), evt.getPoseStack(), evt.getMouseX(),
+    PolymorphClientEvents.render(evt.getScreen(), evt.getGuiGraphics(), evt.getMouseX(),
         evt.getMouseY(), evt.getPartialTick());
   }
 

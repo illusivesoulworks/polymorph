@@ -21,6 +21,7 @@ import com.illusivesoulworks.polymorph.platform.Services;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import javax.annotation.Nonnull;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 
@@ -44,11 +45,11 @@ public class OpenSelectionButton extends ImageButton {
   }
 
   @Override
-  public void renderWidget(@Nonnull PoseStack poseStack, int mouseX, int mouseY,
+  public void renderWidget(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY,
                            float partialTicks) {
     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     this.setX(Services.CLIENT_PLATFORM.getScreenLeft(this.containerScreen) + this.xOffset);
     this.setY(Services.CLIENT_PLATFORM.getScreenTop(this.containerScreen) + this.yOffset);
-    super.renderWidget(poseStack, mouseX, mouseY, partialTicks);
+    super.renderWidget(guiGraphics, mouseX, mouseY, partialTicks);
   }
 }

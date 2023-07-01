@@ -18,13 +18,12 @@
 package com.illusivesoulworks.polymorph.api.client.widget;
 
 import com.illusivesoulworks.polymorph.api.common.base.IRecipePair;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -42,26 +41,24 @@ public class OutputWidget extends AbstractWidget {
   }
 
   @Override
-  public void renderWidget(@Nonnull PoseStack poseStack, int mouseX, int mouseY,
+  public void renderWidget(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY,
                            float partialTicks) {
     Minecraft minecraft = Minecraft.getInstance();
-    RenderSystem.setShaderTexture(0, AbstractRecipesWidget.WIDGETS);
     int j = 0;
 
     if (this.getX() + 25 > mouseX && this.getX() <= mouseX &&
         this.getY() + 25 > mouseY && this.getY() <= mouseY) {
       j += 25;
     }
-    blit(poseStack, this.getX(), this.getY(), 600, this.highlighted ? 41 : 16, j, this.width,
-        this.height, 256, 256);
+    PoseStack poseStack = guiGraphics.pose();
+    guiGraphics.blit(AbstractRecipesWidget.WIDGETS, this.getX(), this.getY(), 600,
+        this.highlighted ? 41 : 16, j, this.width, this.height, 256, 256);
     int k = 4;
-    ItemRenderer itemRenderer = minecraft.getItemRenderer();
     poseStack.pushPose();
     poseStack.translate(0, 0, 700);
-    itemRenderer.renderAndDecorateItem(poseStack, this.getOutput(), this.getX() + k,
+    guiGraphics.renderItem(this.getOutput(), this.getX() + k, this.getY() + k);
+    guiGraphics.renderItemDecorations(minecraft.font, this.getOutput(), this.getX() + k,
         this.getY() + k);
-    itemRenderer.renderGuiItemDecorations(poseStack, minecraft.font, this.getOutput(),
-        this.getX() + k, this.getY() + k);
     poseStack.popPose();
   }
 

@@ -41,7 +41,7 @@ public class PlayerRecipesWidget extends AbstractRecipesWidget {
     Player player = Minecraft.getInstance().player;
 
     if (player != null) {
-      player.level.getRecipeManager().byKey(resourceLocation).ifPresent(
+      player.level().getRecipeManager().byKey(resourceLocation).ifPresent(
           recipe -> commonApi.getRecipeData(player)
               .ifPresent(recipeData -> recipeData.selectRecipe(recipe)));
     }

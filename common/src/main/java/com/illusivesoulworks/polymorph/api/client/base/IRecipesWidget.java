@@ -21,6 +21,7 @@ import com.illusivesoulworks.polymorph.api.client.widget.SelectionWidget;
 import com.illusivesoulworks.polymorph.api.common.base.IRecipePair;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.Set;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.Slot;
 
@@ -34,7 +35,7 @@ public interface IRecipesWidget {
 
   void setRecipesList(Set<IRecipePair> recipesList, ResourceLocation selected);
 
-  void render(PoseStack poseStack, int mouseX, int mouseY, float renderPartialTicks);
+  void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float renderPartialTicks);
 
   boolean mouseClicked(double mouseX, double mouseY, int button);
 

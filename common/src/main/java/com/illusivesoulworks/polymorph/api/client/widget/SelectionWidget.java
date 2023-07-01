@@ -26,13 +26,13 @@ import java.util.Set;
 import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.resources.ResourceLocation;
 
-public class SelectionWidget extends GuiComponent implements Renderable, GuiEventListener {
+public class SelectionWidget implements Renderable, GuiEventListener {
 
   private final Consumer<ResourceLocation> onSelect;
   private final AbstractContainerScreen<?> containerScreen;
@@ -109,21 +109,20 @@ public class SelectionWidget extends GuiComponent implements Renderable, GuiEven
     return this.active;
   }
 
-  public void renderTooltip(PoseStack poseStack, int mouseX, int mouseY) {
+  public void renderTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {
     Minecraft mc = Minecraft.getInstance();
 
     if (mc.screen != null && this.hoveredButton != null) {
+      PoseStack poseStack = guiGraphics.pose();
       poseStack.pushPose();
       poseStack.translate(0, 0, 501);
-      containerScreen.renderTooltip(poseStack,
-          containerScreen.getTooltipFromItem(this.hoveredButton.getOutput()),
-          this.hoveredButton.getOutput().getTooltipImage(), mouseX, mouseY);
+      guiGraphics.renderTooltip(mc.font, this.hoveredButton.getOutput(), mouseX, mouseY);
       poseStack.popPose();
     }
   }
 
   @Override
-  public void render(@Nonnull PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+  public void render(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
 
     if (this.isActive()) {
       int x = Services.CLIENT_PLATFORM.getScreenLeft(this.containerScreen) + this.xOffset;
@@ -136,13 +135,13 @@ public class SelectionWidget extends GuiComponent implements Renderable, GuiEven
       }
       this.hoveredButton = null;
       this.outputWidgets.forEach(button -> {
-        button.render(poseStack, mouseX, mouseY, partialTicks);
+        button.render(guiGraphics, mouseX, mouseY, partialTicks);
 
         if (button.visible && button.isHoveredOrFocused()) {
           this.hoveredButton = button;
         }
       });
-      this.renderTooltip(poseStack, mouseX, mouseY);
+      this.renderTooltip(guiGraphics, mouseX, mouseY);
     }
   }
 

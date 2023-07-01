@@ -18,7 +18,6 @@
 package com.illusivesoulworks.polymorph.server;
 
 import com.illusivesoulworks.polymorph.PolymorphConstants;
-import com.illusivesoulworks.polymorph.mixin.core.AccessorLegacySmithingRecipe;
 import com.illusivesoulworks.polymorph.mixin.core.AccessorSmithingTransformRecipe;
 import com.illusivesoulworks.polymorph.mixin.core.AccessorSmithingTrimRecipe;
 import com.illusivesoulworks.polymorph.platform.Services;
@@ -48,7 +47,6 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.LegacyUpgradeRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -68,7 +66,8 @@ public class PolymorphCommands {
 
   private static int findConflicts(CommandSourceStack source) {
     CompletableFuture.runAsync(() -> {
-      source.sendSuccess(Component.translatable("commands.polymorph.conflicts.starting"), true);
+      source.sendSuccess(() -> Component.translatable("commands.polymorph.conflicts.starting"),
+          true);
       ServerLevel world = source.getLevel();
       RecipeManager recipeManager = world.getRecipeManager();
       List<String> output = new ArrayList<>();
@@ -89,8 +88,9 @@ public class PolymorphCommands {
           e.printStackTrace();
         }
       }
-      source.sendSuccess(Component.translatable("commands.polymorph.conflicts.success", count),
-          true);
+      int finalCount = count;
+      source.sendSuccess(
+          () -> Component.translatable("commands.polymorph.conflicts.success", finalCount), true);
     });
     return Command.SINGLE_SUCCESS;
   }
@@ -281,10 +281,6 @@ public class PolymorphCommands {
         template = accessorSmithingRecipe.getTemplate();
         base = accessorSmithingRecipe.getBase();
         addition = accessorSmithingRecipe.getAddition();
-      } else if (recipe instanceof LegacyUpgradeRecipe) {
-        AccessorLegacySmithingRecipe accessorSmithingRecipe = (AccessorLegacySmithingRecipe) recipe;
-        base = accessorSmithingRecipe.getBase();
-        addition = accessorSmithingRecipe.getAddition();
       }
 
       if (otherRecipe instanceof SmithingTrimRecipe) {
@@ -297,11 +293,6 @@ public class PolymorphCommands {
         AccessorSmithingTransformRecipe accessorSmithingRecipe =
             (AccessorSmithingTransformRecipe) otherRecipe;
         otherTemplate = accessorSmithingRecipe.getTemplate();
-        otherBase = accessorSmithingRecipe.getBase();
-        otherAddition = accessorSmithingRecipe.getAddition();
-      } else if (otherRecipe instanceof LegacyUpgradeRecipe) {
-        AccessorLegacySmithingRecipe accessorSmithingRecipe =
-            (AccessorLegacySmithingRecipe) otherRecipe;
         otherBase = accessorSmithingRecipe.getBase();
         otherAddition = accessorSmithingRecipe.getAddition();
       }

@@ -56,7 +56,7 @@ public class FastBenchModule extends AbstractCompatibilityModule {
       }
 
       if (inv != null && result != null && player != null) {
-        ItemStack stack = craftingRecipe.assemble(inv, player.level.registryAccess());
+        ItemStack stack = craftingRecipe.assemble(inv, player.level().registryAccess());
 
         // Some mods seem to be violating the non-null contract so this check is necessary
         // https://github.com/TheIllusiveC4/Polymorph/issues/163
