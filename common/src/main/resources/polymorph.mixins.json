@@ -10,7 +10,8 @@
     "MixinCraftingMenu",
     "MixinPolymorphApi",
     "MixinRecipeManager",
-    "MixinSmithingMenu"
+    "MixinSmithingMenu",
+    "MixinLegacySmithingMenu"
   ],
   "injectors": {
     "defaultRequire": 1,
