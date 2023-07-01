@@ -20,13 +20,10 @@ package com.illusivesoulworks.polymorph.api.client.widget;
 import com.illusivesoulworks.polymorph.api.common.base.IRecipePair;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -60,7 +57,7 @@ public class OutputWidget extends AbstractWidget {
     int k = 4;
     ItemRenderer itemRenderer = minecraft.getItemRenderer();
     poseStack.pushPose();
-//    poseStack.translate(1);
+    poseStack.translate(0, 0, 700);
     itemRenderer.renderAndDecorateItem(poseStack, this.getOutput(), this.getX() + k,
         this.getY() + k);
     itemRenderer.renderGuiItemDecorations(poseStack, minecraft.font, this.getOutput(),
@@ -78,11 +75,6 @@ public class OutputWidget extends AbstractWidget {
 
   public void setHighlighted(boolean highlighted) {
     this.highlighted = highlighted;
-  }
-
-  public List<ClientTooltipComponent> getTooltipText(Screen screen) {
-    return screen.getTooltipFromItem(this.getOutput()).stream().map(Component::getVisualOrderText)
-        .map(ClientTooltipComponent::create).toList();
   }
 
   @Override
