@@ -46,7 +46,7 @@ public class PolymorphClient implements IPolymorphClient {
       AbstractContainerMenu container = containerScreen.getMenu();
 
       if (container instanceof SmithingMenu) {
-        return new PlayerRecipesWidget(containerScreen, container.slots.get(2));
+        return new PlayerRecipesWidget(containerScreen, container.slots.get(3));
       } else if (container instanceof AbstractFurnaceMenu) {
         return new FurnaceRecipesWidget(containerScreen);
       }
