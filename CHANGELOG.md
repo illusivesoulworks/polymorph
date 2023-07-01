@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 Prior to version 0.45.0, this project used MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH.
 
 ## [0.49.0+1.20.1] - 2023.07.01
+### Added
+- Added Quilt support
 ### Changed
 - Updated to Minecraft 1.20.1
 

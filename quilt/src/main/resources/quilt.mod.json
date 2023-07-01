@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "quilt_loader": {
+    "group": "com.illusivesoulworks.${mod_id}",
+    "id": "${mod_id}",
+    "version": "${version}",
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "entrypoints": {
+      "init": [
+        "com.illusivesoulworks.polymorph.PolymorphQuiltMod"
+      ],
+      "client_init": [
+        "com.illusivesoulworks.polymorph.PolymorphQuiltClientMod"
+      ],
+      "cardinal-components": [
+        "com.illusivesoulworks.polymorph.common.components.PolymorphQuiltComponents"
+      ]
+    },
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "version": "*"
+      },
+      {
+        "id": "quilt_base",
+        "version": "*"
+      },
+      {
+        "id": "minecraft",
+        "version": "${quilt_mc_version_range}"
+      },
+      {
+        "id": "java",
+        "version": ">=17"
+      },
+      {
+        "id": "spectrelib",
+        "version": ">=0.13"
+      },
+      {
+        "id": "cardinal-components-base",
+        "version": "*"
+      },
+      {
+        "id": "cardinal-components-entity",
+        "version": "*"
+      },
+      {
+        "id": "cardinal-components-item",
+        "version": "*"
+      },
+      {
+        "id": "cardinal-components-block",
+        "version": "*"
+      },
+      {
+        "id": "quilted_fabric_api",
+        "version": "*"
+      }
+    ],
+    "metadata": {
+      "name": "${mod_name}",
+      "description": "${mod_description}",
+      "contributors": {
+        "${mod_author}": "Owner"
+      },
+      "contact": {
+        "issues": "${issue_tracker}"
+      },
+      "license": "${license}",
+      "icon": "${mod_id}_icon.png"
+    }
+  },
+  "cardinal-components": [
+    "polymorph:player_recipe_data",
+    "polymorph:block_entity_recipe_data",
+    "polymorph:stack_recipe_data"
+  ],
+  "mixin": [
+    "polymorph.mixins.json",
+    "polymorph.quilt.mixins.json"
+  ],
+  "minecraft": {
+    "environment": "*"
+  }
+}

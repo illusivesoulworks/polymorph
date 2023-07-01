@@ -1,0 +1,156 @@
+plugins {
+    id 'org.quiltmc.loom' version '1.+'
+    id 'maven-publish'
+    id 'idea'
+    id 'net.darkhax.curseforgegradle' version '1.+'
+    id 'com.modrinth.minotaur' version '2.+'
+}
+
+archivesBaseName = "${mod_id}-quilt"
+
+repositories {
+    maven {
+        name 'Ladysnake Libs'
+        url 'https://ladysnake.jfrog.io/artifactory/mods'
+    }
+    maven {
+        name 'Quilt (Release)'
+        url 'https://maven.quiltmc.org/repository/release/'
+    }
+    maven {
+        name 'Quilt (Snapshot)'
+        url 'https://maven.quiltmc.org/repository/snapshot/'
+        content {
+            includeGroup 'org.quiltmc.fabric_api_qsl'
+            includeGroupByRegex 'org\\.quiltmc\\.qsl(?:\\.[a-z_]+)?'
+        }
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings(loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${parchment_mc_version}:${parchment_version}@zip")
+    })
+    modImplementation "org.quiltmc:quilt-loader:${quilt_loader_version}"
+    modImplementation("org.quiltmc:qsl:${quilt_stdlib_version}") {
+        exclude group: "net.fabricmc"
+    }
+    modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}"
+
+    implementation group: 'com.electronwill.night-config', name: 'core', version: '3.6.5'
+    implementation group: 'com.electronwill.night-config', name: 'toml', version: '3.6.5'
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+    implementation project(":common")
+
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cca_version}"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-block:${cca_version}"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-item:${cca_version}"
+    modImplementation group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-quilt', version: "${spectrelib_range}"
+
+    // Embedded
+    include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}"
+    include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cca_version}"
+    include "dev.onyxstudios.cardinal-components-api:cardinal-components-block:${cca_version}"
+    include "dev.onyxstudios.cardinal-components-api:cardinal-components-item:${cca_version}"
+    include group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-quilt', version: "${spectrelib_version}"
+}
+
+loom {
+    runs {
+        client {
+            client()
+            setConfigName("Quilt Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        server {
+            server()
+            setConfigName("Quilt Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs += '../licenses'
+        }
+    }
+}
+
+processResources {
+    from project(":common").sourceSets.main.resources
+    inputs.property "version", project.version
+
+    filesMatching("quilt.mod.json") {
+        expand 'version': project.version, 'quilt_mc_version_range': project.quilt_mc_version_range, 'license': project.license,
+                'mod_id': project.mod_id, 'mod_author': project.mod_author, 'mod_description': project.mod_description,
+                'mod_name': project.mod_name, 'issue_tracker': project.issue_tracker
+    }
+
+    filesMatching("pack.mcmeta") {
+        expand 'mod_name': project.mod_name
+    }
+
+    filesMatching('*.mixins.json') {
+        expand "refmap_target": "${archivesBaseName}-"
+    }
+}
+
+tasks.withType(JavaCompile) {
+    source(project(":common").sourceSets.main.allSource)
+}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId project.archivesBaseName
+            version project.version
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            url "file://" + System.getenv("local_maven")
+        }
+    }
+}
+
+task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    apiToken = findProperty('curseKey')
+    def projectId = "${cf_id}".toString()
+    def mainFile = upload(projectId, file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
+    mainFile.changelogType = 'markdown'
+    mainFile.changelog = file('../CHANGELOG_LATEST.md')
+    mainFile.releaseType = "${release_type}"
+    "${release_versions}".split(',').each {
+        mainFile.addGameVersion("${it}")
+    }
+    mainFile.addRequirement("qsl")
+    mainFile.addEmbedded("cardinal-components")
+    mainFile.withAdditionalFile(sourcesJar)
+}
+
+modrinth {
+    token = findProperty('modrinthKey') ?: 0
+    projectId = "${modrinth_id}"
+    versionName = getArchivesBaseName() + "-" + getVersion()
+    versionType = "${release_type}"
+    changelog = file('../CHANGELOG_LATEST.md').text
+    uploadFile = file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")
+    additionalFiles = [sourcesJar]
+    gameVersions = "${release_versions}".split(",") as List<String>
+    loaders = ["quilt"]
+    dependencies {
+        required.project "qsl"
+        embedded.project "cardinal-components-api"
+    }
+}
