@@ -38,6 +38,7 @@ subprojects {
 
     repositories {
         mavenCentral()
+        mavenLocal()
 
         maven {
             name = 'Sponge / Mixin'
