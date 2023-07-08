@@ -31,6 +31,6 @@ public abstract class MixinTableContainer extends AbstractContainerMenu {
   private <C extends Container, T extends Recipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, RecipeType<T> type, C inventory, Level world,
       Container unused) {
-    return RecipeSelection.getPlayerRecipe(type, inventory, world, this.slots);
+    return RecipeSelection.getPlayerRecipe(this, type, inventory, world, this.slots);
   }
 }

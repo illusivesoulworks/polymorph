@@ -52,7 +52,7 @@ public abstract class MixinPatternTermMenu extends MEStorageMenu {
       method = "getAndUpdateOutput")
   private <C extends Container, T extends Recipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, RecipeType<T> type, C inventory, Level world) {
-    return RecipeSelection.getPlayerRecipe(type, inventory, world,
+    return RecipeSelection.getPlayerRecipe(this, type, inventory, world,
         this.getPlayerInventory().player);
   }
 }

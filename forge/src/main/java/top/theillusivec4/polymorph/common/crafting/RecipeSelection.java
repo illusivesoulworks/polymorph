@@ -44,7 +44,8 @@ import top.theillusivec4.polymorph.api.common.capability.IStackRecipeData;
 public class RecipeSelection {
 
   public static <T extends Recipe<C>, C extends Container> Optional<T> getPlayerRecipe(
-      RecipeType<T> pType, C pInventory, Level pWorld, List<Slot> slots) {
+      AbstractContainerMenu containerMenu, RecipeType<T> pType, C pInventory, Level pWorld,
+      List<Slot> slots) {
     Player player = null;
 
     for (Slot slot : slots) {
@@ -56,7 +57,7 @@ public class RecipeSelection {
     }
 
     if (player != null) {
-      return getPlayerRecipe(pType, pInventory, pWorld, player, new ArrayList<>());
+      return getPlayerRecipe(containerMenu, pType, pInventory, pWorld, player, new ArrayList<>());
     } else {
       return pWorld.getRecipeManager().getRecipesFor(pType, pInventory, pWorld).stream()
           .findFirst();
@@ -64,20 +65,16 @@ public class RecipeSelection {
   }
 
   public static <T extends Recipe<C>, C extends Container> Optional<T> getPlayerRecipe(
-      AbstractContainerMenu containerMenu, RecipeType<T> pType, C pInventory, Level pWorld, Player pPlayer) {
+      AbstractContainerMenu containerMenu, RecipeType<T> pType, C pInventory, Level pWorld,
+      Player pPlayer) {
+    return getPlayerRecipe(containerMenu, pType, pInventory, pWorld, pPlayer, new ArrayList<>());
+  }
+
+  public static <T extends Recipe<C>, C extends Container> Optional<T> getPlayerRecipe(
+      AbstractContainerMenu containerMenu, RecipeType<T> pType, C pInventory, Level pWorld,
+      Player pPlayer, List<T> pRecipes) {
     LazyOptional<IPlayerRecipeData> maybeData = PolymorphApi.common().getRecipeData(pPlayer);
     maybeData.ifPresent(recipeData -> recipeData.setContainerMenu(containerMenu));
-    return getRecipe(pType, pInventory, pWorld, maybeData, new ArrayList<>());
-  }
-
-  public static <T extends Recipe<C>, C extends Container> Optional<T> getPlayerRecipe(
-      RecipeType<T> pType, C pInventory, Level pWorld, Player pPlayer) {
-    return getPlayerRecipe(pType, pInventory, pWorld, pPlayer, new ArrayList<>());
-  }
-
-  public static <T extends Recipe<C>, C extends Container> Optional<T> getPlayerRecipe(
-      RecipeType<T> pType, C pInventory, Level pWorld, Player pPlayer, List<T> pRecipes) {
-    LazyOptional<IPlayerRecipeData> maybeData = PolymorphApi.common().getRecipeData(pPlayer);
     return getRecipe(pType, pInventory, pWorld, maybeData, pRecipes);
   }
 

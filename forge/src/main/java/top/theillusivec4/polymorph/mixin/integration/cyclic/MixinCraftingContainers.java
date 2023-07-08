@@ -52,6 +52,7 @@ public abstract class MixinCraftingContainers extends ContainerBase {
   private <C extends Container, T extends Recipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, RecipeType<T> type, C inventory, Level world,
       Container unused) {
-    return RecipeSelection.getPlayerRecipe(type, inventory, world, this.playerEntity);
+    return RecipeSelection.getPlayerRecipe(this.playerEntity.containerMenu, type, inventory, world,
+        this.playerEntity);
   }
 }

@@ -27,7 +27,8 @@ public class MixinStorageControllerContainerBase {
       method = "findRecipeForMatrixClient")
   private <C extends Container, T extends Recipe<C>> Optional<T> polymorph$findRecipeClient(
       RecipeManager recipeManager, RecipeType<T> type, C inventory, Level world) {
-    return RecipeSelection.getPlayerRecipe(type, inventory, world, this.player);
+    return RecipeSelection.getPlayerRecipe(this.player.containerMenu, type, inventory, world,
+        this.player);
   }
 
   @Redirect(
@@ -37,6 +38,7 @@ public class MixinStorageControllerContainerBase {
       method = "findRecipeForMatrix")
   private <C extends Container, T extends Recipe<C>> Optional<T> polymorph$findRecipe(
       RecipeManager recipeManager, RecipeType<T> type, C inventory, Level world) {
-    return RecipeSelection.getPlayerRecipe(type, inventory, world, this.player);
+    return RecipeSelection.getPlayerRecipe(this.player.containerMenu, type, inventory, world,
+        this.player);
   }
 }

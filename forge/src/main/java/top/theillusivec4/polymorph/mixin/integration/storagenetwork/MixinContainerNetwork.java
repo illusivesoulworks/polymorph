@@ -49,7 +49,8 @@ public class MixinContainerNetwork {
       method = "findMatchingRecipe")
   private <C extends Container, T extends Recipe<C>> Optional<T> polymorph$getRecipe(
       RecipeManager recipeManager, RecipeType<T> type, C inventory, Level world) {
-    return RecipeSelection.getPlayerRecipe(type, inventory, world, this.player);
+    return RecipeSelection.getPlayerRecipe(this.player.containerMenu, type, inventory, world,
+        this.player);
   }
 
   @Redirect(
@@ -59,6 +60,7 @@ public class MixinContainerNetwork {
       method = "findMatchingRecipeClient")
   private <C extends Container, T extends Recipe<C>> Optional<T> polymorph$getRecipeClient(
       RecipeManager recipeManager, RecipeType<T> type, C inventory, Level world) {
-    return RecipeSelection.getPlayerRecipe(type, inventory, world, this.player);
+    return RecipeSelection.getPlayerRecipe(this.player.containerMenu, type, inventory, world,
+        this.player);
   }
 }

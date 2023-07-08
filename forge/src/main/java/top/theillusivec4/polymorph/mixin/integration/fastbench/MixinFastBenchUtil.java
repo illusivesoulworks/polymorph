@@ -48,6 +48,7 @@ public class MixinFastBenchUtil {
                                                                 Level unused1, Player player,
                                                                 CraftingInventoryExt unused2,
                                                                 ResultContainer result) {
-    return RecipeSelection.getPlayerRecipe(RecipeType.CRAFTING, inv, world, player).orElse(null);
+    return RecipeSelection.getPlayerRecipe(player.containerMenu, RecipeType.CRAFTING, inv, world,
+        player).orElse(null);
   }
 }
