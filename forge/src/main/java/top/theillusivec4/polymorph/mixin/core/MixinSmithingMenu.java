@@ -79,7 +79,7 @@ public abstract class MixinSmithingMenu extends ItemCombinerMenu {
           by = 3),
       method = "createResult")
   private void polymorph$updateRepairOutput(CallbackInfo ci) {
-    RecipeSelection.getPlayerRecipe(RecipeType.SMITHING, this.inputSlots, this.player.level,
+    RecipeSelection.getPlayerRecipe(this, RecipeType.SMITHING, this.inputSlots, this.player.level,
         this.player, this.recipes).ifPresent(recipe -> this.selectedRecipe = recipe);
   }
 }

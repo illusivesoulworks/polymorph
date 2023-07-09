@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to the format [MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH](https://mcforge.readthedocs.io/en/1.15.x/conventions/versioning/).
 
+## [1.18.2-0.49] - 2023.07.08
+### Changed
+- Allow loading on JEI versions below 10 [#225](https://github.com/illusivesoulworks/polymorph/issues/225)
+### Fixed
+- Fixed player crafting menu integrations [#226](https://github.com/illusivesoulworks/polymorph/issues/226)
+
 ## [1.18.2-0.48] - 2023.06.30
 ### Fixed
 - Fixed recipe invalidating logic introduced in 0.47
