@@ -36,7 +36,7 @@
     "polymorph.fabric.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.14",
+    "fabricloader": ">=0.14.23",
     "fabric": "*",
     "minecraft": "${fabric_mc_version_range}",
     "java": ">=17"
