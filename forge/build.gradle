@@ -85,6 +85,13 @@ minecraft {
     }
 }
 
+repositories {
+    maven {
+        name = "Shadows' Mods Maven"
+        url = "https://maven.shadowsoffire.dev/releases"
+    }
+}
+
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
@@ -92,10 +99,10 @@ dependencies {
     compileOnly project(":common")
 	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    compileOnly fg.deobf("curse.maven:fastworkbench-288885:${file_fastworkbench}")
-    compileOnly fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
-    compileOnly fg.deobf("curse.maven:fastsuite-475117:${file_fastsuite}")
-    compileOnly fg.deobf("curse.maven:placebo-283644:${file_placebo}")
+    compileOnly fg.deobf("dev.shadowsoffire:FastWorkbench:${fastworkbench_version}")
+    compileOnly fg.deobf("dev.shadowsoffire:FastFurnace:${fastfurnace_version}")
+    compileOnly fg.deobf("dev.shadowsoffire:FastSuite:${fastsuite_version}")
+    implementation fg.deobf("dev.shadowsoffire:Placebo:${placebo_version}")
 
     implementation fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_range}")
     jarJar fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_range}") {

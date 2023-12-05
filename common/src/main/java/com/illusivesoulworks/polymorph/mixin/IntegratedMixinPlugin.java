@@ -37,8 +37,8 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin, IMixinErrorHan
   private static final Map<String, String> CLASS_TO_MOD = new HashMap<>();
 
   static {
-    CLASS_TO_MOD.put("shadows.fastbench.", PolymorphIntegrations.Mod.FASTWORKBENCH.getId());
-    CLASS_TO_MOD.put("shadows.fastsuite.", PolymorphIntegrations.Mod.FASTSUITE.getId());
+    CLASS_TO_MOD.put("dev.shadowsoffire.fastbench.", PolymorphIntegrations.Mod.FASTWORKBENCH.getId());
+    CLASS_TO_MOD.put("dev.shadowsoffire.fastsuite.", PolymorphIntegrations.Mod.FASTSUITE.getId());
   }
 
   @Override

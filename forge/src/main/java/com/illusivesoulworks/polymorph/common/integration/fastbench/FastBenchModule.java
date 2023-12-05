@@ -20,6 +20,9 @@ package com.illusivesoulworks.polymorph.common.integration.fastbench;
 import com.illusivesoulworks.polymorph.common.integration.AbstractCompatibilityModule;
 import com.illusivesoulworks.polymorph.mixin.core.AccessorCraftingMenu;
 import com.illusivesoulworks.polymorph.mixin.core.AccessorInventoryMenu;
+import dev.shadowsoffire.fastbench.FastBench;
+import dev.shadowsoffire.fastbench.net.RecipeMessage;
+import dev.shadowsoffire.placebo.network.PacketDistro;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -29,9 +32,6 @@ import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
-import shadows.fastbench.FastBench;
-import shadows.fastbench.net.RecipeMessage;
-import shadows.placebo.network.PacketDistro;
 
 public class FastBenchModule extends AbstractCompatibilityModule {
 

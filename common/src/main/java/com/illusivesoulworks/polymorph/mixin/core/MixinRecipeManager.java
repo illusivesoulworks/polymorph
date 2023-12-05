@@ -49,4 +49,17 @@ public class MixinRecipeManager {
           .ifPresent(recipe -> cb.setReturnValue(Optional.of(Pair.of(resourceLocation, recipe))));
     }
   }
+
+  @Inject(
+      at = @At("HEAD"),
+      method = "getRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;",
+      cancellable = true)
+  private <C extends Container, T extends Recipe<C>> void polymorph$getRecipe(
+      RecipeType<T> recipeType, C inventory, Level level, CallbackInfoReturnable<Optional<T>> cb) {
+
+    if (inventory instanceof BlockEntity) {
+      RecipeSelection.getBlockEntityRecipe(recipeType, inventory, level, (BlockEntity) inventory)
+          .ifPresent(recipe -> cb.setReturnValue(Optional.of(recipe)));
+    }
+  }
 }

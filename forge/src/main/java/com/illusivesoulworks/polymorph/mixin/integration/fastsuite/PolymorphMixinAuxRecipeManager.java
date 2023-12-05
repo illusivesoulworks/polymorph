@@ -18,6 +18,7 @@
 package com.illusivesoulworks.polymorph.mixin.integration.fastsuite;
 
 import com.illusivesoulworks.polymorph.common.crafting.RecipeSelection;
+import dev.shadowsoffire.fastsuite.AuxRecipeManager;
 import java.util.Optional;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
@@ -28,7 +29,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import shadows.fastsuite.AuxRecipeManager;
 
 @Mixin(AuxRecipeManager.class)
 public class PolymorphMixinAuxRecipeManager {
