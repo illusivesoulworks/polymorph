@@ -19,7 +19,10 @@ package com.illusivesoulworks.polymorph.common.impl;
 
 import com.illusivesoulworks.polymorph.api.common.base.IRecipePair;
 import javax.annotation.Nonnull;
+import net.minecraft.core.DefaultedRegistry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public record RecipePair(ResourceLocation resourceLocation,
@@ -39,17 +42,18 @@ public record RecipePair(ResourceLocation resourceLocation,
   public int compareTo(@Nonnull IRecipePair other) {
     ItemStack output1 = this.getOutput();
     ItemStack output2 = other.getOutput();
-    int compare = output1.getDescriptionId().compareTo(output2.getDescriptionId());
+    DefaultedRegistry<Item> registry = BuiltInRegistries.ITEM;
+    int compare = registry.getKey(output1.getItem()).compareTo(registry.getKey(output2.getItem()));
 
     if (compare == 0) {
-      int diff = output1.getCount() - output2.getCount();
+      compare = output1.getCount() - output2.getCount();
 
-      if (diff == 0) {
+      if (compare == 0) {
         String tag1 = output1.getTag() != null ? output1.getTag().getAsString() : "";
         String tag2 = output2.getTag() != null ? output2.getTag().getAsString() : "";
         return tag1.compareTo(tag2);
       } else {
-        return diff;
+        return compare;
       }
     } else {
 
