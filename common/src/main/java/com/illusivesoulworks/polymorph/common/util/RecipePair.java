@@ -19,13 +19,14 @@ package com.illusivesoulworks.polymorph.common.util;
 
 import com.illusivesoulworks.polymorph.api.common.base.IRecipePair;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
+import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.component.TypedDataComponent;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public record RecipePair(ResourceLocation resourceLocation,
@@ -53,12 +54,13 @@ public record RecipePair(ResourceLocation resourceLocation,
   public int compareTo(@Nonnull IRecipePair other) {
     ItemStack output1 = this.getOutput();
     ItemStack output2 = other.getOutput();
-    int compare = output1.getDescriptionId().compareTo(output2.getDescriptionId());
+    DefaultedRegistry<Item> registry = BuiltInRegistries.ITEM;
+    int compare = registry.getKey(output1.getItem()).compareTo(registry.getKey(output2.getItem()));
 
     if (compare == 0) {
-      int diff = output1.getCount() - output2.getCount();
+      compare = output1.getCount() - output2.getCount();
 
-      if (diff == 0) {
+      if (compare == 0) {
         DataComponentMap components1 = output1.getComponents();
         DataComponentMap components2 = output2.getComponents();
 
@@ -67,7 +69,7 @@ public record RecipePair(ResourceLocation resourceLocation,
         }
         return components1.hashCode() - components2.hashCode();
       } else {
-        return diff;
+        return compare;
       }
     } else {
 
