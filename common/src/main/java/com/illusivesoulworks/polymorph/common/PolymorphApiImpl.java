@@ -17,6 +17,7 @@
 
 package com.illusivesoulworks.polymorph.common;
 
+import com.illusivesoulworks.polymorph.PolymorphConstants;
 import com.illusivesoulworks.polymorph.api.PolymorphApi;
 import com.illusivesoulworks.polymorph.api.common.base.IPolymorphNetwork;
 import com.illusivesoulworks.polymorph.api.common.base.IPolymorphRecipeManager;
@@ -87,11 +88,21 @@ public class PolymorphApiImpl extends PolymorphApi {
 
   @Override
   public void registerMenu(IBlockEntityFactory blockEntityFactory) {
+
+    if (blockEntityFactory == null) {
+      PolymorphConstants.LOG.error("Attempted to register a null IBlockEntityFactory");
+      return;
+    }
     this.blockEntityFactories.add(blockEntityFactory);
   }
 
   @Override
   public void registerBlockEntity(IRecipeDataFactory recipeDataFactory) {
+
+    if (recipeDataFactory == null) {
+      PolymorphConstants.LOG.error("Attempted to register a null IRecipeDataFactory");
+      return;
+    }
     this.recipeDataFactories.add(recipeDataFactory);
   }
 }

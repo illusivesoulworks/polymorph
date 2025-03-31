@@ -17,6 +17,8 @@
 
 package com.illusivesoulworks.polymorph.client;
 
+import com.illusivesoulworks.polymorph.PolymorphConstants;
+import com.illusivesoulworks.polymorph.api.PolymorphApi;
 import com.illusivesoulworks.polymorph.api.client.PolymorphWidgets;
 import com.illusivesoulworks.polymorph.api.client.base.IRecipesWidget;
 import com.illusivesoulworks.polymorph.api.client.widgets.CrafterRecipesWidget;
@@ -86,6 +88,11 @@ public class PolymorphWidgetsImpl extends PolymorphWidgets {
 
   @Override
   public void registerWidget(IRecipesWidgetFactory pFactory) {
+
+    if (pFactory == null) {
+      PolymorphConstants.LOG.error("Attempted to register a null IRecipesWidgetFactory");
+      return;
+    }
     this.widgetFactories.add(pFactory);
   }
 
