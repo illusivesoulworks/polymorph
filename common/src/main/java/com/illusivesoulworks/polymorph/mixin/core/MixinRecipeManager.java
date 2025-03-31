@@ -19,6 +19,7 @@ package com.illusivesoulworks.polymorph.mixin.core;
 
 import com.illusivesoulworks.polymorph.api.PolymorphApi;
 import com.illusivesoulworks.polymorph.api.common.base.IRecipeContext;
+import com.illusivesoulworks.polymorph.api.common.capability.IRecipeData;
 import java.util.Optional;
 import javax.annotation.Nullable;
 import net.minecraft.world.item.crafting.Recipe;
@@ -50,9 +51,13 @@ public class MixinRecipeManager implements IRecipeContext {
       CallbackInfoReturnable<Optional<RecipeHolder<T>>> cb) {
 
     if (this.polymorph$getContext() instanceof BlockEntity blockEntity) {
-      PolymorphApi.getInstance().getRecipeManager()
-          .getBlockEntityRecipe(recipeType, inventory, level, blockEntity)
-          .ifPresent(recipe -> cb.setReturnValue(Optional.of(recipe)));
+      IRecipeData<?> data = PolymorphApi.getInstance().getBlockEntityRecipeData(blockEntity);
+
+      if (data != null) {
+        PolymorphApi.getInstance().getRecipeManager()
+            .getBlockEntityRecipe(recipeType, inventory, level, blockEntity)
+            .ifPresent(recipe -> cb.setReturnValue(Optional.of(recipe)));
+      }
     }
   }
 
