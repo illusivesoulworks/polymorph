@@ -1,0 +1,16 @@
+name: Release
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    container:
+      image: mcr.microsoft.com/openjdk/jdk:21-ubuntu
+      options: --user root
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./gradlew build publishFabricForgeNeoForge
+        env:
+          CURSEFORGE_KEY: ${{ secrets.CURSEFORGE_KEY }}
+          MODRINTH_KEY: ${{ secrets.MODRINTH_KEY }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
