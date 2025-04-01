@@ -2,6 +2,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 This is a copy of the changelog for the most recent version. For the full version history, go [here](https://github.com/illusivesoulworks/polymorph/blob/1.20.x/CHANGELOG.md).
 
-## [0.49.8+1.20.1] - 2024.12.15
+## [0.49.9+1.20.1] - 2025.03.31
 ### Fixed
-- Fixed differentiation of certain modded recipe item outputs
+- Fixed potential NPE crashes [#299](https://github.com/illusivesoulworks/polymorph/issues/299) [#307](https://github.com/illusivesoulworks/polymorph/issues/307)
