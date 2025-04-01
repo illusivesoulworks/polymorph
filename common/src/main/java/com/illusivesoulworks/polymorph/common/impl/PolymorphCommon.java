@@ -17,6 +17,7 @@
 
 package com.illusivesoulworks.polymorph.common.impl;
 
+import com.illusivesoulworks.polymorph.PolymorphConstants;
 import com.illusivesoulworks.polymorph.api.common.base.IPolymorphCommon;
 import com.illusivesoulworks.polymorph.api.common.base.IPolymorphPacketDistributor;
 import com.illusivesoulworks.polymorph.api.common.capability.IBlockEntityRecipeData;
@@ -138,21 +139,41 @@ public class PolymorphCommon implements IPolymorphCommon {
   @Override
   public void registerBlockEntity2RecipeData(
       IBlockEntity2RecipeData blockEntity2RecipeData) {
+
+    if (blockEntity2RecipeData == null) {
+      PolymorphConstants.LOG.error("Attempted to register a null IBlockEntity2RecipeData");
+      return;
+    }
     this.blockEntity2RecipeData.add(blockEntity2RecipeData);
   }
 
   @Override
   public void registerContainer2BlockEntity(IContainer2BlockEntity container2BlockEntity) {
+
+    if (container2BlockEntity == null) {
+      PolymorphConstants.LOG.error("Attempted to register a null IContainer2BlockEntity");
+      return;
+    }
     this.container2BlockEntities.add(container2BlockEntity);
   }
 
   @Override
   public void registerItemStack2RecipeData(IItemStack2RecipeData stack2RecipeData) {
+
+    if (stack2RecipeData == null) {
+      PolymorphConstants.LOG.error("Attempted to register a null IItemStack2RecipeData");
+      return;
+    }
     this.itemStack2RecipeData.add(stack2RecipeData);
   }
 
   @Override
   public void registerContainer2ItemStack(IContainer2ItemStack container2ItemStack) {
+
+    if (container2ItemStack == null) {
+      PolymorphConstants.LOG.error("Attempted to register a null IContainer2ItemStack");
+      return;
+    }
     this.container2ItemStacks.add(container2ItemStack);
   }
 }
