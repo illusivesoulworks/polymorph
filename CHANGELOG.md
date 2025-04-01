@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 Prior to version 0.45.0, this project used MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH.
 
+## [1.0.8+1.21.1] - 2025.03.31
+### Added
+- Added `de_de`, `de_at`, and `de_ch` localizations [#296](https://github.com/illusivesoulworks/polymorph/pull/296)
+### Fixed
+- Fixed potential NPE crashes
+- Fixed erroneous block entities being added to recipe checks [#298](https://github.com/illusivesoulworks/polymorph/issues/298)
+
 ## [1.0.7+1.21.1] - 2024.12.15
 ### Changed
 - Updated `zh_cn` localization [#289](https://github.com/illusivesoulworks/polymorph/pull/289)
