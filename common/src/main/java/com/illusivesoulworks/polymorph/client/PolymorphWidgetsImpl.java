@@ -26,6 +26,7 @@ import com.illusivesoulworks.polymorph.api.client.widgets.FurnaceRecipesWidget;
 import com.illusivesoulworks.polymorph.api.client.widgets.PlayerRecipesWidget;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;
@@ -38,7 +39,7 @@ public class PolymorphWidgetsImpl extends PolymorphWidgets {
 
   public static final PolymorphWidgets INSTANCE = new PolymorphWidgetsImpl();
 
-  private final List<IRecipesWidgetFactory> widgetFactories = new LinkedList<>();
+  private final List<IRecipesWidgetFactory> widgetFactories = new CopyOnWriteArrayList<>();
 
   public static void setup() {
     INSTANCE.registerWidget(containerScreen -> {
