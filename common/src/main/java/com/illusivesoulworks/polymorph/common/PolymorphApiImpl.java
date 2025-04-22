@@ -27,6 +27,7 @@ import com.illusivesoulworks.polymorph.common.capability.PolymorphCapabilities;
 import com.illusivesoulworks.polymorph.platform.Services;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -35,8 +36,8 @@ public class PolymorphApiImpl extends PolymorphApi {
 
   public static final PolymorphApi INSTANCE = new PolymorphApiImpl();
 
-  private final List<IBlockEntityFactory> blockEntityFactories = new LinkedList<>();
-  private final List<IRecipeDataFactory> recipeDataFactories = new LinkedList<>();
+  private final List<IBlockEntityFactory> blockEntityFactories = new CopyOnWriteArrayList<>();
+  private final List<IRecipeDataFactory> recipeDataFactories = new CopyOnWriteArrayList<>();
   private final IPolymorphNetwork distributor = Services.PLATFORM.getPacketDistributor();
   private final IPolymorphRecipeManager recipeManager = new PolymorphRecipeManager();
 
