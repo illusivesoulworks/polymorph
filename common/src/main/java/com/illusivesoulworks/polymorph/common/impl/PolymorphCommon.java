@@ -29,6 +29,7 @@ import com.illusivesoulworks.polymorph.platform.Services;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -43,10 +44,10 @@ public class PolymorphCommon implements IPolymorphCommon {
     return INSTANCE;
   }
 
-  private final List<IBlockEntity2RecipeData> blockEntity2RecipeData = new LinkedList<>();
-  private final List<IContainer2BlockEntity> container2BlockEntities = new LinkedList<>();
-  private final List<IContainer2ItemStack> container2ItemStacks = new LinkedList<>();
-  private final List<IItemStack2RecipeData> itemStack2RecipeData = new LinkedList<>();
+  private final List<IBlockEntity2RecipeData> blockEntity2RecipeData = new CopyOnWriteArrayList<>();
+  private final List<IContainer2BlockEntity> container2BlockEntities = new CopyOnWriteArrayList<>();
+  private final List<IContainer2ItemStack> container2ItemStacks = new CopyOnWriteArrayList<>();
+  private final List<IItemStack2RecipeData> itemStack2RecipeData = new CopyOnWriteArrayList<>();
   private final IPolymorphPacketDistributor distributor = Services.PLATFORM.getPacketDistributor();
 
   private MinecraftServer server = null;
