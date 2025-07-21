@@ -60,11 +60,19 @@ public class PolymorphFabricComponents implements BlockComponentInitializer,
   @Override
   public void registerBlockComponentFactories(@Nonnull BlockComponentFactoryRegistry registry) {
     registerBlockEntity(AbstractFurnaceBlockEntity.class,
-        blockEntity -> new FurnaceRecipeDataComponent((AbstractFurnaceBlockEntity) blockEntity));
+                        blockEntity -> new FurnaceRecipeDataComponent(
+                            (AbstractFurnaceBlockEntity) blockEntity));
 
     for (Map.Entry<Class<? extends BlockEntity>, Function<BlockEntity, AbstractBlockEntityRecipeDataComponent<?>>> entry : BLOCK_ENTITY_2_RECIPE_DATA.entrySet()) {
       registry.registerFor(entry.getKey(), BLOCK_ENTITY_RECIPE_DATA,
-          blockEntity -> entry.getValue().apply(blockEntity));
+                           blockEntity -> entry.getValue().apply(blockEntity));
+    }
+
+    for (Map.Entry<Class<? extends BlockEntity>, PolymorphApi.IRecipeDataFactory> entry : PolymorphApi.getInstance()
+        .getBlockEntities().entrySet()) {
+      registry.registerFor(entry.getKey(), BLOCK_ENTITY_RECIPE_DATA,
+                           blockEntity -> new WrappedRecipeDataComponent<>(
+                               entry.getValue().createRecipeData(blockEntity)));
     }
   }
 

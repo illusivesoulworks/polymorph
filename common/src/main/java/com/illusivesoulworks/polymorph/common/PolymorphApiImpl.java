@@ -17,6 +17,7 @@
 
 package com.illusivesoulworks.polymorph.common;
 
+import com.google.common.collect.ImmutableMap;
 import com.illusivesoulworks.polymorph.PolymorphConstants;
 import com.illusivesoulworks.polymorph.api.PolymorphApi;
 import com.illusivesoulworks.polymorph.api.common.base.IPolymorphNetwork;
@@ -25,8 +26,9 @@ import com.illusivesoulworks.polymorph.api.common.capability.IBlockEntityRecipeD
 import com.illusivesoulworks.polymorph.api.common.capability.IPlayerRecipeData;
 import com.illusivesoulworks.polymorph.common.capability.PolymorphCapabilities;
 import com.illusivesoulworks.polymorph.platform.Services;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -38,6 +40,8 @@ public class PolymorphApiImpl extends PolymorphApi {
 
   private final List<IBlockEntityFactory> blockEntityFactories = new CopyOnWriteArrayList<>();
   private final List<IRecipeDataFactory> recipeDataFactories = new CopyOnWriteArrayList<>();
+  private final Map<Class<? extends BlockEntity>, IRecipeDataFactory>
+      blockEntity2RecipeDataFactory = new ConcurrentHashMap<>();
   private final IPolymorphNetwork distributor = Services.PLATFORM.getPacketDistributor();
   private final IPolymorphRecipeManager recipeManager = new PolymorphRecipeManager();
 
@@ -88,6 +92,11 @@ public class PolymorphApiImpl extends PolymorphApi {
   }
 
   @Override
+  public Map<Class<? extends BlockEntity>, IRecipeDataFactory> getBlockEntities() {
+    return ImmutableMap.copyOf(this.blockEntity2RecipeDataFactory);
+  }
+
+  @Override
   public void registerMenu(IBlockEntityFactory blockEntityFactory) {
 
     if (blockEntityFactory == null) {
@@ -104,6 +113,18 @@ public class PolymorphApiImpl extends PolymorphApi {
       PolymorphConstants.LOG.error("Attempted to register a null IRecipeDataFactory");
       return;
     }
+    this.recipeDataFactories.add(recipeDataFactory);
+  }
+
+  @Override
+  public void registerBlockEntity(Class<? extends BlockEntity> blockEntity,
+                                  IRecipeDataFactory recipeDataFactory) {
+
+    if (recipeDataFactory == null) {
+      PolymorphConstants.LOG.error("Attempted to register a null IRecipeDataFactory");
+      return;
+    }
+    this.blockEntity2RecipeDataFactory.put(blockEntity, recipeDataFactory);
     this.recipeDataFactories.add(recipeDataFactory);
   }
 }
