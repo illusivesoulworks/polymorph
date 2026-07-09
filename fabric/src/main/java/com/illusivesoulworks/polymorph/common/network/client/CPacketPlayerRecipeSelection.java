@@ -20,11 +20,16 @@ package com.illusivesoulworks.polymorph.common.network.client;
 import com.illusivesoulworks.polymorph.api.PolymorphApi;
 import com.illusivesoulworks.polymorph.common.integration.AbstractCompatibilityModule;
 import com.illusivesoulworks.polymorph.common.integration.PolymorphIntegrations;
+import com.illusivesoulworks.polymorph.mixin.core.AccessorCraftingMenu;
+import com.illusivesoulworks.polymorph.mixin.core.AccessorInventoryMenu;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.CraftingMenu;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.ItemCombinerMenu;
+import net.minecraft.world.item.crafting.Recipe;
 
 public record CPacketPlayerRecipeSelection(ResourceLocation recipe) {
 
@@ -42,6 +47,15 @@ public record CPacketPlayerRecipeSelection(ResourceLocation recipe) {
       PolymorphApi.common().getRecipeData(player)
           .ifPresent(recipeData -> recipeData.selectRecipe(recipe));
       PolymorphIntegrations.selectRecipe(container, recipe);
+
+      if (container instanceof CraftingMenu) {
+        AccessorCraftingMenu accessor = (AccessorCraftingMenu) container;
+        accessor.getResultSlots().setItem(0, ((Recipe) recipe).assemble(accessor.getCraftSlots(), player.level().registryAccess()));
+      } else if (container instanceof InventoryMenu) {
+        AccessorInventoryMenu accessor = (AccessorInventoryMenu) container;
+        accessor.getResultSlots().setItem(0, ((Recipe) recipe).assemble(accessor.getCraftSlots(), player.level().registryAccess()));
+      }
+
       container.slotsChanged(player.getInventory());
 
       if (container instanceof ItemCombinerMenu) {

@@ -30,4 +30,4 @@ plugins {
 }
 
 rootProject.name = "${mod_name}"
-include("common", "fabric", "forge", "quilt")
+include("fabric")
