@@ -19,7 +19,6 @@ package com.illusivesoulworks.polymorph.client;
 
 import com.illusivesoulworks.polymorph.api.client.base.ITickingRecipesWidget;
 import com.illusivesoulworks.polymorph.client.recipe.RecipesWidget;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;

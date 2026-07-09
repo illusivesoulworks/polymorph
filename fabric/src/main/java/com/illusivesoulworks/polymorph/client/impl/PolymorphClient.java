@@ -22,7 +22,6 @@ import com.illusivesoulworks.polymorph.api.client.base.IPolymorphClient;
 import com.illusivesoulworks.polymorph.api.client.base.IRecipesWidget;
 import com.illusivesoulworks.polymorph.client.recipe.widget.FurnaceRecipesWidget;
 import com.illusivesoulworks.polymorph.client.recipe.widget.PlayerRecipesWidget;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -47,8 +46,8 @@ public class PolymorphClient implements IPolymorphClient {
     get().registerWidget(containerScreen -> {
       AbstractContainerMenu container = containerScreen.getMenu();
 
-      if (container instanceof SmithingMenu) {
-        return new PlayerRecipesWidget(containerScreen, container.slots.get(3));
+      if (container instanceof SmithingMenu smithing) {
+        return new PlayerRecipesWidget(containerScreen, smithing.slots.get(3));
       } else if (container instanceof AbstractFurnaceMenu) {
         return new FurnaceRecipesWidget(containerScreen);
       }

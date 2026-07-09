@@ -24,28 +24,28 @@ public class SmithingRecipeWrapper extends RecipeWrapper {
     Recipe<?> recipe = this.getRecipe();
     Recipe<?> otherRecipe = pOther.getRecipe();
 
-    if (recipe instanceof SmithingTrimRecipe) {
-      AccessorSmithingTrimRecipe accessorSmithingRecipe = (AccessorSmithingTrimRecipe) recipe;
+    if (recipe instanceof SmithingTrimRecipe trimRecipe) {
+      AccessorSmithingTrimRecipe accessorSmithingRecipe = (AccessorSmithingTrimRecipe) trimRecipe;
       template = accessorSmithingRecipe.getTemplate();
       base = accessorSmithingRecipe.getBase();
       addition = accessorSmithingRecipe.getAddition();
-    } else if (recipe instanceof SmithingTransformRecipe) {
+    } else if (recipe instanceof SmithingTransformRecipe transformRecipe) {
       AccessorSmithingTransformRecipe accessorSmithingRecipe =
-          (AccessorSmithingTransformRecipe) recipe;
+          (AccessorSmithingTransformRecipe) transformRecipe;
       template = accessorSmithingRecipe.getTemplate();
       base = accessorSmithingRecipe.getBase();
       addition = accessorSmithingRecipe.getAddition();
     }
 
-    if (otherRecipe instanceof SmithingTrimRecipe) {
+    if (otherRecipe instanceof SmithingTrimRecipe trimRecipe) {
       AccessorSmithingTrimRecipe accessorSmithingRecipe =
-          (AccessorSmithingTrimRecipe) otherRecipe;
+          (AccessorSmithingTrimRecipe) trimRecipe;
       otherTemplate = accessorSmithingRecipe.getTemplate();
       otherBase = accessorSmithingRecipe.getBase();
       otherAddition = accessorSmithingRecipe.getAddition();
-    } else if (otherRecipe instanceof SmithingTransformRecipe) {
+    } else if (otherRecipe instanceof SmithingTransformRecipe transformRecipe) {
       AccessorSmithingTransformRecipe accessorSmithingRecipe =
-          (AccessorSmithingTransformRecipe) otherRecipe;
+          (AccessorSmithingTransformRecipe) transformRecipe;
       otherTemplate = accessorSmithingRecipe.getTemplate();
       otherBase = accessorSmithingRecipe.getBase();
       otherAddition = accessorSmithingRecipe.getAddition();

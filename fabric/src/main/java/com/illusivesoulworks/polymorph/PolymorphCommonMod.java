@@ -36,8 +36,8 @@ public class PolymorphCommonMod {
   public static void setup() {
     IPolymorphCommon commonApi = PolymorphApi.common();
     commonApi.registerBlockEntity2RecipeData(blockEntity -> {
-      if (blockEntity instanceof AbstractFurnaceBlockEntity) {
-        return new FurnaceRecipeData((AbstractFurnaceBlockEntity) blockEntity);
+      if (blockEntity instanceof AbstractFurnaceBlockEntity furnace) {
+        return new FurnaceRecipeData(furnace);
       }
       return null;
     });
@@ -45,8 +45,8 @@ public class PolymorphCommonMod {
       for (Slot inventorySlot : container.slots) {
         Container inventory = inventorySlot.container;
 
-        if (inventory instanceof BlockEntity) {
-          return (BlockEntity) inventory;
+        if (inventory instanceof BlockEntity blockEntity) {
+          return blockEntity;
         }
       }
       return null;

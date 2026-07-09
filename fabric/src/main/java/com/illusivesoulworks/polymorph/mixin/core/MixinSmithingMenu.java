@@ -35,6 +35,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
+// Suppress unused warnings because Mixin classes and their injector/shadow members are invoked dynamically at runtime by the Mixin framework rather than called directly in Java code.
 @SuppressWarnings("unused")
 @Mixin(SmithingMenu.class)
 public abstract class MixinSmithingMenu extends ItemCombinerMenu {

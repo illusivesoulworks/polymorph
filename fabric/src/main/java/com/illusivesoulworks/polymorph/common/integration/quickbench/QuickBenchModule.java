@@ -18,11 +18,11 @@ public class QuickBenchModule extends AbstractCompatibilityModule {
     if (recipe instanceof CraftingRecipe) {
       ResultContainer result = null;
 
-      if (containerMenu instanceof CraftingMenu) {
-        AccessorCraftingMenu accessor = (AccessorCraftingMenu) containerMenu;
+      if (containerMenu instanceof CraftingMenu craftingMenu) {
+        AccessorCraftingMenu accessor = (AccessorCraftingMenu) craftingMenu;
         result = accessor.getResultSlots();
-      } else if (containerMenu instanceof InventoryMenu) {
-        AccessorInventoryMenu accessor = (AccessorInventoryMenu) containerMenu;
+      } else if (containerMenu instanceof InventoryMenu inventoryMenu) {
+        AccessorInventoryMenu accessor = (AccessorInventoryMenu) inventoryMenu;
         result = accessor.getResultSlots();
       }
 

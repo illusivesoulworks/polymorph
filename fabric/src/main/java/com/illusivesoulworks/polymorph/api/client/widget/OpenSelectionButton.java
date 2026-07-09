@@ -19,7 +19,6 @@ package com.illusivesoulworks.polymorph.api.client.widget;
 
 import com.illusivesoulworks.polymorph.platform.Services;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import javax.annotation.Nonnull;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;

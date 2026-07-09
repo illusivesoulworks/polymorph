@@ -21,7 +21,6 @@ import com.illusivesoulworks.polymorph.api.PolymorphApi;
 import com.illusivesoulworks.polymorph.api.client.base.IRecipesWidget;
 import com.illusivesoulworks.polymorph.api.common.base.IRecipePair;
 import com.illusivesoulworks.polymorph.platform.Services;
-import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;

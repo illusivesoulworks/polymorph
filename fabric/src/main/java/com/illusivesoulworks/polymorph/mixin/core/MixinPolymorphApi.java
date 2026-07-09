@@ -27,6 +27,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+// Suppress unused warnings because Mixin classes and their injector/shadow members are invoked dynamically at runtime by the Mixin framework rather than called directly in Java code.
 @SuppressWarnings("unused")
 @Mixin(PolymorphApi.class)
 public class MixinPolymorphApi {

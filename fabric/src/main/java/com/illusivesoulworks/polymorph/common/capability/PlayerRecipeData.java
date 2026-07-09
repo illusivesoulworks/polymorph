@@ -30,7 +30,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.annotation.Nonnull;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -90,9 +89,9 @@ public class PlayerRecipeData extends AbstractRecipeData<Player> implements
 
   private void syncPlayerRecipeData() {
 
-    if (this.getOwner() instanceof ServerPlayer) {
+    if (this.getOwner() instanceof ServerPlayer serverPlayer) {
       PolymorphApi.common().getPacketDistributor()
-          .sendPlayerSyncS2C((ServerPlayer) this.getOwner(), this.getRecipesList(),
+          .sendPlayerSyncS2C(serverPlayer, this.getRecipesList(),
               this.getSelectedRecipe().map(Recipe::getId).orElse(null));
     }
   }
@@ -108,9 +107,9 @@ public class PlayerRecipeData extends AbstractRecipeData<Player> implements
       if (player.level().isClientSide()) {
         RecipesWidget.get().ifPresent(
             widget -> widget.setRecipesList(packetData.getFirst(), packetData.getSecond()));
-      } else if (player instanceof ServerPlayer) {
+      } else if (player instanceof ServerPlayer serverPlayer) {
         PolymorphApi.common().getPacketDistributor()
-            .sendRecipesListS2C((ServerPlayer) player, packetData.getFirst(),
+            .sendRecipesListS2C(serverPlayer, packetData.getFirst(),
                 packetData.getSecond());
       }
     }
@@ -120,8 +119,8 @@ public class PlayerRecipeData extends AbstractRecipeData<Player> implements
   public Set<ServerPlayer> getListeners() {
     Player player = this.getOwner();
 
-    if (player instanceof ServerPlayer) {
-      return Collections.singleton((ServerPlayer) player);
+    if (player instanceof ServerPlayer serverPlayer) {
+      return Collections.singleton(serverPlayer);
     } else {
       return new HashSet<>();
     }

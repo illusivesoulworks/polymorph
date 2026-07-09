@@ -18,13 +18,13 @@
 package com.illusivesoulworks.polymorph.common.network.client;
 
 import com.illusivesoulworks.polymorph.api.PolymorphApi;
-import com.illusivesoulworks.polymorph.common.integration.AbstractCompatibilityModule;
 import com.illusivesoulworks.polymorph.common.integration.PolymorphIntegrations;
 import com.illusivesoulworks.polymorph.mixin.core.AccessorCraftingMenu;
 import com.illusivesoulworks.polymorph.mixin.core.AccessorInventoryMenu;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -41,6 +41,7 @@ public record CPacketPlayerRecipeSelection(ResourceLocation recipe) {
     return new CPacketPlayerRecipeSelection(buffer.readResourceLocation());
   }
 
+  @SuppressWarnings("unchecked")
   public static void handle(CPacketPlayerRecipeSelection packet, ServerPlayer player) {
     AbstractContainerMenu container = player.containerMenu;
     player.level().getRecipeManager().byKey(packet.recipe).ifPresent(recipe -> {
@@ -48,18 +49,18 @@ public record CPacketPlayerRecipeSelection(ResourceLocation recipe) {
           .ifPresent(recipeData -> recipeData.selectRecipe(recipe));
       PolymorphIntegrations.selectRecipe(container, recipe);
 
-      if (container instanceof CraftingMenu) {
-        AccessorCraftingMenu accessor = (AccessorCraftingMenu) container;
-        accessor.getResultSlots().setItem(0, ((Recipe) recipe).assemble(accessor.getCraftSlots(), player.level().registryAccess()));
-      } else if (container instanceof InventoryMenu) {
-        AccessorInventoryMenu accessor = (AccessorInventoryMenu) container;
-        accessor.getResultSlots().setItem(0, ((Recipe) recipe).assemble(accessor.getCraftSlots(), player.level().registryAccess()));
+      if (container instanceof CraftingMenu craftingMenu) {
+        AccessorCraftingMenu accessor = (AccessorCraftingMenu) craftingMenu;
+        accessor.getResultSlots().setItem(0, ((Recipe<Container>) recipe).assemble(accessor.getCraftSlots(), player.level().registryAccess()));
+      } else if (container instanceof InventoryMenu inventoryMenu) {
+        AccessorInventoryMenu accessor = (AccessorInventoryMenu) inventoryMenu;
+        accessor.getResultSlots().setItem(0, ((Recipe<Container>) recipe).assemble(accessor.getCraftSlots(), player.level().registryAccess()));
       }
 
       container.slotsChanged(player.getInventory());
 
-      if (container instanceof ItemCombinerMenu) {
-        ((ItemCombinerMenu) container).createResult();
+      if (container instanceof ItemCombinerMenu itemCombinerMenu) {
+        itemCombinerMenu.createResult();
       }
     });
   }

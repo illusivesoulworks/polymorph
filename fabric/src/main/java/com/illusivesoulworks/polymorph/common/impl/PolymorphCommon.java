@@ -26,7 +26,6 @@ import com.illusivesoulworks.polymorph.api.common.capability.IStackRecipeData;
 import com.illusivesoulworks.polymorph.common.capability.PolymorphCapabilities;
 import com.illusivesoulworks.polymorph.common.util.BlockEntityTicker;
 import com.illusivesoulworks.polymorph.platform.Services;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;

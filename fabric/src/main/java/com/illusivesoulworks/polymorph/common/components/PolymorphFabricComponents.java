@@ -43,11 +43,12 @@ public class PolymorphFabricComponents implements BlockComponentInitializer,
   public static final ComponentKey<PlayerRecipeDataComponent> PLAYER_RECIPE_DATA =
       ComponentRegistry.getOrCreate(new ResourceLocation(PolymorphApi.MOD_ID, "player_recipe_data"),
           PlayerRecipeDataComponent.class);
-  public static final ComponentKey<AbstractBlockEntityRecipeDataComponent>
+  @SuppressWarnings("unchecked")
+  public static final ComponentKey<AbstractBlockEntityRecipeDataComponent<?>>
       BLOCK_ENTITY_RECIPE_DATA =
       ComponentRegistry.getOrCreate(
           new ResourceLocation(PolymorphApi.MOD_ID, "block_entity_recipe_data"),
-          AbstractBlockEntityRecipeDataComponent.class);
+          (Class<AbstractBlockEntityRecipeDataComponent<?>>) (Class<?>) AbstractBlockEntityRecipeDataComponent.class);
   public static final ComponentKey<AbstractStackRecipeDataComponent> STACK_RECIPE_DATA =
       ComponentRegistry.getOrCreate(new ResourceLocation(PolymorphApi.MOD_ID, "stack_recipe_data"),
           AbstractStackRecipeDataComponent.class);

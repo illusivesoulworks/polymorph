@@ -149,7 +149,7 @@ public class PolymorphCommands {
       count++;
     }
 
-    if (skipped.size() > 0) {
+    if (!skipped.isEmpty()) {
       pOutput.add("Skipped special recipes: ");
 
       for (ResourceLocation resourceLocation : skipped) {

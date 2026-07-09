@@ -31,6 +31,7 @@ import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinErrorHandler;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+// Suppress unused warnings because Mixin classes and their injector/shadow members are invoked dynamically at runtime by the Mixin framework rather than called directly in Java code.
 @SuppressWarnings("unused")
 public class IntegratedMixinPlugin implements IMixinConfigPlugin, IMixinErrorHandler {
 

@@ -38,10 +38,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class RecipeSelection {
 
-  private static <T extends Recipe<C>, C extends Container> Optional<T> getDefaultRecipe(
-      RecipeType<T> type, C inventory, Level level) {
-    return level.getRecipeManager().getRecipeFor(type, inventory, level);
-  }
 
   public static <T extends Recipe<C>, C extends Container> Optional<T> getPlayerRecipe(
       AbstractContainerMenu containerMenu, RecipeType<T> type, C inventory, Level level,

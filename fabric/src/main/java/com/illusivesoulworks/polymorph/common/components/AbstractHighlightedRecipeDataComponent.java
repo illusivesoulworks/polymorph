@@ -19,7 +19,6 @@ package com.illusivesoulworks.polymorph.common.components;
 
 import com.illusivesoulworks.polymorph.api.PolymorphApi;
 import com.illusivesoulworks.polymorph.api.common.base.IRecipePair;
-import com.illusivesoulworks.polymorph.common.capability.AbstractBlockEntityRecipeData;
 import com.mojang.datafixers.util.Pair;
 import java.util.SortedSet;
 import javax.annotation.Nonnull;
