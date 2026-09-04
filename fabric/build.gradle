@@ -27,6 +27,8 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     implementation project(":common")
     implementation group: 'com.electronwill.night-config', name: 'core', version: '3.6.5'
+    compileOnly "mezz.jei:jei-1.19.2-common-api:${jei_version}"
+    testCompileOnly "mezz.jei:jei-1.19.2-common-api:${jei_version}"
 
     include group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-fabric', version: "${spectrelib_version}"
 
@@ -72,7 +74,7 @@ processResources {
     filesMatching("fabric.mod.json") {
         expand 'version': project.version, 'fabric_mc_version_range': project.fabric_mc_version_range, 'license': project.license,
                 'mod_id': project.mod_id, 'mod_author': project.mod_author, 'mod_description': project.mod_description,
-                'mod_name': project.mod_name, 'issue_tracker': project.issue_tracker
+                'mod_name': project.mod_name, 'issue_tracker': project.issue_tracker, 'jei_version': project.jei_version
     }
 
     filesMatching("pack.mcmeta") {
