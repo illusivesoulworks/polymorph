@@ -27,7 +27,11 @@ import javax.annotation.Nonnull;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.handlers.IGlobalGuiHandler;
+import mezz.jei.api.recipe.transfer.IRecipeTransferContext;
+import mezz.jei.api.recipe.transfer.IRecipeTransferListener;
+import mezz.jei.api.recipe.transfer.RecipeTransferResult;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
+import mezz.jei.api.registration.IRecipeTransferRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -52,16 +56,20 @@ public class JeiModule implements IModPlugin {
     return new ResourceLocation(PolymorphApi.MOD_ID, "jei");
   }
 
-  @SuppressWarnings("ConstantConditions")
-  public static void selectRecipe(Object object) {
+  @Override
+  public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
+    registration.addRecipeTransferListener(new PolymorphRecipeTransferListener());
+  }
 
-    if (object instanceof Recipe<?> recipe) {
-      ResourceLocation resourceLocation = recipe.getId();
+  private static final class PolymorphRecipeTransferListener
+      implements IRecipeTransferListener {
 
-      // This technically should always be true but apparently some mods violate this rule, so we
-      // have to check for it
-      if (resourceLocation != null) {
-        PolymorphApi.common().getPacketDistributor().sendPlayerRecipeSelectionC2S(resourceLocation);
+    @Override
+    public void afterRecipeTransfer(IRecipeTransferContext<?, ?> context,
+                                    RecipeTransferResult result) {
+      if (result == RecipeTransferResult.SUCCESS &&
+          context.getRecipe() instanceof Recipe<?> recipe) {
+        RecipesWidget.get().ifPresent(widget -> widget.selectRecipe(recipe.getId()));
       }
     }
   }

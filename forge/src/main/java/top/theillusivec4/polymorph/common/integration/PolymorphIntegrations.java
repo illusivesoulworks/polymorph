@@ -125,7 +125,6 @@ public class PolymorphIntegrations {
   }
 
   public enum Mod {
-    JEI("jei"),
     CRAFTINGCRAFT("craftingcraft"),
     TOMS_STORAGE("toms_storage"),
     SIMPLE_STORAGE_NETWORK("storagenetwork"),

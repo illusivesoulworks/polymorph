@@ -25,6 +25,9 @@
     ],
     "rei_plugins": [
       "top.theillusivec4.polymorph.common.integration.roughlyenoughitems.RoughlyEnoughItemsModule"
+    ],
+    "jei_mod_plugin": [
+      "top.theillusivec4.polymorph.common.integration.PolymorphJeiPlugin"
     ]
   },
   "custom": {
@@ -48,5 +51,8 @@
   },
   "breaks": {
     "ae2": "<11.0.0"
+  },
+  "suggests": {
+    "jei": ">=${version_jei}"
   }
 }

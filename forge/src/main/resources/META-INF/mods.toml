@@ -49,3 +49,9 @@ No more recipe conflicts! Adds an option to choose the crafting result if more t
     versionRange="[1.18.2-1.7.9,)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.polymorph]]
+    modId="jei"
+    mandatory=false
+    versionRange="[${version_jei},)"
+    ordering="NONE"
+    side="BOTH"
