@@ -17,7 +17,7 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
     compileOnly "dev.emi:emi-xplat-mojmap:${emi_version}"
-    compileOnly "mezz.jei:jei-1.21-common:${jei_version}"
+    compileOnly "mezz.jei:jei-1.21.1-common-api:${jei_version}"
 }
 
 configurations {

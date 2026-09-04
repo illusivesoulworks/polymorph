@@ -70,7 +70,7 @@ dependencies {
     // Hack fix for now, force jopt-simple to be exactly 5.0.4 because Mojang ships that version, but some transtive dependencies request 6.0+
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
     compileOnly "dev.emi:emi-xplat-mojmap:${emi_version}"
-    compileOnly "mezz.jei:jei-1.21-common:${jei_version}"
+    compileOnly "mezz.jei:jei-1.21.1-common-api:${jei_version}"
 }
 
 sourceSets.each {

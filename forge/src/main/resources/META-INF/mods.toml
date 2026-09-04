@@ -23,3 +23,9 @@ issueTrackerURL= "${issues_url}"
     versionRange = "${minecraft_version_range}"
     ordering = "NONE"
     side = "BOTH"
+[[dependencies.${mod_id}]]
+    modId = "jei"
+    mandatory = false
+    versionRange = "[${jei_version},)"
+    ordering = "NONE"
+    side = "BOTH"

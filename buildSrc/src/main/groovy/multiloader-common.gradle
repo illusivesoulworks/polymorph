@@ -118,6 +118,7 @@ processResources {
             "description"                : project.description,
             "neoforge_version"           : neoforge_version,
             "neoforge_version_range"     : neoforge_version_range,
+            "jei_version"                : jei_version,
             "java_version"               : java_version
     ]
 

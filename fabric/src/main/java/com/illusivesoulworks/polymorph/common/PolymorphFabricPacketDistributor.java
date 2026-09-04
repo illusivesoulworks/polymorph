@@ -23,7 +23,6 @@ import com.illusivesoulworks.polymorph.common.network.client.CPacketBlockEntityL
 import com.illusivesoulworks.polymorph.common.network.client.CPacketPersistentRecipeSelection;
 import com.illusivesoulworks.polymorph.common.network.client.CPacketPlayerRecipeSelection;
 import com.illusivesoulworks.polymorph.common.network.server.SPacketPlayerRecipeSync;
-import com.illusivesoulworks.polymorph.common.network.server.SPacketRecipeHandshake;
 import com.illusivesoulworks.polymorph.common.network.server.SPacketRecipesList;
 import com.illusivesoulworks.polymorph.common.network.server.SPacketUpdatePreview;
 import java.util.HashSet;
@@ -88,10 +87,5 @@ public class PolymorphFabricPacketDistributor implements IPolymorphNetwork {
   @Override
   public void sendUpdatePreviewS2C(ServerPlayer player) {
     ServerPlayNetworking.send(player, SPacketUpdatePreview.INSTANCE);
-  }
-
-  @Override
-  public void sendRecipeHandshakeS2C(ServerPlayer player) {
-    ServerPlayNetworking.send(player, SPacketRecipeHandshake.INSTANCE);
   }
 }
