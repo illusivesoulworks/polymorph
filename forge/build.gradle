@@ -72,6 +72,10 @@ mixin {
 
 repositories {
     maven {
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com"
+    }
+    maven {
         // Maven for JEI
         name = "Progwml6 maven"
         url = "https://dvs1.progwml6.com/files/maven/"
@@ -101,7 +105,8 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 
-    implementation(fg.deobf("mezz.jei:jei-1.18.2-forge:${version_jei}"))
+    compileOnly "mezz.jei:jei-1.18.2-common-api:${version_jei}"
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2-forge:${version_jei}")
     implementation fg.deobf("appeng:appliedenergistics2:${version_ae2}")
 
     implementation fg.deobf("curse.maven:craftingcraft-237581:${file_craftingcraft}")
@@ -136,7 +141,9 @@ def replaceResources = tasks.register("replaceResources", Copy) {
 
     it.from(sourceSets.main.resources) {
         include "META-INF/mods.toml"
-        expand 'version': version, 'mc_version_range': mc_version_range, 'forge_version_range': forge_version_range, "loader_version": loader_version
+        expand 'version': version, 'mc_version_range': mc_version_range,
+                'forge_version_range': forge_version_range, 'loader_version': loader_version,
+                'version_jei': version_jei
     }
     it.into "$buildDir/resources/main/"
 }

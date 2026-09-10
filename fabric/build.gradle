@@ -25,6 +25,10 @@ loom {
 }
 
 repositories {
+    maven {
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com"
+    }
     maven { 
         url = "https://jitpack.io" 
     }
@@ -103,6 +107,7 @@ dependencies {
 //    modRuntimeOnly "curse.maven:cammiesbackpacks-443091:${project.file_cammiesbackpacks}"
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
 //    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
+    modCompileOnly "mezz.jei:jei-1.18.2-fabric-api:${project.version_jei}"
     modCompileOnly "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
 //    modRuntimeOnly "curse.maven:ironfurnaces-318036:${project.file_ironfurnaces}"
 //    modRuntimeOnly "teamreborn:energy:0.1.1"
@@ -127,9 +132,10 @@ dependencies {
 
 processResources {
     inputs.property "version", project.version
+    inputs.property "version_jei", project.version_jei
 
     filesMatching("fabric.mod.json") {
-		expand "version": project.version
+		expand "version": project.version, "version_jei": project.version_jei
 	}
 }
 

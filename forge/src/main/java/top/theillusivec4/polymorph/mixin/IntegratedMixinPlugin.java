@@ -39,7 +39,6 @@ public class IntegratedMixinPlugin implements IMixinConfigPlugin {
   private static final Set<String> CONFIG_ACTIVATED = new HashSet<>();
 
   static {
-    CLASS_TO_MOD.put("mezz.jei.", PolymorphIntegrations.Mod.JEI.getId());
     CLASS_TO_MOD.put("net.blay09.mods.craftingcraft.",
         PolymorphIntegrations.Mod.CRAFTINGCRAFT.getId());
     CLASS_TO_MOD.put("com.tom.storagemod.", PolymorphIntegrations.Mod.TOMS_STORAGE.getId());
