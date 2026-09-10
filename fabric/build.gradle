@@ -4,7 +4,7 @@ plugins {
     id 'multiloader-loader'
     id 'fabric-loom' version '1.7-SNAPSHOT'
     id 'com.modrinth.minotaur' version '2.+'
-    id 'net.darkhax.curseforgegradle' version '1.+'
+    id 'net.darkhax.curseforgegradle' version '1.1.26'
 }
 
 repositories {
@@ -71,11 +71,13 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
     mainFile.changelogType = 'markdown'
     mainFile.changelog = file('../CHANGELOG_LATEST.md')
     mainFile.releaseType = "${release_type}"
+    mainFile.withAdditionalFile(sourcesJar)
     "${release_versions}".split(',').each {
         mainFile.addGameVersion("${it}")
     }
+    mainFile.addEnvironment("Client")
+    mainFile.addEnvironment("Server")
     mainFile.addRequirement("fabric-api")
-    mainFile.withAdditionalFile(sourcesJar)
 
     doLast {
 

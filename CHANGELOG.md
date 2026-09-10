@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 Prior to version 0.45.0, this project used MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH.
 
+## [1.2.0+1.21.1] - 2026.09.09
+### Changed
+- Updated JEI compatibility to remove mixins and use the new recipe transfer listener API (thanks mezz!) [#338](https://github.com/illusivesoulworks/polymorph/pull/338)
+
 ## [1.1.0+1.21.1] - 2025.07.21
 ### Changed
 - Retooled block entity registration for recipe data to accommodate for Fabric components
