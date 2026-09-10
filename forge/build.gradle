@@ -111,6 +111,8 @@ dependencies {
     implementation fg.deobf("curse.maven:fastfurnace-299540:${file_fastfurnace}")
     implementation fg.deobf("curse.maven:fastsuite-475117:${file_fastsuite}")
     implementation fg.deobf("curse.maven:placebo-283644:${file_placebo}")
+    compileOnly "mezz.jei:jei-1.19.2-common-api:${jei_version}"
+    testCompileOnly "mezz.jei:jei-1.19.2-common-api:${jei_version}"
 
     implementation fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_range}")
     jarJar fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_range}") {
@@ -137,7 +139,7 @@ def replaceResources = tasks.register("replaceResources", Copy) {
         include "META-INF/mods.toml"
         expand 'version': version, 'forge_mc_version_range': forge_mc_version_range, 'forge_version_range': forge_version_range,
                 'license': license, 'mod_id': mod_id, 'mod_author': mod_author, 'mod_description': mod_description,
-                'mod_name': mod_name, 'issue_tracker': issue_tracker
+                'mod_name': mod_name, 'issue_tracker': issue_tracker, 'jei_version': jei_version
     }
     it.from(project(":common").sourceSets.main.resources) {
         include "pack.mcmeta"
