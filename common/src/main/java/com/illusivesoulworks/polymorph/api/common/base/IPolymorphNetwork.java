@@ -40,6 +40,4 @@ public interface IPolymorphNetwork {
   void sendBlockEntityListenerC2S(boolean add);
 
   void sendUpdatePreviewS2C(ServerPlayer player);
-
-  void sendRecipeHandshakeS2C(ServerPlayer player);
 }

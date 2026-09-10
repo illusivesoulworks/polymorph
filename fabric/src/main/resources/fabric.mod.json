@@ -23,6 +23,9 @@
     ],
     "cardinal-components": [
       "com.illusivesoulworks.polymorph.common.components.PolymorphFabricComponents"
+    ],
+    "jei_mod_plugin": [
+      "com.illusivesoulworks.polymorph.common.integration.PolymorphJeiPlugin"
     ]
   },
   "custom": {
@@ -42,5 +45,8 @@
     "fabric-api": "*",
     "minecraft": "${minecraft_version_range_alt}",
     "java": ">=${java_version}"
+  },
+  "suggests": {
+    "jei": ">=${jei_version}"
   }
 }

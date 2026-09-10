@@ -18,12 +18,10 @@
 package com.illusivesoulworks.polymorph.common.network.server;
 
 import com.illusivesoulworks.polymorph.api.PolymorphApi;
-import com.illusivesoulworks.polymorph.api.client.PolymorphWidgets;
 import com.illusivesoulworks.polymorph.api.client.base.IRecipesWidget;
 import com.illusivesoulworks.polymorph.api.common.base.IRecipePair;
 import com.illusivesoulworks.polymorph.api.common.capability.IPlayerRecipeData;
 import com.illusivesoulworks.polymorph.client.RecipesWidget;
-import com.illusivesoulworks.polymorph.common.integration.util.RecipeTransfer;
 import com.illusivesoulworks.polymorph.mixin.core.AccessorSmithingScreen;
 import java.util.HashSet;
 import java.util.Optional;
@@ -32,7 +30,6 @@ import java.util.TreeSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.SmithingScreen;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.resources.ResourceLocation;
 
 public class ClientPacketHandler {
 
@@ -85,16 +82,6 @@ public class ClientPacketHandler {
     if (mc.screen instanceof SmithingScreen smithingScreen) {
       ((AccessorSmithingScreen) smithingScreen).callUpdateArmorStandPreview(
           smithingScreen.getMenu().getSlot(3).getItem());
-    }
-  }
-
-  public static void handle(SPacketRecipeHandshake unused) {
-    IRecipesWidget widget = PolymorphWidgets.getInstance().getCurrentWidget();
-    ResourceLocation resourceLocation = RecipeTransfer.getTransfer();
-
-    if (widget != null && resourceLocation != null) {
-      widget.selectRecipe(resourceLocation);
-      RecipeTransfer.enqueueTransfer(null);
     }
   }
 }

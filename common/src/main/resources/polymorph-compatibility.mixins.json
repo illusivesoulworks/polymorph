@@ -3,9 +3,7 @@
   "package": "com.illusivesoulworks.polymorph.mixin.integration",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "emi.MixinEmiRecipeFiller",
-    "jei.MixinRecipeTransferUtil",
-    "jei.MixinPacketRecipeTransfer"
+    "emi.MixinEmiRecipeFiller"
   ],
   "injectors": {
     "defaultRequire": 1,
