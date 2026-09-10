@@ -103,6 +103,8 @@ dependencies {
     compileOnly fg.deobf("dev.shadowsoffire:FastFurnace:${fastfurnace_version}")
     compileOnly fg.deobf("dev.shadowsoffire:FastSuite:${fastsuite_version}")
     compileOnly fg.deobf("dev.shadowsoffire:Placebo:${placebo_version}")
+    compileOnly "mezz.jei:jei-1.20.1-common-api:${jei_version}"
+    testCompileOnly "mezz.jei:jei-1.20.1-common-api:${jei_version}"
 
     implementation fg.deobf(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_range}")
     jarJar (group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_range}") {
@@ -126,7 +128,8 @@ def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta', '*.mixins.json']
 def replaceProperties = [
         forge_version: forge_version, forge_version_range: forge_version_range, version: version,
         forge_mc_version_range: forge_mc_version_range, license: license, mod_id: mod_id, mod_author: mod_author,
-        mod_description: mod_description, mod_name: mod_name, issue_tracker: issue_tracker, refmap_target: "${mod_id}."
+        mod_description: mod_description, mod_name: mod_name, issue_tracker: issue_tracker, jei_version: jei_version,
+        refmap_target: "${mod_id}."
 ]
 processResources {
     from project(":common").sourceSets.main.resources

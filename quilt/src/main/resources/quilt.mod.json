@@ -14,6 +14,9 @@
       ],
       "cardinal-components": [
         "com.illusivesoulworks.polymorph.common.components.PolymorphQuiltComponents"
+      ],
+      "jei_mod_plugin": [
+        "com.illusivesoulworks.polymorph.common.integration.PolymorphJeiPlugin"
       ]
     },
     "depends": [
@@ -56,6 +59,11 @@
       {
         "id": "quilted_fabric_api",
         "version": "*"
+      },
+      {
+        "id": "jei",
+        "versions": ">=${jei_version}",
+        "optional": true
       }
     ],
     "metadata": {

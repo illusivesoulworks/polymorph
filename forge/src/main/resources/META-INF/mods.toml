@@ -24,3 +24,9 @@ ${mod_description}
     versionRange="${forge_mc_version_range}"
     ordering="NONE"
     side="BOTH"
+[[dependencies.polymorph]]
+    modId="jei"
+    mandatory=false
+    versionRange="[${jei_version},)"
+    ordering="NONE"
+    side="BOTH"

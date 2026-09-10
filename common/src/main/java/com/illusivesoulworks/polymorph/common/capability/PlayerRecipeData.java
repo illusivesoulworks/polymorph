@@ -84,6 +84,7 @@ public class PlayerRecipeData extends AbstractRecipeData<Player> implements
 
   @Override
   public void selectRecipe(@Nonnull Recipe<?> recipe) {
+    this.cachedSelection = null;
     super.selectRecipe(recipe);
     this.syncPlayerRecipeData();
   }
